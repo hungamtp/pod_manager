@@ -86,8 +86,8 @@ export default function NavBar({}: Props) {
               </g>
             </svg>
           </span>
-          <span className="app-brand-text demo menu-text fw-bolder ms-2">
-            Sneat
+          <span className="app-brand-text text-uppercase demo menu-text fw-bolder ms-2">
+            podoc
           </span>
         </a>
 
@@ -127,7 +127,7 @@ export default function NavBar({}: Props) {
               </a>
             </li>
             <li className="menu-item">
-              <a href="\account-setting" className="menu-link">
+              <a href="\login" className="menu-link">
                 <div data-i18n="Horizontal Form">Log out</div>
               </a>
             </li>
@@ -188,10 +188,22 @@ export default function NavBar({}: Props) {
           <span className="menu-header-text">Manage Discount</span>
         </li>
         <li className="menu-item">
-          <a href="\table" className="menu-link">
-            <i className="menu-icon tf-icons bx bx-box"></i>
-            <div data-i18n="Tables">Discount</div>
+          <a href="" className="menu-link menu-toggle">
+            <i className="menu-icon tf-icons bx bx-crown"></i>
+            <div data-i18n="Form Layouts">Discount</div>
           </a>
+          <ul className="menu-sub">
+            <li className="menu-item">
+              <a href="\basic-input" className="menu-link">
+                <div data-i18n="Horizontal Form">abc</div>
+              </a>
+            </li>
+            <li className="menu-item">
+              <a href="\horizontal-form" className="menu-link">
+                <div data-i18n="Horizontal Form">asdasd</div>
+              </a>
+            </li>
+          </ul>
         </li>
         {/* {/Manage Order} */}
         <li className="menu-header small text-uppercase">

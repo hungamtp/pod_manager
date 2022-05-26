@@ -1,0 +1,90 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.outer{
+  height: 100%;
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position: center;
+}
+
+.designTable{
+  height: 100%;
+}
+
+#placeHolder{
+  border-style: dashed;
+  margin: 0 auto;
+}
+
+.bg-gray{
+  background-color:#f7f7f7
+}
+
+.w-half{
+  width: 50%;
+}
+
+.w-quater{
+  width: 25%;
+}
+
+.w-30p{
+  width:30%
+}
+
+.h-screen{
+  height: 100vh;
+}
+
+.h-full{
+  height: 100%;
+}
+.h-60p{
+  height: 60%;
+}
+
+.w-full{
+  width: 100%;
+}
+
+.py-3point5 {
+  padding-top: 1.4rem !important;
+  padding-bottom: 1.28rem !important;
+}
+
+.py-2point5 {
+  padding-top: 0.85rem !important;
+  padding-bottom: 0.85rem !important;
+}
+
+.add-design-button {
+  border-style: dashed;
+  border-width: 1px;
+  border-color: gray;
+
+  padding: 1rem;
+  margin-top: 1rem;
+
+  cursor: pointer;
+}
+
+.add-design-button:hover {
+  color:rgb(48, 167, 48)
+}
+
+
