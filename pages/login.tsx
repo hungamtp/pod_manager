@@ -2,15 +2,16 @@ import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import useLogin from "hooks/auth/use-login";
 
 export interface ILoginProps {}
 type FormLogin = {
-  username: string;
+  email: string;
   password: string;
 };
 
 const schema = yup.object().shape({
-  username: yup
+  email: yup
     .string()
     .min(8, "Tài khoản cần ít nhất 8 kí tự")
     .max(50, "Tài khoản tối đa 50 kí tự")
@@ -22,9 +23,11 @@ const schema = yup.object().shape({
     .required("Mật khẩu không được để trống"),
 });
 export default function Login(props: ILoginProps) {
+  const { mutate: login, isLoading, error } = useLogin();
+
   const defaultValues: FormLogin = {
-    username: "duynkse123",
-    password: "123123213",
+    email: "vuvietsang10a9@gmail.com",
+    password: "12345678",
   };
   const {
     register,
@@ -38,6 +41,8 @@ export default function Login(props: ILoginProps) {
 
   const onSubmit: SubmitHandler<FormLogin> = (data) => {
     console.log(data, "loginn");
+    const res = login({ email: data.email, password: data.password });
+    console.log(res);
   };
   return (
     <>
@@ -150,18 +155,18 @@ export default function Login(props: ILoginProps) {
                   >
                     <div className="mb-3">
                       <label htmlFor="email" className="form-label">
-                        Username
+                        email
                       </label>
                       <input
-                        type="username"
+                        type="text"
                         className="form-control"
                         id="email"
-                        placeholder="Enter your username"
-                        {...register("username")}
+                        placeholder="Enter your email"
+                        {...register("email")}
                       />
-                      {errors.username && (
+                      {errors.email && (
                         <span id="error-pwd-message" className="text-danger">
-                          {errors.username.message}
+                          {errors.email.message}
                         </span>
                       )}
                     </div>

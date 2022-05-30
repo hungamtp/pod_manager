@@ -140,7 +140,7 @@ export default function NavBar({}: Props) {
           <span className="menu-header-text">manage account</span>
         </li>
         <li className="menu-item">
-          <a href="\table" className="menu-link">
+          <a href="\manage-account" className="menu-link">
             <i className="menu-icon tf-icons bx bx-table"></i>
             <div data-i18n="Tables">Customer Account</div>
           </a>
