@@ -1,10 +1,18 @@
 import NavBar from "@/components/common/nav-bar";
 import { LayoutProps } from "@/models/index";
+import { useRouter } from "next/router";
 import * as React from "react";
+import { useAppSelector } from "../hooks/reduxHook";
 
 export interface IMainLayoutProps {}
 
 export function MainLayout({ children }: LayoutProps) {
+  const auth = useAppSelector((state) => state.auth);
+  const router = useRouter();
+  if (!auth.isAuth) {
+    router.push("/login");
+  } else {
+  }
   return (
     <div>
       {/* <Head>
