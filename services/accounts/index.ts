@@ -3,6 +3,7 @@ import {
   } from "./dto/get-all-accounts-dto";
   
   import { API } from "@/api-client/axios";
+import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
   
   export interface Filter {
     pageSize?: number;
@@ -13,8 +14,8 @@ import {
     const pageNumber = 0;
     const pageSize = 9;
     const query = new URLSearchParams({
-      pageNumber: pageNumber.toString(),
-      pageSize: pageSize.toString(),
+      pageNumber: filter?.pageNumber?.toString() || pageNumber.toString(),
+      pageSize: filter?.pageSize?.toString() || pageSize.toString(),
     });
     const { data } = await API.get<GetAllAccountsDto>(
       `/user?${query.toString()}`
@@ -22,9 +23,23 @@ import {
     return data.data;
   };
   
-  export const createAccount = async (requestData: CreateAccountDto) => {
+  export const createAccountUser = async (requestData: CreateAccountDto) => {
     const { data } = await API.post<CreateAccountResponse>(
-      "/auth/signup",
+      "/user",
+      requestData
+    );
+    return data;
+  };
+  export const createAccountFactory = async (requestData: CreateAccountDto) => {
+    const { data } = await API.post<CreateAccountResponse>(
+      "user/addFactory",
+      requestData
+    );
+    return data;
+  };
+  export const createAccountAdmin = async (requestData: CreateAccountDto) => {
+    const { data } = await API.post<CreateAccountResponse>(
+      "/user/addAdmin",
       requestData
     );
     return data;

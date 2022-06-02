@@ -1,8 +1,24 @@
 import React from "react";
 
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Collapse from "@mui/material/Collapse";
+import LogoutIcon from "@mui/icons-material/Logout";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import TableViewIcon from "@mui/icons-material/TableView";
+import { Router, useRouter } from "next/router";
 type Props = {};
 
 export default function NavBar({}: Props) {
+  const [open, setOpen] = React.useState(true);
+  const router = useRouter();
+  const handleClick = () => {
+    setOpen(!open);
+  };
   return (
     <aside
       id="layout-menu"
@@ -115,42 +131,63 @@ export default function NavBar({}: Props) {
         <li className="menu-header small text-uppercase">
           <span className="menu-header-text">Account Setting</span>
         </li>
-        <li className="menu-item">
-          <a href="" className="menu-link menu-toggle">
-            <i className="menu-icon tf-icons bx bx-dock-top"></i>
-            <div data-i18n="Form Layouts">Account Settings</div>
-          </a>
-          <ul className="menu-sub">
-            <li className="menu-item">
-              <a href="\account-setting" className="menu-link">
-                <div data-i18n="Horizontal Form">Account</div>
-              </a>
-            </li>
-            <li className="menu-item">
-              <a href="\login" className="menu-link">
-                <div data-i18n="Horizontal Form">Log out</div>
-              </a>
-            </li>
-          </ul>
-        </li>
-        {/* {Manage Account} */}
 
         {/* {Manage Account} */}
+        <List
+          className="w-screen"
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+          component="nav"
+        >
+          <ListItemButton onClick={handleClick}>
+            <ListItemIcon className="pl-2p">
+              <AccountCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Account Setting" />
+            {open ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={open} timeout="auto" className="pl-4p " unmountOnExit>
+            <List component="div">
+              <ListItemButton
+                onClick={() => {
+                  router.push("account-setting");
+                }}
+              >
+                <ListItemIcon>
+                  <AccountCircleIcon />
+                </ListItemIcon>
+                <ListItemText primary="Account" />
+              </ListItemButton>
+            </List>
+            <List component="div">
+              <ListItemButton>
+                <ListItemIcon>
+                  <LogoutIcon />
+                </ListItemIcon>
+                <ListItemText primary="Log out" />
+              </ListItemButton>
+            </List>
+          </Collapse>
+        </List>
+        {/* {Manage Account} */}
+
         <li className="menu-header small text-uppercase">
           <span className="menu-header-text">manage account</span>
         </li>
-        <li className="menu-item">
-          <a href="\manage-account" className="menu-link">
-            <i className="menu-icon tf-icons bx bx-table"></i>
-            <div data-i18n="Tables">Customer Account</div>
-          </a>
-        </li>
-        <li className="menu-item">
-          <a href="\table" className="menu-link">
-            <i className="menu-icon tf-icons bx bx-table"></i>
-            <div data-i18n="Tables">Factory Account</div>
-          </a>
-        </li>
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        >
+          <ListItemButton
+            onClick={() => {
+              router.push("manage-account");
+            }}
+          >
+            <ListItemIcon className="pl-2p">
+              <TableViewIcon />
+            </ListItemIcon>
+            <ListItemText primary="Manage Account" />
+          </ListItemButton>
+        </List>
+
         {/* {Manage Account} */}
 
         {/* {Manage designed product} */}
