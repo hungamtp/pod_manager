@@ -11,7 +11,6 @@ export function MainLayout({ children }: LayoutProps) {
   const router = useRouter();
   if (!auth.isAuth) {
     router.push("/login");
-  } else {
   }
   return (
     <div>

@@ -47,6 +47,7 @@ export default class MyDocument extends Document {
             className="template-customizer-theme-css"
           />
           <link rel="stylesheet" href="assets/css/demo.css" />
+          <link rel="stylesheet" href="assets/css/style.css" />
 
           <link
             rel="stylesheet"
@@ -72,15 +73,14 @@ export default class MyDocument extends Document {
           <NextScript>
             <script src="assets/vendor/js/bootstrap.js"></script>
             <script src="assets/vendor/libs/apex-charts/apexcharts.js"></script>
+            <script src="assets/js/script.js"></script>
           </NextScript>
           <script src="assets/vendor/libs/jquery/jquery.js"></script>
           <script src="assets/vendor/libs/popper/popper.js"></script>
           <script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-
           <script src="assets/vendor/js/menu.js"></script>
 
           <script src="assets/js/main.js"></script>
-
           <script src="assets/js/dashboards-analytics.js"></script>
         </body>
       </Html>

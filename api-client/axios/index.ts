@@ -10,6 +10,20 @@ const API = axios.create({
   },
 });
 
-
+API.interceptors.request.use(
+	(config) => {
+		if(config.headers){
+			if (!config.headers.Authorization) {
+				const token = store.getState().auth.token;
+		  
+				if (token) {
+				  config.headers.Authorization = `${token}`;
+				}
+			}
+	  	}
+	  return config;
+	},
+	(error) => Promise.reject(error)
+  );
 
 export { API };

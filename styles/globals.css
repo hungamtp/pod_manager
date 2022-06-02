@@ -15,6 +15,12 @@ a {
   box-sizing: border-box;
 }
 
+.fz-sm {
+font-size: larger;
+}
+
+
+
 .outer{
   height: 100%;
   background-size:contain;
@@ -38,6 +44,25 @@ a {
 .w-half{
   width: 50%;
 }
+.pl-4p {
+  padding-left: 40px;
+}
+
+.pl-2p {
+  padding-left: 20px;
+}
+
+.pl-20p {
+  padding-left: 20%;
+}
+
+.pr-20p {
+  padding-right: 20%;
+}
+
+.mr-20p{
+  margin-right: 20rem !important;
+}
 
 .w-quater{
   width: 25%;
@@ -45,6 +70,10 @@ a {
 
 .w-30p{
   width:30%
+}
+
+.w-80p{
+  width:80vw
 }
 
 .h-screen{
@@ -60,6 +89,10 @@ a {
 
 .w-full{
   width: 100%;
+}
+
+.w-screen{
+  width: 100vw;
 }
 
 .py-3point5 {
