@@ -1,8 +1,8 @@
 import { ISuccessHttpResponse } from "@/models/success_http_response.interface";
 
 export interface CreateAccountDto {
-	firstName: string;
-  lastName: string;
+	userFirstName: string;
+  userLastName: string;
   password: string;
   email: string;
   phone: string;
