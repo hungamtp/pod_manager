@@ -1,30 +1,36 @@
-/* eslint-disable @next/next/no-css-tags */
-/* eslint-disable @next/next/no-sync-scripts */
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 import { MainLayout } from "@/components/layouts";
 import CreateForm from "@/components/manage-account/create-form";
 import UpdateForm from "@/components/manage-account/update-form";
 import { Filter } from "@/services/accounts";
-import { DeleteAccountDto } from "@/services/accounts/dto/delete-accounts-dto";
-import { AccountDto } from "@/services/accounts/dto/get-all-accounts-dto";
-import { UpdateAccountDto } from "@/services/accounts/dto/update-accounts-dto";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@mui/icons-material/Add";
-import { IconButton, Menu, MenuItem, Pagination, Stack } from "@mui/material";
+import { IconButton, Pagination, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import useAccounts from "hooks/accounts/use-accounts";
-import useDeleteAccount from "hooks/accounts/use-delete-accounts";
+import useProducts from "hooks/products/use-products";
+import Image from "next/image";
 import * as React from "react";
 import { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-export interface IManageAccountProps {}
 
+export interface IManageProductProps {}
+
+type FormCreateAccount = {
+  userFirstName: string;
+  userLastName: string;
+  email: string;
+  phone: string;
+  address: string;
+  roleName: string;
+};
 const ITEM_HEIGHT = 48;
 
-export default function ManageAccount(props: IManageAccountProps) {
+export default function ManageProduct(props: IManageProductProps) {
   const [filter, setFilter] = useState<Filter>({
     pageNumber: 0,
     pageSize: 10,
@@ -36,16 +42,8 @@ export default function ManageAccount(props: IManageAccountProps) {
   ) => {
     setFilter({ ...filter, pageNumber: value - 1 });
   };
-  const { data: response, isLoading: isLoadingAccount } = useAccounts(filter);
-  const defaultValues: UpdateAccountDto = {
-    id: 0,
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    roleName: "",
-  };
+  const { data: response, isLoading: isLoadingProduct } = useProducts(filter);
+
   //  menu button
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -57,12 +55,6 @@ export default function ManageAccount(props: IManageAccountProps) {
     setAnchorEl(null);
   };
 
-  const { mutate: deleteAccount, error } = useDeleteAccount();
-
-  const onDelete = (id: DeleteAccountDto) => {
-    deleteAccount(id);
-  };
-
   /*{form add account }*/
 
   const handleCloseDialog = () => {
@@ -70,18 +62,9 @@ export default function ManageAccount(props: IManageAccountProps) {
   };
 
   /*{form add account }*/
-  const handleIsEditTrue = (user: AccountDto) => {
+  const handleIsEditTrue = (user: FormCreateAccount) => {
     console.log(user, "userrrrrr");
-    const tmpAcc = {
-      id: user.id,
-      firstName: user.userFirstName,
-      lastName: user.userLastName,
-      email: user.email,
-      phone: user.phone,
-      address: user.address,
-      roleName: user.roleName,
-    };
-    setAccount(tmpAcc);
+    setAccount(user);
     setIsEdit(true);
     setOpenDialog(true);
   };
@@ -94,7 +77,15 @@ export default function ManageAccount(props: IManageAccountProps) {
   /* {open Dialog} */
   const [isEdit, setIsEdit] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [account, setAccount] = useState<UpdateAccountDto>(defaultValues);
+  const defaultValues: FormCreateAccount = {
+    userFirstName: "",
+    userLastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    roleName: "",
+  };
+  const [account, setAccount] = useState<FormCreateAccount>(defaultValues);
 
   return (
     <>
@@ -146,12 +137,7 @@ export default function ManageAccount(props: IManageAccountProps) {
               <DialogTitle id="alert-dialog-title">
                 {"Update Account"}
               </DialogTitle>
-              <DialogContent>
-                <UpdateForm
-                  account={account}
-                  handleCloseDialog={handleCloseDialog}
-                />
-              </DialogContent>
+              <DialogContent></DialogContent>
               <DialogActions></DialogActions>
             </Dialog>
           )}
@@ -195,77 +181,47 @@ export default function ManageAccount(props: IManageAccountProps) {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Last Name</th>
-                    <th>First Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>Role</th>
-                    <th>Status</th>
+                    <th>Name</th>
+                    <th>Product Image</th>
+                    <th>Category Name</th>
+                    <th>Tags</th>
+
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">
-                  {!isLoadingAccount &&
+                  {!isLoadingProduct &&
                     response &&
                     response.content.map((x) => (
                       <tr key={x.id}>
                         <td>{x.id}</td>
-                        <td>
-                          <strong>{x.userLastName}</strong>
-                        </td>
+
                         <td>
                           <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
-                          <strong>{x.userFirstName}</strong>
+                          <strong>{x.name}</strong>
                         </td>
+                        <td>
+                          <img
+                            src={x.productImages[0].image}
+                            className="d-block rounded"
+                            height={100}
+                            width={100}
+                          />
+                        </td>
+                        <td>{x.categoryName}</td>
 
-                        <td>{x.email}</td>
-                        <td>{x.phone}</td>
-                        <td>{x.address}</td>
-                        <td>
-                          {x.roleName == "ADMIN" && (
-                            <span className="w-full badge bg-primary me-1">
-                              {x.roleName}
-                            </span>
-                          )}
-                          {x.roleName == "USER" && (
-                            <span className="w-full badge bg-info me-1">
-                              {x.roleName}
-                            </span>
-                          )}
-                          {x.roleName == "FACTORY" && (
-                            <span className="w-full badge bg-warning me-1">
-                              {x.roleName}
-                            </span>
-                          )}
-                        </td>
-                        <td>
-                          {x.userStatus == "ACTIVE" && (
-                            <span className="badge bg-label-primary me-1">
-                              {x.userStatus}
-                            </span>
-                          )}
-                          {x.userStatus == "INACTIVE" && (
-                            <span className="badge bg-label-danger me-1">
-                              {x.userStatus}
-                            </span>
-                          )}
-                        </td>
+                        <td>{x.tags}</td>
+
                         <td>
                           <div>
                             <IconButton
                               onClick={() => {
-                                handleIsEditTrue(x);
                                 handleClose();
                               }}
                             >
                               <EditIcon fontSize="medium" color="primary" />
                             </IconButton>
-                            <IconButton
-                              onClick={() => {
-                                onDelete(x.id as any);
-                              }}
-                            >
+                            <IconButton>
                               <DeleteIcon fontSize="medium" color="error" />
                             </IconButton>
                           </div>
@@ -344,4 +300,4 @@ export default function ManageAccount(props: IManageAccountProps) {
     </>
   );
 }
-ManageAccount.Layout = MainLayout;
+ManageProduct.Layout = MainLayout;

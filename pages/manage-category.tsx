@@ -20,11 +20,12 @@ import * as React from "react";
 import { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-export interface IManageAccountProps {}
+import useCategories from "hooks/categories/use-categories";
+export interface IManageCategoryProps {}
 
 const ITEM_HEIGHT = 48;
 
-export default function ManageAccount(props: IManageAccountProps) {
+export default function ManageCategory(props: IManageCategoryProps) {
   const [filter, setFilter] = useState<Filter>({
     pageNumber: 0,
     pageSize: 10,
@@ -36,7 +37,7 @@ export default function ManageAccount(props: IManageAccountProps) {
   ) => {
     setFilter({ ...filter, pageNumber: value - 1 });
   };
-  const { data: response, isLoading: isLoadingAccount } = useAccounts(filter);
+  const { data: response, isLoading: isLoadingAccount } = useCategories(filter);
   const defaultValues: UpdateAccountDto = {
     id: 0,
     firstName: "",
@@ -55,12 +56,6 @@ export default function ManageAccount(props: IManageAccountProps) {
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const { mutate: deleteAccount, error } = useDeleteAccount();
-
-  const onDelete = (id: DeleteAccountDto) => {
-    deleteAccount(id);
   };
 
   /*{form add account }*/
@@ -195,14 +190,8 @@ export default function ManageAccount(props: IManageAccountProps) {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Last Name</th>
-                    <th>First Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>Role</th>
+                    <th>Name</th>
                     <th>Status</th>
-                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">
@@ -212,60 +201,14 @@ export default function ManageAccount(props: IManageAccountProps) {
                       <tr key={x.id}>
                         <td>{x.id}</td>
                         <td>
-                          <strong>{x.userLastName}</strong>
-                        </td>
-                        <td>
-                          <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
-                          <strong>{x.userFirstName}</strong>
-                        </td>
-
-                        <td>{x.email}</td>
-                        <td>{x.phone}</td>
-                        <td>{x.address}</td>
-                        <td>
-                          {x.roleName == "ADMIN" && (
-                            <span className="w-full badge bg-primary me-1">
-                              {x.roleName}
-                            </span>
-                          )}
-                          {x.roleName == "USER" && (
-                            <span className="w-full badge bg-info me-1">
-                              {x.roleName}
-                            </span>
-                          )}
-                          {x.roleName == "FACTORY" && (
-                            <span className="w-full badge bg-warning me-1">
-                              {x.roleName}
-                            </span>
-                          )}
-                        </td>
-                        <td>
-                          {x.userStatus == "ACTIVE" && (
-                            <span className="badge bg-label-primary me-1">
-                              {x.userStatus}
-                            </span>
-                          )}
-                          {x.userStatus == "INACTIVE" && (
-                            <span className="badge bg-label-danger me-1">
-                              {x.userStatus}
-                            </span>
-                          )}
+                          <strong>{x.name}</strong>
                         </td>
                         <td>
                           <div>
-                            <IconButton
-                              onClick={() => {
-                                handleIsEditTrue(x);
-                                handleClose();
-                              }}
-                            >
+                            <IconButton>
                               <EditIcon fontSize="medium" color="primary" />
                             </IconButton>
-                            <IconButton
-                              onClick={() => {
-                                onDelete(x.id as any);
-                              }}
-                            >
+                            <IconButton>
                               <DeleteIcon fontSize="medium" color="error" />
                             </IconButton>
                           </div>
@@ -344,4 +287,4 @@ export default function ManageAccount(props: IManageAccountProps) {
     </>
   );
 }
-ManageAccount.Layout = MainLayout;
+ManageCategory.Layout = MainLayout;

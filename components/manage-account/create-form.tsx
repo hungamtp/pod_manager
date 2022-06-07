@@ -1,17 +1,23 @@
+/* eslint-disable @next/next/no-css-tags */
+/* eslint-disable @next/next/no-sync-scripts */
 import KeyIcon from "@mui/icons-material/Key";
 import * as React from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import useCreateAccount from "hooks/accounts/use-create-account";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 export interface ICreateFormProps {
   handleCloseDialog: () => void;
 }
 
 type FormCreateAccount = {
-  userFirstName: string;
-  userLastName: string;
+  firstName: string;
+  lastName: string;
   password: string;
   email: string;
   phone: string;
@@ -24,7 +30,7 @@ const schema = yup.object().shape({
     .min(1, "First Name cần ít nhất 1 kí tự")
     .max(26, "First Name tối đa 50 kí tự")
     .required("First Name không được để trống"),
-  userLastName: yup
+  lastName: yup
     .string()
     .min(1, "Last Name cần ít nhất 1 kí tự")
     .max(26, "Last Name tối đa 50 kí tự")
@@ -52,18 +58,18 @@ const schema = yup.object().shape({
     .min(10, "Địa chỉ cần ít nhất 10 kí tự")
     .max(50, "Địa chỉ tối đa 50 kí tự")
     .required("Địa chỉ không được để trống"),
-  roleName: yup
-    .string()
-    .min(3, "Role cần ít nhất 8 kí tự")
-    .max(10, "Role tối đa 50 kí tự")
-    .required("Role không được để trống"),
 });
 
 export default function CreateForm(props: ICreateFormProps) {
   const { handleCloseDialog } = props;
+  const [role, setRole] = React.useState("USER");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setRole(event.target.value);
+  };
   const defaultValues: FormCreateAccount = {
-    userFirstName: "",
-    userLastName: "",
+    firstName: "",
+    lastName: "",
     password: "",
     email: "",
     phone: "",
@@ -82,6 +88,7 @@ export default function CreateForm(props: ICreateFormProps) {
   const { mutate: addAcount, error } = useCreateAccount(handleCloseDialog);
 
   const onSubmit: SubmitHandler<FormCreateAccount> = (data) => {
+    data.roleName = role;
     addAcount(data);
     console.log(data, "formCreate");
   };
@@ -115,12 +122,12 @@ export default function CreateForm(props: ICreateFormProps) {
                       placeholder="John"
                       aria-label="John"
                       aria-describedby="basic-icon-default-fullname2"
-                      {...register("userFirstName")}
+                      {...register("firstName")}
                     />
                   </div>
-                  {errors.userFirstName && (
+                  {errors.firstName && (
                     <span id="error-pwd-message" className="text-danger">
-                      {errors.userFirstName.message}
+                      {errors.firstName.message}
                     </span>
                   )}
                 </div>
@@ -147,12 +154,12 @@ export default function CreateForm(props: ICreateFormProps) {
                       placeholder="Doe"
                       aria-label="Doe"
                       aria-describedby="basic-icon-default-fullname2"
-                      {...register("userLastName")}
+                      {...register("lastName")}
                     />
                   </div>
-                  {errors.userLastName && (
+                  {errors.lastName && (
                     <span id="error-pwd-message" className="text-danger">
-                      {errors.userLastName.message}
+                      {errors.lastName.message}
                     </span>
                   )}
                 </div>
@@ -299,23 +306,22 @@ export default function CreateForm(props: ICreateFormProps) {
                   Role Name
                 </label>
                 <div className="col-sm-10">
-                  <div className="input-group input-group-merge">
-                    <span
-                      id="basic-icon-default-company2"
-                      className="input-group-text"
+                  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                    <InputLabel id="demo-select-small">Role</InputLabel>
+                    <Select
+                      labelId="demo-select-small"
+                      id="demo-select-small"
+                      value={role}
+                      label="Role"
+                      onChange={handleChange}
                     >
-                      <i className="bx bx-user" />
-                    </span>
-                    <input
-                      type="text"
-                      id="basic-icon-default-company"
-                      className="form-control"
-                      placeholder="ACME Inc."
-                      aria-label="ACME Inc."
-                      aria-describedby="basic-icon-default-company2"
-                      {...register("roleName")}
-                    />
-                  </div>
+                      <MenuItem value="USER">USER</MenuItem>
+                      <br />
+                      <MenuItem value="FACTORY">FACTORY</MenuItem>
+                      <br />
+                      <MenuItem value="ADMIN">ADMIN</MenuItem>
+                    </Select>
+                  </FormControl>
                   {errors.roleName && (
                     <span id="error-pwd-message" className="text-danger">
                       {errors.roleName.message}

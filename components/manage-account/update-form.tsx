@@ -1,38 +1,39 @@
-import { AccountDto } from "@/services/accounts/dto/get-all-accounts-dto";
+import { UpdateAccountDto } from "@/services/accounts/dto/update-accounts-dto";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useCreateAccount from "hooks/accounts/use-create-account";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import useUpdateAccount from "hooks/accounts/use-update-account";
 import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
+
 export interface IUpdateFormProps {
   handleCloseDialog: () => void;
-  account: FormCreateAccount;
+  account: UpdateAccountDto;
 }
+// type FormUpdateAccount = {
+//   id: number;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   phone: string;
+//   address: string;
+//   roleName: string;
+// };
 
-type FormCreateAccount = {
-  userFirstName: string;
-  userLastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  roleName: string;
-};
 const schema = yup.object().shape({
   firstName: yup
     .string()
     .min(1, "First Name cần ít nhất 1 kí tự")
     .max(26, "First Name tối đa 50 kí tự")
     .required("First Name không được để trống"),
-  userLastName: yup
+  lastName: yup
     .string()
     .min(1, "Last Name cần ít nhất 1 kí tự")
     .max(26, "Last Name tối đa 50 kí tự")
     .required("Last Name không được để trống"),
-  password: yup
-    .string()
-    .min(8, "Mật khẩu cần ít nhất 8 kí tự")
-    .max(26, "Mật khẩu tối đa 50 kí tự")
-    .required("Mật khẩu không được để trống"),
   email: yup
     .string()
     .email()
@@ -51,18 +52,19 @@ const schema = yup.object().shape({
     .min(10, "Địa chỉ cần ít nhất 10 kí tự")
     .max(50, "Địa chỉ tối đa 50 kí tự")
     .required("Địa chỉ không được để trống"),
-  roleName: yup
-    .string()
-    .min(3, "Role cần ít nhất 8 kí tự")
-    .max(10, "Role tối đa 50 kí tự")
-    .required("Role không được để trống"),
 });
 
 export default function UpdateForm(props: IUpdateFormProps) {
   const { handleCloseDialog, account } = props;
-  const defaultValues: FormCreateAccount = {
-    userFirstName: "",
-    userLastName: "",
+  const [role, setRole] = React.useState("");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setRole(event.target.value);
+  };
+  const defaultValues: UpdateAccountDto = {
+    id: 0,
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
     address: "",
@@ -73,20 +75,28 @@ export default function UpdateForm(props: IUpdateFormProps) {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormCreateAccount>({
+  } = useForm<UpdateAccountDto>({
     defaultValues,
     resolver: yupResolver(schema),
   });
 
   React.useEffect(() => {
+    setRole(account.roleName);
     reset(account);
   }, [account]);
 
-  const { mutate: addAcount, error } = useCreateAccount(handleCloseDialog);
+  const { mutate: updateAccount, error } = useUpdateAccount(handleCloseDialog);
 
-  const onSubmit: SubmitHandler<FormCreateAccount> = (data) => {
-    console.log(data, "formCreate");
+  const onSubmit: SubmitHandler<UpdateAccountDto> = (data) => {
+    const submitData = {
+      ...data,
+      id: account.id,
+      roleName: role,
+    } as UpdateAccountDto;
+    updateAccount(submitData);
+    console.log(submitData, "data");
   };
+
   return (
     <>
       <div className="col-xxl">
@@ -116,12 +126,12 @@ export default function UpdateForm(props: IUpdateFormProps) {
                       placeholder="John"
                       aria-label="John"
                       aria-describedby="basic-icon-default-fullname2"
-                      {...register("userFirstName")}
+                      {...register("firstName")}
                     />
                   </div>
-                  {errors.userFirstName && (
+                  {errors.firstName && (
                     <span id="error-pwd-message" className="text-danger">
-                      {errors.userFirstName.message}
+                      {errors.firstName.message}
                     </span>
                   )}
                 </div>
@@ -148,12 +158,12 @@ export default function UpdateForm(props: IUpdateFormProps) {
                       placeholder="Doe"
                       aria-label="Doe"
                       aria-describedby="basic-icon-default-fullname2"
-                      {...register("userLastName")}
+                      {...register("lastName")}
                     />
                   </div>
-                  {errors.userLastName && (
+                  {errors.lastName && (
                     <span id="error-pwd-message" className="text-danger">
-                      {errors.userLastName.message}
+                      {errors.lastName.message}
                     </span>
                   )}
                 </div>
@@ -168,25 +178,16 @@ export default function UpdateForm(props: IUpdateFormProps) {
                 </label>
                 <div className="col-sm-10">
                   <div className="input-group input-group-merge">
-                    <span className="input-group-text">
-                      <i className="bx bx-envelope" />
-                    </span>
                     <input
                       type="text"
                       id="basic-icon-default-email"
                       className="form-control"
                       placeholder="john.doe"
                       aria-label="john.doe"
+                      readOnly
                       aria-describedby="basic-icon-default-email2"
                       {...register("email")}
                     />
-
-                    <span
-                      id="basic-icon-default-email2"
-                      className="input-group-text"
-                    >
-                      @example.com
-                    </span>
                   </div>
                   {errors.email && (
                     <span id="error-pwd-message" className="text-danger">
@@ -269,23 +270,22 @@ export default function UpdateForm(props: IUpdateFormProps) {
                   Role Name
                 </label>
                 <div className="col-sm-10">
-                  <div className="input-group input-group-merge">
-                    <span
-                      id="basic-icon-default-company2"
-                      className="input-group-text"
+                  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                    <InputLabel id="demo-select-small">Role</InputLabel>
+                    <Select
+                      labelId="demo-select-small"
+                      id="demo-select-small"
+                      value={role}
+                      label="Role"
+                      onChange={handleChange}
                     >
-                      <i className="bx bx-user" />
-                    </span>
-                    <input
-                      type="text"
-                      id="basic-icon-default-company"
-                      className="form-control"
-                      placeholder="ACME Inc."
-                      aria-label="ACME Inc."
-                      aria-describedby="basic-icon-default-company2"
-                      {...register("roleName")}
-                    />
-                  </div>
+                      <MenuItem value="USER">USER</MenuItem>
+                      <br />
+                      <MenuItem value="FACTORY">FACTORY</MenuItem>
+                      <br />
+                      <MenuItem value="ADMIN">ADMIN</MenuItem>
+                    </Select>
+                  </FormControl>
                   {errors.roleName && (
                     <span id="error-pwd-message" className="text-danger">
                       {errors.roleName.message}
@@ -293,6 +293,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
                   )}
                 </div>
               </div>
+
               <div className="d-flex justify-content-center">
                 <div className="col-sm-10 d-flex justify-content-around">
                   <button
