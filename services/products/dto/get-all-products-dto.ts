@@ -13,7 +13,7 @@ export interface GetAllProductsDto extends ISuccessHttpResponse {
 export interface ProductDto{
     id:number;
     name: string;
-    productImages: [];
+    productImages: {image: string}[];
     categoryName: string;
     tags: [];
     numberOfSize: number;

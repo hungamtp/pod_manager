@@ -200,12 +200,34 @@ export default function NavBar({}: Props) {
             <div data-i18n="Tables">Designed Product</div>
           </a>
         </li>
-        <li className="menu-item">
-          <a href="\table" className="menu-link">
-            <i className="menu-icon tf-icons bx bx-cube-alt"></i>
-            <div data-i18n="Tables">Raw Product</div>
-          </a>
-        </li>
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        >
+          <ListItemButton
+            onClick={() => {
+              router.push("manage-product");
+            }}
+          >
+            <ListItemIcon className="pl-2p">
+              <TableViewIcon />
+            </ListItemIcon>
+            <ListItemText primary="Manage Product" />
+          </ListItemButton>
+        </List>
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        >
+          <ListItemButton
+            onClick={() => {
+              router.push("manage-category");
+            }}
+          >
+            <ListItemIcon className="pl-2p">
+              <TableViewIcon />
+            </ListItemIcon>
+            <ListItemText primary="Manage category" />
+          </ListItemButton>
+        </List>
         {/* {/Manage designed product} */}
 
         {/* {Manage Order} */}

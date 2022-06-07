@@ -1,100 +1,88 @@
-import { UpdateAccountDto } from "@/services/accounts/dto/update-accounts-dto";
+/* eslint-disable @next/next/no-css-tags */
+/* eslint-disable @next/next/no-sync-scripts */
+import KeyIcon from "@mui/icons-material/Key";
+import * as React from "react";
+import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import FormControl from "@mui/material/FormControl";
+import { SubmitHandler, useForm } from "react-hook-form";
+import useCreateAccount from "hooks/accounts/use-create-account";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import useUpdateAccount from "hooks/accounts/use-update-account";
-import * as React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import * as yup from "yup";
 
-export interface IUpdateFormProps {
+export interface ICreateProductFormProps {
   handleCloseDialog: () => void;
-  account: UpdateAccountDto;
 }
-// type FormUpdateAccount = {
-//   id: number;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   phone: string;
-//   address: string;
-//   roleName: string;
-// };
 
+type FormCreateProduct = {
+  name: string;
+  categoryName: string;
+  tags: [];
+  numberOfSize: number;
+  numberOfColor: number;
+  numberOfFactory: number;
+  productImages: { image: string }[];
+};
 const schema = yup.object().shape({
-  firstName: yup
+  name: yup
     .string()
     .min(1, "First Name cần ít nhất 1 kí tự")
     .max(26, "First Name tối đa 50 kí tự")
     .required("First Name không được để trống"),
-  lastName: yup
+  categoryName: yup
     .string()
-    .min(1, "Last Name cần ít nhất 1 kí tự")
-    .max(26, "Last Name tối đa 50 kí tự")
-    .required("Last Name không được để trống"),
-  email: yup
-    .string()
-    .email()
-    .min(8, "Tài khoản cần ít nhất 8 kí tự")
-    .max(50, "Tài khoản tối đa 50 kí tự")
-    .required("Tài khoản không được để trống"),
-  phone: yup
-    .string()
-    .matches(
-      /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/,
-      "Số điện thoại gồm 10 số và bắt đầu từ 0"
-    )
-    .required("Số điện thoại không được để trống"),
-  address: yup
-    .string()
-    .min(10, "Địa chỉ cần ít nhất 10 kí tự")
-    .max(50, "Địa chỉ tối đa 50 kí tự")
-    .required("Địa chỉ không được để trống"),
+    .min(1, "Category Name cần ít nhất 1 kí tự")
+    .max(26, "Category Name tối đa 50 kí tự")
+    .required("Category Name không được để trống"),
+  numberOfSize: yup
+    .number()
+    .min(1, "First Name cần ít nhất 1 kí tự")
+    .max(26, "First Name tối đa 50 kí tự")
+    .required("First Name không được để trống"),
+  numberOfColor: yup
+    .number()
+    .min(1, "First Name cần ít nhất 1 kí tự")
+    .max(26, "First Name tối đa 50 kí tự")
+    .required("First Name không được để trống"),
+  numberOfFactory: yup
+    .number()
+    .min(1, "First Name cần ít nhất 1 kí tự")
+    .max(26, "First Name tối đa 50 kí tự")
+    .required("First Name không được để trống"),
 });
 
-export default function UpdateForm(props: IUpdateFormProps) {
-  const { handleCloseDialog, account } = props;
-  const [role, setRole] = React.useState("");
+export default function CreateProductForm(props: ICreateProductFormProps) {
+  const { handleCloseDialog } = props;
+  const [role, setRole] = React.useState("USER");
 
   const handleChange = (event: SelectChangeEvent) => {
     setRole(event.target.value);
   };
-  const defaultValues: UpdateAccountDto = {
-    id: 0,
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    roleName: "",
+  const defaultValues: FormCreateProduct = {
+    name: "",
+    categoryName: "",
+    tags: [],
+  numberOfSize: 0,
+  numberOfColor: 0,
+  numberOfFactory: 0,
+  productImages: ,
   };
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<UpdateAccountDto>({
+  } = useForm<FormCreateProduct>({
     defaultValues,
     resolver: yupResolver(schema),
   });
+  const { mutate: addAcount, error } = useCreateAccount(handleCloseDialog);
 
-  React.useEffect(() => {
-    setRole(account.roleName);
-    reset(account);
-  }, [account]);
-
-  const { mutate: updateAccount, error } = useUpdateAccount(handleCloseDialog);
-
-  const onSubmit: SubmitHandler<UpdateAccountDto> = (data) => {
-    const submitData = {
-      ...data,
-      id: account.id,
-      roleName: role,
-    } as UpdateAccountDto;
-    updateAccount(submitData);
-    console.log(submitData, "data");
+  const onSubmit: SubmitHandler<FormCreateProduct> = (data) => {
+    data.roleName = role;
+    addAcount(data);
+    console.log(data, "formCreate");
   };
 
   return (
@@ -168,7 +156,38 @@ export default function UpdateForm(props: IUpdateFormProps) {
                   )}
                 </div>
               </div>
-
+              <div className="row mb-3">
+                <label
+                  className="col-sm-2 col-form-label"
+                  htmlFor="basic-icon-default-company"
+                >
+                  Pass Word
+                </label>
+                <div className="col-sm-10">
+                  <div className="input-group input-group-merge">
+                    <span
+                      id="basic-icon-default-company2"
+                      className="input-group-text"
+                    >
+                      <KeyIcon fontSize="small" />
+                    </span>
+                    <input
+                      type="text"
+                      id="basic-icon-default-company"
+                      className="form-control"
+                      placeholder="ACME Inc."
+                      aria-label="ACME Inc."
+                      aria-describedby="basic-icon-default-company2"
+                      {...register("password")}
+                    />
+                  </div>
+                  {errors.password && (
+                    <span id="error-pwd-message" className="text-danger">
+                      {errors.password.message}
+                    </span>
+                  )}
+                </div>
+              </div>
               <div className="row mb-3">
                 <label
                   className="col-sm-2 col-form-label"
@@ -178,16 +197,25 @@ export default function UpdateForm(props: IUpdateFormProps) {
                 </label>
                 <div className="col-sm-10">
                   <div className="input-group input-group-merge">
+                    <span className="input-group-text">
+                      <i className="bx bx-envelope" />
+                    </span>
                     <input
                       type="text"
                       id="basic-icon-default-email"
                       className="form-control"
                       placeholder="john.doe"
                       aria-label="john.doe"
-                      readOnly
                       aria-describedby="basic-icon-default-email2"
                       {...register("email")}
                     />
+
+                    <span
+                      id="basic-icon-default-email2"
+                      className="input-group-text"
+                    >
+                      @example.com
+                    </span>
                   </div>
                   {errors.email && (
                     <span id="error-pwd-message" className="text-danger">
@@ -293,7 +321,6 @@ export default function UpdateForm(props: IUpdateFormProps) {
                   )}
                 </div>
               </div>
-
               <div className="d-flex justify-content-center">
                 <div className="col-sm-10 d-flex justify-content-around">
                   <button
@@ -301,7 +328,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
                     className="btn btn-primary"
                     color="primary"
                   >
-                    UPDATE
+                    CREATE
                   </button>
                   <button
                     className="btn btn-secondary"
