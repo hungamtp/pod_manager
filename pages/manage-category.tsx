@@ -1,26 +1,22 @@
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
 import { MainLayout } from "@/components/layouts";
-import CreateForm from "@/components/manage-account/create-form";
-import UpdateForm from "@/components/manage-account/update-form";
+import CreateCategoryForm from "@/components/manage-category/create-category-form";
+import UpdateCategoryForm from "@/components/manage-category/update-category-form";
 import { Filter } from "@/services/accounts";
-import { DeleteAccountDto } from "@/services/accounts/dto/delete-accounts-dto";
-import { AccountDto } from "@/services/accounts/dto/get-all-accounts-dto";
-import { UpdateAccountDto } from "@/services/accounts/dto/update-accounts-dto";
+import { UpdateCategoryDto } from "@/services/categories/dto/update-categories-dto";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@mui/icons-material/Add";
-import { IconButton, Menu, MenuItem, Pagination, Stack } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { IconButton, Pagination, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import useAccounts from "hooks/accounts/use-accounts";
-import useDeleteAccount from "hooks/accounts/use-delete-accounts";
+import useCategories from "hooks/categories/use-categories";
 import * as React from "react";
 import { useState } from "react";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import useCategories from "hooks/categories/use-categories";
 export interface IManageCategoryProps {}
 
 const ITEM_HEIGHT = 48;
@@ -37,15 +33,12 @@ export default function ManageCategory(props: IManageCategoryProps) {
   ) => {
     setFilter({ ...filter, pageNumber: value - 1 });
   };
-  const { data: response, isLoading: isLoadingAccount } = useCategories(filter);
-  const defaultValues: UpdateAccountDto = {
+  const { data: response, isLoading: isLoadingCategory } =
+    useCategories(filter);
+  const defaultValues: UpdateCategoryDto = {
     id: 0,
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    roleName: "",
+    name: "",
+    image: "",
   };
   //  menu button
 
@@ -65,18 +58,10 @@ export default function ManageCategory(props: IManageCategoryProps) {
   };
 
   /*{form add account }*/
-  const handleIsEditTrue = (user: AccountDto) => {
-    console.log(user, "userrrrrr");
-    const tmpAcc = {
-      id: user.id,
-      firstName: user.userFirstName,
-      lastName: user.userLastName,
-      email: user.email,
-      phone: user.phone,
-      address: user.address,
-      roleName: user.roleName,
-    };
-    setAccount(tmpAcc);
+  const handleIsEditTrue = (category: UpdateCategoryDto) => {
+    console.log(category, "userrrrrr");
+
+    setCategory(category);
     setIsEdit(true);
     setOpenDialog(true);
   };
@@ -89,7 +74,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
   /* {open Dialog} */
   const [isEdit, setIsEdit] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [account, setAccount] = useState<UpdateAccountDto>(defaultValues);
+  const [category, setCategory] = useState<UpdateCategoryDto>(defaultValues);
 
   return (
     <>
@@ -109,7 +94,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
             onClick={handleIsEditFalse}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create New Account
+            Create New Category
           </Fab>
 
           <hr className="my-4" />
@@ -122,10 +107,10 @@ export default function ManageCategory(props: IManageCategoryProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Create New Account"}
+                {"Create New Category"}
               </DialogTitle>
               <DialogContent>
-                <CreateForm handleCloseDialog={handleCloseDialog} />
+                <CreateCategoryForm handleCloseDialog={handleCloseDialog} />
               </DialogContent>
               <DialogActions></DialogActions>
             </Dialog>
@@ -139,11 +124,11 @@ export default function ManageCategory(props: IManageCategoryProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Update Account"}
+                {"Update Category"}
               </DialogTitle>
               <DialogContent>
-                <UpdateForm
-                  account={account}
+                <UpdateCategoryForm
+                  category={category}
                   handleCloseDialog={handleCloseDialog}
                 />
               </DialogContent>
@@ -184,18 +169,19 @@ export default function ManageCategory(props: IManageCategoryProps) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Account management</h5>
+            <h5 className="card-header">Category management</h5>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>
                   <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Image</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">
-                  {!isLoadingAccount &&
+                  {!isLoadingCategory &&
                     response &&
                     response.content.map((x) => (
                       <tr key={x.id}>
@@ -204,9 +190,19 @@ export default function ManageCategory(props: IManageCategoryProps) {
                           <strong>{x.name}</strong>
                         </td>
                         <td>
+                          <strong>{x.image}</strong>
+                        </td>
+                        <td>
                           <div>
                             <IconButton>
-                              <EditIcon fontSize="medium" color="primary" />
+                              <EditIcon
+                                fontSize="medium"
+                                color="primary"
+                                onClick={() => {
+                                  handleIsEditTrue(x);
+                                  handleClose();
+                                }}
+                              />
                             </IconButton>
                             <IconButton>
                               <DeleteIcon fontSize="medium" color="error" />
