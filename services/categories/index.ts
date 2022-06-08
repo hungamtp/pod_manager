@@ -3,6 +3,8 @@ import {
   } from "./dto/get-all-categories-dto";
   
   import { API } from "@/api-client/axios";
+import { CreateCategoryDto, CreateCategoryResponse } from "./dto/create-categories-dto";
+import { UpdateCategoryDto, UpdateCategoryResponse } from "./dto/update-categories-dto";
   
   export interface Filter {
     pageSize?: number;
@@ -22,4 +24,18 @@ import {
     return data.data;
   };
   
- 
+  export const createCategory = async (requestData: CreateCategoryDto) => {
+    const { data } = await API.post<CreateCategoryResponse>(
+      "category",
+      requestData
+    );
+    return data;
+  };
+
+  export const updateCategory = async (requestData: UpdateCategoryDto) => {
+    const { data } = await API.put<UpdateCategoryResponse>(
+      `/category${requestData.id}`,
+      requestData
+    );
+    return data;
+  };
