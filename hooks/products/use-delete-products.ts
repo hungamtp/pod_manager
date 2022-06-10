@@ -1,24 +1,24 @@
-import {  deleteAccount } from '@/services/accounts';
+import { deleteProduct } from '@/services/products';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 
 
-const useDeleteAccount = () => {
+const useDeleteProduct = () => {
 	const router = useRouter();
     const queryClient = useQueryClient();
 	return useMutation(
 		      
         async (id: number) => {
-            return await deleteAccount(id);
+            return await deleteProduct(id);
 		},
 		{
 			onSuccess: (data) => {
-                queryClient.invalidateQueries("Accounts")
-				router.push('/manage-account');
+                queryClient.invalidateQueries("Products")
+				router.push('/manage-product');
 			},
 			
 		}
 	);
 };
 
-export default useDeleteAccount;
+export default useDeleteProduct;

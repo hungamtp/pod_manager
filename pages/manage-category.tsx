@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
 import { MainLayout } from "@/components/layouts";
@@ -15,6 +17,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import useCategories from "hooks/categories/use-categories";
+import useDeleteCategory from "hooks/categories/use-delete-categories";
 import * as React from "react";
 import { useState } from "react";
 export interface IManageCategoryProps {}
@@ -51,10 +54,19 @@ export default function ManageCategory(props: IManageCategoryProps) {
     setAnchorEl(null);
   };
 
+  const { mutate: deleteCategory, error } = useDeleteCategory();
+
+  const onDelete = (id: number) => {
+    deleteCategory(id);
+  };
+
   /*{form add account }*/
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
   };
 
   /*{form add account }*/
@@ -71,9 +83,16 @@ export default function ManageCategory(props: IManageCategoryProps) {
     setOpenDialog(true);
   };
 
+  const hanldeIsDelete = (x: number) => {
+    setIsDelete(x);
+    setOpenDeleteDialog(true);
+  };
+
   /* {open Dialog} */
   const [isEdit, setIsEdit] = useState(false);
+  const [isDelete, setIsDelete] = useState(0);
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [category, setCategory] = useState<UpdateCategoryDto>(defaultValues);
 
   return (
@@ -135,6 +154,41 @@ export default function ManageCategory(props: IManageCategoryProps) {
               <DialogActions></DialogActions>
             </Dialog>
           )}
+
+          <Dialog
+            open={openDeleteDialog}
+            onClose={handleCloseDeleteDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            fullWidth={true}
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Bạn có muốn delete category này không?"}
+            </DialogTitle>
+            <DialogContent>
+              <div className="d-flex justify-content-center">
+                <div className="col-sm-10 d-flex justify-content-around">
+                  <button
+                    className="btn btn-danger"
+                    color="danger"
+                    onClick={() => {
+                      onDelete(isDelete);
+                    }}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={handleCloseDeleteDialog}
+                    autoFocus
+                  >
+                    CANCEL
+                  </button>
+                </div>
+              </div>
+            </DialogContent>
+            <DialogActions></DialogActions>
+          </Dialog>
           <nav
             className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
             id="layout-navbar"
@@ -177,6 +231,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
                     <th>ID</th>
                     <th>Name</th>
                     <th>Image</th>
+                    <th>isDelete</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -190,7 +245,19 @@ export default function ManageCategory(props: IManageCategoryProps) {
                           <strong>{x.name}</strong>
                         </td>
                         <td>
-                          <strong>{x.image}</strong>
+                          <img
+                            src={x.image}
+                            className="d-block rounded"
+                            height={100}
+                            width={100}
+                          />
+                        </td>
+                        <td>
+                          {x.deleted == true && (
+                            <span className="badge bg-label-danger me-1">
+                              DELETE
+                            </span>
+                          )}
                         </td>
                         <td>
                           <div>
@@ -205,7 +272,13 @@ export default function ManageCategory(props: IManageCategoryProps) {
                               />
                             </IconButton>
                             <IconButton>
-                              <DeleteIcon fontSize="medium" color="error" />
+                              <DeleteIcon
+                                onClick={() => {
+                                  hanldeIsDelete(x.id);
+                                }}
+                                fontSize="medium"
+                                color="error"
+                              />
                             </IconButton>
                           </div>
                         </td>

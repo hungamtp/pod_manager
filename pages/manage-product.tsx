@@ -17,6 +17,8 @@ import * as React from "react";
 import { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CreateProductForm from "@/components/manage-product/create-product-form";
+import useDeleteProduct from "hooks/products/use-delete-products";
 
 export interface IManageProductProps {}
 
@@ -43,7 +45,10 @@ export default function ManageProduct(props: IManageProductProps) {
     setFilter({ ...filter, pageNumber: value - 1 });
   };
   const { data: response, isLoading: isLoadingProduct } = useProducts(filter);
-
+  const { mutate: deleteProduct, error } = useDeleteProduct();
+  const onDelete = (id: number) => {
+    deleteProduct(id);
+  };
   //  menu button
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -61,6 +66,10 @@ export default function ManageProduct(props: IManageProductProps) {
     setOpenDialog(false);
   };
 
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
   /*{form add account }*/
   const handleIsEditTrue = (user: FormCreateAccount) => {
     console.log(user, "userrrrrr");
@@ -74,6 +83,11 @@ export default function ManageProduct(props: IManageProductProps) {
     setOpenDialog(true);
   };
 
+  const hanldeIsDelete = (x: number) => {
+    setIsDelete(x);
+    setOpenDeleteDialog(true);
+  };
+
   /* {open Dialog} */
   const [isEdit, setIsEdit] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -85,7 +99,10 @@ export default function ManageProduct(props: IManageProductProps) {
     address: "",
     roleName: "",
   };
+
   const [account, setAccount] = useState<FormCreateAccount>(defaultValues);
+  const [isDelete, setIsDelete] = useState(0);
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
   return (
     <>
@@ -121,7 +138,7 @@ export default function ManageProduct(props: IManageProductProps) {
                 {"Create New Account"}
               </DialogTitle>
               <DialogContent>
-                <CreateForm handleCloseDialog={handleCloseDialog} />
+                <CreateProductForm handleCloseDialog={handleCloseDialog} />
               </DialogContent>
               <DialogActions></DialogActions>
             </Dialog>
@@ -141,6 +158,41 @@ export default function ManageProduct(props: IManageProductProps) {
               <DialogActions></DialogActions>
             </Dialog>
           )}
+          <Dialog
+            open={openDeleteDialog}
+            onClose={handleCloseDeleteDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            fullWidth={true}
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Bạn có muốn delete category này không?"}
+            </DialogTitle>
+            <DialogContent>
+              <div className="d-flex justify-content-center">
+                <div className="col-sm-10 d-flex justify-content-around">
+                  <button
+                    className="btn btn-danger"
+                    color="danger"
+                    onClick={() => {
+                      onDelete(isDelete);
+                    }}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={handleCloseDeleteDialog}
+                    autoFocus
+                  >
+                    CANCEL
+                  </button>
+                </div>
+              </div>
+            </DialogContent>
+            <DialogActions></DialogActions>
+          </Dialog>
+
           <nav
             className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
             id="layout-navbar"
@@ -185,6 +237,7 @@ export default function ManageProduct(props: IManageProductProps) {
                     <th>Product Image</th>
                     <th>Category Name</th>
                     <th>Tags</th>
+                    <th>isDelete</th>
 
                     <th>Actions</th>
                   </tr>
@@ -210,7 +263,15 @@ export default function ManageProduct(props: IManageProductProps) {
                         </td>
                         <td>{x.categoryName}</td>
 
-                        <td>{x.tags}</td>
+                        {/* <td>{x.productTags[0].tag.name}</td> */}
+                        <td></td>
+                        <td>
+                          {x.deleted == true && (
+                            <span className="badge bg-label-danger me-1">
+                              DELETE
+                            </span>
+                          )}
+                        </td>
 
                         <td>
                           <div>
@@ -222,7 +283,13 @@ export default function ManageProduct(props: IManageProductProps) {
                               <EditIcon fontSize="medium" color="primary" />
                             </IconButton>
                             <IconButton>
-                              <DeleteIcon fontSize="medium" color="error" />
+                              <DeleteIcon
+                                onClick={() => {
+                                  hanldeIsDelete(x.id);
+                                }}
+                                fontSize="medium"
+                                color="error"
+                              />
                             </IconButton>
                           </div>
                         </td>
