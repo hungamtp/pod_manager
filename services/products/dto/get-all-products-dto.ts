@@ -15,8 +15,13 @@ export interface ProductDto{
     name: string;
     productImages: {image: string}[];
     categoryName: string;
-    tags: [];
-    numberOfSize: number;
-    numberOfColor: number;
-    numberOfFactory: number;
+    productTags: ProductTagDto[];
+    priceByFactories: number;
+    public: boolean;
+    deleted: boolean;
+}
+export interface ProductTagDto{
+    tag: {
+        name: string;
+    }
 }

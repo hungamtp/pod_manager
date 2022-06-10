@@ -5,7 +5,6 @@ import {
   import { API } from "@/api-client/axios";
 import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
 import { UpdateAccountDto, UpdateAccountResponse } from "./dto/update-accounts-dto";
-import { DeleteAccountDto  } from "./dto/delete-accounts-dto";
   
   export interface Filter {
     pageSize?: number;
@@ -54,10 +53,11 @@ import { DeleteAccountDto  } from "./dto/delete-accounts-dto";
     );
     return data;
   };
-  export const deleteAccount = async (requestData: DeleteAccountDto) => {
+
+  export const deleteAccount = async (id: number ) => {
      await API.patch(
-      `/user${requestData.id}`,
-      requestData
+      `/user/${id}`,
+      
     );
     
   };

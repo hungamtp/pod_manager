@@ -1,24 +1,25 @@
 import {  deleteAccount } from '@/services/accounts';
+import { deleteCategory } from '@/services/categories';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 
 
-const useDeleteAccount = () => {
+const useDeleteCategory = () => {
 	const router = useRouter();
     const queryClient = useQueryClient();
 	return useMutation(
 		      
         async (id: number) => {
-            return await deleteAccount(id);
+            return await deleteCategory(id);
 		},
 		{
 			onSuccess: (data) => {
-                queryClient.invalidateQueries("Accounts")
-				router.push('/manage-account');
+                queryClient.invalidateQueries("Categories")
+				router.push('/manage-category');
 			},
 			
 		}
 	);
 };
 
-export default useDeleteAccount;
+export default useDeleteCategory;

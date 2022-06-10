@@ -3,6 +3,7 @@ import {
   } from "./dto/get-all-products-dto";
   
   import { API } from "@/api-client/axios";
+import { CreateProductDto, CreateProductResponse } from "./dto/create-products-dto";
 // import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
   
   export interface Filter {
@@ -29,50 +30,18 @@ import {
     return data.data;
   };
   
-  // export const createAccountUser = async (requestData: CreateAccountDto) => {
-  //   const { data } = await API.post<CreateAccountResponse>(
-  //     "/user",
-  //     requestData
-  //   );
-  //   return data;
-  // };
-  // export const createAccountFactory = async (requestData: CreateAccountDto) => {
-  //   const { data } = await API.post<CreateAccountResponse>(
-  //     "user/addFactory",
-  //     requestData
-  //   );
-  //   return data;
-  // };
-  // export const createAccountAdmin = async (requestData: CreateAccountDto) => {
-  //   const { data } = await API.post<CreateAccountResponse>(
-  //     "/user/addAdmin",
-  //     requestData
-  //   );
-  //   return data;
-  // };
+  export const createProduct = async (requestData: CreateProductDto) => {
+    const { data } = await API.post<CreateProductResponse>(
+      "/product",
+      requestData
+    );
+    return data;
+  };
   
-  // export const updateRole = async (requestData: UpdateAccountDto) => {
-  //   const { data } = await API.put<UpdateUserResponse>(
-  //     `/user/${requestData.userId}?roleId=${requestData.role}`
-  //   );
-  //   return data;
-  // };
-  
-  // export const updatePassword = async (requestData: UpdateAccountDto) => {
-  //   const { data } = await API.post<UpdateUserResponse>(
-  //     `/auth/changePassword`,
-  //     requestData
-  //   );
-  //   console.log(data, "changePassworddddddddd");
-  //   return data;
-  // };
-  
-  // export const updateAccount = async (requestData: UpdateAccountDto) => {
-  //   const { data } = await API.put<UpdateUserResponse>(
-  //     `/user/update/${requestData.userId}`,
-  //     requestData
-  //   );
-  //   return data;
-  // };
-  
- 
+  export const deleteProduct = async (id: number ) => {
+    await API.patch(
+     `/product/${id}`,
+     
+   );
+   
+ };

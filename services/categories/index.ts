@@ -13,7 +13,7 @@ import { UpdateCategoryDto, UpdateCategoryResponse } from "./dto/update-categori
   
   export const getCategories = async (filter?: Filter) => {
     const pageNumber = 0;
-    const pageSize = 9;
+    const pageSize = 5;
     const query = new URLSearchParams({
       pageNumber: filter?.pageNumber?.toString() || pageNumber.toString(),
       pageSize: filter?.pageSize?.toString() || pageSize.toString(),
@@ -34,8 +34,16 @@ import { UpdateCategoryDto, UpdateCategoryResponse } from "./dto/update-categori
 
   export const updateCategory = async (requestData: UpdateCategoryDto) => {
     const { data } = await API.put<UpdateCategoryResponse>(
-      `/category${requestData.id}`,
+      `/category/${requestData.id}`,
       requestData
     );
     return data;
   };
+
+  export const deleteCategory = async (id: number ) => {
+    await API.patch(
+     `/category/${id}`,
+     
+   );
+   
+ };

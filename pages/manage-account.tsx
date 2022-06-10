@@ -4,12 +4,13 @@ import { MainLayout } from "@/components/layouts";
 import CreateForm from "@/components/manage-account/create-form";
 import UpdateForm from "@/components/manage-account/update-form";
 import { Filter } from "@/services/accounts";
-import { DeleteAccountDto } from "@/services/accounts/dto/delete-accounts-dto";
 import { AccountDto } from "@/services/accounts/dto/get-all-accounts-dto";
 import { UpdateAccountDto } from "@/services/accounts/dto/update-accounts-dto";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@mui/icons-material/Add";
-import { IconButton, Menu, MenuItem, Pagination, Stack } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { IconButton, Pagination, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -18,8 +19,6 @@ import useAccounts from "hooks/accounts/use-accounts";
 import useDeleteAccount from "hooks/accounts/use-delete-accounts";
 import * as React from "react";
 import { useState } from "react";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 export interface IManageAccountProps {}
 
 const ITEM_HEIGHT = 48;
@@ -59,7 +58,7 @@ export default function ManageAccount(props: IManageAccountProps) {
 
   const { mutate: deleteAccount, error } = useDeleteAccount();
 
-  const onDelete = (id: DeleteAccountDto) => {
+  const onDelete = (id: number) => {
     deleteAccount(id);
   };
 
@@ -263,7 +262,7 @@ export default function ManageAccount(props: IManageAccountProps) {
                             </IconButton>
                             <IconButton
                               onClick={() => {
-                                onDelete(x.id as any);
+                                onDelete(x.id);
                               }}
                             >
                               <DeleteIcon fontSize="medium" color="error" />
