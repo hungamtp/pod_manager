@@ -3,6 +3,7 @@
 import KeyIcon from "@mui/icons-material/Key";
 import * as React from "react";
 import * as yup from "yup";
+import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import useCreateAccount from "hooks/accounts/use-create-account";
@@ -21,6 +22,9 @@ import {
   list,
 } from "firebase/storage";
 import useCreateProduct from "hooks/products/use-create-products";
+import useCategories from "hooks/categories/use-categories";
+import { Filter } from "@/services/categories";
+import { MenuList } from "@mui/material";
 
 export interface ICreateProductFormProps {
   handleCloseDialog: () => void;
@@ -30,6 +34,7 @@ type FormCreateProduct = {
   name: string;
   categoryName: string;
   description: string;
+  images: [];
 };
 const schema = yup.object().shape({
   name: yup
@@ -37,30 +42,27 @@ const schema = yup.object().shape({
     .min(1, "First Name cần ít nhất 1 kí tự")
     .max(26, "First Name tối đa 50 kí tự")
     .required("First Name không được để trống"),
-  categoryName: yup
-    .string()
-    .min(1, "Category Name cần ít nhất 1 kí tự")
-    .max(26, "Category Name tối đa 50 kí tự")
-    .required("Category Name không được để trống"),
   description: yup
     .string()
     .min(1, "Description cần ít nhất 1 kí tự")
-    .max(26, "Description tối đa 50 kí tự")
+    .max(100, "Description tối đa 100 kí tự")
     .required("Description không được để trống"),
 });
 
 export default function CreateProductForm(props: ICreateProductFormProps) {
   const { handleCloseDialog } = props;
-  const [role, setRole] = React.useState("USER");
+  const [categoryName, setCategoryName] = React.useState("");
   const [images, setImages] = React.useState<ImageListType>([]);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setRole(event.target.value);
+    setCategoryName(event.target.value);
   };
+
   const defaultValues: FormCreateProduct = {
     name: "",
     categoryName: "",
     description: "",
+    images: [],
   };
   const {
     register,
@@ -77,24 +79,40 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
     setImages(imageList);
     // data for submit
   };
-  const onUploadImage = (data: { name: string; image: string }) => {
+  const onUploadImage = (data: {
+    name: string;
+    categoryName: string;
+    description: string;
+    images: [];
+  }) => {
     if (images !== null) {
-      const file = images[0].file;
-      const imageRef = ref(storage, `images/${file?.name}`);
-      uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then((url) => {
-          const submitData = { ...data, image: url };
-          // addCategory(submitData);
+      const imageList = [] as string[];
+      images.map((image) => {
+        const file = image.file;
+        const imageRef = ref(storage, `images/${file?.name}`);
+        uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then((url) => {
+            imageList.push(url);
+            if (imageList.length === images.length) {
+              const submitData = { ...data, images: imageList };
+              addProduct(submitData);
+            }
+          });
         });
       });
     }
   };
-
+  const [filter, setFilter] = useState<Filter>({
+    pageNumber: 0,
+    pageSize: 10,
+  });
+  const { data: response, isLoading: isLoadingCategory } =
+    useCategories(filter);
   const { mutate: addProduct, error } = useCreateProduct(handleCloseDialog);
 
   const onSubmit: SubmitHandler<FormCreateProduct> = (data) => {
-    // addProduct(data);
-    console.log(data, "formCreate");
+    data.categoryName = categoryName;
+    onUploadImage(data);
   };
 
   return (
@@ -144,28 +162,28 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                   Category Name
                 </label>
                 <div className="col-sm-10">
-                  <div className="input-group input-group-merge">
-                    <span
-                      id="basic-icon-default-fullname2"
-                      className="input-group-text"
+                  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                    <InputLabel id="demo-select-small">Category</InputLabel>
+                    <Select
+                      labelId="demo-select-small"
+                      id="demo-select-small"
+                      value={categoryName}
+                      label="categoryName"
+                      onChange={handleChange}
                     >
-                      <i className="bx bx-user" />
-                    </span>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="basic-icon-default-fullname"
-                      placeholder="Doe"
-                      aria-label="Doe"
-                      aria-describedby="basic-icon-default-fullname2"
-                      {...register("categoryName")}
-                    />
-                  </div>
-                  {errors.categoryName && (
-                    <span id="error-pwd-message" className="text-danger">
-                      {errors.categoryName.message}
-                    </span>
-                  )}
+                      {!isLoadingCategory &&
+                        response &&
+                        response.content.map((categoryN) => (
+                          <MenuItem
+                            className="d-flex flex-column"
+                            key={categoryN.name}
+                            value={categoryN.name}
+                          >
+                            {categoryN.name}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
                 </div>
               </div>
               <div className="row mb-3">
@@ -209,6 +227,7 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                 </label>
                 <div className="col-sm-10">
                   <ImageUploading
+                    multiple
                     value={images}
                     onChange={onChange}
                     maxNumber={maxNumber}
@@ -234,11 +253,14 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                           style={isDragging ? { color: "red" } : undefined}
                           onClick={onImageUpload}
                           {...dragProps}
+                          type="button"
                         >
                           Thêm ảnh
                         </button>
                         &nbsp;
-                        <button onClick={onImageRemoveAll}>Xóa ảnh</button>
+                        <button type="button" onClick={onImageRemoveAll}>
+                          Xóa ảnh
+                        </button>
                       </div>
                     )}
                   </ImageUploading>
@@ -247,9 +269,9 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
               <div className="d-flex justify-content-center">
                 <div className="col-sm-10 d-flex justify-content-around">
                   <button
-                    onClick={handleSubmit(onSubmit)}
                     className="btn btn-primary"
                     color="primary"
+                    type="submit"
                   >
                     CREATE
                   </button>
@@ -257,6 +279,7 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                     className="btn btn-secondary"
                     onClick={handleCloseDialog}
                     autoFocus
+                    type="button"
                   >
                     CANCEL
                   </button>

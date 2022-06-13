@@ -20,10 +20,12 @@ import {
   listAll,
   list,
 } from "firebase/storage";
+import useUpdateProduct from "hooks/products/use-update-products";
+import { UpdateProductDto } from "@/services/products/dto/update-product-dto";
 
-export interface IUpdateCategoryFormProps {
+export interface IUpdateProductFormProps {
   handleCloseDialog: () => void;
-  category: UpdateCategoryDto;
+  product: UpdateProductDto;
 }
 
 const schema = yup.object().shape({
@@ -34,58 +36,71 @@ const schema = yup.object().shape({
     .required("First Name không được để trống"),
 });
 
-export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
-  const { handleCloseDialog, category } = props;
+export default function UpdateProductForm(props: IUpdateProductFormProps) {
+  const { handleCloseDialog, product } = props;
 
-  const [images, setImages] = React.useState<ImageListType>([
-    { data_url: category.image },
-  ]);
+  const [images, setImages] = React.useState<ImageListType>(
+    product.images.map((image) => ({ data_url: image }))
+  );
 
-  const defaultValues: UpdateCategoryDto = {
+  const defaultValues: UpdateProductDto = {
     id: 0,
     name: "",
-    image: "",
+    categoryName: "",
+    description: "",
+    images: [],
   };
+  const form = useForm<UpdateProductDto>({
+    defaultValues,
+    resolver: yupResolver(schema),
+  });
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<UpdateCategoryDto>({
-    defaultValues,
-    resolver: yupResolver(schema),
-  });
+  } = form;
 
   React.useEffect(() => {
-    reset(category);
-  }, [category]);
+    reset(product);
+  }, [product]);
 
-  const { mutate: updateCategory, error } =
-    useUpdateCategory(handleCloseDialog);
+  const { mutate: updateProduct, error } = useUpdateProduct(handleCloseDialog);
 
   const maxNumber = 69;
   const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
     setImages(imageList);
     // data for submit
   };
-  const onUploadImage = (data: { name: string; image: string }) => {
+  const onUploadImage = (data: {
+    name: string;
+    images: string[];
+    description: string;
+    categoryName: string;
+  }) => {
     if (images !== null) {
-      const file = images[0].file;
-      const imageRef = ref(storage, `images/${file?.name}`);
-      uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then((url) => {
-          const submitData = {
-            ...data,
-            id: category.id,
-            image: url,
-          } as UpdateCategoryDto;
-          updateCategory(submitData);
+      const imageList = [] as string[];
+      images.map((image) => {
+        const file = image.file;
+        const imageRef = ref(storage, `images/${file?.name}`);
+        uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then((url) => {
+            imageList.push(url);
+            if (imageList.length === images.length) {
+              const submitData = {
+                ...data,
+                id: product.id,
+                images: imageList,
+              } as UpdateProductDto;
+              updateProduct(submitData);
+            }
+          });
         });
       });
     }
   };
 
-  const onSubmit: SubmitHandler<UpdateCategoryDto> = (data) => {
+  const onSubmit: SubmitHandler<UpdateProductDto> = (data) => {
     console.log(data, "dataaa");
     onUploadImage(data);
   };
@@ -101,7 +116,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
                   className="col-sm-2 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Category Name
+                  Name
                 </label>
 
                 <div className="col-sm-10">
@@ -134,7 +149,73 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
                   className="col-sm-2 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Image
+                  Category Name
+                </label>
+
+                <div className="col-sm-10">
+                  <div className="input-group input-group-merge">
+                    <span
+                      id="basic-icon-default-fullname2"
+                      className="input-group-text"
+                    >
+                      <i className="bx bx-user" />
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="basic-icon-default-fullname"
+                      placeholder="Hoodies"
+                      aria-label="Hoodies"
+                      aria-describedby="basic-icon-default-fullname2"
+                      {...register("categoryName")}
+                    />
+                  </div>
+                  {errors.categoryName && (
+                    <span id="error-pwd-message" className="text-danger">
+                      {errors.categoryName.message}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="row mb-3">
+                <label
+                  className="col-sm-2 col-form-label"
+                  htmlFor="basic-icon-default-fullname"
+                >
+                  Description
+                </label>
+
+                <div className="col-sm-10">
+                  <div className="input-group input-group-merge">
+                    <span
+                      id="basic-icon-default-fullname2"
+                      className="input-group-text"
+                    >
+                      <i className="bx bx-user" />
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="basic-icon-default-fullname"
+                      placeholder="Hoodies"
+                      aria-label="Hoodies"
+                      aria-describedby="basic-icon-default-fullname2"
+                      {...register("description")}
+                    />
+                  </div>
+                  {errors.description && (
+                    <span id="error-pwd-message" className="text-danger">
+                      {errors.description.message}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="row mb-3">
+                <label
+                  className="col-sm-2 col-form-label"
+                  htmlFor="basic-icon-default-fullname"
+                >
+                  Images
                 </label>
                 <div className="col-sm-10">
                   <ImageUploading
@@ -142,6 +223,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
                     onChange={onChange}
                     maxNumber={maxNumber}
                     dataURLKey="data_url"
+                    multiple
                   >
                     {({
                       imageList,
@@ -163,25 +245,22 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
                           style={isDragging ? { color: "red" } : undefined}
                           onClick={onImageUpload}
                           {...dragProps}
+                          type="button"
                         >
                           Thêm ảnh
                         </button>
                         &nbsp;
-                        <button onClick={onImageRemoveAll}>Xóa ảnh</button>
+                        <button type="button" onClick={onImageRemoveAll}>
+                          Xóa ảnh
+                        </button>
                       </div>
                     )}
                   </ImageUploading>
-                  {errors.image && (
-                    <span id="error-pwd-message" className="text-danger">
-                      {errors.image.message}
-                    </span>
-                  )}
                 </div>
               </div>
               <div className="d-flex justify-content-center">
                 <div className="col-sm-10 d-flex justify-content-around">
                   <button
-                    onClick={handleSubmit(onSubmit)}
                     className="btn btn-primary"
                     color="primary"
                     type="submit"
@@ -192,6 +271,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
                     className="btn btn-secondary"
                     onClick={handleCloseDialog}
                     autoFocus
+                    type="button"
                   >
                     CANCEL
                   </button>

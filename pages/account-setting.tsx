@@ -16,7 +16,7 @@ export default function AccountSetting(props: IAccountSettingProps) {
             <div className="col-md-12">
               <ul className="nav nav-pills flex-column flex-md-row mb-3">
                 <li className="nav-item">
-                  <a className="nav-link active" href="javascript:void(0);">
+                  <a className="nav-link active">
                     <i className="bx bx-user me-1" /> Account
                   </a>
                 </li>
