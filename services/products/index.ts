@@ -4,6 +4,7 @@ import {
   
   import { API } from "@/api-client/axios";
 import { CreateProductDto, CreateProductResponse } from "./dto/create-products-dto";
+import { UpdateProductDto, UpdateProductResponse } from "./dto/update-product-dto";
 // import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
   
   export interface Filter {
@@ -43,5 +44,24 @@ import { CreateProductDto, CreateProductResponse } from "./dto/create-products-d
      `/product/${id}`,
      
    );
-   
  };
+
+ export const updateProduct = async (requestData: UpdateProductDto) => {
+  const { data } = await API.put<UpdateProductResponse>(
+    `/product/${requestData.id}`,
+    requestData
+  );
+  return data;
+};
+
+export const publishProduct = async (id: number ) => {
+  await API.patch(
+   `/product/publish/${id}`,
+   
+ );
+};
+export const unPublishProduct = async (id: number ) => {
+  await API.patch(
+   `/product/un-publish/${id}`,
+ );
+};

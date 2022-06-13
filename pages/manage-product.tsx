@@ -19,17 +19,15 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CreateProductForm from "@/components/manage-product/create-product-form";
 import useDeleteProduct from "hooks/products/use-delete-products";
+import { UpdateProductDto } from "@/services/products/dto/update-product-dto";
+import UpdateProductForm from "@/components/manage-product/update-product-form";
+import { ProductDto } from "@/services/products/dto/get-all-products-dto";
+import PublicIcon from "@mui/icons-material/Public";
+import PublicOffIcon from "@mui/icons-material/PublicOff";
+import PublishProduct from "@/components/manage-product/publish-product-form";
+import UnPublishProduct from "@/components/manage-product/un-publish-product-form";
 
 export interface IManageProductProps {}
-
-type FormCreateAccount = {
-  userFirstName: string;
-  userLastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  roleName: string;
-};
 const ITEM_HEIGHT = 48;
 
 export default function ManageProduct(props: IManageProductProps) {
@@ -48,6 +46,7 @@ export default function ManageProduct(props: IManageProductProps) {
   const { mutate: deleteProduct, error } = useDeleteProduct();
   const onDelete = (id: number) => {
     deleteProduct(id);
+    setOpenDeleteDialog(false);
   };
   //  menu button
 
@@ -71,9 +70,16 @@ export default function ManageProduct(props: IManageProductProps) {
   };
 
   /*{form add account }*/
-  const handleIsEditTrue = (user: FormCreateAccount) => {
-    console.log(user, "userrrrrr");
-    setAccount(user);
+  const handleIsEditTrue = (product: ProductDto) => {
+    console.log(product, "productttt");
+    const tmpPro = {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      images: product.productImages.map((image) => image.image),
+      categoryName: product.categoryName,
+    };
+    setProduct(tmpPro);
     setIsEdit(true);
     setOpenDialog(true);
   };
@@ -87,23 +93,42 @@ export default function ManageProduct(props: IManageProductProps) {
     setIsDelete(x);
     setOpenDeleteDialog(true);
   };
+  /* {open Publish} */
+  const handleIsPublishTrue = (id: number) => {
+    setIdProduct(id);
+    setIsPublish(true);
+    setOpenPublishDialog(true);
+  };
+  const handleIsPublishFalse = (id: number) => {
+    setIdProduct(id);
+    setIsPublish(false);
+    setOpenPublishDialog(true);
+  };
+  const handleClosePublishDialog = () => {
+    setOpenPublishDialog(false);
+  };
+  /* {open Publish} */
 
   /* {open Dialog} */
   const [isEdit, setIsEdit] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
-  const defaultValues: FormCreateAccount = {
-    userFirstName: "",
-    userLastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    roleName: "",
+  const defaultValues: UpdateProductDto = {
+    id: 0,
+    name: "",
+    categoryName: "",
+    description: "",
+    images: [],
   };
 
-  const [account, setAccount] = useState<FormCreateAccount>(defaultValues);
+  const [isPublish, setIsPublish] = useState(false);
+  const [product, setProduct] = useState<UpdateProductDto>(defaultValues);
   const [isDelete, setIsDelete] = useState(0);
+  const [idProduct, setIdProduct] = useState(0);
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
-
+  const [openPublishDialog, setOpenPublishDialog] = React.useState(false);
+  React.useEffect(() => {
+    console.log(response, "ressss");
+  }, [response]);
   return (
     <>
       <div>
@@ -122,7 +147,7 @@ export default function ManageProduct(props: IManageProductProps) {
             onClick={handleIsEditFalse}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create New Account
+            Create New Product
           </Fab>
 
           <hr className="my-4" />
@@ -135,7 +160,7 @@ export default function ManageProduct(props: IManageProductProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Create New Account"}
+                {"Create New Product"}
               </DialogTitle>
               <DialogContent>
                 <CreateProductForm handleCloseDialog={handleCloseDialog} />
@@ -152,12 +177,60 @@ export default function ManageProduct(props: IManageProductProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Update Account"}
+                {"Update Product"}
               </DialogTitle>
-              <DialogContent></DialogContent>
+              <DialogContent>
+                <UpdateProductForm
+                  product={product}
+                  handleCloseDialog={handleCloseDialog}
+                />
+              </DialogContent>
               <DialogActions></DialogActions>
             </Dialog>
           )}
+
+          {isPublish == true && (
+            <Dialog
+              open={openPublishDialog}
+              onClose={handleClosePublishDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              fullWidth={true}
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Bạn có muốn unPublish sản phẩm này không?"}
+              </DialogTitle>
+              <DialogContent>
+                <UnPublishProduct
+                  idProduct={idProduct}
+                  handleClosePublishDialog={handleClosePublishDialog}
+                />
+              </DialogContent>
+              <DialogActions></DialogActions>
+            </Dialog>
+          )}
+
+          {isPublish == false && (
+            <Dialog
+              open={openPublishDialog}
+              onClose={handleClosePublishDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              fullWidth={true}
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Bạn có muốn Publish sản phẩm này không?"}
+              </DialogTitle>
+              <DialogContent>
+                <PublishProduct
+                  idProduct={idProduct}
+                  handleClosePublishDialog={handleClosePublishDialog}
+                />
+              </DialogContent>
+              <DialogActions></DialogActions>
+            </Dialog>
+          )}
+
           <Dialog
             open={openDeleteDialog}
             onClose={handleCloseDeleteDialog}
@@ -166,7 +239,7 @@ export default function ManageProduct(props: IManageProductProps) {
             fullWidth={true}
           >
             <DialogTitle id="alert-dialog-title">
-              {"Bạn có muốn delete category này không?"}
+              {"Bạn có muốn xóa sản phẩm này không?"}
             </DialogTitle>
             <DialogContent>
               <div className="d-flex justify-content-center">
@@ -198,10 +271,7 @@ export default function ManageProduct(props: IManageProductProps) {
             id="layout-navbar"
           >
             <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-              <a
-                className="nav-item nav-link px-0 me-xl-4"
-                href="javascript:void(0)"
-              >
+              <a className="nav-item nav-link px-0 me-xl-4">
                 <i className="bx bx-menu bx-sm" />
               </a>
             </div>
@@ -210,16 +280,14 @@ export default function ManageProduct(props: IManageProductProps) {
               id="navbar-collapse"
             >
               {/* Search */}
-              <div className="navbar-nav align-items-center">
-                <div className="nav-item d-flex align-items-center">
-                  <i className="bx bx-search fs-4 lh-0" />
-                  <input
-                    type="text"
-                    className="form-control border-0 shadow-none"
-                    placeholder="Search..."
-                    aria-label="Search..."
-                  />
-                </div>
+              <div className="nav-item d-flex align-items-center w-full">
+                <i className="bx bx-search fs-4 lh-0" />
+                <input
+                  type="text"
+                  className="form-control border-0  shadow-none w-full"
+                  placeholder="Search..."
+                  aria-label="Search..."
+                />
               </div>
               {/* /Search */}
             </div>
@@ -227,7 +295,7 @@ export default function ManageProduct(props: IManageProductProps) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Account management</h5>
+            <h5 className="card-header">Products management</h5>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>
@@ -236,9 +304,9 @@ export default function ManageProduct(props: IManageProductProps) {
                     <th>Name</th>
                     <th>Product Image</th>
                     <th>Category Name</th>
-                    <th>Tags</th>
-                    <th>isDelete</th>
-
+                    <th>IS Public</th>
+                    <th>Description</th>
+                    <th>is Delete</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -262,13 +330,30 @@ export default function ManageProduct(props: IManageProductProps) {
                           />
                         </td>
                         <td>{x.categoryName}</td>
+                        <td>
+                          {x.public == true && (
+                            <span className="badge bg-label-info me-1">
+                              TRUE
+                            </span>
+                          )}
+                          {x.public == false && (
+                            <span className="badge bg-label-danger me-1">
+                              FALSE
+                            </span>
+                          )}
+                        </td>
+                        <td>{x.description}</td>
 
                         {/* <td>{x.productTags[0].tag.name}</td> */}
-                        <td></td>
                         <td>
                           {x.deleted == true && (
                             <span className="badge bg-label-danger me-1">
-                              DELETE
+                              TRUE
+                            </span>
+                          )}
+                          {x.deleted == false && (
+                            <span className="badge bg-label-primary me-1">
+                              FALSE
                             </span>
                           )}
                         </td>
@@ -277,6 +362,7 @@ export default function ManageProduct(props: IManageProductProps) {
                           <div>
                             <IconButton
                               onClick={() => {
+                                handleIsEditTrue(x);
                                 handleClose();
                               }}
                             >
@@ -291,6 +377,28 @@ export default function ManageProduct(props: IManageProductProps) {
                                 color="error"
                               />
                             </IconButton>
+                            {x.public == true && (
+                              <IconButton>
+                                <PublicOffIcon
+                                  onClick={() => {
+                                    handleIsPublishTrue(x.id);
+                                  }}
+                                  fontSize="medium"
+                                  color="warning"
+                                />
+                              </IconButton>
+                            )}
+                            {x.public == false && (
+                              <IconButton>
+                                <PublicIcon
+                                  onClick={() => {
+                                    handleIsPublishFalse(x.id);
+                                  }}
+                                  fontSize="medium"
+                                  color="info"
+                                />
+                              </IconButton>
+                            )}
                           </div>
                         </td>
                       </tr>

@@ -315,11 +315,15 @@ export default function CreateForm(props: ICreateFormProps) {
                       label="Role"
                       onChange={handleChange}
                     >
-                      <MenuItem value="USER">USER</MenuItem>
-                      <br />
-                      <MenuItem value="FACTORY">FACTORY</MenuItem>
-                      <br />
-                      <MenuItem value="ADMIN">ADMIN</MenuItem>
+                      <MenuItem className="d-flex flex-column" value="USER">
+                        USER
+                      </MenuItem>
+                      <MenuItem className="d-flex flex-column" value="FACTORY">
+                        FACTORY
+                      </MenuItem>
+                      <MenuItem className="d-flex flex-column" value="ADMIN">
+                        ADMIN
+                      </MenuItem>
                     </Select>
                   </FormControl>
                   {errors.roleName && (

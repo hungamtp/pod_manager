@@ -15,6 +15,7 @@ export interface ProductDto{
     name: string;
     productImages: {image: string}[];
     categoryName: string;
+    description: string;
     productTags: ProductTagDto[];
     priceByFactories: number;
     public: boolean;

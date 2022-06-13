@@ -58,6 +58,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
 
   const onDelete = (id: number) => {
     deleteCategory(id);
+    setOpenDeleteDialog(false);
   };
 
   /*{form add account }*/
@@ -71,8 +72,6 @@ export default function ManageCategory(props: IManageCategoryProps) {
 
   /*{form add account }*/
   const handleIsEditTrue = (category: UpdateCategoryDto) => {
-    console.log(category, "userrrrrr");
-
     setCategory(category);
     setIsEdit(true);
     setOpenDialog(true);
@@ -194,10 +193,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
             id="layout-navbar"
           >
             <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-              <a
-                className="nav-item nav-link px-0 me-xl-4"
-                href="javascript:void(0)"
-              >
+              <a className="nav-item nav-link px-0 me-xl-4">
                 <i className="bx bx-menu bx-sm" />
               </a>
             </div>
@@ -255,7 +251,12 @@ export default function ManageCategory(props: IManageCategoryProps) {
                         <td>
                           {x.deleted == true && (
                             <span className="badge bg-label-danger me-1">
-                              DELETE
+                              TRUE
+                            </span>
+                          )}
+                          {x.deleted == false && (
+                            <span className="badge bg-label-primary me-1">
+                              FALSE
                             </span>
                           )}
                         </td>
