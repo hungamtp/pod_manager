@@ -22,7 +22,6 @@ const useCreateCategory = (handleCloseDialog:() => void) => {
 				//because data:any
                 handleCloseDialog()
                 queryClient.invalidateQueries("Categories")
-				router.push('/manage-category');
 			},
 			
 		}

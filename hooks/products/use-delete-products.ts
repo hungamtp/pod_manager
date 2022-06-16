@@ -14,7 +14,6 @@ const useDeleteProduct = () => {
 		{
 			onSuccess: (data) => {
                 queryClient.invalidateQueries("Products")
-				router.push('/manage-product');
 			},
 			
 		}

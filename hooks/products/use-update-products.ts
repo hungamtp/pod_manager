@@ -19,7 +19,6 @@ const useUpdateProduct = (handleCloseDialog:() => void) => {
 				//because data:any
                 handleCloseDialog()
                 queryClient.invalidateQueries("Products")
-				router.replace('/manage-product');
 			},
 		}
 	);

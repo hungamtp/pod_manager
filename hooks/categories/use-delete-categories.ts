@@ -15,7 +15,6 @@ const useDeleteCategory = () => {
 		{
 			onSuccess: (data) => {
                 queryClient.invalidateQueries("Categories")
-				router.push('/manage-category');
 			},
 			
 		}

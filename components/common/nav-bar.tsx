@@ -19,6 +19,11 @@ export default function NavBar({}: Props) {
   const handleClick = () => {
     setOpen(!open);
   };
+  const logout = () => {
+    localStorage.removeItem("persist:root");
+    router.push("/login");
+  };
+
   return (
     <aside
       id="layout-menu"
@@ -159,7 +164,11 @@ export default function NavBar({}: Props) {
               </ListItemButton>
             </List>
             <List component="div">
-              <ListItemButton>
+              <ListItemButton
+                onClick={() => {
+                  logout();
+                }}
+              >
                 <ListItemIcon>
                   <LogoutIcon />
                 </ListItemIcon>
@@ -188,6 +197,20 @@ export default function NavBar({}: Props) {
           </ListItemButton>
         </List>
 
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        >
+          <ListItemButton
+            onClick={() => {
+              router.push("manage-factory");
+            }}
+          >
+            <ListItemIcon className="pl-2p">
+              <TableViewIcon />
+            </ListItemIcon>
+            <ListItemText primary="Manage Factory" />
+          </ListItemButton>
+        </List>
         {/* {Manage Account} */}
 
         {/* {Manage designed product} */}

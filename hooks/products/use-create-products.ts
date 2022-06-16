@@ -24,7 +24,6 @@ const useCreateProduct = (handleCloseDialog:() => void) => {
 				//because data:any
                 handleCloseDialog()
                 queryClient.invalidateQueries("Products")
-				router.push('/manage-product');
 			},
 			
 		}
