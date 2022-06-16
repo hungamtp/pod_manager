@@ -336,9 +336,9 @@ export default function CreateForm(props: ICreateFormProps) {
               <div className="d-flex justify-content-center">
                 <div className="col-sm-10 d-flex justify-content-around">
                   <button
-                    onClick={handleSubmit(onSubmit)}
                     className="btn btn-primary"
                     color="primary"
+                    type="submit"
                   >
                     CREATE
                   </button>
@@ -346,6 +346,7 @@ export default function CreateForm(props: ICreateFormProps) {
                     className="btn btn-secondary"
                     onClick={handleCloseDialog}
                     autoFocus
+                    type="button"
                   >
                     CANCEL
                   </button>

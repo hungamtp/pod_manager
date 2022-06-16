@@ -26,7 +26,7 @@ export default function Login(props: ILoginProps) {
   const { mutate: login, isLoading, error } = useLogin();
 
   const defaultValues: FormLogin = {
-    email: "vuvietsang10a9@gmail.com",
+    email: "duyne@gmail.com",
     password: "12345678",
   };
   const {

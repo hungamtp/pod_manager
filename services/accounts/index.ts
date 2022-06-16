@@ -7,6 +7,8 @@ import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-d
 import { UpdateAccountDto, UpdateAccountResponse } from "./dto/update-accounts-dto";
   
   export interface Filter {
+    searchValues?: string;
+    searchCriteria?: string;
     pageSize?: number;
     pageNumber?: number;
   }
@@ -23,6 +25,23 @@ import { UpdateAccountDto, UpdateAccountResponse } from "./dto/update-accounts-d
     );
     return data.data;
   };
+
+  export const getAccountsByRoleName = async (filter?: Filter) => {
+    const pageNumber = 0;
+    const pageSize = 9;
+    const roleName = "";
+    const query = new URLSearchParams({
+      pageNumber: filter?.pageNumber?.toString() || pageNumber.toString(),
+      pageSize: filter?.pageSize?.toString() || pageSize.toString(),
+      roleName: filter?.searchValues || roleName,
+    });
+    const { data } = await API.get<GetAllAccountsDto>(
+      `/user/role?${query.toString()}`
+    );
+    return data.data;
+  };
+
+
   
   export const createAccountUser = async (requestData: CreateAccountDto) => {
     const { data } = await API.post<CreateAccountResponse>(

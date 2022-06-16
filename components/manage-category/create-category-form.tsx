@@ -157,11 +157,14 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
                           style={isDragging ? { color: "red" } : undefined}
                           onClick={onImageUpload}
                           {...dragProps}
+                          type="button"
                         >
                           Thêm ảnh
                         </button>
                         &nbsp;
-                        <button onClick={onImageRemoveAll}>Xóa ảnh</button>
+                        <button onClick={onImageRemoveAll} type="button">
+                          Xóa ảnh
+                        </button>
                       </div>
                     )}
                   </ImageUploading>
@@ -175,9 +178,9 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
               <div className="d-flex justify-content-center">
                 <div className="col-sm-10 d-flex justify-content-around">
                   <button
-                    onClick={handleSubmit(onSubmit)}
                     className="btn btn-primary"
                     color="primary"
+                    type="submit"
                   >
                     CREATE
                   </button>
@@ -185,6 +188,7 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
                     className="btn btn-secondary"
                     onClick={handleCloseDialog}
                     autoFocus
+                    type="button"
                   >
                     CANCEL
                   </button>

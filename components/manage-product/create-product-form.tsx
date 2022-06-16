@@ -14,6 +14,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import useCreateCategory from "hooks/categories/use-create-categories";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import { storage } from "@/firebase/firebase";
+import DescriptionIcon from "@mui/icons-material/Description";
 import {
   ref,
   uploadBytes,
@@ -44,7 +45,7 @@ const schema = yup.object().shape({
     .required("First Name không được để trống"),
   description: yup
     .string()
-    .min(1, "Description cần ít nhất 1 kí tự")
+    .min(10, "Description cần ít nhất 10 kí tự")
     .max(100, "Description tối đa 100 kí tự")
     .required("Description không được để trống"),
 });
@@ -141,8 +142,8 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                       type="text"
                       className="form-control"
                       id="basic-icon-default-fullname"
-                      placeholder="John"
-                      aria-label="John"
+                      placeholder="Product Name"
+                      aria-label="Product Name"
                       aria-describedby="basic-icon-default-fullname2"
                       {...register("name")}
                     />
@@ -199,14 +200,14 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                       id="basic-icon-default-company2"
                       className="input-group-text"
                     >
-                      <KeyIcon fontSize="small" />
+                      <DescriptionIcon fontSize="small" />
                     </span>
                     <input
                       type="text"
                       id="basic-icon-default-company"
                       className="form-control"
-                      placeholder="ACME Inc."
-                      aria-label="ACME Inc."
+                      placeholder="Description."
+                      aria-label="Description."
                       aria-describedby="basic-icon-default-company2"
                       {...register("description")}
                     />

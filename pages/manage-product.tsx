@@ -26,6 +26,7 @@ import PublicIcon from "@mui/icons-material/Public";
 import PublicOffIcon from "@mui/icons-material/PublicOff";
 import PublishProduct from "@/components/manage-product/publish-product-form";
 import UnPublishProduct from "@/components/manage-product/un-publish-product-form";
+import Link from "next/link";
 
 export interface IManageProductProps {}
 const ITEM_HEIGHT = 48;
@@ -126,9 +127,6 @@ export default function ManageProduct(props: IManageProductProps) {
   const [idProduct, setIdProduct] = useState(0);
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [openPublishDialog, setOpenPublishDialog] = React.useState(false);
-  React.useEffect(() => {
-    console.log(response, "ressss");
-  }, [response]);
   return (
     <>
       <div>
@@ -319,7 +317,7 @@ export default function ManageProduct(props: IManageProductProps) {
 
                         <td>
                           <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
-                          <strong>{x.name}</strong>
+                          <Link href="">{x.name}</Link>
                         </td>
                         <td>
                           <img
@@ -359,47 +357,51 @@ export default function ManageProduct(props: IManageProductProps) {
                         </td>
 
                         <td>
-                          <div>
-                            <IconButton
-                              onClick={() => {
-                                handleIsEditTrue(x);
-                                handleClose();
-                              }}
-                            >
-                              <EditIcon fontSize="medium" color="primary" />
-                            </IconButton>
-                            <IconButton>
-                              <DeleteIcon
+                          {x.deleted == false && (
+                            <div>
+                              <IconButton
                                 onClick={() => {
-                                  hanldeIsDelete(x.id);
+                                  handleIsEditTrue(x);
+                                  handleClose();
                                 }}
-                                fontSize="medium"
-                                color="error"
-                              />
-                            </IconButton>
-                            {x.public == true && (
+                              >
+                                <EditIcon fontSize="medium" color="primary" />
+                              </IconButton>
+
                               <IconButton>
-                                <PublicOffIcon
+                                <DeleteIcon
                                   onClick={() => {
-                                    handleIsPublishTrue(x.id);
+                                    hanldeIsDelete(x.id);
                                   }}
                                   fontSize="medium"
-                                  color="warning"
+                                  color="error"
                                 />
                               </IconButton>
-                            )}
-                            {x.public == false && (
-                              <IconButton>
-                                <PublicIcon
-                                  onClick={() => {
-                                    handleIsPublishFalse(x.id);
-                                  }}
-                                  fontSize="medium"
-                                  color="info"
-                                />
-                              </IconButton>
-                            )}
-                          </div>
+
+                              {x.public == true && (
+                                <IconButton>
+                                  <PublicOffIcon
+                                    onClick={() => {
+                                      handleIsPublishTrue(x.id);
+                                    }}
+                                    fontSize="medium"
+                                    color="warning"
+                                  />
+                                </IconButton>
+                              )}
+                              {x.public == false && (
+                                <IconButton>
+                                  <PublicIcon
+                                    onClick={() => {
+                                      handleIsPublishFalse(x.id);
+                                    }}
+                                    fontSize="medium"
+                                    color="info"
+                                  />
+                                </IconButton>
+                              )}
+                            </div>
+                          )}
                         </td>
                       </tr>
                     ))}

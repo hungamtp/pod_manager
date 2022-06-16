@@ -10,43 +10,33 @@ import { Fab } from "@material-ui/core";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Pagination,
-  Stack,
-} from "@mui/material";
+import { IconButton, Pagination, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import useAccounts from "hooks/accounts/use-accounts";
 import useDeleteAccount from "hooks/accounts/use-delete-accounts";
+import useFactories from "hooks/factories/use-factories";
 import * as React from "react";
 import { useState } from "react";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { string } from "yup/lib/locale";
-
-export interface IManageAccountProps {}
+export interface IManageFactory {}
 
 const ITEM_HEIGHT = 48;
 
-export default function ManageAccount(props: IManageAccountProps) {
+export default function ManageFactory(props: IManageFactory) {
   const [filter, setFilter] = useState<Filter>({
-    searchCriteria: "All",
-    searchValues: "",
     pageNumber: 0,
     pageSize: 10,
   });
+
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     value: number
   ) => {
     setFilter({ ...filter, pageNumber: value - 1 });
   };
-  const { data: response, isLoading: isLoadingAccount } = useAccounts(filter);
+  const { data: response, isLoading: isLoadingAccount } = useFactories(filter);
   const defaultValues: UpdateAccountDto = {
     id: 0,
     firstName: "",
@@ -109,14 +99,8 @@ export default function ManageAccount(props: IManageAccountProps) {
   const handleCloseDeleteDialog = () => {
     setOpenDeleteDialog(false);
   };
-  const handleSearchChange = (event: SelectChangeEvent) => {
-    setSearchCriteria(event.target.value);
-    console.log(event.target.value);
-    setFilter((state) => ({ ...state, searchCriteria: event.target.value }));
-  };
 
   /* {open Dialog} */
-  const [searchCriteria, setSearchCriteria] = React.useState("All");
   const [isEdit, setIsEdit] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [account, setAccount] = useState<UpdateAccountDto>(defaultValues);
@@ -141,7 +125,7 @@ export default function ManageAccount(props: IManageAccountProps) {
             onClick={handleIsEditFalse}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create New Account
+            Create New Factory
           </Fab>
 
           <hr className="my-4" />
@@ -154,7 +138,7 @@ export default function ManageAccount(props: IManageAccountProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Create New Account"}
+                {"Create New Factory"}
               </DialogTitle>
               <DialogContent>
                 <CreateForm handleCloseDialog={handleCloseDialog} />
@@ -216,84 +200,22 @@ export default function ManageAccount(props: IManageAccountProps) {
             </DialogContent>
             <DialogActions></DialogActions>
           </Dialog>
-          <nav
-            className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-            id="layout-navbar"
-          >
-            <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-              <a className="nav-item nav-link px-0 me-xl-4">
-                <i className="bx bx-menu bx-sm" />
-              </a>
-            </div>
-            <div
-              className="navbar-nav-right d-flex align-items-center"
-              id="navbar-collapse"
-            >
-              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                <Select
-                  labelId="demo-select-small"
-                  id="demo-select-small"
-                  value={searchCriteria}
-                  label="Role"
-                  onChange={handleSearchChange}
-                  inputProps={{
-                    disableUnderline: true,
-                  }}
-                  variant="standard"
-                >
-                  <MenuItem className="d-flex flex-column" value="All">
-                    All
-                  </MenuItem>
-                  <MenuItem className="d-flex flex-column" value="ID">
-                    ID
-                  </MenuItem>
-                  <MenuItem className="d-flex flex-column" value="EMAIL">
-                    Email
-                  </MenuItem>
-                  <MenuItem className="d-flex flex-column" value="RoleName">
-                    Role Name
-                  </MenuItem>
-                </Select>
-              </FormControl>
-              {/* Search */}
-              <div className="nav-item d-flex align-items-center w-full">
-                <i className="bx bx-search fs-4 lh-0" />
-                <form
-                  onSubmit={(e: any) => {
-                    e.preventDefault();
-                    setFilter((state) => ({
-                      ...state,
-                      searchValues: e.target[0].value,
-                    }));
-                  }}
-                >
-                  <input
-                    type="text"
-                    className="form-control border-0  shadow-none w-full"
-                    placeholder="Search..."
-                    aria-label="Search..."
-                  />
-                </form>
-              </div>
-              {/* /Search */}
-            </div>
-          </nav>
+
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Account management</h5>
+            <h5 className="card-header">Factory management</h5>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Last Name</th>
-                    <th>First Name</th>
+                    <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Address</th>
-                    <th>Role</th>
-                    <th>Status</th>
+                    <th>Location</th>
+                    <th>Is Collaborating</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -303,66 +225,28 @@ export default function ManageAccount(props: IManageAccountProps) {
                     response.content.map((x) => (
                       <tr key={x.id}>
                         <td>{x.id}</td>
-                        <td>
-                          <strong>{x.userLastName}</strong>
-                        </td>
-                        <td>
-                          <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
-                          <strong>{x.userFirstName}</strong>
-                        </td>
-
+                        <td>{x.name}</td>
                         <td>{x.email}</td>
                         <td>{x.phone}</td>
                         <td>{x.address}</td>
+                        <td>{x.location}</td>
                         <td>
-                          {x.roleName == "ADMIN" && (
-                            <span className="w-full badge bg-primary me-1">
-                              {x.roleName}
-                            </span>
-                          )}
-                          {x.roleName == "USER" && (
-                            <span className="w-full badge bg-info me-1">
-                              {x.roleName}
-                            </span>
-                          )}
-                          {x.roleName == "FACTORY" && (
-                            <span className="w-full badge bg-warning me-1">
-                              {x.roleName}
-                            </span>
-                          )}
-                        </td>
-                        <td>
-                          {x.userStatus == "ACTIVE" && (
+                          {x.collaborating == false && (
                             <span className="badge bg-label-primary me-1">
-                              {x.userStatus}
-                            </span>
-                          )}
-                          {x.userStatus == "INACTIVE" && (
-                            <span className="badge bg-label-danger me-1">
-                              {x.userStatus}
+                              FALSE
                             </span>
                           )}
                         </td>
+
                         <td>
-                          {x.userStatus == "ACTIVE" && (
-                            <div>
-                              <IconButton
-                                onClick={() => {
-                                  handleIsEditTrue(x);
-                                  handleClose();
-                                }}
-                              >
-                                <EditIcon fontSize="medium" color="primary" />
-                              </IconButton>
-                              <IconButton
-                                onClick={() => {
-                                  hanldeIsDelete(x.id);
-                                }}
-                              >
-                                <DeleteIcon fontSize="medium" color="error" />
-                              </IconButton>
-                            </div>
-                          )}
+                          <div>
+                            <IconButton>
+                              <EditIcon fontSize="medium" color="primary" />
+                            </IconButton>
+                            <IconButton>
+                              <DeleteIcon fontSize="medium" color="error" />
+                            </IconButton>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -438,4 +322,4 @@ export default function ManageAccount(props: IManageAccountProps) {
     </>
   );
 }
-ManageAccount.Layout = MainLayout;
+ManageFactory.Layout = MainLayout;
