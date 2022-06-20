@@ -1,4 +1,7 @@
+import { ErrorHttpResponse } from '@/models/error_http_response.interface';
+import ManageProduct from '@/pages/manage-product';
 import { publishProduct } from '@/services/products';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 
@@ -15,6 +18,9 @@ const usePublishProduct = (handleClosePublishDialog:() => void) => {
 			onSettled: (data) => {
 				handleClosePublishDialog()
                 queryClient.invalidateQueries("Products")
+			},
+			onError: (error: AxiosError<ErrorHttpResponse>) => {
+				console.log(error.response?.data.errorMessage, "errorrrrrrrrrrr");
 			},
 			
 		}
