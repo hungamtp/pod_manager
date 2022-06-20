@@ -5,6 +5,8 @@ import {
   import { API } from "@/api-client/axios";
 import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
 import { UpdateAccountDto, UpdateAccountResponse } from "./dto/update-accounts-dto";
+import { getProductByIdDtos } from "../products/dto/get-products-by-id-dto";
+import { AccountByIdDtos , getAccountByIdResponse } from "./dto/get-accounts-by-id-dto";
   
   export interface Filter {
     searchValues?: string;
@@ -41,6 +43,12 @@ import { UpdateAccountDto, UpdateAccountResponse } from "./dto/update-accounts-d
     return data.data;
   };
 
+  export const getAccountById = async (id: number) => {
+    const { data } = await API.get<getAccountByIdResponse>(
+      `/user/admin/${id}`
+    );
+    return data;
+  };
 
   
   export const createAccountUser = async (requestData: CreateAccountDto) => {

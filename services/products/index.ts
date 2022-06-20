@@ -1,10 +1,12 @@
 import {
-    GetAllProductsDto,
+    GetAllProductsDto, GetColors, GetSizes,
   } from "./dto/get-all-products-dto";
   
   import { API } from "@/api-client/axios";
 import { CreateProductDto, CreateProductResponse } from "./dto/create-products-dto";
 import { UpdateProductDto, UpdateProductResponse } from "./dto/update-product-dto";
+import { getProductByIdDtos } from "./dto/get-products-by-id-dto";
+import { getSizesAndColors } from "./dto/get-all-size-color-by-id";
 // import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
   
   export interface Filter {
@@ -29,6 +31,33 @@ import { UpdateProductDto, UpdateProductResponse } from "./dto/update-product-dt
       `/product/admin?${query.toString()}`
     );
     return data.data;
+  };
+
+  export const getSizes = async () => {
+    const { data } = await API.get<GetSizes>(
+      `/size-color/size`
+    );
+    return data;
+  };
+  export const getColors = async () => {
+    const { data } = await API.get<GetColors>(
+      `/size-color/color`
+    );
+    return data;
+  };
+
+  export const getProductById = async (id: number) => {
+    const { data } = await API.get<getProductByIdDtos>(
+      `/product/admin/${id}`
+    );
+    return data;
+  };
+
+  export const getSizesAndColorsById = async (id: number) => {
+    const { data } = await API.get<getSizesAndColors>(
+      `/product/admin/size-color/${id}`
+    );
+    return data;
   };
   
   export const createProduct = async (requestData: CreateProductDto) => {

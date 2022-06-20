@@ -80,7 +80,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
   }) => {
     if (images !== null) {
       const imageList = [] as string[];
-      images.map((image) => {
+      images?.map((image) => {
         const file = image.file;
         const imageRef = ref(storage, `images/${file?.name}`);
         uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
@@ -236,7 +236,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
                     }) => (
                       // write your building UI
                       <div className="upload__image-wrapper">
-                        {imageList.map((image, index) => (
+                        {imageList?.map((image, index) => (
                           <div key={index} className="image-item">
                             <img src={image["data_url"]} alt="" width="100" />
                           </div>

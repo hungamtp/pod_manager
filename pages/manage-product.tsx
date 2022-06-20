@@ -27,6 +27,9 @@ import PublicOffIcon from "@mui/icons-material/PublicOff";
 import PublishProduct from "@/components/manage-product/publish-product-form";
 import UnPublishProduct from "@/components/manage-product/un-publish-product-form";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import ProductDetails from "./product-details";
+import usePublishProduct from "hooks/products/use-publish-product";
 
 export interface IManageProductProps {}
 const ITEM_HEIGHT = 48;
@@ -120,13 +123,14 @@ export default function ManageProduct(props: IManageProductProps) {
     description: "",
     images: [],
   };
-
+  const router = useRouter();
   const [isPublish, setIsPublish] = useState(false);
   const [product, setProduct] = useState<UpdateProductDto>(defaultValues);
   const [isDelete, setIsDelete] = useState(0);
   const [idProduct, setIdProduct] = useState(0);
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [openPublishDialog, setOpenPublishDialog] = React.useState(false);
+
   return (
     <>
       <div>
@@ -264,6 +268,7 @@ export default function ManageProduct(props: IManageProductProps) {
             <DialogActions></DialogActions>
           </Dialog>
 
+          {/* Dialog */}
           <nav
             className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
             id="layout-navbar"
@@ -306,6 +311,7 @@ export default function ManageProduct(props: IManageProductProps) {
                     <th>Description</th>
                     <th>is Delete</th>
                     <th>Actions</th>
+                    <th>Details</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">
@@ -317,7 +323,11 @@ export default function ManageProduct(props: IManageProductProps) {
 
                         <td>
                           <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
-                          <Link href="">{x.name}</Link>
+                          <strong>
+                            <Link href={`/product-details?id=${x.id}`}>
+                              {x.name}
+                            </Link>
+                          </strong>
                         </td>
                         <td>
                           <img
@@ -402,6 +412,19 @@ export default function ManageProduct(props: IManageProductProps) {
                               )}
                             </div>
                           )}
+                        </td>
+                        <td>
+                          <div>
+                            <button
+                              type="button"
+                              className="btn btn-primary btn-sm"
+                              onClick={() => {
+                                router.push(`/product-details?id=${x.id}`);
+                              }}
+                            >
+                              Detail
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}

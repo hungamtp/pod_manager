@@ -9,6 +9,13 @@ export interface GetAllProductsDto extends ISuccessHttpResponse {
         number: number,
     }
 }
+export interface GetSizes extends ISuccessHttpResponse {
+    data: {name: string}[]
+}
+
+export interface GetColors extends ISuccessHttpResponse {
+    data: {name: string}[]
+}
 
 export interface ProductDto{
     id:number;

@@ -217,12 +217,7 @@ export default function NavBar({}: Props) {
         <li className="menu-header small text-uppercase">
           <span className="menu-header-text">Manage product</span>
         </li>
-        <li className="menu-item">
-          <a href="\table" className="menu-link">
-            <i className="menu-icon tf-icons bx bx-cube-alt"></i>
-            <div data-i18n="Tables">Designed Product</div>
-          </a>
-        </li>
+
         <List
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
         >
