@@ -7,6 +7,8 @@ import { CreateProductDto, CreateProductResponse } from "./dto/create-products-d
 import { UpdateProductDto, UpdateProductResponse } from "./dto/update-product-dto";
 import { getProductByIdDtos } from "./dto/get-products-by-id-dto";
 import { getSizesAndColors } from "./dto/get-all-size-color-by-id";
+import { GetAllSizesDto } from "./dto/get-all-size-dto";
+import { GetAllColorDto } from "./dto/get-all-colors-dtos";
 // import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
   
   export interface Filter {
@@ -33,18 +35,31 @@ import { getSizesAndColors } from "./dto/get-all-size-color-by-id";
     return data.data;
   };
 
-  export const getSizes = async () => {
-    const { data } = await API.get<GetSizes>(
-      `/size-color/size`
+  export const getSizes = async (filter?: Filter) => {
+    const pageNumber = 0;
+    const pageSize = 9;
+    const query = new URLSearchParams({
+      pageNumber: filter?.pageNumber?.toString() || pageNumber.toString(),
+      pageSize: filter?.pageSize?.toString() || pageSize.toString(),
+    });
+    const { data } = await API.get<GetAllSizesDto>(
+      `/size-color/sizes?${query.toString()}`
     );
-    return data;
+    return data.data;
   };
-  export const getColors = async () => {
-    const { data } = await API.get<GetColors>(
-      `/size-color/color`
+  export const getColors = async (filter?: Filter) => {
+    const pageNumber = 0;
+    const pageSize = 9;
+    const query = new URLSearchParams({
+      pageNumber: filter?.pageNumber?.toString() || pageNumber.toString(),
+      pageSize: filter?.pageSize?.toString() || pageSize.toString(),
+    });
+    const { data } = await API.get<GetAllColorDto>(
+      `/size-color/colors?${query.toString()}`
     );
-    return data;
+    return data.data;
   };
+
 
   export const getProductById = async (id: number) => {
     const { data } = await API.get<getProductByIdDtos>(

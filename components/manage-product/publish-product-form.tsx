@@ -69,7 +69,6 @@ export default function PublishProduct(props: IPublishProductProps) {
           color="primary"
           onClick={() => {
             onPublish(idProduct);
-            handleClosePublishDialog;
           }}
         >
           YES
