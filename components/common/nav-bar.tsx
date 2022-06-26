@@ -14,7 +14,7 @@ import { Router, useRouter } from "next/router";
 type Props = {};
 
 export default function NavBar({}: Props) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const handleClick = () => {
     setOpen(!open);
@@ -211,6 +211,7 @@ export default function NavBar({}: Props) {
             <ListItemText primary="Manage Factory" />
           </ListItemButton>
         </List>
+
         {/* {Manage Account} */}
 
         {/* {Manage designed product} */}
@@ -244,6 +245,36 @@ export default function NavBar({}: Props) {
               <TableViewIcon />
             </ListItemIcon>
             <ListItemText primary="Manage category" />
+          </ListItemButton>
+        </List>
+
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        >
+          <ListItemButton
+            onClick={() => {
+              router.push("manage-size");
+            }}
+          >
+            <ListItemIcon className="pl-2p">
+              <TableViewIcon />
+            </ListItemIcon>
+            <ListItemText primary="Manage Size" />
+          </ListItemButton>
+        </List>
+
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        >
+          <ListItemButton
+            onClick={() => {
+              router.push("manage-color");
+            }}
+          >
+            <ListItemIcon className="pl-2p">
+              <TableViewIcon />
+            </ListItemIcon>
+            <ListItemText primary="Manage Color" />
           </ListItemButton>
         </List>
         {/* {/Manage designed product} */}

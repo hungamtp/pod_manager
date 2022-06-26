@@ -23,7 +23,7 @@ import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import * as yup from "yup";
-export interface IProductDetailsProps {}
+export interface FactoryDetailsProps {}
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -36,7 +36,7 @@ const schema = yup.object().shape({
     .required(" Name không được để trống"),
 });
 
-export default function ProductDetails(props: IProductDetailsProps) {
+export default function FactoryDetails(props: FactoryDetailsProps) {
   const router = useRouter();
   const id = router.asPath.split("id=")[1];
   const { data: responseProduct, isLoading: isLoadingProduct } =
@@ -444,4 +444,4 @@ export default function ProductDetails(props: IProductDetailsProps) {
     </>
   );
 }
-ProductDetails.Layout = MainLayout;
+FactoryDetails.Layout = MainLayout;
