@@ -12,6 +12,8 @@ import * as yup from "yup";
 import CreateSizeColorProductForm from "@/components/manage-factory/create-size-color-product-form";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
+import useColors from "hooks/colors/use-colors";
+import useSizes from "hooks/sizes/use-sizes";
 export interface FactoryDetailsProps {}
 
 const schema = yup.object().shape({
@@ -31,6 +33,9 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
   const id = router.asPath.split("id=")[1];
   const { data: responseFactory, isLoading: isLoadingFactory } =
     useGetFactoryById(Number(id));
+
+  const { data: colors } = useColors({ pageNumber: 0, pageSize: 100 });
+  const { data: sizes } = useSizes({ pageNumber: 0, pageSize: 100 });
 
   const [isDisabled, setIsDisabled] = React.useState(true);
 
@@ -111,6 +116,8 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                 handleCloseDialog={handleCloseCreateDialog}
                 factoryId={responseFactory?.data.id.toString()}
                 productId={productId.toString()}
+                colors={colors.content}
+                sizes={sizes.content}
               />
             </DialogContent>
           </Dialog>

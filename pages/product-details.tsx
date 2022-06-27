@@ -5,18 +5,13 @@ import { Filter } from "@/services/categories";
 import { UpdateProductDto } from "@/services/products/dto/update-product-dto";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { InputLabel, MenuItem } from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import useCategories from "hooks/categories/use-categories";
-import useColors from "hooks/products/use-colors";
 import useGetProductById from "hooks/products/use-get-products-by-id";
 import useGetSizesColorsById from "hooks/products/use-get-sizes-colors-by-id";
-import useSizes from "hooks/products/use-sizes";
 import useUpdateProductById from "hooks/products/use-update-products-by-id";
 import { useRouter } from "next/router";
 import * as React from "react";
@@ -39,10 +34,12 @@ const schema = yup.object().shape({
 export default function ProductDetails(props: IProductDetailsProps) {
   const router = useRouter();
   const id = router.asPath.split("id=")[1];
+
   const { data: responseProduct, isLoading: isLoadingProduct } =
     useGetProductById(Number(id));
   const { data: responseSizesColors, isLoading: isLoadingSizesColors } =
     useGetSizesColorsById(Number(id));
+
   const [checked, setChecked] = React.useState(true);
   const [checkValue, setCheckValue] = React.useState("");
   const [isDisabled, setIsDisabled] = React.useState(true);
