@@ -18,6 +18,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import useAccounts from "hooks/accounts/use-accounts";
 import useDeleteAccount from "hooks/accounts/use-delete-accounts";
 import useFactories from "hooks/factories/use-factories";
+import { useRouter } from "next/router";
 import * as React from "react";
 import { useState } from "react";
 export interface IManageFactory {}
@@ -101,6 +102,7 @@ export default function ManageFactory(props: IManageFactory) {
   };
 
   /* {open Dialog} */
+  const router = useRouter();
   const [isEdit, setIsEdit] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [account, setAccount] = useState<UpdateAccountDto>(defaultValues);
@@ -246,6 +248,21 @@ export default function ManageFactory(props: IManageFactory) {
                             <IconButton>
                               <DeleteIcon fontSize="medium" color="error" />
                             </IconButton>
+                          </div>
+                        </td>
+                        <td>
+                          <div>
+                            <button
+                              type="button"
+                              className="btn btn-primary btn-sm"
+                              onClick={() => {
+                                router.push(
+                                  `/factory-details?id=${x.credentialId}`
+                                );
+                              }}
+                            >
+                              Detail
+                            </button>
                           </div>
                         </td>
                       </tr>

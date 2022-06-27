@@ -3,6 +3,7 @@
 import { MainLayout } from "@/components/layouts";
 import CreateForm from "@/components/manage-account/create-form";
 import UpdateForm from "@/components/manage-account/update-form";
+import CreateColorForm from "@/components/manage-color/create-color-form";
 import { Filter } from "@/services/accounts";
 import { AccountDto } from "@/services/accounts/dto/get-all-accounts-dto";
 import { UpdateAccountDto } from "@/services/accounts/dto/update-accounts-dto";
@@ -39,76 +40,19 @@ export default function ManageColor(props: IManageColor) {
     setFilter({ ...filter, pageNumber: value - 1 });
   };
   const { data: response, isLoading: isLoadingAccount } = useColors(filter);
-  const defaultValues: UpdateAccountDto = {
-    id: 0,
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    roleName: "",
-  };
   //  menu button
-
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const { mutate: deleteAccount, error } = useDeleteAccount();
-
-  const onDelete = (id: number) => {
-    deleteAccount(id);
-    setOpenDeleteDialog(false);
-  };
-
-  const hanldeIsDelete = (x: number) => {
-    setIsDelete(x);
-    setOpenDeleteDialog(true);
-  };
-
-  /*{form add account }*/
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
 
   /*{form add account }*/
-  const handleIsEditTrue = (user: AccountDto) => {
-    console.log(user, "userrrrrr");
-    const tmpAcc = {
-      id: user.id,
-      firstName: user.userFirstName,
-      lastName: user.userLastName,
-      email: user.email,
-      phone: user.phone,
-      address: user.address,
-      roleName: user.roleName,
-    };
-    setAccount(tmpAcc);
-    setIsEdit(true);
+  const handleOpenCreate = () => {
     setOpenDialog(true);
-  };
-
-  const handleIsEditFalse = () => {
-    setIsEdit(false);
-    setOpenDialog(true);
-  };
-  const handleCloseDeleteDialog = () => {
-    setOpenDeleteDialog(false);
   };
 
   /* {open Dialog} */
-  const [isEdit, setIsEdit] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [account, setAccount] = useState<UpdateAccountDto>(defaultValues);
-  const [isDelete, setIsDelete] = useState(0);
-  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
-
   return (
     <>
       <div>
@@ -124,81 +68,25 @@ export default function ManageColor(props: IManageColor) {
             variant="extended"
             size="small"
             aria-label="add"
-            onClick={handleIsEditFalse}
+            onClick={handleOpenCreate}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create New Factory
+            Create New Color
           </Fab>
 
           <hr className="my-4" />
-          {isEdit == false && (
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Create New Factory"}
-              </DialogTitle>
-              <DialogContent>
-                <CreateForm handleCloseDialog={handleCloseDialog} />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
-          {isEdit == true && (
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Update Account"}
-              </DialogTitle>
-              <DialogContent>
-                <UpdateForm
-                  account={account}
-                  handleCloseDialog={handleCloseDialog}
-                />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
           <Dialog
-            open={openDeleteDialog}
-            onClose={handleCloseDeleteDialog}
+            open={openDialog}
+            onClose={handleCloseDialog}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             fullWidth={true}
           >
             <DialogTitle id="alert-dialog-title">
-              {"Bạn có muốn delete category này không?"}
+              {"Create New Color"}
             </DialogTitle>
             <DialogContent>
-              <div className="d-flex justify-content-center">
-                <div className="col-sm-10 d-flex justify-content-around">
-                  <button
-                    className="btn btn-danger"
-                    color="danger"
-                    onClick={() => {
-                      onDelete(isDelete);
-                    }}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className="btn btn-secondary"
-                    onClick={handleCloseDeleteDialog}
-                    autoFocus
-                  >
-                    CANCEL
-                  </button>
-                </div>
-              </div>
+              <CreateColorForm handleCloseDialog={handleCloseDialog} />
             </DialogContent>
             <DialogActions></DialogActions>
           </Dialog>
