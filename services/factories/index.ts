@@ -3,6 +3,8 @@ import {
   } from "./dto/get-all-factories-dto";
   
   import { API } from "@/api-client/axios";
+import {  getFactoryByIdDtos } from "./dto/get-factory-by-id-dto";
+import { CreateCategoryResponse, CreateSizeColorProductDto } from "./dto/create-size-color-product-dto";
   
   export interface Filter {
     pageSize?: number;
@@ -22,4 +24,17 @@ import {
     return data.data;
   };
   
- 
+  export const getFactoryById = async (id: number) => {
+    const { data } = await API.get<getFactoryByIdDtos>(
+      `/factory/${id}`
+    );
+    return data;
+  };
+
+  export const createSizeColorProduct = async (requestData: CreateSizeColorProductDto[], factoryId: string, productId: string) => {
+    const { data } = await API.post<CreateCategoryResponse>(
+      `/factory/add-size-color?factoryId=${factoryId}&productId=${productId}`,
+      requestData
+    );
+    return data;
+  };

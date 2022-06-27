@@ -1,23 +1,15 @@
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
 import { MainLayout } from "@/components/layouts";
-import CreateForm from "@/components/manage-account/create-form";
-import UpdateForm from "@/components/manage-account/update-form";
+import CreateSizeForm from "@/components/manage-size/create-size-form";
 import { Filter } from "@/services/accounts";
-import { AccountDto } from "@/services/accounts/dto/get-all-accounts-dto";
-import { UpdateAccountDto } from "@/services/accounts/dto/update-accounts-dto";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { IconButton, Pagination, Stack } from "@mui/material";
+import { Pagination, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import useAccounts from "hooks/accounts/use-accounts";
-import useDeleteAccount from "hooks/accounts/use-delete-accounts";
-import useFactories from "hooks/factories/use-factories";
 import useSizes from "hooks/sizes/use-sizes";
 import * as React from "react";
 import { useState } from "react";
@@ -37,76 +29,20 @@ export default function ManageSize(props: IManageSize) {
   ) => {
     setFilter({ ...filter, pageNumber: value - 1 });
   };
-  const { data: response, isLoading: isLoadingAccount } = useSizes(filter);
-  const defaultValues: UpdateAccountDto = {
-    id: 0,
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    roleName: "",
-  };
+  const { data: response, isLoading: isLoadingSize } = useSizes(filter);
   //  menu button
-
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const { mutate: deleteAccount, error } = useDeleteAccount();
-
-  const onDelete = (id: number) => {
-    deleteAccount(id);
-    setOpenDeleteDialog(false);
-  };
-
-  const hanldeIsDelete = (x: number) => {
-    setIsDelete(x);
-    setOpenDeleteDialog(true);
-  };
-
-  /*{form add account }*/
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
 
   /*{form add account }*/
-  const handleIsEditTrue = (user: AccountDto) => {
-    console.log(user, "userrrrrr");
-    const tmpAcc = {
-      id: user.id,
-      firstName: user.userFirstName,
-      lastName: user.userLastName,
-      email: user.email,
-      phone: user.phone,
-      address: user.address,
-      roleName: user.roleName,
-    };
-    setAccount(tmpAcc);
-    setIsEdit(true);
+  const handleOpenCreate = () => {
     setOpenDialog(true);
-  };
-
-  const handleIsEditFalse = () => {
-    setIsEdit(false);
-    setOpenDialog(true);
-  };
-  const handleCloseDeleteDialog = () => {
-    setOpenDeleteDialog(false);
   };
 
   /* {open Dialog} */
-  const [isEdit, setIsEdit] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [account, setAccount] = useState<UpdateAccountDto>(defaultValues);
-  const [isDelete, setIsDelete] = useState(0);
-  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
   return (
     <>
@@ -123,81 +59,25 @@ export default function ManageSize(props: IManageSize) {
             variant="extended"
             size="small"
             aria-label="add"
-            onClick={handleIsEditFalse}
+            onClick={handleOpenCreate}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create New Factory
+            Create New Size
           </Fab>
 
           <hr className="my-4" />
-          {isEdit == false && (
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Create New Factory"}
-              </DialogTitle>
-              <DialogContent>
-                <CreateForm handleCloseDialog={handleCloseDialog} />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
-          {isEdit == true && (
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Update Account"}
-              </DialogTitle>
-              <DialogContent>
-                <UpdateForm
-                  account={account}
-                  handleCloseDialog={handleCloseDialog}
-                />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
           <Dialog
-            open={openDeleteDialog}
-            onClose={handleCloseDeleteDialog}
+            open={openDialog}
+            onClose={handleCloseDialog}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             fullWidth={true}
           >
             <DialogTitle id="alert-dialog-title">
-              {"Bạn có muốn delete category này không?"}
+              {"Create New Size"}
             </DialogTitle>
             <DialogContent>
-              <div className="d-flex justify-content-center">
-                <div className="col-sm-10 d-flex justify-content-around">
-                  <button
-                    className="btn btn-danger"
-                    color="danger"
-                    onClick={() => {
-                      onDelete(isDelete);
-                    }}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className="btn btn-secondary"
-                    onClick={handleCloseDeleteDialog}
-                    autoFocus
-                  >
-                    CANCEL
-                  </button>
-                </div>
-              </div>
+              <CreateSizeForm handleCloseDialog={handleCloseDialog} />
             </DialogContent>
             <DialogActions></DialogActions>
           </Dialog>
@@ -215,7 +95,7 @@ export default function ManageSize(props: IManageSize) {
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">
-                  {!isLoadingAccount &&
+                  {!isLoadingSize &&
                     response &&
                     response.content.map((x) => (
                       <tr key={x.id}>
