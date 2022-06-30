@@ -117,37 +117,12 @@ export default function ManageFactory(props: IManageFactory) {
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
           <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Tables /</span> Basic Tables
+            <span className="text-muted fw-light">Mangage Account /</span>
+            Manage Factory
           </h4>
-          <Fab
-            className="badge bg-success"
-            variant="extended"
-            size="small"
-            aria-label="add"
-            onClick={handleIsEditFalse}
-          >
-            <AddIcon sx={{ mr: 1 }} />
-            Create New Factory
-          </Fab>
 
           <hr className="my-4" />
-          {isEdit == false && (
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Create New Factory"}
-              </DialogTitle>
-              <DialogContent>
-                <CreateForm handleCloseDialog={handleCloseDialog} />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
+
           {isEdit == true && (
             <Dialog
               open={openDialog}
@@ -242,9 +217,6 @@ export default function ManageFactory(props: IManageFactory) {
 
                         <td>
                           <div>
-                            <IconButton>
-                              <EditIcon fontSize="medium" color="primary" />
-                            </IconButton>
                             <IconButton>
                               <DeleteIcon fontSize="medium" color="error" />
                             </IconButton>

@@ -4,7 +4,7 @@ export interface AccountByIdDtos {
     id: number;
 	userFirstName: string;
     userLastName: string;
-    name: null,
+    name: string,
     email: string;
     roleName: string;
     phone: number;

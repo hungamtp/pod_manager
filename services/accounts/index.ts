@@ -4,7 +4,7 @@ import {
   
   import { API } from "@/api-client/axios";
 import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
-import { UpdateAccountDto, UpdateAccountResponse } from "./dto/update-accounts-dto";
+import { UpdateAccountDto, UpdateAccountResponse, UpdateImageAccountDto, UpdateImageAccountResponse } from "./dto/update-accounts-dto";
 import { getProductByIdDtos } from "../products/dto/get-products-by-id-dto";
 import { AccountByIdDtos , getAccountByIdResponse } from "./dto/get-accounts-by-id-dto";
   
@@ -84,10 +84,15 @@ import { AccountByIdDtos , getAccountByIdResponse } from "./dto/get-accounts-by-
   export const deleteAccount = async (id: number ) => {
      await API.patch(
       `/user/${id}`,
-      
     );
-    
   };
+
+  export const updateImageAccount = async (requestData: UpdateImageAccountDto ) => {
+    await API.patch<UpdateImageAccountResponse>(
+     `/user/avatar/${requestData.id}`,
+     requestData
+   );
+ };
   // export const getAccount = async (id: string) => {
   //   const { data } = await API.get<GetAccountsResponse>(
   //     `/user?pageNum=0&pageSize=10&sort=usernameASC&search=id:${id}`

@@ -1,15 +1,79 @@
 /* eslint-disable @next/next/no-img-element */
 import { useAppSelector } from "@/components/hooks/reduxHook";
 import { MainLayout } from "@/components/layouts";
+import { storage } from "@/firebase/firebase";
+import { AccountByIdDtos } from "@/services/accounts/dto/get-accounts-by-id-dto";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import useGetAccountById from "hooks/accounts/use-get-accounts-by-id";
+import useUpdateImageAccount from "hooks/accounts/use-update-image";
 import * as React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import ImageUploading, { ImageListType } from "react-images-uploading";
+import * as yup from "yup";
 
 export interface IAccountSettingProps {}
+
+const schema = yup.object().shape({});
 
 export default function AccountSetting(props: IAccountSettingProps) {
   const credentialId = useAppSelector((state) => state.auth.userId);
   const { data: responseAccount, isLoading: isLoadingAccount } =
     useGetAccountById(Number(credentialId));
+  const { mutate: updateImageAccount, error } = useUpdateImageAccount();
+  const maxNumber = 69;
+  const [images, setImages] = React.useState<ImageListType>([
+    { data_url: responseAccount?.data.image },
+  ]);
+
+  const defaultValues: AccountByIdDtos = {
+    id: 0,
+    image: "",
+    userFirstName: "",
+    userLastName: "",
+    name: "",
+    email: "",
+    roleName: "",
+    phone: 0,
+    address: "",
+    userStatus: "",
+  };
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<AccountByIdDtos>({
+    defaultValues,
+    resolver: yupResolver(schema),
+  });
+
+  const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
+    setImages(imageList);
+    // data for submit
+  };
+
+  const onUploadImage = (data: { name: string; image: string }) => {
+    if (images !== null) {
+      const file = images[0].file;
+      const imageRef = ref(storage, `images/${file?.name}`);
+      uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => {
+          const submitData = {
+            id: Number(credentialId),
+            image: url,
+          };
+          updateImageAccount(submitData);
+        });
+      });
+    }
+  };
+
+  React.useEffect(() => {}, [responseAccount]);
+
+  const onSubmit: SubmitHandler<AccountByIdDtos> = (data) => {
+    onUploadImage(data);
+  };
   return (
     <>
       <div>
@@ -25,45 +89,59 @@ export default function AccountSetting(props: IAccountSettingProps) {
                 {/* Account */}
                 <div className="card-body">
                   {!isLoadingAccount && responseAccount && (
-                    <form id="formAccountSettings" method="POST">
+                    <form onSubmit={handleSubmit(onSubmit)}>
                       <div className="d-flex align-items-start align-items-sm-center gap-4">
-                        <img
-                          src="../assets/img/avatars/1.png"
-                          alt="user-avatar"
-                          className="d-block rounded"
-                          height={100}
-                          width={100}
-                          id="uploadedAvatar"
-                        />
-                        <div className="button-wrapper">
-                          <label
-                            htmlFor="upload"
-                            className="btn btn-primary me-2 mb-4"
-                            tabIndex={0}
+                        {images && (
+                          <ImageUploading
+                            value={images}
+                            onChange={onChange}
+                            maxNumber={maxNumber}
+                            dataURLKey="data_url"
                           >
-                            <span className="d-none d-sm-block">
-                              Upload new photo
-                            </span>
-                            <i className="bx bx-upload d-block d-sm-none" />
-                            <input
-                              type="file"
-                              id="upload"
-                              className="account-file-input"
-                              hidden
-                              accept="image/png, image/jpeg"
-                            />
-                          </label>
-                          <button
-                            type="button"
-                            className="btn btn-outline-secondary account-image-reset mb-4"
-                          >
-                            <i className="bx bx-reset d-block d-sm-none" />
-                            <span className="d-none d-sm-block">Reset</span>
-                          </button>
-                          <p className="text-muted mb-0">
-                            Allowed JPG, GIF or PNG. Max size of 800K
-                          </p>
-                        </div>
+                            {({
+                              imageList,
+                              onImageUpload,
+                              onImageRemoveAll,
+                              onImageUpdate,
+                              onImageRemove,
+                              isDragging,
+                              dragProps,
+                            }) => (
+                              // write your building UI
+                              <div className="upload__image-wrapper">
+                                {imageList?.map((image, index) => (
+                                  <img
+                                    alt="user-avatar"
+                                    key={index}
+                                    src={image["data_url"]}
+                                    height={100}
+                                    width={100}
+                                    className="me-2 border border-secondary rounded-3 "
+                                  />
+                                ))}
+                                <button
+                                  className="btn btn-primary me-2 mb-4 ms-2"
+                                  style={
+                                    isDragging ? { color: "red" } : undefined
+                                  }
+                                  onClick={onImageUpload}
+                                  {...dragProps}
+                                  type="button"
+                                >
+                                  Thêm ảnh
+                                </button>
+                                &nbsp;
+                                <button
+                                  className="btn btn-outline-secondary account-image-reset mb-4"
+                                  type="button"
+                                  onClick={onImageRemoveAll}
+                                >
+                                  Xóa ảnh
+                                </button>
+                              </div>
+                            )}
+                          </ImageUploading>
+                        )}
                       </div>
                       <hr className="my-0 mt-3 mb-3" />
                       <div className="row">

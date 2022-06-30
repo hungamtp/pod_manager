@@ -12,6 +12,6 @@ export interface GetAllColorDto extends ISuccessHttpResponse {
 
 export interface ColorDto{
     id:number;
+    imageColor: string;
     name: string;
-   
 }

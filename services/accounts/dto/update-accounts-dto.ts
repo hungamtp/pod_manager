@@ -10,6 +10,15 @@ export interface UpdateAccountDto {
     roleName: string;
 }
 
+export interface UpdateImageAccountDto {
+    id:number;
+    image: string
+}
+
+export interface UpdateImageAccountResponse extends ISuccessHttpResponse {
+	data: UpdateAccountDto[];
+}
+
 export interface UpdateAccountResponse extends ISuccessHttpResponse {
 	data: UpdateAccountDto[];
 }
