@@ -32,12 +32,14 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
     pageSize: 10,
   });
   const router = useRouter();
-  const id = router.asPath.split("id=")[1];
+  const factoryId = router.asPath.split("id=")[2];
+  const { id } = router.query;
   const { data: responseFactory, isLoading: isLoadingFactory } =
     useGetFactoryById(Number(id));
 
-  const { data: responseProductForFactory, isLoading: isLoadingProForFactory } =
-    useGetProductForFactory(Number(id));
+  React.useEffect(() => {
+    responseFactory?.data;
+  }, [responseFactory]);
 
   const { data: colors } = useColors({ pageNumber: 0, pageSize: 100 });
   const { data: sizes } = useSizes({ pageNumber: 0, pageSize: 100 });
@@ -101,14 +103,8 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
   const handleCloseCreatePriceDialog = () => {
     setOpenCreatePriceDialog(false);
   };
-  //   const handleChangeCategory = (event: SelectChangeEvent) => {
-  //     setCategoryName(event.target.value);
-  //   };
-
-  //   const [categoryName, setCategoryName] = React.useState(
-  //     responseFactory?.data.categoryName
-  //   );
-
+  const { data: responseProductForFactory, isLoading: isLoadingProForFactory } =
+    useGetProductForFactory(Number(factoryId));
   const [index, setIndex] = React.useState(0);
   const [productId, setProductId] = React.useState(0);
   const [productForFactoryId, setProductForFactoryId] = React.useState(0);

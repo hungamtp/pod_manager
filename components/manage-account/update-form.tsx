@@ -13,15 +13,6 @@ export interface IUpdateFormProps {
   handleCloseDialog: () => void;
   account: UpdateAccountDto;
 }
-// type FormUpdateAccount = {
-//   id: number;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   phone: string;
-//   address: string;
-//   roleName: string;
-// };
 
 const schema = yup.object().shape({
   firstName: yup

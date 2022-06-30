@@ -14,7 +14,18 @@ import * as yup from "yup";
 
 export interface IAccountSettingProps {}
 
-const schema = yup.object().shape({});
+const schema = yup.object().shape({
+  userFirstName: yup
+    .string()
+    .min(1, "First Name cần ít nhất 1 kí tự")
+    .max(26, "First Name tối đa 50 kí tự")
+    .required("First Name không được để trống"),
+  userLastName: yup
+    .string()
+    .min(1, "Last Name cần ít nhất 1 kí tự")
+    .max(26, "Last Name tối đa 50 kí tự")
+    .required("Last Name không được để trống"),
+});
 
 export default function AccountSetting(props: IAccountSettingProps) {
   const credentialId = useAppSelector((state) => state.auth.userId);
@@ -48,6 +59,11 @@ export default function AccountSetting(props: IAccountSettingProps) {
     resolver: yupResolver(schema),
   });
 
+  React.useEffect(() => {
+    reset(responseAccount?.data);
+    setImages([{ data_url: responseAccount?.data.image }]);
+  }, [responseAccount]);
+
   const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
     setImages(imageList);
     // data for submit
@@ -68,8 +84,6 @@ export default function AccountSetting(props: IAccountSettingProps) {
       });
     }
   };
-
-  React.useEffect(() => {}, [responseAccount]);
 
   const onSubmit: SubmitHandler<AccountByIdDtos> = (data) => {
     onUploadImage(data);
@@ -117,6 +131,7 @@ export default function AccountSetting(props: IAccountSettingProps) {
                                     height={100}
                                     width={100}
                                     className="me-2 border border-secondary rounded-3 "
+                                    {...register("image")}
                                   />
                                 ))}
                                 <button
@@ -147,6 +162,19 @@ export default function AccountSetting(props: IAccountSettingProps) {
                       <div className="row">
                         <div className="mb-3 col-md-6">
                           <label htmlFor="firstName" className="form-label">
+                            Id
+                          </label>
+                          <input
+                            className="form-control"
+                            type="text"
+                            id="firstName"
+                            disabled
+                            defaultValue={responseAccount.data.id}
+                            {...register("id")}
+                          />
+                        </div>
+                        <div className="mb-3 col-md-6">
+                          <label htmlFor="firstName" className="form-label">
                             First Name
                           </label>
                           <input
@@ -154,6 +182,7 @@ export default function AccountSetting(props: IAccountSettingProps) {
                             type="text"
                             id="firstName"
                             defaultValue={responseAccount.data.userFirstName}
+                            {...register("userFirstName")}
                           />
                         </div>
                         <div className="mb-3 col-md-6">
@@ -163,9 +192,9 @@ export default function AccountSetting(props: IAccountSettingProps) {
                           <input
                             className="form-control"
                             type="text"
-                            name="lastName"
                             id="lastName"
                             value={responseAccount.data.userLastName}
+                            {...register("userLastName")}
                           />
                         </div>
                         <div className="mb-3 col-md-6">
@@ -176,9 +205,9 @@ export default function AccountSetting(props: IAccountSettingProps) {
                             className="form-control"
                             type="text"
                             id="email"
-                            name="email"
                             defaultValue={responseAccount.data.email}
                             disabled
+                            {...register("email")}
                           />
                         </div>
 
@@ -190,9 +219,9 @@ export default function AccountSetting(props: IAccountSettingProps) {
                             <input
                               type="text"
                               id="phoneNumber"
-                              name="phoneNumber"
                               className="form-control"
                               defaultValue={responseAccount.data.phone}
+                              {...register("phone")}
                             />
                           </div>
                         </div>
@@ -204,9 +233,9 @@ export default function AccountSetting(props: IAccountSettingProps) {
                             type="text"
                             className="form-control"
                             id="address"
-                            name="address"
                             placeholder="Address"
                             defaultValue={responseAccount.data.address}
+                            {...register("address")}
                           />
                         </div>
                         <div className="mb-3 col-md-6">

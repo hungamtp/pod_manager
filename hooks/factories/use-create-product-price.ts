@@ -16,6 +16,7 @@ const useCreateProductPrice = (
       onSuccess: (data) => {
         //because data:any
         handleCloseDialog();
+        queryClient.invalidateQueries("GetProductForFactory");
         queryClient.invalidateQueries("GetFactoryById");
       },
     }

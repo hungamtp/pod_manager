@@ -154,7 +154,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
                     }) => (
                       // write your building UI
                       <div className="upload__image-wrapper">
-                        {imageList.map((image, index) => (
+                        {imageList?.map((image, index) => (
                           <div key={index} className="image-item">
                             <img src={image["data_url"]} alt="" width="100" />
                           </div>
