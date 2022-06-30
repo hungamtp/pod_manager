@@ -6,6 +6,7 @@ import {
   CreateCategoryResponse,
   CreateSizeColorProductDto,
 } from "./dto/create-size-color-product-dto";
+import { getProductForFactoryDtos } from "./dto/get-product-for-factory-dto";
 
 export interface Filter {
   pageSize?: number;
@@ -30,6 +31,11 @@ export const getFactoryById = async (id: number) => {
   return data;
 };
 
+export const getProductForFactory = async (id: number) => {
+  const { data } = await API.get<getProductForFactoryDtos>(`/product/product-for-factory?factoryId=${id}`);
+  return data;
+};
+
 export const createSizeColorProduct = async (
   requestData: CreateSizeColorProductDto[],
   factoryId: string,
@@ -38,6 +44,16 @@ export const createSizeColorProduct = async (
   const { data } = await API.post<CreateCategoryResponse>(
     `/factory/add-size-color?factoryId=${factoryId}&productId=${productId}`,
     requestData
+  );
+  return data;
+};
+export const createProductPrice = async (
+  factoryId: string,
+  productId: string,
+  price: number
+) => {
+  const { data } = await API.post(
+    `/factory/add-price?factoryId=${factoryId}&productId=${productId}&price=${price}`,
   );
   return data;
 };

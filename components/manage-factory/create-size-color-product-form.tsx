@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
 import { CreateSizeColorProductDto } from "@/services/factories/dto/create-size-color-product-dto";
@@ -101,7 +102,7 @@ export default function CreateSizeColorProductForm(
     const submitData: CreateSizeColorProductDto[] = [];
     colorsList.forEach((color) => {
       sizesList.forEach((size) => {
-        submitData.push({ size: size, color: color, quantity: quantity });
+        submitData.push({ size: size, colorImage: color, quantity: quantity });
       });
     });
     console.log(submitData, "dataaa");
@@ -164,7 +165,7 @@ export default function CreateSizeColorProductForm(
                     {colors.map((color) => (
                       <MenuItem
                         key={color.name}
-                        value={color.name}
+                        value={color.imageColor}
                         className="d-flex justify-content-between"
                       >
                         <p className="m-0">{color.name}</p>
@@ -177,7 +178,7 @@ export default function CreateSizeColorProductForm(
                             "https://images.printify.com/5853fec7ce46f30f8328200a"
                           }
                           style={{
-                            backgroundColor: color.name,
+                            backgroundColor: color.imageColor,
                             opacity: "0.8",
                           }}
                           alt={color.name}

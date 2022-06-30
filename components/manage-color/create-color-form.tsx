@@ -29,6 +29,7 @@ export interface ICreateColorFormProps {
 
 type FormCreateAccount = {
   name: string;
+  imageColor: string;
 };
 
 const schema = yup.object().shape({
@@ -44,6 +45,7 @@ export default function CreateColorForm(props: ICreateColorFormProps) {
 
   const defaultValues: FormCreateAccount = {
     name: "",
+    imageColor: "",
   };
   const {
     register,
@@ -86,6 +88,29 @@ export default function CreateColorForm(props: ICreateColorFormProps) {
                   {errors.name && (
                     <span id="error-pwd-message" className="text-danger">
                       {errors.name.message}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="row mb-3">
+                <label
+                  className="col-sm-2 col-form-label"
+                  htmlFor="basic-icon-default-fullname"
+                >
+                  Color Image
+                </label>
+                <div className="col-sm-10">
+                  <div className="input-group input-group-merge">
+                    <input
+                      type="color"
+                      className="form-control"
+                      aria-describedby="basic-icon-default-fullname2"
+                      {...register("imageColor")}
+                    />
+                  </div>
+                  {errors.imageColor && (
+                    <span id="error-pwd-message" className="text-danger">
+                      {errors.imageColor.message}
                     </span>
                   )}
                 </div>

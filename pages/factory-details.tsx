@@ -14,6 +14,8 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import useColors from "hooks/colors/use-colors";
 import useSizes from "hooks/sizes/use-sizes";
+import useGetProductForFactory from "hooks/factories/use-get-product-for-factory";
+import CreateProductPriceForm from "@/components/manage-factory/create-product-price-form";
 export interface FactoryDetailsProps {}
 
 const schema = yup.object().shape({
@@ -33,6 +35,9 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
   const id = router.asPath.split("id=")[1];
   const { data: responseFactory, isLoading: isLoadingFactory } =
     useGetFactoryById(Number(id));
+
+  const { data: responseProductForFactory, isLoading: isLoadingProForFactory } =
+    useGetProductForFactory(Number(id));
 
   const { data: colors } = useColors({ pageNumber: 0, pageSize: 100 });
   const { data: sizes } = useSizes({ pageNumber: 0, pageSize: 100 });
@@ -81,11 +86,20 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
     setOpenCreateDialog(true);
   };
 
+  const handleOpenCreatePriceDialog = (index: number, productId: number) => {
+    setIndex(index);
+    setProductForFactoryId(productId);
+    setOpenCreatePriceDialog(true);
+  };
+
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
   const handleCloseCreateDialog = () => {
     setOpenCreateDialog(false);
+  };
+  const handleCloseCreatePriceDialog = () => {
+    setOpenCreatePriceDialog(false);
   };
   //   const handleChangeCategory = (event: SelectChangeEvent) => {
   //     setCategoryName(event.target.value);
@@ -97,84 +111,147 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
 
   const [index, setIndex] = React.useState(0);
   const [productId, setProductId] = React.useState(0);
+  const [productForFactoryId, setProductForFactoryId] = React.useState(0);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
+  const [openCreatePriceDialog, setOpenCreatePriceDialog] =
+    React.useState(false);
 
   return (
     <>
-      {!isLoadingFactory && responseFactory && (
+      {!isLoadingFactory && responseFactory && colors && sizes && (
         <>
-          <Dialog
-            open={openCreateDialog}
-            onClose={handleCloseCreateDialog}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            fullWidth={true}
-          >
-            <DialogContent>
-              <CreateSizeColorProductForm
-                handleCloseDialog={handleCloseCreateDialog}
-                factoryId={responseFactory?.data.id.toString()}
-                productId={productId.toString()}
-                colors={colors.content}
-                sizes={sizes.content}
-              />
-            </DialogContent>
-          </Dialog>
-          <Dialog
-            open={openDialog}
-            onClose={handleCloseDialog}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            fullWidth={true}
-          >
-            <DialogContent>
-              <div className="card">
-                <h5 className="card-header">Size-Color</h5>
-                <div className="table-responsive text-nowrap">
-                  <table className="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>
-                          <strong>color</strong>
-                        </th>
-                        <th>
-                          <strong>Size</strong>
-                        </th>
-                        <th>
-                          <strong>quantity</strong>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {responseFactory.data.productDtoList[
-                        index
-                      ].sizeColors.map((x) => (
-                        <tr key={index}>
-                          <td>{x.color}</td>
-                          <td>{x.size}</td>
-                          <td>{x.quantity}</td>
+          <>
+            <Dialog
+              open={openCreateDialog}
+              onClose={handleCloseCreateDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              fullWidth={true}
+            >
+              <DialogContent>
+                <CreateSizeColorProductForm
+                  handleCloseDialog={handleCloseCreateDialog}
+                  factoryId={responseFactory?.data.id.toString()}
+                  productId={productId.toString()}
+                  colors={colors.content}
+                  sizes={sizes.content}
+                />
+              </DialogContent>
+            </Dialog>
+            <Dialog
+              open={openDialog}
+              onClose={handleCloseDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              fullWidth={true}
+            >
+              <DialogContent>
+                <div className="card">
+                  <h5 className="card-header">Size-Color</h5>
+                  <div className="table-responsive text-nowrap">
+                    <table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>
+                            <strong>color</strong>
+                          </th>
+                          <th>
+                            <strong>Size</strong>
+                          </th>
+                          <th>
+                            <strong>quantity</strong>
+                          </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {responseFactory.data.productDtoList[
+                          index
+                        ].sizeColors.map((x) => (
+                          <tr key={index}>
+                            <td>{x.color}</td>
+                            <td>{x.size}</td>
+                            <td>{x.quantity}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+              </DialogContent>
+            </Dialog>
+          </>
+          <>
+            <Dialog
+              open={openCreatePriceDialog}
+              onClose={handleCloseCreatePriceDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              fullWidth={true}
+            >
+              <DialogContent>
+                <CreateProductPriceForm
+                  handleCloseDialog={handleCloseCreatePriceDialog}
+                  factoryId={responseFactory?.data.id.toString()}
+                  productId={productForFactoryId.toString()}
+                />
+              </DialogContent>
+            </Dialog>
+            <Dialog
+              open={openDialog}
+              onClose={handleCloseDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              fullWidth={true}
+            >
+              <DialogContent>
+                <div className="card">
+                  <h5 className="card-header">Size-Color</h5>
+                  <div className="table-responsive text-nowrap">
+                    <table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>
+                            <strong>color</strong>
+                          </th>
+                          <th>
+                            <strong>Size</strong>
+                          </th>
+                          <th>
+                            <strong>quantity</strong>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {responseFactory.data.productDtoList[
+                          index
+                        ].sizeColors.map((x) => (
+                          <tr key={index}>
+                            <td>{x.color}</td>
+                            <td>{x.size}</td>
+                            <td>{x.quantity}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </>
         </>
       )}
       <div>
         <div className="container-xxl flex-grow-1 container-p-y">
           <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Product Details /</span>{" "}
-            Product
+            <span className="text-muted fw-light">Factory Details /</span>{" "}
+            Factory
           </h4>
           <div className="row">
             <div className="col-md-12">
               {!isLoadingFactory && responseFactory && (
                 <div className="card mb-4">
-                  <h5 className="card-header">Product Details</h5>
+                  <h5 className="card-header">Factory Details</h5>
                   {/* Account */}
 
                   <div className="card-body">
@@ -212,7 +289,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                             email
                           </label>
                           <input
-                            disabled={isDisabled}
+                            disabled
                             className="form-control"
                             defaultValue={responseFactory.data.email}
                           />
@@ -294,7 +371,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
             <div className="col-md-12">
               <div className="card mb-4">
                 {/* Account */}
-                <h5 className="card-header">Product</h5>
+                <h5 className="card-header">Product By Factory</h5>
                 <hr className="my-0" />
                 <div className="card">
                   <div className="table-responsive text-nowrap">
@@ -312,9 +389,6 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                           </th>
                           <th>
                             <strong>Image</strong>
-                          </th>
-                          <th>
-                            <strong>description</strong>
                           </th>
                           <th>
                             <strong>Sizes&Colors</strong>
@@ -340,7 +414,6 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                                 height="100"
                               />
                             </td>
-                            <td>{x.description}</td>
                             <td>
                               <button
                                 type="button"
@@ -357,6 +430,70 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                                 className="btn btn-success me-2"
                               >
                                 Create
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      ))}
+                    </table>
+                  </div>
+                </div>
+                {/* /Account */}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* / Content */}
+
+        <div className="content-backdrop fade" />
+      </div>
+
+      <div>
+        <div className="container-xxl flex-grow-1 container-p-y">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="card mb-4">
+                {/* Account */}
+                <h5 className="card-header">Product For Factory Do not have</h5>
+                <hr className="my-0" />
+                <div className="card">
+                  <div className="table-responsive text-nowrap">
+                    <table className="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>
+                            <strong>id</strong>
+                          </th>
+                          <th>
+                            <strong>Name</strong>
+                          </th>
+                          <th>
+                            <strong>Action</strong>
+                          </th>
+                        </tr>
+                      </thead>
+                      {responseProductForFactory?.data.map((x, index) => (
+                        <tbody key={x.id} className="table-border-bottom-0">
+                          <tr>
+                            <td>
+                              <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
+                              <strong>{x.id}</strong>
+                            </td>
+                            <td>
+                              <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
+                              <strong>{x.name}</strong>
+                            </td>
+
+                            <td>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleOpenCreatePriceDialog(index, x.id)
+                                }
+                                className="btn btn-primary me-2"
+                              >
+                                Add Price
                               </button>
                             </td>
                           </tr>

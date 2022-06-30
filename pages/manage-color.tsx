@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
 import { MainLayout } from "@/components/layouts";
@@ -94,7 +95,7 @@ export default function ManageColor(props: IManageColor) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Factory management</h5>
+            <h5 className="card-header">Color management</h5>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>
@@ -109,7 +110,20 @@ export default function ManageColor(props: IManageColor) {
                     response.content.map((x) => (
                       <tr key={x.id}>
                         <td>{x.id}</td>
-                        <td>{x.name}</td>
+                        <td>
+                          <img
+                            key={x.imageColor}
+                            width={25}
+                            height={25}
+                            className="rounded-circle border me-1"
+                            src={
+                              "https://images.printify.com/5853fec7ce46f30f8328200a"
+                            }
+                            style={{ backgroundColor: x.imageColor }}
+                            alt={x.imageColor}
+                          />
+                          {x.name}
+                        </td>
                       </tr>
                     ))}
                 </tbody>
