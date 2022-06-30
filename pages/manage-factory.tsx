@@ -1,29 +1,21 @@
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
 import { MainLayout } from "@/components/layouts";
-import CreateForm from "@/components/manage-account/create-form";
-import UpdateForm from "@/components/manage-account/update-form";
 import { Filter } from "@/services/accounts";
 import { AccountDto } from "@/services/accounts/dto/get-all-accounts-dto";
 import { UpdateAccountDto } from "@/services/accounts/dto/update-accounts-dto";
-import { Fab } from "@material-ui/core";
-import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import { IconButton, Pagination, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import useAccounts from "hooks/accounts/use-accounts";
 import useDeleteAccount from "hooks/accounts/use-delete-accounts";
 import useFactories from "hooks/factories/use-factories";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useState } from "react";
 export interface IManageFactory {}
-
-const ITEM_HEIGHT = 48;
 
 export default function ManageFactory(props: IManageFactory) {
   const [filter, setFilter] = useState<Filter>({
@@ -38,25 +30,6 @@ export default function ManageFactory(props: IManageFactory) {
     setFilter({ ...filter, pageNumber: value - 1 });
   };
   const { data: response, isLoading: isLoadingAccount } = useFactories(filter);
-  const defaultValues: UpdateAccountDto = {
-    id: 0,
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    roleName: "",
-  };
-  //  menu button
-
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const { mutate: deleteAccount, error } = useDeleteAccount();
 
@@ -72,40 +45,14 @@ export default function ManageFactory(props: IManageFactory) {
 
   /*{form add account }*/
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
-
   /*{form add account }*/
-  const handleIsEditTrue = (user: AccountDto) => {
-    console.log(user, "userrrrrr");
-    const tmpAcc = {
-      id: user.id,
-      firstName: user.userFirstName,
-      lastName: user.userLastName,
-      email: user.email,
-      phone: user.phone,
-      address: user.address,
-      roleName: user.roleName,
-    };
-    setAccount(tmpAcc);
-    setIsEdit(true);
-    setOpenDialog(true);
-  };
 
-  const handleIsEditFalse = () => {
-    setIsEdit(false);
-    setOpenDialog(true);
-  };
   const handleCloseDeleteDialog = () => {
     setOpenDeleteDialog(false);
   };
 
   /* {open Dialog} */
   const router = useRouter();
-  const [isEdit, setIsEdit] = useState(false);
-  const [openDialog, setOpenDialog] = React.useState(false);
-  const [account, setAccount] = useState<UpdateAccountDto>(defaultValues);
   const [isDelete, setIsDelete] = useState(0);
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
@@ -122,27 +69,6 @@ export default function ManageFactory(props: IManageFactory) {
           </h4>
 
           <hr className="my-4" />
-
-          {isEdit == true && (
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Update Account"}
-              </DialogTitle>
-              <DialogContent>
-                <UpdateForm
-                  account={account}
-                  handleCloseDialog={handleCloseDialog}
-                />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
           <Dialog
             open={openDeleteDialog}
             onClose={handleCloseDeleteDialog}
@@ -229,7 +155,7 @@ export default function ManageFactory(props: IManageFactory) {
                               className="btn btn-primary btn-sm"
                               onClick={() => {
                                 router.push(
-                                  `/factory-details?id=${x.credentialId}`
+                                  `/factory-details?id=${x.credentialId}&factoryid=${x.id}`
                                 );
                               }}
                             >

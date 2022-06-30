@@ -87,7 +87,6 @@ export default function ManageAccount(props: IManageAccountProps) {
 
   /*{form add account }*/
   const handleIsEditTrue = (user: AccountDto) => {
-    console.log(user, "userrrrrr");
     const tmpAcc = {
       id: user.id,
       firstName: user.userFirstName,
