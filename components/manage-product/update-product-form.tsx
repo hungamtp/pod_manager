@@ -101,7 +101,6 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
   };
 
   const onSubmit: SubmitHandler<UpdateProductDto> = (data) => {
-    console.log(data, "dataaa");
     onUploadImage(data);
   };
 

@@ -4,8 +4,7 @@ import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 
 
-const useUpdateAccount = (handleCloseDialog:() => void) => {
-	const router = useRouter();
+const useUpdateProfile = () => {
     const queryClient = useQueryClient();
 	return useMutation(
 		      
@@ -14,13 +13,11 @@ const useUpdateAccount = (handleCloseDialog:() => void) => {
 		},
 		{
 			onSuccess: (data) => {
-				//because data:any
-                handleCloseDialog()
-                queryClient.invalidateQueries("Accounts")
+                queryClient.invalidateQueries("GetAccountById")
 			},
 			
 		}
 	);
 };
 
-export default useUpdateAccount;
+export default useUpdateProfile;

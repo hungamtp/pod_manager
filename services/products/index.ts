@@ -9,6 +9,7 @@ import { getProductByIdDtos } from "./dto/get-products-by-id-dto";
 import { getSizesAndColors } from "./dto/get-all-size-color-by-id";
 import { GetAllSizesDto } from "./dto/get-all-size-dto";
 import { GetAllColorDto } from "./dto/get-all-colors-dtos";
+import { CreateSizesColorsForProductDto, CreateSizesColorsForProductResponse } from "./dto/create-size-color-for-product-dto";
 // import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
   
   export interface Filter {
@@ -78,6 +79,13 @@ import { GetAllColorDto } from "./dto/get-all-colors-dtos";
   export const createProduct = async (requestData: CreateProductDto) => {
     const { data } = await API.post<CreateProductResponse>(
       "/product",
+      requestData
+    );
+    return data;
+  };
+  export const createSizesColorsForProduct = async (requestData: CreateSizesColorsForProductDto, id: number) => {
+    const { data } = await API.post<CreateSizesColorsForProductResponse>(
+      `/product/size-color/${id}`,
       requestData
     );
     return data;

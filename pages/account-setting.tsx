@@ -3,10 +3,13 @@ import { useAppSelector } from "@/components/hooks/reduxHook";
 import { MainLayout } from "@/components/layouts";
 import { storage } from "@/firebase/firebase";
 import { AccountByIdDtos } from "@/services/accounts/dto/get-accounts-by-id-dto";
+import { UpdateAccountDto } from "@/services/accounts/dto/update-accounts-dto";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Email, Phone } from "@mui/icons-material";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import useGetAccountById from "hooks/accounts/use-get-accounts-by-id";
 import useUpdateImageAccount from "hooks/accounts/use-update-image";
+import useUpdateProfile from "hooks/accounts/use-update-profile";
 import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import ImageUploading, { ImageListType } from "react-images-uploading";
@@ -25,6 +28,24 @@ const schema = yup.object().shape({
     .min(1, "Last Name cần ít nhất 1 kí tự")
     .max(26, "Last Name tối đa 50 kí tự")
     .required("Last Name không được để trống"),
+  email: yup
+    .string()
+    .email()
+    .min(8, "Tài khoản cần ít nhất 8 kí tự")
+    .max(50, "Tài khoản tối đa 50 kí tự")
+    .required("Tài khoản không được để trống"),
+  phone: yup
+    .string()
+    .matches(
+      /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/,
+      "Số điện thoại gồm 10 số và bắt đầu từ 0"
+    )
+    .required("Số điện thoại không được để trống"),
+  address: yup
+    .string()
+    .min(10, "Địa chỉ cần ít nhất 10 kí tự")
+    .max(50, "Địa chỉ tối đa 50 kí tự")
+    .required("Địa chỉ không được để trống"),
 });
 
 export default function AccountSetting(props: IAccountSettingProps) {
@@ -32,10 +53,12 @@ export default function AccountSetting(props: IAccountSettingProps) {
   const { data: responseAccount, isLoading: isLoadingAccount } =
     useGetAccountById(Number(credentialId));
   const { mutate: updateImageAccount, error } = useUpdateImageAccount();
+  const { mutate: updateProfile } = useUpdateProfile();
   const maxNumber = 69;
   const [images, setImages] = React.useState<ImageListType>([
     { data_url: responseAccount?.data.image },
   ]);
+  const [isDisable, setIsDisable] = React.useState(true);
 
   const defaultValues: AccountByIdDtos = {
     id: 0,
@@ -69,7 +92,7 @@ export default function AccountSetting(props: IAccountSettingProps) {
     // data for submit
   };
 
-  const onUploadImage = (data: { name: string; image: string }) => {
+  const onUploadImage = (image: string) => {
     if (images !== null) {
       const file = images[0].file;
       const imageRef = ref(storage, `images/${file?.name}`);
@@ -85,8 +108,22 @@ export default function AccountSetting(props: IAccountSettingProps) {
     }
   };
 
+  const handleIsDisable = () => {
+    setIsDisable(!isDisable);
+  };
+
   const onSubmit: SubmitHandler<AccountByIdDtos> = (data) => {
-    onUploadImage(data);
+    onUploadImage(data.image);
+    const tmpData = {
+      id: data.id,
+      firstName: data.userFirstName,
+      lastName: data.userLastName,
+      address: data.address,
+      phone: data.phone.toString(),
+      roleName: data.roleName,
+      email: data.email,
+    };
+    updateProfile(tmpData);
   };
   return (
     <>
@@ -182,9 +219,19 @@ export default function AccountSetting(props: IAccountSettingProps) {
                             type="text"
                             id="firstName"
                             defaultValue={responseAccount.data.userFirstName}
+                            disabled={isDisable}
                             {...register("userFirstName")}
                           />
+                          {errors.userFirstName && (
+                            <span
+                              id="error-pwd-message"
+                              className="text-danger"
+                            >
+                              {errors.userFirstName.message}
+                            </span>
+                          )}
                         </div>
+
                         <div className="mb-3 col-md-6">
                           <label htmlFor="lastName" className="form-label">
                             Last Name
@@ -193,9 +240,18 @@ export default function AccountSetting(props: IAccountSettingProps) {
                             className="form-control"
                             type="text"
                             id="lastName"
-                            value={responseAccount.data.userLastName}
+                            disabled={isDisable}
+                            defaultValue={responseAccount.data.userLastName}
                             {...register("userLastName")}
                           />
+                          {errors.userLastName && (
+                            <span
+                              id="error-pwd-message"
+                              className="text-danger"
+                            >
+                              {errors.userLastName.message}
+                            </span>
+                          )}
                         </div>
                         <div className="mb-3 col-md-6">
                           <label htmlFor="email" className="form-label">
@@ -209,6 +265,14 @@ export default function AccountSetting(props: IAccountSettingProps) {
                             disabled
                             {...register("email")}
                           />
+                          {errors.email && (
+                            <span
+                              id="error-pwd-message"
+                              className="text-danger"
+                            >
+                              {errors.email.message}
+                            </span>
+                          )}
                         </div>
 
                         <div className="mb-3 col-md-6">
@@ -221,8 +285,17 @@ export default function AccountSetting(props: IAccountSettingProps) {
                               id="phoneNumber"
                               className="form-control"
                               defaultValue={responseAccount.data.phone}
+                              disabled={isDisable}
                               {...register("phone")}
                             />
+                            {errors.phone && (
+                              <span
+                                id="error-pwd-message"
+                                className="text-danger"
+                              >
+                                {errors.phone.message}
+                              </span>
+                            )}
                           </div>
                         </div>
                         <div className="mb-3 col-md-6">
@@ -234,9 +307,18 @@ export default function AccountSetting(props: IAccountSettingProps) {
                             className="form-control"
                             id="address"
                             placeholder="Address"
+                            disabled={isDisable}
                             defaultValue={responseAccount.data.address}
                             {...register("address")}
                           />
+                          {errors.address && (
+                            <span
+                              id="error-pwd-message"
+                              className="text-danger"
+                            >
+                              {errors.address.message}
+                            </span>
+                          )}
                         </div>
                         <div className="mb-3 col-md-6">
                           <label htmlFor="state" className="form-label">
@@ -258,8 +340,9 @@ export default function AccountSetting(props: IAccountSettingProps) {
                         <button
                           type="reset"
                           className="btn btn-outline-secondary"
+                          onClick={handleIsDisable}
                         >
-                          Cancel
+                          Edit
                         </button>
                       </div>
                     </form>
