@@ -17,7 +17,7 @@ export interface FactoryByIdDtos {
         sizeColors: {
             quantity: number;
             size: string;
-            color: string;
+            colorImage: string;
         }[]
     }[]
     public: Boolean;

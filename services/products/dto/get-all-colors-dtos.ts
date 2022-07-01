@@ -15,3 +15,8 @@ export interface ColorDto{
     imageColor: string;
     name: string;
 }
+export interface ColorOfProductDto{
+    id:number;
+    image: string;
+    name: string;
+}

@@ -86,7 +86,6 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
   };
 
   const onSubmit: SubmitHandler<UpdateCategoryDto> = (data) => {
-    console.log(data, "dataaa");
     onUploadImage(data);
   };
 

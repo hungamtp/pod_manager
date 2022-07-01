@@ -2,7 +2,10 @@
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
 import { CreateSizeColorProductDto } from "@/services/factories/dto/create-size-color-product-dto";
-import { ColorDto } from "@/services/products/dto/get-all-colors-dtos";
+import {
+  ColorDto,
+  ColorOfProductDto,
+} from "@/services/products/dto/get-all-colors-dtos";
 import { SizeDto } from "@/services/products/dto/get-all-size-dto";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -23,8 +26,8 @@ export interface ICreateSizeColorProductFormProps {
   handleCloseDialog: () => void;
   factoryId: string;
   productId: string;
-  sizes: SizeDto[];
-  colors: ColorDto[];
+  sizes: string[];
+  colors: ColorOfProductDto[];
 }
 
 type FormCreateSizeColorProduct = {
@@ -105,7 +108,7 @@ export default function CreateSizeColorProductForm(
         submitData.push({ size: size, colorImage: color, quantity: quantity });
       });
     });
-    console.log(submitData, "dataaa");
+    addSizeColorProduct(submitData);
     // addSizeColorProduct(submitData, {
     //   onError: (error: any) => {
     //     console.log(error.response.data.errorMessage);
@@ -165,7 +168,7 @@ export default function CreateSizeColorProductForm(
                     {colors.map((color) => (
                       <MenuItem
                         key={color.name}
-                        value={color.imageColor}
+                        value={color.image}
                         className="d-flex justify-content-between"
                       >
                         <p className="m-0">{color.name}</p>
@@ -178,7 +181,7 @@ export default function CreateSizeColorProductForm(
                             "https://images.printify.com/5853fec7ce46f30f8328200a"
                           }
                           style={{
-                            backgroundColor: color.imageColor,
+                            backgroundColor: color.image,
                             opacity: "0.8",
                           }}
                           alt={color.name}
@@ -223,11 +226,11 @@ export default function CreateSizeColorProductForm(
                   >
                     {sizes.map((size) => (
                       <MenuItem
-                        key={size.name}
-                        value={size.name}
+                        key={size}
+                        value={size}
                         className="d-flex justify-content-between"
                       >
-                        {size.name}
+                        {size}
                       </MenuItem>
                     ))}
                   </Select>

@@ -1,9 +1,12 @@
 import { useAppDispatch } from "@/components/hooks/reduxHook";
 import { useMutation, useQueryClient } from "react-query";
 
-import { useRouter } from "next/router";
-import { CreateSizeColorProductDto } from "@/services/factories/dto/create-size-color-product-dto";
+import { ErrorHttpResponse } from "@/models/error_http_response.interface";
 import { createSizeColorProduct } from "@/services/factories";
+import { CreateSizeColorProductDto } from "@/services/factories/dto/create-size-color-product-dto";
+import { AxiosError } from "axios";
+import { useRouter } from "next/router";
+import { useSnackbar } from 'notistack';
 
 const useCreateSizeColorProduct = (
   handleCloseDialog: () => void,
@@ -13,6 +16,8 @@ const useCreateSizeColorProduct = (
   const router = useRouter();
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+	const { enqueueSnackbar } = useSnackbar();
+
   return useMutation(
     async (data: CreateSizeColorProductDto[]) => {
       return await createSizeColorProduct(data, factoryId, productId);
@@ -23,6 +28,15 @@ const useCreateSizeColorProduct = (
         handleCloseDialog();
         queryClient.invalidateQueries("GetFactoryById");
       },
+      onError: (error: AxiosError<ErrorHttpResponse>) => {
+				if (error) {
+					enqueueSnackbar(error.response?.data.errorMessage, {
+					  autoHideDuration: 9000,
+					  variant: "error",
+					});
+				  }
+			},
+
     }
   );
 };

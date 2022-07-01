@@ -135,8 +135,8 @@ export default function ManageFactory(props: IManageFactory) {
                         <td>{x.location}</td>
                         <td>
                           {x.collaborating == false && (
-                            <span className="badge bg-label-primary me-1">
-                              FALSE
+                            <span className="badge bg-label-info me-1">
+                              TRUE
                             </span>
                           )}
                         </td>

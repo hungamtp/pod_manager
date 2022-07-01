@@ -3,12 +3,14 @@ import ManageProduct from '@/pages/manage-product';
 import { publishProduct } from '@/services/products';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
+import { useSnackbar } from 'notistack';
 import { useMutation, useQueryClient } from 'react-query';
 
 
 const usePublishProduct = (handleClosePublishDialog:() => void) => {
 	const router = useRouter();
     const queryClient = useQueryClient();
+	const { enqueueSnackbar } = useSnackbar();
 	return useMutation(
 		      
         async (id: number) => {
@@ -20,7 +22,12 @@ const usePublishProduct = (handleClosePublishDialog:() => void) => {
                 queryClient.invalidateQueries("Products")
 			},
 			onError: (error: AxiosError<ErrorHttpResponse>) => {
-				console.log(error.response?.data.errorMessage, "errorrrrrrrrrrr");
+				if (error) {
+					enqueueSnackbar(error.response?.data.errorMessage, {
+					  autoHideDuration: 9000,
+					  variant: "error",
+					});
+				  }
 			},
 			
 		}

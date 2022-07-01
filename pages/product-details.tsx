@@ -4,10 +4,12 @@ import { storage } from "@/firebase/firebase";
 import { Filter } from "@/services/categories";
 import { UpdateProductDto } from "@/services/products/dto/update-product-dto";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { InputLabel, MenuItem } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import { Fab, InputLabel, MenuItem } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { nanoid } from "@reduxjs/toolkit";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import useCategories from "hooks/categories/use-categories";
 import useGetProductById from "hooks/products/use-get-products-by-id";
@@ -18,6 +20,13 @@ import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import * as yup from "yup";
+/* eslint-disable @next/next/no-css-tags */
+/* eslint-disable @next/next/no-sync-scripts */
+import CreateSizeColorProductForm from "@/components/manage-factory/create-size-color-product-form";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import CreateNewSizeColorForProductForm from "@/components/manage-product/create-new-size-color-for-product-form";
+
 export interface IProductDetailsProps {}
 
 const ITEM_HEIGHT = 48;
@@ -39,6 +48,8 @@ export default function ProductDetails(props: IProductDetailsProps) {
     useGetProductById(Number(id));
   const { data: responseSizesColors, isLoading: isLoadingSizesColors } =
     useGetSizesColorsById(Number(id));
+  const { data: responseSizesColorById } = useGetSizesColorsById(Number(id));
+  const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
 
   const [checked, setChecked] = React.useState(true);
   const [checkValue, setCheckValue] = React.useState("");
@@ -48,6 +59,14 @@ export default function ProductDetails(props: IProductDetailsProps) {
   const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
     setImages(imageList);
     // data for submit
+  };
+
+  const handleCloseCreateDialog = () => {
+    setOpenCreateDialog(false);
+  };
+
+  const handleOpenCreateSizeColorDialog = () => {
+    setOpenCreateDialog(true);
   };
 
   const defaultValues: UpdateProductDto = {
@@ -141,7 +160,6 @@ export default function ProductDetails(props: IProductDetailsProps) {
       categoryName: data.categoryName,
       images: data.images,
     };
-    console.log(tmpData, "dataaa");
     onUploadImage(tmpData);
   };
 
@@ -327,7 +345,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                         <div className="card">
                           <h5 className="card-header">Price By Factories</h5>
                           <div className="table-responsive text-nowrap">
-                            <table className="table table-sm">
+                            <table className="table table-sm ">
                               <thead>
                                 <tr>
                                   <th>
@@ -381,6 +399,9 @@ export default function ProductDetails(props: IProductDetailsProps) {
                         <button
                           type="button"
                           className="btn btn-outline-secondary"
+                          onClick={() => {
+                            router.push("manage-product");
+                          }}
                         >
                           Cancel
                         </button>
@@ -400,27 +421,101 @@ export default function ProductDetails(props: IProductDetailsProps) {
       </div>
       {/* Content wrapper */}
       <div>
-        <div className="container-xxl flex-grow-1 container-p-y">
+        <Dialog
+          open={openCreateDialog}
+          onClose={handleCloseCreateDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          fullWidth={true}
+        >
+          <DialogContent>
+            <CreateNewSizeColorForProductForm
+              handleCloseDialog={handleCloseCreateDialog}
+              id={Number(id)}
+            />
+          </DialogContent>
+        </Dialog>
+        <div className="container-xxl flex-grow-1 container-p-y ">
           <div className="row">
             <div className="col-md-12">
               <div className="card mb-4">
                 {/* Account */}
+
                 <h5 className="card-header">Sizes & Colors</h5>
+                <div>
+                  <Fab
+                    className="badge bg-success ms-2"
+                    variant="extended"
+                    size="small"
+                    aria-label="add"
+                    onClick={handleOpenCreateSizeColorDialog}
+                  >
+                    <AddIcon sx={{ mr: 1 }} />
+                    Create New Sizes & Colors
+                  </Fab>
+                </div>
+                <br className="my-4" />
                 <hr className="my-0" />
                 <div className="card">
                   <div className="card-body">
                     <div className="table-responsive text-nowrap">
-                      <div className="mt-2">
-                        <button type="button" className="btn btn-primary me-2">
-                          Save changes
-                        </button>
-                        <button
-                          type="button"
-                          className="btn btn-outline-secondary"
-                        >
-                          Cancel
-                        </button>
-                      </div>
+                      {responseSizesColorById && (
+                        <div key={nanoid()}>
+                          <table className="table table-sm mb-3 col-md-6">
+                            <thead>
+                              <tr>
+                                <th>
+                                  <strong>Size</strong>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className="table-border-bottom-0">
+                              {responseSizesColorById.data.sizes.map(
+                                (sizes) => (
+                                  <tr key={nanoid()}>
+                                    <td>
+                                      <strong>{sizes}</strong>
+                                    </td>
+                                  </tr>
+                                )
+                              )}
+                            </tbody>
+                          </table>
+                          <table className="table table-sm mb-3 col-md-6">
+                            <thead>
+                              <tr>
+                                <th>
+                                  <strong>Color</strong>
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className="table-border-bottom-0">
+                              {responseSizesColorById.data.colors.map(
+                                (colors) => (
+                                  <tr key={nanoid()}>
+                                    <td>
+                                      <img
+                                        key={colors.image}
+                                        width={25}
+                                        height={25}
+                                        className="rounded-circle border me-1"
+                                        src={
+                                          "https://images.printify.com/5853fec7ce46f30f8328200a"
+                                        }
+                                        style={{
+                                          backgroundColor: colors.image,
+                                        }}
+                                        alt={colors.image}
+                                      />
+                                      <strong>{colors.name}</strong>
+                                    </td>
+                                  </tr>
+                                )
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

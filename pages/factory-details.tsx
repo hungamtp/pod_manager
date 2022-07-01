@@ -2,20 +2,19 @@
 /* eslint-disable @next/next/no-img-element */
 import { MainLayout } from "@/components/layouts";
 import { Filter } from "@/services/categories";
-import useCategories from "hooks/categories/use-categories";
 import useGetFactoryById from "hooks/factories/use-get-factory-by-id";
 import { useRouter } from "next/router";
 import * as React from "react";
 import * as yup from "yup";
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
+import CreateProductPriceForm from "@/components/manage-factory/create-product-price-form";
 import CreateSizeColorProductForm from "@/components/manage-factory/create-size-color-product-form";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import useColors from "hooks/colors/use-colors";
-import useSizes from "hooks/sizes/use-sizes";
+import { nanoid } from "@reduxjs/toolkit";
 import useGetProductForFactory from "hooks/factories/use-get-product-for-factory";
-import CreateProductPriceForm from "@/components/manage-factory/create-product-price-form";
+import useGetSizesColorsById from "hooks/products/use-get-sizes-colors-by-id";
 export interface FactoryDetailsProps {}
 
 const schema = yup.object().shape({
@@ -36,13 +35,22 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
   const { id } = router.query;
   const { data: responseFactory, isLoading: isLoadingFactory } =
     useGetFactoryById(Number(id));
+  const { data: responseProductForFactory, isLoading: isLoadingProForFactory } =
+    useGetProductForFactory(Number(factoryId));
+  const [index, setIndex] = React.useState(0);
+  const [productId, setProductId] = React.useState(0);
+  const [productForFactoryId, setProductForFactoryId] = React.useState(0);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
+  const [openCreatePriceDialog, setOpenCreatePriceDialog] =
+    React.useState(false);
+  const { data: responseSizesColorById } = useGetSizesColorsById(productId);
 
   React.useEffect(() => {
     responseFactory?.data;
   }, [responseFactory]);
 
-  const { data: colors } = useColors({ pageNumber: 0, pageSize: 100 });
-  const { data: sizes } = useSizes({ pageNumber: 0, pageSize: 100 });
+  React.useEffect(() => {}, [productId]);
 
   const [isDisabled, setIsDisabled] = React.useState(true);
 
@@ -75,7 +83,8 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
     setIsDisabled(!isDisabled);
   };
 
-  const handleOpenSizeColorDialog = (index: number) => {
+  const handleOpenSizeColorDialog = (index: number, productId: number) => {
+    setProductId(productId);
     setIndex(index);
     setOpenDialog(true);
   };
@@ -103,19 +112,10 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
   const handleCloseCreatePriceDialog = () => {
     setOpenCreatePriceDialog(false);
   };
-  const { data: responseProductForFactory, isLoading: isLoadingProForFactory } =
-    useGetProductForFactory(Number(factoryId));
-  const [index, setIndex] = React.useState(0);
-  const [productId, setProductId] = React.useState(0);
-  const [productForFactoryId, setProductForFactoryId] = React.useState(0);
-  const [openDialog, setOpenDialog] = React.useState(false);
-  const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
-  const [openCreatePriceDialog, setOpenCreatePriceDialog] =
-    React.useState(false);
 
   return (
     <>
-      {!isLoadingFactory && responseFactory && colors && sizes && (
+      {!isLoadingFactory && responseFactory && responseSizesColorById && (
         <>
           <>
             <Dialog
@@ -130,8 +130,8 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                   handleCloseDialog={handleCloseCreateDialog}
                   factoryId={responseFactory?.data.id.toString()}
                   productId={productId.toString()}
-                  colors={colors.content}
-                  sizes={sizes.content}
+                  colors={responseSizesColorById?.data.colors}
+                  sizes={responseSizesColorById.data.sizes}
                 />
               </DialogContent>
             </Dialog>
@@ -164,8 +164,8 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                         {responseFactory.data.productDtoList[
                           index
                         ].sizeColors.map((x) => (
-                          <tr key={index}>
-                            <td>{x.color}</td>
+                          <tr key={nanoid()}>
+                            <td>{x.colorImage}</td>
                             <td>{x.size}</td>
                             <td>{x.quantity}</td>
                           </tr>
@@ -191,47 +191,6 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                   factoryId={responseFactory?.data.id.toString()}
                   productId={productForFactoryId.toString()}
                 />
-              </DialogContent>
-            </Dialog>
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogContent>
-                <div className="card">
-                  <h5 className="card-header">Size-Color</h5>
-                  <div className="table-responsive text-nowrap">
-                    <table className="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>
-                            <strong>color</strong>
-                          </th>
-                          <th>
-                            <strong>Size</strong>
-                          </th>
-                          <th>
-                            <strong>quantity</strong>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {responseFactory.data.productDtoList[
-                          index
-                        ].sizeColors.map((x) => (
-                          <tr key={index}>
-                            <td>{x.color}</td>
-                            <td>{x.size}</td>
-                            <td>{x.quantity}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
               </DialogContent>
             </Dialog>
           </>
@@ -329,24 +288,6 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
 
                         <hr className="my-5" />
                       </div>
-                      <div className="mt-2">
-                        <button
-                          type="button"
-                          onClick={handleIsDisabled}
-                          className="btn btn-primary me-2"
-                        >
-                          Edit
-                        </button>
-                        <button type="submit" className="btn btn-primary me-2">
-                          Save changes
-                        </button>
-                        <button
-                          type="button"
-                          className="btn btn-outline-secondary"
-                        >
-                          Cancel
-                        </button>
-                      </div>
                     </form>
                   </div>
                   {/* /Account */}
@@ -413,7 +354,9 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                             <td>
                               <button
                                 type="button"
-                                onClick={() => handleOpenSizeColorDialog(index)}
+                                onClick={() =>
+                                  handleOpenSizeColorDialog(index, x.id)
+                                }
                                 className="btn btn-primary me-2"
                               >
                                 View
