@@ -40,7 +40,7 @@ import { UpdateCategoryDto, UpdateCategoryResponse } from "./dto/update-categori
     return data;
   };
 
-  export const deleteCategory = async (id: number ) => {
+  export const deleteCategory = async (id: string ) => {
     await API.patch(
      `/category/${id}`,
      

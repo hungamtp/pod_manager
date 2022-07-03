@@ -34,72 +34,45 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
   const factoryId = router.asPath.split("id=")[2];
   const { id } = router.query;
   const { data: responseFactory, isLoading: isLoadingFactory } =
-    useGetFactoryById(Number(id));
+    useGetFactoryById(id as string);
   const { data: responseProductForFactory, isLoading: isLoadingProForFactory } =
-    useGetProductForFactory(Number(factoryId));
+    useGetProductForFactory(factoryId);
   const [index, setIndex] = React.useState(0);
-  const [productId, setProductId] = React.useState(0);
-  const [productForFactoryId, setProductForFactoryId] = React.useState(0);
+  const [productId, setProductId] = React.useState("");
+  const [productForFactoryId, setProductForFactoryId] = React.useState("");
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
   const [openCreatePriceDialog, setOpenCreatePriceDialog] =
     React.useState(false);
-  const { data: responseSizesColorById } = useGetSizesColorsById(productId);
+  const { data: responseSizesColorById, isLoading: isLoadingSizeColorById } =
+    useGetSizesColorsById(productId);
 
   React.useEffect(() => {
     responseFactory?.data;
   }, [responseFactory]);
 
-  React.useEffect(() => {}, [productId]);
+  React.useEffect(() => {
+    productId;
+  }, [productId]);
 
-  const [isDisabled, setIsDisabled] = React.useState(true);
-
-  // const defaultValues: FactoryByIdDtos = {
-  //   id: 0,
-  //   name: "",
-  //   email: "",
-  //   location: "",
-  //   phone: 0,
-  //   image: "",
-  //   productDtoList: [],
-  // };
-
-  // const form = useForm<FactoryByIdDtos>({
-  //   defaultValues,
-  //   resolver: yupResolver(schema),
-  // });
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   reset,
-  //   formState: { errors },
-  // } = form;
-
-  // React.useEffect(() => {
-  //   reset(responseFactory?.data);
-  // }, [responseFactory]);
-
-  const handleIsDisabled = () => {
-    setIsDisabled(!isDisabled);
-  };
-
-  const handleOpenSizeColorDialog = (index: number, productId: number) => {
+  const handleOpenSizeColorDialog = (index: number, productId: string) => {
     setProductId(productId);
     setIndex(index);
     setOpenDialog(true);
   };
   const handleOpenCreateSizeColorDialog = (
     index: number,
-    productId: number
+    productId: string
   ) => {
     setIndex(index);
     setProductId(productId);
     setOpenCreateDialog(true);
   };
 
-  const handleOpenCreatePriceDialog = (index: number, productId: number) => {
+  const handleOpenCreatePriceDialog = (index: number, productId: string) => {
     setIndex(index);
     setProductForFactoryId(productId);
+    setProductId(productId);
     setOpenCreatePriceDialog(true);
   };
 
@@ -115,93 +88,114 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
 
   return (
     <>
-      {!isLoadingFactory && responseFactory && responseSizesColorById && (
-        <>
+      {!isLoadingFactory &&
+        !isLoadingSizeColorById &&
+        responseFactory &&
+        responseSizesColorById && (
           <>
-            <Dialog
-              open={openCreateDialog}
-              onClose={handleCloseCreateDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogContent>
-                <CreateSizeColorProductForm
-                  handleCloseDialog={handleCloseCreateDialog}
-                  factoryId={responseFactory?.data.id.toString()}
-                  productId={productId.toString()}
-                  colors={responseSizesColorById?.data.colors}
-                  sizes={responseSizesColorById.data.sizes}
-                />
-              </DialogContent>
-            </Dialog>
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogContent>
-                <div className="card">
-                  <h5 className="card-header">Size-Color</h5>
-                  <div className="table-responsive text-nowrap">
-                    <table className="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>
-                            <strong>color</strong>
-                          </th>
-                          <th>
-                            <strong>Size</strong>
-                          </th>
-                          <th>
-                            <strong>quantity</strong>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {responseFactory.data.productDtoList[
-                          index
-                        ].sizeColors.map((x) => (
-                          <tr key={nanoid()}>
-                            <td>{x.colorImage}</td>
-                            <td>{x.size}</td>
-                            <td>{x.quantity}</td>
+            <>
+              <Dialog
+                open={openCreateDialog}
+                onClose={handleCloseCreateDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth={true}
+              >
+                <DialogContent>
+                  <CreateSizeColorProductForm
+                    handleCloseDialog={handleCloseCreateDialog}
+                    factoryId={responseFactory?.data.id}
+                    productId={productId}
+                    colors={responseSizesColorById?.data.colors}
+                    sizes={responseSizesColorById.data.sizes}
+                  />
+                </DialogContent>
+              </Dialog>
+              <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth={true}
+              >
+                <DialogContent>
+                  <div className="card">
+                    <h5 className="card-header">Size-Color</h5>
+                    <div className="table-responsive text-nowrap">
+                      <table className="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>
+                              <strong>color</strong>
+                            </th>
+                            <th>
+                              <strong>Size</strong>
+                            </th>
+                            <th>
+                              <strong>quantity</strong>
+                            </th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {responseFactory.data.productDtoList[
+                            index
+                          ]?.sizeColors.map((x) => (
+                            <tr key={nanoid()}>
+                              <td>{x.colorImage}</td>
+                              <td>{x.size}</td>
+                              <td>{x.quantity}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
-              </DialogContent>
-            </Dialog>
+                </DialogContent>
+              </Dialog>
+            </>
+            <>
+              <Dialog
+                open={openCreatePriceDialog}
+                onClose={handleCloseCreatePriceDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth={true}
+              >
+                <DialogContent>
+                  <CreateProductPriceForm
+                    handleCloseDialog={handleCloseCreatePriceDialog}
+                    factoryId={responseFactory?.data.id}
+                    productId={productForFactoryId}
+                  />
+                </DialogContent>
+              </Dialog>
+            </>
           </>
-          <>
-            <Dialog
-              open={openCreatePriceDialog}
-              onClose={handleCloseCreatePriceDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogContent>
-                <CreateProductPriceForm
-                  handleCloseDialog={handleCloseCreatePriceDialog}
-                  factoryId={responseFactory?.data.id.toString()}
-                  productId={productForFactoryId.toString()}
-                />
-              </DialogContent>
-            </Dialog>
-          </>
-        </>
-      )}
+        )}
+
       <div>
         <div className="container-xxl flex-grow-1 container-p-y">
           <h4 className="fw-bold py-3 mb-4">
             <span className="text-muted fw-light">Factory Details /</span>{" "}
             Factory
           </h4>
+          <div className="card-body">
+            <div className="d-flex align-items-start align-items-sm-center gap-4">
+              <img
+                src={responseFactory?.data.image}
+                alt="user-avatar"
+                className="d-block rounded"
+                height={100}
+                width={100}
+                id="uploadedAvatar"
+              />
+              <div className="button-wrapper">
+                <h2>{responseFactory?.data.name}</h2>
+                <p className="text-muted mb-0"></p>
+              </div>
+            </div>
+          </div>
+          <hr className="my-0" />
           <div className="row">
             <div className="col-md-12">
               {!isLoadingFactory && responseFactory && (
@@ -231,9 +225,9 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                           <label className="form-label">Name</label>
 
                           <input
-                            disabled={isDisabled}
                             className="form-control"
                             type="text"
+                            disabled
                             id="Name"
                             defaultValue={responseFactory.data.name}
                           />
@@ -249,26 +243,15 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                             defaultValue={responseFactory.data.email}
                           />
                         </div>
-                        <div className="mb-3 col-md-6">
-                          <label htmlFor="organization" className="form-label">
-                            address
-                          </label>
-                          <textarea
-                            disabled={isDisabled}
-                            className="form-control"
-                            id="exampleFormControlTextarea1"
-                            rows={3}
-                            defaultValue={responseFactory.data.address}
-                          />
-                        </div>
+
                         <div className="mb-3 col-md-6">
                           <label htmlFor="organization" className="form-label">
                             location
                           </label>
                           <textarea
-                            disabled={isDisabled}
                             className="form-control"
                             id="exampleFormControlTextarea1"
+                            disabled
                             rows={3}
                             defaultValue={responseFactory.data.location}
                           />
@@ -278,7 +261,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                             Phone Number
                           </label>
                           <input
-                            disabled={isDisabled}
+                            disabled
                             className="form-control"
                             defaultValue={responseFactory.data.phone}
                           />
@@ -413,7 +396,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                         </tr>
                       </thead>
                       {responseProductForFactory?.data.map((x, index) => (
-                        <tbody key={x.id} className="table-border-bottom-0">
+                        <tbody key={index} className="table-border-bottom-0">
                           <tr>
                             <td>
                               <i className="fab fa-angular fa-lg text-danger me-3" />{" "}

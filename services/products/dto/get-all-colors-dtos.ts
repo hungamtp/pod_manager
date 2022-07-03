@@ -11,12 +11,12 @@ export interface GetAllColorDto extends ISuccessHttpResponse {
 }
 
 export interface ColorDto{
-    id:number;
+    id:string;
     imageColor: string;
     name: string;
 }
 export interface ColorOfProductDto{
-    id:number;
+    id:string;
     image: string;
     name: string;
 }

@@ -62,14 +62,14 @@ import { CreateSizesColorsForProductDto, CreateSizesColorsForProductResponse } f
   };
 
 
-  export const getProductById = async (id: number) => {
+  export const getProductById = async (id: string) => {
     const { data } = await API.get<getProductByIdDtos>(
       `/product/admin/${id}`
     );
     return data;
   };
 
-  export const getSizesAndColorsById = async (id: number) => {
+  export const getSizesAndColorsById = async (id: string) => {
     const { data } = await API.get<getSizesAndColors>(
       `/product/admin/size-color/${id}`
     );
@@ -83,7 +83,7 @@ import { CreateSizesColorsForProductDto, CreateSizesColorsForProductResponse } f
     );
     return data;
   };
-  export const createSizesColorsForProduct = async (requestData: CreateSizesColorsForProductDto, id: number) => {
+  export const createSizesColorsForProduct = async (requestData: CreateSizesColorsForProductDto, id: string) => {
     const { data } = await API.post<CreateSizesColorsForProductResponse>(
       `/product/size-color/${id}`,
       requestData
@@ -91,7 +91,7 @@ import { CreateSizesColorsForProductDto, CreateSizesColorsForProductResponse } f
     return data;
   };
   
-  export const deleteProduct = async (id: number ) => {
+  export const deleteProduct = async (id: string ) => {
     await API.patch(
      `/product/${id}`,
      
@@ -106,13 +106,13 @@ import { CreateSizesColorsForProductDto, CreateSizesColorsForProductResponse } f
   return data;
 };
 
-export const publishProduct = async (id: number ) => {
+export const publishProduct = async (id: string ) => {
   await API.patch(
    `/product/publish/${id}`,
    
  );
 };
-export const unPublishProduct = async (id: number ) => {
+export const unPublishProduct = async (id: string ) => {
   await API.patch(
    `/product/un-publish/${id}`,
  );

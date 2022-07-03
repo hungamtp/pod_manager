@@ -48,7 +48,7 @@ export default function ManageAccount(props: IManageAccountProps) {
   };
   const { data: response, isLoading: isLoadingAccount } = useAccounts(filter);
   const defaultValues: UpdateAccountDto = {
-    id: 0,
+    id: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -69,12 +69,12 @@ export default function ManageAccount(props: IManageAccountProps) {
 
   const { mutate: deleteAccount, error } = useDeleteAccount();
 
-  const onDelete = (id: number) => {
+  const onDelete = (id: string) => {
     deleteAccount(id);
     setOpenDeleteDialog(false);
   };
 
-  const hanldeIsDelete = (x: number) => {
+  const hanldeIsDelete = (x: string) => {
     setIsDelete(x);
     setOpenDeleteDialog(true);
   };
@@ -119,7 +119,7 @@ export default function ManageAccount(props: IManageAccountProps) {
   const [isEdit, setIsEdit] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [account, setAccount] = useState<UpdateAccountDto>(defaultValues);
-  const [isDelete, setIsDelete] = useState(0);
+  const [isDelete, setIsDelete] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
   return (
@@ -285,7 +285,6 @@ export default function ManageAccount(props: IManageAccountProps) {
               <table className="table ">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>Last Name</th>
                     <th>First Name</th>
                     <th>Email</th>
@@ -301,7 +300,6 @@ export default function ManageAccount(props: IManageAccountProps) {
                     response &&
                     response.content.map((x) => (
                       <tr key={x.id}>
-                        <td>{x.id}</td>
                         <td>
                           <strong>{x.userLastName}</strong>
                         </td>
@@ -312,7 +310,11 @@ export default function ManageAccount(props: IManageAccountProps) {
 
                         <td>{x.email}</td>
                         <td>{x.phone}</td>
-                        <td>{x.address}</td>
+                        <td>
+                          <textarea rows={3} disabled>
+                            {x.address}
+                          </textarea>
+                        </td>
                         <td>
                           {x.roleName == "ADMIN" && (
                             <span className="w-full badge bg-primary me-1">

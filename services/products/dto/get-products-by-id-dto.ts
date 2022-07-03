@@ -1,7 +1,7 @@
 import { ISuccessHttpResponse } from "@/models/success_http_response.interface";
 
 export interface ProductByIdDtos {
-    id: number;
+    id: string;
 	name: string;
     description: string;
     productImages: {image: string}[];

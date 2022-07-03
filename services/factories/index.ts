@@ -26,12 +26,12 @@ export const getFactories = async (filter?: Filter) => {
   return data.data;
 };
 
-export const getFactoryById = async (id: number) => {
+export const getFactoryById = async (id: string) => {
   const { data } = await API.get<getFactoryByIdDtos>(`/factory/${id}`);
   return data;
 };
 
-export const getProductForFactory = async (id: number) => {
+export const getProductForFactory = async (id: string) => {
   const { data } = await API.get<getProductForFactoryDtos>(`/product/product-for-factory?factoryId=${id}`);
   return data;
 };

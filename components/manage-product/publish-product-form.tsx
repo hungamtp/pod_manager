@@ -9,7 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useSnackbar } from "notistack";
 export interface IPublishProductProps {
   handleClosePublishDialog: () => void;
-  idProduct: number;
+  idProduct: string;
 }
 
 export default function PublishProduct(props: IPublishProductProps) {
@@ -26,7 +26,7 @@ export default function PublishProduct(props: IPublishProductProps) {
     handleClosePublishDialog
   );
 
-  const onPublish = (id: number) => {
+  const onPublish = (id: string) => {
     publishProduct(id);
   };
   const [openErrorPublishDialog, setOpenErrorPublishDialog] =

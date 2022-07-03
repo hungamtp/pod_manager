@@ -18,7 +18,7 @@ import { SubmitHandler } from "react-hook-form";
 
 export interface ICreateNewSizeColorForProductFormProps {
   handleCloseDialog: () => void;
-  id: number;
+  id: string;
 }
 
 const ITEM_HEIGHT = 48;

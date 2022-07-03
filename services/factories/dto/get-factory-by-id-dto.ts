@@ -1,7 +1,7 @@
 import { ISuccessHttpResponse } from "@/models/success_http_response.interface";
 
 export interface FactoryByIdDtos {
-    id: number;
+    id: string;
 	name: string;
 	email: string;
     location: string;
@@ -9,7 +9,7 @@ export interface FactoryByIdDtos {
     phone: number;
     image: string;
     productDtoList: {
-        id: number;
+        id: string;
         name: string;
         description: string;
         productImages: {image: string}[];

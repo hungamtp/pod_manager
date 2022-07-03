@@ -39,7 +39,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
   const { data: response, isLoading: isLoadingCategory } =
     useCategories(filter);
   const defaultValues: UpdateCategoryDto = {
-    id: 0,
+    id: "",
     name: "",
     image: "",
   };
@@ -56,7 +56,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
 
   const { mutate: deleteCategory, error } = useDeleteCategory();
 
-  const onDelete = (id: number) => {
+  const onDelete = (id: string) => {
     deleteCategory(id);
     setOpenDeleteDialog(false);
   };
@@ -82,14 +82,14 @@ export default function ManageCategory(props: IManageCategoryProps) {
     setOpenDialog(true);
   };
 
-  const hanldeIsDelete = (x: number) => {
+  const hanldeIsDelete = (x: string) => {
     setIsDelete(x);
     setOpenDeleteDialog(true);
   };
 
   /* {open Dialog} */
   const [isEdit, setIsEdit] = useState(false);
-  const [isDelete, setIsDelete] = useState(0);
+  const [isDelete, setIsDelete] = useState("");
   const [openDialog, setOpenDialog] = React.useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [category, setCategory] = useState<UpdateCategoryDto>(defaultValues);

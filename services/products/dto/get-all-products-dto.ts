@@ -18,7 +18,7 @@ export interface GetColors extends ISuccessHttpResponse {
 }
 
 export interface ProductDto{
-    id:number;
+    id:string;
     name: string;
     productImages: {image: string}[];
     categoryName: string;

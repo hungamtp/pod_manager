@@ -11,7 +11,7 @@ export interface GetAllAccountsDto extends ISuccessHttpResponse {
 }
 
 export interface AccountDto{
-    id:number;
+    id:string;
     userFirstName: string;
     userLastName: string;
     name: string;

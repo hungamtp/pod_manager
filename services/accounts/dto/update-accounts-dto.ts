@@ -1,7 +1,7 @@
 import { ISuccessHttpResponse } from "@/models/success_http_response.interface";
 
 export interface UpdateAccountDto {
-    id:number;
+    id:string;
     firstName: string;
     lastName: string;
     email: string;
@@ -11,7 +11,7 @@ export interface UpdateAccountDto {
 }
 
 export interface UpdateImageAccountDto {
-    id:number;
+    id:string;
     image: string
 }
 
