@@ -1,4 +1,6 @@
+import { ErrorHttpResponse } from '@/models/error_http_response.interface';
 import { unPublishProduct } from '@/services/products';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useMutation, useQueryClient } from 'react-query';
@@ -22,6 +24,13 @@ const useUnPublishProduct = (handleClosePublishDialog:() => void) => {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });
+			},onError: (error: AxiosError<ErrorHttpResponse>) => {
+				if (error) {
+					enqueueSnackbar(error.response?.data.errorMessage, {
+					  autoHideDuration: 9000,
+					  variant: "error",
+					});
+				  }
 			},
 			
 		}

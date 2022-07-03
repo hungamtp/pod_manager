@@ -42,7 +42,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
   ]);
 
   const defaultValues: UpdateCategoryDto = {
-    id: 0,
+    id: "",
     name: "",
     image: "",
   };
