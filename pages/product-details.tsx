@@ -45,10 +45,8 @@ export default function ProductDetails(props: IProductDetailsProps) {
   const id = router.asPath.split("id=")[1];
 
   const { data: responseProduct, isLoading: isLoadingProduct } =
-    useGetProductById(Number(id));
-  const { data: responseSizesColors, isLoading: isLoadingSizesColors } =
-    useGetSizesColorsById(Number(id));
-  const { data: responseSizesColorById } = useGetSizesColorsById(Number(id));
+    useGetProductById(id);
+  const { data: responseSizesColorById } = useGetSizesColorsById(id);
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
 
   const [checked, setChecked] = React.useState(true);
@@ -70,7 +68,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
   };
 
   const defaultValues: UpdateProductDto = {
-    id: 0,
+    id: "",
     name: "",
     categoryName: "",
     description: "",
@@ -431,7 +429,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
           <DialogContent>
             <CreateNewSizeColorForProductForm
               handleCloseDialog={handleCloseCreateDialog}
-              id={Number(id)}
+              id={id}
             />
           </DialogContent>
         </Dialog>

@@ -27,6 +27,11 @@ const useCreateSizeColorProduct = (
         //because data:any
         handleCloseDialog();
         queryClient.invalidateQueries("GetFactoryById");
+        const message = "Create successfully!";
+        enqueueSnackbar(message, {
+          autoHideDuration: 3000,
+          variant: "success",
+        });
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
 				if (error) {

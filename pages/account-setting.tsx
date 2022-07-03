@@ -51,7 +51,7 @@ const schema = yup.object().shape({
 export default function AccountSetting(props: IAccountSettingProps) {
   const credentialId = useAppSelector((state) => state.auth.userId);
   const { data: responseAccount, isLoading: isLoadingAccount } =
-    useGetAccountById(Number(credentialId));
+    useGetAccountById(credentialId);
   const { mutate: updateImageAccount, error } = useUpdateImageAccount();
   const { mutate: updateProfile } = useUpdateProfile();
   const maxNumber = 69;
@@ -61,7 +61,7 @@ export default function AccountSetting(props: IAccountSettingProps) {
   const [isDisable, setIsDisable] = React.useState(true);
 
   const defaultValues: AccountByIdDtos = {
-    id: 0,
+    id: "",
     image: "",
     userFirstName: "",
     userLastName: "",
@@ -99,7 +99,7 @@ export default function AccountSetting(props: IAccountSettingProps) {
       uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
           const submitData = {
-            id: Number(credentialId),
+            id: credentialId,
             image: url,
           };
           updateImageAccount(submitData);

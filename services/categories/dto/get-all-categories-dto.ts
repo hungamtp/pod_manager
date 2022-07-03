@@ -11,7 +11,7 @@ export interface GetAllCategoriesDto extends ISuccessHttpResponse {
 }
 
 export interface CategoryDto{
-    id: number;
+    id: string;
     name: string;
     image:string;
     deleted: boolean;

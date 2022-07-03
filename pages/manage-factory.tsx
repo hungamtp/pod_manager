@@ -31,12 +31,12 @@ export default function ManageFactory(props: IManageFactory) {
   };
   const { data: response, isLoading: isLoadingAccount } = useFactories(filter);
 
-  const { mutate: deleteAccount, error } = useDeleteAccount();
+  // const { mutate: deleteAccount, error } = useDeleteAccount();
 
-  const onDelete = (id: number) => {
-    deleteAccount(id);
-    setOpenDeleteDialog(false);
-  };
+  // const onDelete = (id: string) => {
+  //   deleteAccount(id);
+  //   setOpenDeleteDialog(false);
+  // };
 
   const hanldeIsDelete = (x: number) => {
     setIsDelete(x);
@@ -86,7 +86,7 @@ export default function ManageFactory(props: IManageFactory) {
                     className="btn btn-danger"
                     color="danger"
                     onClick={() => {
-                      onDelete(isDelete);
+                      // onDelete(isDelete);
                     }}
                   >
                     Delete
@@ -116,7 +116,6 @@ export default function ManageFactory(props: IManageFactory) {
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Address</th>
                     <th>Location</th>
                     <th>Is Collaborating</th>
                     <th>Actions</th>
@@ -132,9 +131,8 @@ export default function ManageFactory(props: IManageFactory) {
                         <td>{x.email}</td>
                         <td>{x.phone}</td>
                         <td>{x.address}</td>
-                        <td>{x.location}</td>
                         <td>
-                          {x.collaborating == false && (
+                          {x.collaborating == true && (
                             <span className="badge bg-label-info me-1">
                               TRUE
                             </span>
@@ -143,7 +141,12 @@ export default function ManageFactory(props: IManageFactory) {
 
                         <td>
                           <div>
-                            <IconButton>
+                            <IconButton
+                              onClick={() => {
+                                {
+                                }
+                              }}
+                            >
                               <DeleteIcon fontSize="medium" color="error" />
                             </IconButton>
                           </div>

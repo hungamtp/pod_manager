@@ -8,10 +8,12 @@ import { createCategory } from '@/services/categories';
 import { CreateCategoryDto } from '@/services/categories/dto/create-categories-dto';
 import { CreateProductDto } from '@/services/products/dto/create-products-dto';
 import { createProduct } from '@/services/products';
+import { useSnackbar } from 'notistack';
 
 const useCreateProduct = (handleCloseDialog:() => void) => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
+	const {enqueueSnackbar} = useSnackbar();
     const queryClient = useQueryClient();
 	return useMutation(
 		      
@@ -24,6 +26,10 @@ const useCreateProduct = (handleCloseDialog:() => void) => {
 				//because data:any
                 handleCloseDialog()
                 queryClient.invalidateQueries("Products")
+				enqueueSnackbar("Create successfully!", {
+					autoHideDuration: 3000,
+					variant: "success",
+				  });
 			},
 			
 		}

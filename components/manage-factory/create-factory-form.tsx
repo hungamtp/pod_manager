@@ -11,7 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-export interface ICreateFormProps {
+export interface ICreateFactoryFormProps {
   handleCloseDialog: () => void;
 }
 
@@ -60,7 +60,7 @@ const schema = yup.object().shape({
     .required("Địa chỉ không được để trống"),
 });
 
-export default function CreateForm(props: ICreateFormProps) {
+export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
   const { handleCloseDialog } = props;
   const [role, setRole] = React.useState("USER");
 

@@ -13,13 +13,17 @@ const usePublishProduct = (handleClosePublishDialog:() => void) => {
 	const { enqueueSnackbar } = useSnackbar();
 	return useMutation(
 		      
-        async (id: number) => {
+        async (id: string) => {
             return await publishProduct(id);
 		},
 		{
 			onSettled: (data) => {
 				handleClosePublishDialog()
                 queryClient.invalidateQueries("Products")
+				enqueueSnackbar("Create successfully!", {
+					autoHideDuration: 3000,
+					variant: "success",
+				  });
 			},
 			onError: (error: AxiosError<ErrorHttpResponse>) => {
 				if (error) {

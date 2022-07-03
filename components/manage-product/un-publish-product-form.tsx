@@ -4,7 +4,7 @@ import * as React from "react";
 
 export interface IUnPublishProductProps {
   handleClosePublishDialog: () => void;
-  idProduct: number;
+  idProduct: string;
 }
 
 export default function UnPublishProduct(props: IUnPublishProductProps) {
@@ -13,7 +13,7 @@ export default function UnPublishProduct(props: IUnPublishProductProps) {
   const { mutate: unPublishProduct, error } = useUnPublishProduct(
     handleClosePublishDialog
   );
-  const onPublish = (id: number) => {
+  const onPublish = (id: string) => {
     unPublishProduct(id);
   };
 

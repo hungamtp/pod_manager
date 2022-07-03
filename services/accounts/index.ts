@@ -43,7 +43,7 @@ import { AccountByIdDtos , getAccountByIdResponse } from "./dto/get-accounts-by-
     return data.data;
   };
 
-  export const getAccountById = async (id: number) => {
+  export const getAccountById = async (id: string) => {
     const { data } = await API.get<getAccountByIdResponse>(
       `/user/admin/${id}`
     );
@@ -81,7 +81,7 @@ import { AccountByIdDtos , getAccountByIdResponse } from "./dto/get-accounts-by-
     return data;
   };
 
-  export const deleteAccount = async (id: number ) => {
+  export const deleteAccount = async (id: string ) => {
      await API.patch(
       `/user/${id}`,
     );

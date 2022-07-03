@@ -1,7 +1,7 @@
 import { getProductForFactory } from '@/services/factories';
 import { useQuery, useQueryClient } from 'react-query';
 
-const useGetProductForFactory = (id: number) => {
+const useGetProductForFactory = (id: string) => {
   const queryClient = useQueryClient();
 
 	return useQuery(['GetProductForFactory'],

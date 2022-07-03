@@ -48,7 +48,7 @@ export default function ManageProduct(props: IManageProductProps) {
   };
   const { data: response, isLoading: isLoadingProduct } = useProducts(filter);
   const { mutate: deleteProduct, error } = useDeleteProduct();
-  const onDelete = (id: number) => {
+  const onDelete = (id: string) => {
     deleteProduct(id);
     setOpenDeleteDialog(false);
   };
@@ -93,17 +93,17 @@ export default function ManageProduct(props: IManageProductProps) {
     setOpenDialog(true);
   };
 
-  const hanldeIsDelete = (x: number) => {
+  const hanldeIsDelete = (x: string) => {
     setIsDelete(x);
     setOpenDeleteDialog(true);
   };
   /* {open Publish} */
-  const handleIsPublishTrue = (id: number) => {
+  const handleIsPublishTrue = (id: string) => {
     setIdProduct(id);
     setIsPublish(true);
     setOpenPublishDialog(true);
   };
-  const handleIsPublishFalse = (id: number) => {
+  const handleIsPublishFalse = (id: string) => {
     setIdProduct(id);
     setIsPublish(false);
     setOpenPublishDialog(true);
@@ -117,7 +117,7 @@ export default function ManageProduct(props: IManageProductProps) {
   const [isEdit, setIsEdit] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
   const defaultValues: UpdateProductDto = {
-    id: 0,
+    id: "",
     name: "",
     categoryName: "",
     description: "",
@@ -126,8 +126,8 @@ export default function ManageProduct(props: IManageProductProps) {
   const router = useRouter();
   const [isPublish, setIsPublish] = useState(false);
   const [product, setProduct] = useState<UpdateProductDto>(defaultValues);
-  const [isDelete, setIsDelete] = useState(0);
-  const [idProduct, setIdProduct] = useState(0);
+  const [isDelete, setIsDelete] = useState("");
+  const [idProduct, setIdProduct] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [openPublishDialog, setOpenPublishDialog] = React.useState(false);
 
@@ -350,7 +350,11 @@ export default function ManageProduct(props: IManageProductProps) {
                             </span>
                           )}
                         </td>
-                        <td>{x.description}</td>
+                        <td>
+                          <textarea disabled rows={3}>
+                            {x.description}
+                          </textarea>
+                        </td>
 
                         {/* <td>{x.productTags[0].tag.name}</td> */}
                         <td>

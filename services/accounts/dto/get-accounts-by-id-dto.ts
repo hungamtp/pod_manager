@@ -1,7 +1,7 @@
 import { ISuccessHttpResponse } from "@/models/success_http_response.interface";
 
 export interface AccountByIdDtos {
-    id: number;
+    id: string;
 	userFirstName: string;
     userLastName: string;
     name: string,
