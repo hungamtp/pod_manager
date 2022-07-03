@@ -7,6 +7,7 @@ import {
   CreateSizeColorProductDto,
 } from "./dto/create-size-color-product-dto";
 import { getProductForFactoryDtos } from "./dto/get-product-for-factory-dto";
+import { CreateFactoryDto, CreateFactoryResponse } from "./dto/create-factory-dto";
 
 export interface Filter {
   pageSize?: number;
@@ -24,6 +25,14 @@ export const getFactories = async (filter?: Filter) => {
     `/factory?${query.toString()}`
   );
   return data.data;
+};
+
+export const createAccountFactory = async (requestData: CreateFactoryDto) => {
+  const { data } = await API.post<CreateFactoryResponse>(
+    "/factory",
+    requestData
+  );
+  return data;
 };
 
 export const getFactoryById = async (id: string) => {

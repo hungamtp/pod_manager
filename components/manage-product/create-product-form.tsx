@@ -46,7 +46,7 @@ const schema = yup.object().shape({
   description: yup
     .string()
     .min(10, "Description cần ít nhất 10 kí tự")
-    .max(100, "Description tối đa 100 kí tự")
+    .max(500, "Description tối đa 500 kí tự")
     .required("Description không được để trống"),
 });
 

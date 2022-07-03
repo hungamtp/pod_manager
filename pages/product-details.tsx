@@ -26,6 +26,8 @@ import CreateSizeColorProductForm from "@/components/manage-factory/create-size-
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import CreateNewSizeColorForProductForm from "@/components/manage-product/create-new-size-color-for-product-form";
+import useGetProductBlueprint from "hooks/products/use-get-product-blueprint";
+import CreateProductBlueprintForm from "@/components/manage-product/create-product-blueprint-form";
 
 export interface IProductDetailsProps {}
 
@@ -46,9 +48,12 @@ export default function ProductDetails(props: IProductDetailsProps) {
 
   const { data: responseProduct, isLoading: isLoadingProduct } =
     useGetProductById(id);
+  const { data: responseProductBlueprint, isLoading: isloadingPrBlueprint } =
+    useGetProductBlueprint(id);
   const { data: responseSizesColorById } = useGetSizesColorsById(id);
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
-
+  const [openCreateProductBlueprint, setOpenCreateProductBlueprint] =
+    React.useState(false);
   const [checked, setChecked] = React.useState(true);
   const [checkValue, setCheckValue] = React.useState("");
   const [isDisabled, setIsDisabled] = React.useState(true);
@@ -57,6 +62,14 @@ export default function ProductDetails(props: IProductDetailsProps) {
   const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
     setImages(imageList);
     // data for submit
+  };
+
+  const handleCreateProductBlueprint = () => {
+    setOpenCreateProductBlueprint(true);
+  };
+
+  const handleCloseCreateProductBlueprint = () => {
+    setOpenCreateProductBlueprint(false);
   };
 
   const handleCloseCreateDialog = () => {
@@ -340,48 +353,61 @@ export default function ProductDetails(props: IProductDetailsProps) {
                           ))}
                         </div>
                         {/* Small table */}
-                        <div className="card">
-                          <h5 className="card-header">Price By Factories</h5>
-                          <div className="table-responsive text-nowrap">
-                            <table className="table table-sm ">
-                              <thead>
-                                <tr>
-                                  <th>
-                                    <strong>Name</strong>
-                                  </th>
-                                  <th>
-                                    <strong>Location</strong>
-                                  </th>
-                                  <th>
-                                    <strong>Price</strong>
-                                  </th>
-                                </tr>
-                              </thead>
-                              {responseProduct.data.priceByFactories.map(
-                                (x) => (
-                                  <tbody
-                                    key={x.factory.name}
-                                    className="table-border-bottom-0"
-                                  >
-                                    <tr>
-                                      <td>
-                                        <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
-                                        <strong>{x.factory.name}</strong>
-                                      </td>
-                                      <td>
-                                        <strong>{x.factory.location}</strong>
-                                      </td>
-                                      <td>
-                                        <strong>{x.price}</strong>
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                )
-                              )}
-                            </table>
+                        <div className="container-xxl flex-grow-1 container-p-y ">
+                          <div className="row">
+                            <div className="col-md-12">
+                              <div className="card mb-4">
+                                {/* Account */}
+                                <div className="card">
+                                  <h5 className="card-header">Factories</h5>
+                                  <div className="table-responsive text-nowrap">
+                                    <table className="table table-sm ">
+                                      <thead>
+                                        <tr>
+                                          <th>
+                                            <strong>Name</strong>
+                                          </th>
+                                          <th>
+                                            <strong>Location</strong>
+                                          </th>
+                                          <th>
+                                            <strong>Price</strong>
+                                          </th>
+                                        </tr>
+                                      </thead>
+                                      {responseProduct?.data.priceByFactories.map(
+                                        (x) => (
+                                          <tbody
+                                            key={x.factory.name}
+                                            className="table-border-bottom-0"
+                                          >
+                                            <tr>
+                                              <td>
+                                                <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
+                                                <strong>
+                                                  {x.factory.name}
+                                                </strong>
+                                              </td>
+                                              <td>
+                                                <strong>
+                                                  {x.factory.location}
+                                                </strong>
+                                              </td>
+                                              <td>
+                                                <strong>{x.price}</strong>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        )
+                                      )}
+                                    </table>
+                                  </div>
+                                </div>
+                                {/* /Account */}
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <hr className="my-5" />
                       </div>
                       <div className="mt-2">
                         <button
@@ -416,6 +442,101 @@ export default function ProductDetails(props: IProductDetailsProps) {
         {/* / Content */}
 
         <div className="content-backdrop fade" />
+      </div>
+      <div>
+        <Dialog
+          open={openCreateProductBlueprint}
+          onClose={handleCloseCreateProductBlueprint}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          fullWidth={true}
+        >
+          <DialogContent>
+            <CreateProductBlueprintForm
+              handleCloseDialog={handleCloseCreateProductBlueprint}
+              id={id}
+            />
+          </DialogContent>
+        </Dialog>
+        <div className="container-xxl flex-grow-1 container-p-y ">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="card mb-4">
+                {/* Account */}
+                <div className="card">
+                  <h5 className="card-header">Product Blueprints</h5>
+                  <div>
+                    <Fab
+                      className="badge bg-success ms-2"
+                      variant="extended"
+                      size="small"
+                      aria-label="add"
+                      onClick={handleCreateProductBlueprint}
+                    >
+                      <AddIcon sx={{ mr: 1 }} />
+                      Create Product Blueprints
+                    </Fab>
+                  </div>
+                  <br className="my-4" />
+                  <hr className="my-0" />
+                  <div className="table-responsive text-nowrap">
+                    {!isloadingPrBlueprint && responseProductBlueprint && (
+                      <table className="table table-sm ">
+                        <thead>
+                          <tr>
+                            <th>
+                              <strong>frame Image</strong>
+                            </th>
+                            <th>
+                              <strong>placeholder</strong>
+                            </th>
+
+                            <th>
+                              <strong>position</strong>
+                            </th>
+                          </tr>
+                        </thead>
+                        {responseProductBlueprint.data.map(
+                          (productBlueprint) => (
+                            <tbody
+                              key={productBlueprint.id}
+                              className="table-border-bottom-0"
+                            >
+                              <tr>
+                                <td>
+                                  <img
+                                    src={productBlueprint.frameImage}
+                                    alt="user-avatar"
+                                    className="d-block rounded"
+                                    height={100}
+                                    width={100}
+                                    id="uploadedAvatar"
+                                  />
+                                </td>
+                                <td>
+                                  <strong> Top: </strong>
+                                  {productBlueprint.placeholder.top}%
+                                  <br />
+                                  <strong>Height: </strong>
+                                  {productBlueprint.placeholder.height} inch
+                                  <br />
+                                  <strong>Width: </strong>
+                                  {productBlueprint.placeholder.width} inch
+                                </td>
+                                <td>{productBlueprint.position}</td>
+                              </tr>
+                            </tbody>
+                          )
+                        )}
+                      </table>
+                    )}
+                  </div>
+                </div>
+                {/* /Account */}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       {/* Content wrapper */}
       <div>
@@ -527,6 +648,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
 
         <div className="content-backdrop fade" />
       </div>
+
       {/* Content wrapper */}
       {/* / Layout page */}
       {/* Overlay */}

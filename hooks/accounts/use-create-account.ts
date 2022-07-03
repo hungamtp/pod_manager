@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack';
 
 import { useRouter } from 'next/router';
 import { CreateAccountDto } from '@/services/accounts/dto/create-accounts-dto';
-import { createAccountAdmin, createAccountFactory, createAccountUser } from '@/services/accounts';
+import { createAccountAdmin,  createAccountUser } from '@/services/accounts';
 
 const useCreateAccount = (handleCloseDialog:() => void) => {
 	const router = useRouter();
@@ -21,10 +21,7 @@ const useCreateAccount = (handleCloseDialog:() => void) => {
 			return await createAccountUser(data);
                 
             }
-            if(data.roleName == "FACTORY"){
-                return await createAccountFactory(data);
-
-            }
+          
             return await createAccountAdmin(data);
 		},
 		{

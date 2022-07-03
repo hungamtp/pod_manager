@@ -2,6 +2,8 @@ import { deleteProduct } from '@/services/products';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSnackbar } from 'notistack';
+import { AxiosError } from 'axios';
+import { ErrorHttpResponse } from '@/models/error_http_response.interface';
 
 
 const useDeleteProduct = () => {
@@ -20,6 +22,14 @@ const useDeleteProduct = () => {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });
+			},
+			onError: (error: AxiosError<ErrorHttpResponse>) => {
+				if (error) {
+					enqueueSnackbar(error.response?.data.errorMessage, {
+					  autoHideDuration: 9000,
+					  variant: "error",
+					});
+				  }
 			},
 			
 		}

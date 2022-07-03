@@ -1,40 +1,33 @@
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
-import KeyIcon from "@mui/icons-material/Key";
-import * as React from "react";
-import * as yup from "yup";
+import { storage } from "@/firebase/firebase";
 import { yupResolver } from "@hookform/resolvers/yup";
+import KeyIcon from "@mui/icons-material/Key";
+import { SelectChangeEvent } from "@mui/material/Select";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import useCreateFactoryAccount from "hooks/factories/use-create-factory-account";
+import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import useCreateAccount from "hooks/accounts/use-create-account";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-
+import ImageUploading, { ImageListType } from "react-images-uploading";
+import * as yup from "yup";
 export interface ICreateFactoryFormProps {
   handleCloseDialog: () => void;
 }
 
-type FormCreateAccount = {
-  firstName: string;
-  lastName: string;
+type FormCreateFactoryAccount = {
+  name: string;
   password: string;
   email: string;
   phone: string;
   address: string;
-  roleName: string;
+  logo: string;
 };
 const schema = yup.object().shape({
-  firstName: yup
+  name: yup
     .string()
-    .min(1, "First Name cần ít nhất 1 kí tự")
-    .max(26, "First Name tối đa 50 kí tự")
-    .required("First Name không được để trống"),
-  lastName: yup
-    .string()
-    .min(1, "Last Name cần ít nhất 1 kí tự")
-    .max(26, "Last Name tối đa 50 kí tự")
-    .required("Last Name không được để trống"),
+    .min(1, "Name cần ít nhất 1 kí tự")
+    .max(26, "Name tối đa 50 kí tự")
+    .required("Name không được để trống"),
   password: yup
     .string()
     .min(8, "Mật khẩu cần ít nhất 8 kí tự")
@@ -63,34 +56,52 @@ const schema = yup.object().shape({
 export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
   const { handleCloseDialog } = props;
   const [role, setRole] = React.useState("USER");
+  const { mutate: addFactoryAcount, error } =
+    useCreateFactoryAccount(handleCloseDialog);
+  const [images, setImages] = React.useState<ImageListType>([]);
 
   const handleChange = (event: SelectChangeEvent) => {
     setRole(event.target.value);
   };
-  const defaultValues: FormCreateAccount = {
-    firstName: "",
-    lastName: "",
+  const defaultValues: FormCreateFactoryAccount = {
+    logo: "",
+    name: "",
     password: "",
     email: "",
     phone: "",
     address: "",
-    roleName: "",
   };
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormCreateAccount>({
+  } = useForm<FormCreateFactoryAccount>({
     defaultValues,
     resolver: yupResolver(schema),
   });
-  const { mutate: addAcount, error } = useCreateAccount(handleCloseDialog);
 
-  const onSubmit: SubmitHandler<FormCreateAccount> = (data) => {
-    data.roleName = role;
-    addAcount(data);
-    console.log(data, "formCreate");
+  const maxNumber = 69;
+  const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
+    setImages(imageList);
+    // data for submit
+  };
+  const onUploadImage = (data: FormCreateFactoryAccount) => {
+    if (images !== null) {
+      const file = images[0].file;
+      const imageRef = ref(storage, `images/${file?.name}`);
+      uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => {
+          const submitData = { ...data, logo: url };
+          addFactoryAcount(submitData);
+        });
+      });
+    }
+  };
+
+  const onSubmit: SubmitHandler<FormCreateFactoryAccount> = (data) => {
+    // addFactoryAcount(data);
+    onUploadImage(data);
   };
 
   return (
@@ -104,7 +115,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                   className="col-sm-2 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  First Name
+                  Name
                 </label>
 
                 <div className="col-sm-10">
@@ -119,47 +130,13 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                       type="text"
                       className="form-control"
                       id="basic-icon-default-fullname"
-                      placeholder="John"
-                      aria-label="John"
                       aria-describedby="basic-icon-default-fullname2"
-                      {...register("firstName")}
+                      {...register("name")}
                     />
                   </div>
-                  {errors.firstName && (
+                  {errors.name && (
                     <span id="error-pwd-message" className="text-danger">
-                      {errors.firstName.message}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="row mb-3">
-                <label
-                  className="col-sm-2 col-form-label"
-                  htmlFor="basic-icon-default-fullname"
-                >
-                  Last Name
-                </label>
-                <div className="col-sm-10">
-                  <div className="input-group input-group-merge">
-                    <span
-                      id="basic-icon-default-fullname2"
-                      className="input-group-text"
-                    >
-                      <i className="bx bx-user" />
-                    </span>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="basic-icon-default-fullname"
-                      placeholder="Doe"
-                      aria-label="Doe"
-                      aria-describedby="basic-icon-default-fullname2"
-                      {...register("lastName")}
-                    />
-                  </div>
-                  {errors.lastName && (
-                    <span id="error-pwd-message" className="text-danger">
-                      {errors.lastName.message}
+                      {errors.name.message}
                     </span>
                   )}
                 </div>
@@ -301,32 +278,56 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
               <div className="row mb-3">
                 <label
                   className="col-sm-2 col-form-label"
-                  htmlFor="basic-icon-default-company"
+                  htmlFor="basic-icon-default-fullname"
                 >
-                  Role Name
+                  Logo
                 </label>
                 <div className="col-sm-10">
-                  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                    <InputLabel id="demo-select-small">Role</InputLabel>
-                    <Select
-                      labelId="demo-select-small"
-                      id="demo-select-small"
-                      value={role}
-                      label="Role"
-                      onChange={handleChange}
-                    >
-                      <MenuItem className="d-flex flex-column" value="USER">
-                        USER
-                      </MenuItem>
-
-                      <MenuItem className="d-flex flex-column" value="ADMIN">
-                        ADMIN
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                  {errors.roleName && (
+                  <ImageUploading
+                    value={images}
+                    onChange={onChange}
+                    maxNumber={maxNumber}
+                    dataURLKey="data_url"
+                  >
+                    {({
+                      imageList,
+                      onImageUpload,
+                      onImageRemoveAll,
+                      onImageUpdate,
+                      onImageRemove,
+                      isDragging,
+                      dragProps,
+                    }) => (
+                      // write your building UI
+                      <div className="upload__image-wrapper">
+                        {imageList.map((image, index) => (
+                          <div key={index} className="image-item">
+                            <img src={image["data_url"]} alt="" width="100" />
+                          </div>
+                        ))}
+                        <button
+                          className="btn btn-success"
+                          style={isDragging ? { color: "red" } : undefined}
+                          onClick={onImageUpload}
+                          {...dragProps}
+                          type="button"
+                        >
+                          Thêm ảnh
+                        </button>
+                        &nbsp;
+                        <button
+                          className="btn btn-secondary"
+                          onClick={onImageRemoveAll}
+                          type="button"
+                        >
+                          Xóa ảnh
+                        </button>
+                      </div>
+                    )}
+                  </ImageUploading>
+                  {errors.logo && (
                     <span id="error-pwd-message" className="text-danger">
-                      {errors.roleName.message}
+                      {errors.logo.message}
                     </span>
                   )}
                 </div>
