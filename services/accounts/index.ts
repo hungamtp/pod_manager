@@ -58,13 +58,7 @@ import { AccountByIdDtos , getAccountByIdResponse } from "./dto/get-accounts-by-
     );
     return data;
   };
-  export const createAccountFactory = async (requestData: CreateAccountDto) => {
-    const { data } = await API.post<CreateAccountResponse>(
-      "user/addFactory",
-      requestData
-    );
-    return data;
-  };
+  
   export const createAccountAdmin = async (requestData: CreateAccountDto) => {
     const { data } = await API.post<CreateAccountResponse>(
       "/user/addAdmin",

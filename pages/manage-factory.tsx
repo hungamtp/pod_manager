@@ -1,16 +1,15 @@
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
 import { MainLayout } from "@/components/layouts";
+import CreateFactoryForm from "@/components/manage-factory/create-factory-form";
 import { Filter } from "@/services/accounts";
-import { AccountDto } from "@/services/accounts/dto/get-all-accounts-dto";
-import { UpdateAccountDto } from "@/services/accounts/dto/update-accounts-dto";
+import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton, Pagination, Stack } from "@mui/material";
+import { Fab, IconButton, Pagination, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import useDeleteAccount from "hooks/accounts/use-delete-accounts";
 import useFactories from "hooks/factories/use-factories";
 import { useRouter } from "next/router";
 import * as React from "react";
@@ -43,9 +42,13 @@ export default function ManageFactory(props: IManageFactory) {
     setOpenDeleteDialog(true);
   };
 
-  /*{form add account }*/
+  const handleOpenCreateDialog = () => {
+    setOpenCreateDialog(true);
+  };
 
-  /*{form add account }*/
+  const handleCloseCreateDialog = () => {
+    setOpenCreateDialog(false);
+  };
 
   const handleCloseDeleteDialog = () => {
     setOpenDeleteDialog(false);
@@ -55,55 +58,78 @@ export default function ManageFactory(props: IManageFactory) {
   const router = useRouter();
   const [isDelete, setIsDelete] = useState(0);
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+  const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
 
   return (
     <>
       <div>
         {/* Layout wrapper */}
-
+        <Dialog
+          open={openDeleteDialog}
+          onClose={handleCloseDeleteDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          fullWidth={true}
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Bạn có muốn delete category này không?"}
+          </DialogTitle>
+          <DialogContent>
+            <div className="d-flex justify-content-center">
+              <div className="col-sm-10 d-flex justify-content-around">
+                <button
+                  className="btn btn-danger"
+                  color="danger"
+                  onClick={() => {
+                    // onDelete(isDelete);
+                  }}
+                >
+                  Delete
+                </button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={handleCloseDeleteDialog}
+                  autoFocus
+                >
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </DialogContent>
+          <DialogActions></DialogActions>
+        </Dialog>
+        <Dialog
+          open={openCreateDialog}
+          onClose={handleCloseCreateDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          fullWidth={true}
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Create New Factory"}
+          </DialogTitle>
+          <DialogContent>
+            <CreateFactoryForm handleCloseDialog={handleCloseCreateDialog} />
+          </DialogContent>
+          <DialogActions></DialogActions>
+        </Dialog>
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
           <h4 className="fw-bold py-3 mb-4">
             <span className="text-muted fw-light">Mangage Account /</span>
             Manage Factory
           </h4>
-
-          <hr className="my-4" />
-          <Dialog
-            open={openDeleteDialog}
-            onClose={handleCloseDeleteDialog}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            fullWidth={true}
+          <Fab
+            className="badge bg-success"
+            variant="extended"
+            size="small"
+            aria-label="add"
+            onClick={handleOpenCreateDialog}
           >
-            <DialogTitle id="alert-dialog-title">
-              {"Bạn có muốn delete category này không?"}
-            </DialogTitle>
-            <DialogContent>
-              <div className="d-flex justify-content-center">
-                <div className="col-sm-10 d-flex justify-content-around">
-                  <button
-                    className="btn btn-danger"
-                    color="danger"
-                    onClick={() => {
-                      // onDelete(isDelete);
-                    }}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    className="btn btn-secondary"
-                    onClick={handleCloseDeleteDialog}
-                    autoFocus
-                  >
-                    CANCEL
-                  </button>
-                </div>
-              </div>
-            </DialogContent>
-            <DialogActions></DialogActions>
-          </Dialog>
-
+            <AddIcon sx={{ mr: 1 }} />
+            Create New Account
+          </Fab>
+          <hr className="my-4" />
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">

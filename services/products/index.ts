@@ -10,6 +10,8 @@ import { getSizesAndColors } from "./dto/get-all-size-color-by-id";
 import { GetAllSizesDto } from "./dto/get-all-size-dto";
 import { GetAllColorDto } from "./dto/get-all-colors-dtos";
 import { CreateSizesColorsForProductDto, CreateSizesColorsForProductResponse } from "./dto/create-size-color-for-product-dto";
+import {  getProductBlueprintResponse } from "./dto/get-product-blueprint-dto";
+import { CreateProductBlueprintDto, CreateProductBlueprintResponse } from "./dto/create-products-blueprint-dto";
 // import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
   
   export interface Filter {
@@ -61,6 +63,12 @@ import { CreateSizesColorsForProductDto, CreateSizesColorsForProductResponse } f
     return data.data;
   };
 
+  export const getProductBlueprint = async (id: string) => {
+    const { data } = await API.get<getProductBlueprintResponse>(
+      `/product/design/${id}`
+    );
+    return data;
+  };
 
   export const getProductById = async (id: string) => {
     const { data } = await API.get<getProductByIdDtos>(
@@ -79,6 +87,13 @@ import { CreateSizesColorsForProductDto, CreateSizesColorsForProductResponse } f
   export const createProduct = async (requestData: CreateProductDto) => {
     const { data } = await API.post<CreateProductResponse>(
       "/product",
+      requestData
+    );
+    return data;
+  };
+  export const createProductBluePrint = async (requestData: CreateProductBlueprintDto, id: string) => {
+    const { data } = await API.post<CreateProductBlueprintResponse>(
+      `/product/blueprint?productId=${id}`,
       requestData
     );
     return data;

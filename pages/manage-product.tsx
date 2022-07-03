@@ -139,7 +139,8 @@ export default function ManageProduct(props: IManageProductProps) {
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
           <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Tables /</span> Basic Tables
+            <span className="text-muted fw-light">Manage Product /</span> Manage
+            Raw Product
           </h4>
           <Fab
             className="badge bg-success"
@@ -303,7 +304,6 @@ export default function ManageProduct(props: IManageProductProps) {
               <table className="table ">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>Name</th>
                     <th>Product Image</th>
                     <th>Category Name</th>
@@ -319,8 +319,6 @@ export default function ManageProduct(props: IManageProductProps) {
                     response &&
                     response.content.map((x) => (
                       <tr key={x.id}>
-                        <td>{x.id}</td>
-
                         <td>
                           <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
                           <strong>

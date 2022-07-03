@@ -31,6 +31,14 @@ const useCreateProduct = (handleCloseDialog:() => void) => {
 					variant: "success",
 				  });
 			},
+			onError: (error: AxiosError<ErrorHttpResponse>) => {
+				if (error) {
+					enqueueSnackbar(error.response?.data.errorMessage, {
+					  autoHideDuration: 9000,
+					  variant: "error",
+					});
+				  }
+			},
 			
 		}
 	);
