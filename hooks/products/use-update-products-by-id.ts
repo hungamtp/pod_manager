@@ -1,5 +1,7 @@
+import { ErrorHttpResponse } from '@/models/error_http_response.interface';
 import {  updateProduct } from '@/services/products';
 import { UpdateProductDto } from '@/services/products/dto/update-product-dto';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useMutation, useQueryClient } from 'react-query';
@@ -22,6 +24,13 @@ const useUpdateProductById = () => {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });
+			},onError: (error: AxiosError<ErrorHttpResponse>) => {
+				if (error) {
+					enqueueSnackbar(error.response?.data.errorMessage, {
+					  autoHideDuration: 9000,
+					  variant: "error",
+					});
+				  }
 			},
 		}
 	);

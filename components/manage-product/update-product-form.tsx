@@ -44,7 +44,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
   );
 
   const defaultValues: UpdateProductDto = {
-    id: 0,
+    id: "",
     name: "",
     categoryName: "",
     description: "",

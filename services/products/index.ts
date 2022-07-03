@@ -12,6 +12,7 @@ import { GetAllColorDto } from "./dto/get-all-colors-dtos";
 import { CreateSizesColorsForProductDto, CreateSizesColorsForProductResponse } from "./dto/create-size-color-for-product-dto";
 import {  getProductBlueprintResponse } from "./dto/get-product-blueprint-dto";
 import { CreateProductBlueprintDto, CreateProductBlueprintResponse } from "./dto/create-products-blueprint-dto";
+import { UpdateProductBlueprintDto, UpdateProductBlueprintResponse } from "./dto/update-product-blueprint-dto";
 // import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
   
   export interface Filter {
@@ -116,6 +117,13 @@ import { CreateProductBlueprintDto, CreateProductBlueprintResponse } from "./dto
  export const updateProduct = async (requestData: UpdateProductDto) => {
   const { data } = await API.put<UpdateProductResponse>(
     `/product/${requestData.id}`,
+    requestData
+  );
+  return data;
+};
+ export const updateProductBlueprint = async (requestData: UpdateProductBlueprintDto) => {
+  const { data } = await API.put<UpdateProductBlueprintResponse>(
+    `/product/blueprint?blueprintId=${requestData.id}`,
     requestData
   );
   return data;

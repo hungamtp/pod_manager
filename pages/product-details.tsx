@@ -5,7 +5,7 @@ import { Filter } from "@/services/categories";
 import { UpdateProductDto } from "@/services/products/dto/update-product-dto";
 import { yupResolver } from "@hookform/resolvers/yup";
 import AddIcon from "@mui/icons-material/Add";
-import { Fab, InputLabel, MenuItem } from "@mui/material";
+import { Fab, IconButton, InputLabel, MenuItem } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -28,6 +28,10 @@ import DialogContent from "@mui/material/DialogContent";
 import CreateNewSizeColorForProductForm from "@/components/manage-product/create-new-size-color-for-product-form";
 import useGetProductBlueprint from "hooks/products/use-get-product-blueprint";
 import CreateProductBlueprintForm from "@/components/manage-product/create-product-blueprint-form";
+import EditIcon from "@mui/icons-material/Edit";
+import { UpdateProductBlueprintDto } from "@/services/products/dto/update-product-blueprint-dto";
+import { ProductBlueprintDto } from "@/services/products/dto/get-product-blueprint-dto";
+import UpdateProductBlueprintForm from "@/components/manage-product/update-product-blueprint-form";
 
 export interface IProductDetailsProps {}
 
@@ -45,7 +49,14 @@ const schema = yup.object().shape({
 export default function ProductDetails(props: IProductDetailsProps) {
   const router = useRouter();
   const id = router.asPath.split("id=")[1];
-
+  const ProductBlueprintValues: UpdateProductBlueprintDto = {
+    id: "",
+    frameImage: "",
+    position: "",
+    placeHolderTop: 0,
+    placeHolderHeight: 0,
+    placeHolderWidth: 0,
+  };
   const { data: responseProduct, isLoading: isLoadingProduct } =
     useGetProductById(id);
   const { data: responseProductBlueprint, isLoading: isloadingPrBlueprint } =
@@ -54,9 +65,14 @@ export default function ProductDetails(props: IProductDetailsProps) {
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
   const [openCreateProductBlueprint, setOpenCreateProductBlueprint] =
     React.useState(false);
+  const [openUpdateProductBlueprint, setOpenUpdateProductBlueprint] =
+    React.useState(false);
+  const [productBlueprint, setProductBlueprint] =
+    React.useState<UpdateProductBlueprintDto>(ProductBlueprintValues);
   const [checked, setChecked] = React.useState(true);
   const [checkValue, setCheckValue] = React.useState("");
   const [isDisabled, setIsDisabled] = React.useState(true);
+
   const maxNumber = 69;
 
   const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
@@ -70,6 +86,24 @@ export default function ProductDetails(props: IProductDetailsProps) {
 
   const handleCloseCreateProductBlueprint = () => {
     setOpenCreateProductBlueprint(false);
+  };
+
+  const handleUpdateProductBlueprint = (
+    productBlueprint: ProductBlueprintDto
+  ) => {
+    const tmpData: UpdateProductBlueprintDto = {
+      id: productBlueprint.id,
+      frameImage: productBlueprint.frameImage,
+      position: productBlueprint.position,
+      placeHolderTop: productBlueprint.placeholder.top,
+      placeHolderHeight: productBlueprint.placeholder.height,
+      placeHolderWidth: productBlueprint.placeholder.width,
+    };
+    setProductBlueprint(tmpData);
+    setOpenUpdateProductBlueprint(true);
+  };
+  const handleCloseUpdateProductBlueprint = () => {
+    setOpenUpdateProductBlueprint(false);
   };
 
   const handleCloseCreateDialog = () => {
@@ -458,6 +492,20 @@ export default function ProductDetails(props: IProductDetailsProps) {
             />
           </DialogContent>
         </Dialog>
+        <Dialog
+          open={openUpdateProductBlueprint}
+          onClose={handleCloseUpdateProductBlueprint}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          fullWidth={true}
+        >
+          <DialogContent>
+            <UpdateProductBlueprintForm
+              handleCloseDialog={handleCloseUpdateProductBlueprint}
+              productBlueprint={productBlueprint}
+            />
+          </DialogContent>
+        </Dialog>
         <div className="container-xxl flex-grow-1 container-p-y ">
           <div className="row">
             <div className="col-md-12">
@@ -494,6 +542,9 @@ export default function ProductDetails(props: IProductDetailsProps) {
                             <th>
                               <strong>position</strong>
                             </th>
+                            <th>
+                              <strong>Actions</strong>
+                            </th>
                           </tr>
                         </thead>
                         {responseProductBlueprint.data.map(
@@ -524,6 +575,20 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                   {productBlueprint.placeholder.width} inch
                                 </td>
                                 <td>{productBlueprint.position}</td>
+                                <td>
+                                  <IconButton
+                                    onClick={() => {
+                                      handleUpdateProductBlueprint(
+                                        productBlueprint
+                                      );
+                                    }}
+                                  >
+                                    <EditIcon
+                                      fontSize="medium"
+                                      color="primary"
+                                    />
+                                  </IconButton>
+                                </td>
                               </tr>
                             </tbody>
                           )
