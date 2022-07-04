@@ -101,13 +101,13 @@ export default function CreateForm(props: ICreateFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   First Name
                 </label>
 
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-fullname2"
@@ -134,12 +134,12 @@ export default function CreateForm(props: ICreateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Last Name
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-fullname2"
@@ -166,12 +166,12 @@ export default function CreateForm(props: ICreateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-company"
                 >
                   Pass Word
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-company2"
@@ -198,12 +198,12 @@ export default function CreateForm(props: ICreateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-email"
                 >
                   Email
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span className="input-group-text">
                       <i className="bx bx-envelope" />
@@ -212,37 +212,26 @@ export default function CreateForm(props: ICreateFormProps) {
                       type="text"
                       id="basic-icon-default-email"
                       className="form-control"
-                      placeholder="john.doe"
-                      aria-label="john.doe"
+                      placeholder="john.doe@gmail.com"
                       aria-describedby="basic-icon-default-email2"
                       {...register("email")}
                     />
-
-                    <span
-                      id="basic-icon-default-email2"
-                      className="input-group-text"
-                    >
-                      @example.com
-                    </span>
                   </div>
                   {errors.email && (
                     <span id="error-pwd-message" className="text-danger">
                       {errors.email.message}
                     </span>
                   )}
-                  <div className="form-text">
-                    You can use letters, numbers &amp; periods
-                  </div>
                 </div>
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 form-label"
+                  className="col-sm-3 form-label"
                   htmlFor="basic-icon-default-phone"
                 >
                   Phone No
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-phone2"
@@ -254,8 +243,7 @@ export default function CreateForm(props: ICreateFormProps) {
                       type="text"
                       id="basic-icon-default-phone"
                       className="form-control phone-mask"
-                      placeholder="658 799 8941"
-                      aria-label="658 799 8941"
+                      placeholder="091 234 8473"
                       aria-describedby="basic-icon-default-phone2"
                       {...register("phone")}
                     />
@@ -269,12 +257,12 @@ export default function CreateForm(props: ICreateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 form-label"
+                  className="col-sm-3 form-label"
                   htmlFor="basic-icon-default-message"
                 >
                   Address
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-message2"
@@ -285,8 +273,7 @@ export default function CreateForm(props: ICreateFormProps) {
                     <textarea
                       id="basic-icon-default-message"
                       className="form-control"
-                      placeholder="Hi, Do you have a moment to talk Joe?"
-                      aria-label="Hi, Do you have a moment to talk Joe?"
+                      placeholder="Quận 9, TP. Hồ Chí Minh"
                       aria-describedby="basic-icon-default-message2"
                       {...register("address")}
                     />
@@ -300,12 +287,12 @@ export default function CreateForm(props: ICreateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-company"
                 >
                   Role Name
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                     <InputLabel id="demo-select-small">Role</InputLabel>
                     <Select

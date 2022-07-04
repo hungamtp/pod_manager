@@ -17,15 +17,17 @@ const useUnPublishProduct = (handleClosePublishDialog:() => void) => {
             return await unPublishProduct(id);
 		},
 		{
-			onSettled: (data) => {
+			onSuccess: (data) => {
 				handleClosePublishDialog()
                 queryClient.invalidateQueries("Products")
-				enqueueSnackbar("Create successfully!", {
+				enqueueSnackbar("UnPublish successfully!", {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });
 			},onError: (error: AxiosError<ErrorHttpResponse>) => {
 				if (error) {
+				handleClosePublishDialog()
+
 					enqueueSnackbar(error.response?.data.errorMessage, {
 					  autoHideDuration: 9000,
 					  variant: "error",

@@ -113,8 +113,6 @@ export default function HorizontalForm(props: IHorizontalFormProps) {
                         <textarea
                           id="basic-default-message"
                           className="form-control"
-                          placeholder="Hi, Do you have a moment to talk Joe?"
-                          aria-label="Hi, Do you have a moment to talk Joe?"
                           aria-describedby="basic-icon-default-message2"
                           defaultValue={""}
                         />
@@ -270,8 +268,6 @@ export default function HorizontalForm(props: IHorizontalFormProps) {
                           <textarea
                             id="basic-icon-default-message"
                             className="form-control"
-                            placeholder="Hi, Do you have a moment to talk Joe?"
-                            aria-label="Hi, Do you have a moment to talk Joe?"
                             aria-describedby="basic-icon-default-message2"
                             defaultValue={""}
                           />

@@ -223,11 +223,7 @@ export default function UpdateProductBlueprintForm(
                           {...dragProps}
                           type="button"
                         >
-                          Thêm ảnh
-                        </button>
-                        &nbsp;
-                        <button onClick={onImageRemoveAll} type="button">
-                          Xóa ảnh
+                          Update Image
                         </button>
                       </div>
                     )}

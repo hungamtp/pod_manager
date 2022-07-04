@@ -142,16 +142,13 @@ export default function ManageProduct(props: IManageProductProps) {
             <span className="text-muted fw-light">Manage Product /</span> Manage
             Raw Product
           </h4>
-          <Fab
-            className="badge bg-success"
-            variant="extended"
-            size="small"
-            aria-label="add"
+          <button
+            className="btn btn-success ms-4 text-dark"
             onClick={handleIsEditFalse}
           >
             <AddIcon sx={{ mr: 1 }} />
             Create New Product
-          </Fab>
+          </button>
 
           <hr className="my-4" />
           {isEdit == false && (
@@ -201,7 +198,7 @@ export default function ManageProduct(props: IManageProductProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Bạn có muốn unPublish sản phẩm này không?"}
+                {"Do you want to unpublish this Raw Product?"}
               </DialogTitle>
               <DialogContent>
                 <UnPublishProduct
@@ -222,7 +219,7 @@ export default function ManageProduct(props: IManageProductProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Bạn có muốn Publish sản phẩm này không?"}
+                {"Do you want to Publish this Raw Product?"}
               </DialogTitle>
               <DialogContent>
                 <PublishProduct
@@ -242,7 +239,7 @@ export default function ManageProduct(props: IManageProductProps) {
             fullWidth={true}
           >
             <DialogTitle id="alert-dialog-title">
-              {"Bạn có muốn xóa sản phẩm này không?"}
+              {"Do you want to delete this Raw Product?"}
             </DialogTitle>
             <DialogContent>
               <div className="d-flex justify-content-center">

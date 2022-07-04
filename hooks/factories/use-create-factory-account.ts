@@ -4,6 +4,8 @@ import { useMutation, useQueryClient } from 'react-query';
 import { createAccountFactory } from '@/services/factories';
 import { CreateFactoryDto } from '@/services/factories/dto/create-factory-dto';
 import { useRouter } from 'next/router';
+import { AxiosError } from 'axios';
+import { ErrorHttpResponse } from '@/models/error_http_response.interface';
 
 const useCreateFactoryAccount = (handleCloseDialog:() => void) => {
 	const router = useRouter();
@@ -26,6 +28,15 @@ const useCreateFactoryAccount = (handleCloseDialog:() => void) => {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });
+			},
+			onError: (error: AxiosError<ErrorHttpResponse>) => {
+				if (error) {
+					handleCloseDialog()
+					enqueueSnackbar(error.response?.data.errorMessage, {
+					  autoHideDuration: 9000,
+					  variant: "error",
+					});
+				  }
 			},
 			
 		}

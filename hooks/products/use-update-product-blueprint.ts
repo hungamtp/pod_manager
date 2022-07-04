@@ -22,7 +22,7 @@ const useUpdateProductBlueprint = (handleCloseDialog:() => void) => {
                 handleCloseDialog()
                 queryClient.invalidateQueries("GetProductById")
                 queryClient.invalidateQueries("GetProductBlueprint")
-				enqueueSnackbar("Create successfully!", {
+				enqueueSnackbar("Update successfully!", {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });

@@ -129,6 +129,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                     <input
                       type="text"
                       className="form-control"
+                      placeholder="Potato Factory"
                       id="basic-icon-default-fullname"
                       aria-describedby="basic-icon-default-fullname2"
                       {...register("name")}
@@ -189,27 +190,16 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                       type="text"
                       id="basic-icon-default-email"
                       className="form-control"
-                      placeholder="john.doe"
-                      aria-label="john.doe"
+                      placeholder="john.doe@gmail.com"
                       aria-describedby="basic-icon-default-email2"
                       {...register("email")}
                     />
-
-                    <span
-                      id="basic-icon-default-email2"
-                      className="input-group-text"
-                    >
-                      @example.com
-                    </span>
                   </div>
                   {errors.email && (
                     <span id="error-pwd-message" className="text-danger">
                       {errors.email.message}
                     </span>
                   )}
-                  <div className="form-text">
-                    You can use letters, numbers &amp; periods
-                  </div>
                 </div>
               </div>
               <div className="row mb-3">
@@ -231,8 +221,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                       type="text"
                       id="basic-icon-default-phone"
                       className="form-control phone-mask"
-                      placeholder="658 799 8941"
-                      aria-label="658 799 8941"
+                      placeholder="093 847 8347"
                       aria-describedby="basic-icon-default-phone2"
                       {...register("phone")}
                     />
@@ -262,8 +251,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                     <textarea
                       id="basic-icon-default-message"
                       className="form-control"
-                      placeholder="Hi, Do you have a moment to talk Joe?"
-                      aria-label="Hi, Do you have a moment to talk Joe?"
+                      placeholder="Quan 9, TP. Ho Chi Minh"
                       aria-describedby="basic-icon-default-message2"
                       {...register("address")}
                     />
@@ -306,21 +294,13 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                           </div>
                         ))}
                         <button
-                          className="btn btn-success"
+                          className="btn btn-primary"
                           style={isDragging ? { color: "red" } : undefined}
                           onClick={onImageUpload}
                           {...dragProps}
                           type="button"
                         >
-                          Thêm ảnh
-                        </button>
-                        &nbsp;
-                        <button
-                          className="btn btn-secondary"
-                          onClick={onImageRemoveAll}
-                          type="button"
-                        >
-                          Xóa ảnh
+                          Update image
                         </button>
                       </div>
                     )}

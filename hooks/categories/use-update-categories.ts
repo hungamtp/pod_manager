@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from 'react-query';
 import { UpdateCategoryDto } from '@/services/categories/dto/update-categories-dto';
 import { useSnackbar } from 'notistack';
+import { AxiosError } from 'axios';
+import { ErrorHttpResponse } from '@/models/error_http_response.interface';
 
 
 const useUpdateCategory = (handleCloseDialog:() => void) => {
@@ -23,6 +25,14 @@ const useUpdateCategory = (handleCloseDialog:() => void) => {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });
+			},onError: (error: AxiosError<ErrorHttpResponse>) => {
+				if (error) {
+					handleCloseDialog()
+					enqueueSnackbar(error.response?.data.errorMessage, {
+					  autoHideDuration: 9000,
+					  variant: "error",
+					});
+				  }
 			},
 			
 		}

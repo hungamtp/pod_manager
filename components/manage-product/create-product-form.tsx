@@ -124,20 +124,14 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Name
                 </label>
 
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
-                    <span
-                      id="basic-icon-default-fullname2"
-                      className="input-group-text"
-                    >
-                      <i className="bx bx-user" />
-                    </span>
                     <input
                       type="text"
                       className="form-control"
@@ -157,12 +151,12 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Category Name
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                     <InputLabel id="demo-select-small">Category</InputLabel>
                     <Select
@@ -189,25 +183,19 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-company"
                 >
                   Description
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
-                    <span
-                      id="basic-icon-default-company2"
-                      className="input-group-text"
-                    >
-                      <DescriptionIcon fontSize="small" />
-                    </span>
                     <input
                       type="text"
                       id="basic-icon-default-company"
                       className="form-control"
-                      placeholder="Description."
-                      aria-label="Description."
+                      placeholder="Description"
+                      aria-label="Description"
                       aria-describedby="basic-icon-default-company2"
                       {...register("description")}
                     />
@@ -221,12 +209,12 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Image
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <ImageUploading
                     multiple
                     value={images}
@@ -254,13 +242,18 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                           style={isDragging ? { color: "red" } : undefined}
                           onClick={onImageUpload}
                           {...dragProps}
+                          className="btn btn-primary"
                           type="button"
                         >
-                          Thêm ảnh
+                          Update Image
                         </button>
                         &nbsp;
-                        <button type="button" onClick={onImageRemoveAll}>
-                          Xóa ảnh
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          onClick={onImageRemoveAll}
+                        >
+                          Clear
                         </button>
                       </div>
                     )}

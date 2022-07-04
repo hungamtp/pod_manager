@@ -122,32 +122,41 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                   <div className="card">
                     <h5 className="card-header">Size-Color</h5>
                     <div className="table-responsive text-nowrap">
-                      <table className="table table-bordered">
-                        <thead>
-                          <tr>
-                            <th>
-                              <strong>color</strong>
-                            </th>
-                            <th>
-                              <strong>Size</strong>
-                            </th>
-                            <th>
-                              <strong>quantity</strong>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {responseFactory.data.productDtoList[
-                            index
-                          ]?.sizeColors.map((x) => (
-                            <tr key={nanoid()}>
-                              <td>{x.colorImage}</td>
-                              <td>{x.size}</td>
-                              <td>{x.quantity}</td>
+                      {!isLoadingFactory &&
+                      responseFactory &&
+                      responseFactory.data.productDtoList[index].sizeColors
+                        .length > 0 ? (
+                        <table className="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>
+                                <strong>color</strong>
+                              </th>
+                              <th>
+                                <strong>Size</strong>
+                              </th>
+                              <th>
+                                <strong>quantity</strong>
+                              </th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {responseFactory.data.productDtoList[
+                              index
+                            ]?.sizeColors.map((x) => (
+                              <tr key={nanoid()}>
+                                <td>{x.colorImage}</td>
+                                <td>{x.size}</td>
+                                <td>{x.quantity}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        <div className="h4 text-center p-3">
+                          This product does not have any Sizes-Colors yet
+                        </div>
+                      )}
                     </div>
                   </div>
                 </DialogContent>
@@ -176,8 +185,8 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
       <div>
         <div className="container-xxl flex-grow-1 container-p-y">
           <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Factory Details /</span>{" "}
-            Factory
+            <span className="text-muted fw-light">Manage Factory /</span>{" "}
+            Factory Details
           </h4>
           <div className="card-body">
             <div className="d-flex align-items-start align-items-sm-center gap-4">
@@ -295,69 +304,75 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                 <hr className="my-0" />
                 <div className="card">
                   <div className="table-responsive text-nowrap">
-                    <table className="table table-sm">
-                      <thead>
-                        <tr>
-                          <th>
-                            <strong>id</strong>
-                          </th>
-                          <th>
-                            <strong>Name</strong>
-                          </th>
-                          <th>
-                            <strong>category Name</strong>
-                          </th>
-                          <th>
-                            <strong>Image</strong>
-                          </th>
-                          <th>
-                            <strong>Sizes&Colors</strong>
-                          </th>
-                        </tr>
-                      </thead>
-                      {responseFactory?.data.productDtoList.map((x, index) => (
-                        <tbody key={x.id} className="table-border-bottom-0">
+                    {!isLoadingFactory &&
+                    responseFactory &&
+                    responseFactory.data.productDtoList.length > 0 ? (
+                      <table className="table table-sm">
+                        <thead>
                           <tr>
-                            <td>
-                              <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
-                              <strong>{x.id}</strong>
-                            </td>
-                            <td>
-                              <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
-                              <strong>{x.name}</strong>
-                            </td>
-                            <td>{x.categoryName}</td>
-                            <td>
-                              <img
-                                src={x.productImages[0].image}
-                                width="100"
-                                height="100"
-                              />
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  handleOpenSizeColorDialog(index, x.id)
-                                }
-                                className="btn btn-primary me-2"
-                              >
-                                View
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  handleOpenCreateSizeColorDialog(index, x.id)
-                                }
-                                className="btn btn-success me-2"
-                              >
-                                Create
-                              </button>
-                            </td>
+                            <th>
+                              <strong>Name</strong>
+                            </th>
+                            <th>
+                              <strong>category Name</strong>
+                            </th>
+                            <th>
+                              <strong>Image</strong>
+                            </th>
+                            <th>
+                              <strong>Sizes&Colors</strong>
+                            </th>
                           </tr>
-                        </tbody>
-                      ))}
-                    </table>
+                        </thead>
+                        {responseFactory?.data.productDtoList.map(
+                          (x, index) => (
+                            <tbody key={x.id} className="table-border-bottom-0">
+                              <tr>
+                                <td>
+                                  <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
+                                  <strong>{x.name}</strong>
+                                </td>
+                                <td>{x.categoryName}</td>
+                                <td>
+                                  <img
+                                    src={x.productImages[0].image}
+                                    width="100"
+                                    height="100"
+                                  />
+                                </td>
+                                <td>
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleOpenSizeColorDialog(index, x.id)
+                                    }
+                                    className="btn btn-primary me-2"
+                                  >
+                                    View
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleOpenCreateSizeColorDialog(
+                                        index,
+                                        x.id
+                                      )
+                                    }
+                                    className="btn btn-success me-2"
+                                  >
+                                    Create
+                                  </button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          )
+                        )}
+                      </table>
+                    ) : (
+                      <div className="h3 text-center p-3">
+                        Factory does not have any product yet
+                      </div>
+                    )}
                   </div>
                 </div>
                 {/* /Account */}
@@ -377,16 +392,15 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
             <div className="col-md-12">
               <div className="card mb-4">
                 {/* Account */}
-                <h5 className="card-header">Product For Factory Do not have</h5>
+                <h5 className="card-header">
+                  Product For Factory Does not have
+                </h5>
                 <hr className="my-0" />
                 <div className="card">
                   <div className="table-responsive text-nowrap">
                     <table className="table table-sm">
                       <thead>
                         <tr>
-                          <th>
-                            <strong>id</strong>
-                          </th>
                           <th>
                             <strong>Name</strong>
                           </th>
@@ -398,10 +412,6 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                       {responseProductForFactory?.data.map((x, index) => (
                         <tbody key={index} className="table-border-bottom-0">
                           <tr>
-                            <td>
-                              <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
-                              <strong>{x.id}</strong>
-                            </td>
                             <td>
                               <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
                               <strong>{x.name}</strong>

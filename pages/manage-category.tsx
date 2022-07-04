@@ -102,18 +102,16 @@ export default function ManageCategory(props: IManageCategoryProps) {
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
           <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Tables /</span> Basic Tables
+            <span className="text-muted fw-light">Manage Product /</span> Manage
+            Category
           </h4>
-          <Fab
-            className="badge bg-success"
-            variant="extended"
-            size="small"
-            aria-label="add"
+          <button
+            className="btn btn-success ms-4 text-dark"
             onClick={handleIsEditFalse}
           >
             <AddIcon sx={{ mr: 1 }} />
             Create New Category
-          </Fab>
+          </button>
 
           <hr className="my-4" />
           {isEdit == false && (
@@ -162,7 +160,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
             fullWidth={true}
           >
             <DialogTitle id="alert-dialog-title">
-              {"Bạn có muốn delete category này không?"}
+              {"Do you want to delete this Category?"}
             </DialogTitle>
             <DialogContent>
               <div className="d-flex justify-content-center">
@@ -188,43 +186,15 @@ export default function ManageCategory(props: IManageCategoryProps) {
             </DialogContent>
             <DialogActions></DialogActions>
           </Dialog>
-          <nav
-            className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-            id="layout-navbar"
-          >
-            <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-              <a className="nav-item nav-link px-0 me-xl-4">
-                <i className="bx bx-menu bx-sm" />
-              </a>
-            </div>
-            <div
-              className="navbar-nav-right d-flex align-items-center"
-              id="navbar-collapse"
-            >
-              {/* Search */}
-              <div className="navbar-nav align-items-center">
-                <div className="nav-item d-flex align-items-center">
-                  <i className="bx bx-search fs-4 lh-0" />
-                  <input
-                    type="text"
-                    className="form-control border-0 shadow-none"
-                    placeholder="Search..."
-                    aria-label="Search..."
-                  />
-                </div>
-              </div>
-              {/* /Search */}
-            </div>
-          </nav>
+
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Category management</h5>
+            <h5 className="card-header">Categories management</h5>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>Name</th>
                     <th>Image</th>
                     <th>isDelete</th>
@@ -236,7 +206,6 @@ export default function ManageCategory(props: IManageCategoryProps) {
                     response &&
                     response.content.map((x) => (
                       <tr key={x.id}>
-                        <td>{x.id}</td>
                         <td>
                           <strong>{x.name}</strong>
                         </td>

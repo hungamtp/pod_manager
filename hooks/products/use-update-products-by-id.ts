@@ -20,7 +20,7 @@ const useUpdateProductById = () => {
 			onSuccess: (data) => {
 				//because data:any
                 queryClient.invalidateQueries("Products")
-				enqueueSnackbar("Create successfully!", {
+				enqueueSnackbar("Update successfully!", {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });

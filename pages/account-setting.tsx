@@ -172,7 +172,7 @@ export default function AccountSetting(props: IAccountSettingProps) {
                                   />
                                 ))}
                                 <button
-                                  className="btn btn-primary me-2 mb-4 ms-2"
+                                  className="btn btn-primary me-2  ms-2 mt-5"
                                   style={
                                     isDragging ? { color: "red" } : undefined
                                   }
@@ -180,15 +180,7 @@ export default function AccountSetting(props: IAccountSettingProps) {
                                   {...dragProps}
                                   type="button"
                                 >
-                                  Thêm ảnh
-                                </button>
-                                &nbsp;
-                                <button
-                                  className="btn btn-outline-secondary account-image-reset mb-4"
-                                  type="button"
-                                  onClick={onImageRemoveAll}
-                                >
-                                  Xóa ảnh
+                                  Update image
                                 </button>
                               </div>
                             )}
@@ -306,7 +298,6 @@ export default function AccountSetting(props: IAccountSettingProps) {
                             type="text"
                             className="form-control"
                             id="address"
-                            placeholder="Address"
                             disabled={isDisable}
                             defaultValue={responseAccount.data.address}
                             {...register("address")}
