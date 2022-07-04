@@ -395,46 +395,55 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                 <div className="card">
                                   <h5 className="card-header">Factories</h5>
                                   <div className="table-responsive text-nowrap">
-                                    <table className="table table-sm ">
-                                      <thead>
-                                        <tr>
-                                          <th>
-                                            <strong>Name</strong>
-                                          </th>
-                                          <th>
-                                            <strong>Location</strong>
-                                          </th>
-                                          <th>
-                                            <strong>Price</strong>
-                                          </th>
-                                        </tr>
-                                      </thead>
-                                      {responseProduct?.data.priceByFactories.map(
-                                        (x) => (
-                                          <tbody
-                                            key={x.factory.name}
-                                            className="table-border-bottom-0"
-                                          >
-                                            <tr>
-                                              <td>
-                                                <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
-                                                <strong>
-                                                  {x.factory.name}
-                                                </strong>
-                                              </td>
-                                              <td>
-                                                <strong>
-                                                  {x.factory.location}
-                                                </strong>
-                                              </td>
-                                              <td>
-                                                <strong>{x.price}</strong>
-                                              </td>
-                                            </tr>
-                                          </tbody>
-                                        )
-                                      )}
-                                    </table>
+                                    {responseProduct &&
+                                    responseProduct.data.priceByFactories
+                                      .length > 0 ? (
+                                      <table className="table table-sm ">
+                                        <thead>
+                                          <tr>
+                                            <th>
+                                              <strong>Name</strong>
+                                            </th>
+                                            <th>
+                                              <strong>Location</strong>
+                                            </th>
+                                            <th>
+                                              <strong>Price</strong>
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                        {responseProduct.data.priceByFactories.map(
+                                          (x) => (
+                                            <tbody
+                                              key={x.factory.name}
+                                              className="table-border-bottom-0"
+                                            >
+                                              <tr>
+                                                <td>
+                                                  <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
+                                                  <strong>
+                                                    {x.factory.name}
+                                                  </strong>
+                                                </td>
+                                                <td>
+                                                  <strong>
+                                                    {x.factory.location}
+                                                  </strong>
+                                                </td>
+                                                <td>
+                                                  <strong>{x.price}</strong>
+                                                </td>
+                                              </tr>
+                                            </tbody>
+                                          )
+                                        )}
+                                      </table>
+                                    ) : (
+                                      <div className="h3 text-center p-3">
+                                        There is no factories support this
+                                        product yet
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                                 {/* /Account */}
@@ -514,21 +523,20 @@ export default function ProductDetails(props: IProductDetailsProps) {
                 <div className="card">
                   <h5 className="card-header">Product Blueprints</h5>
                   <div>
-                    <Fab
-                      className="badge bg-success ms-2"
-                      variant="extended"
-                      size="small"
-                      aria-label="add"
+                    <button
+                      className="btn btn-success ms-4 text-dark"
                       onClick={handleCreateProductBlueprint}
                     >
                       <AddIcon sx={{ mr: 1 }} />
                       Create Product Blueprints
-                    </Fab>
+                    </button>
                   </div>
                   <br className="my-4" />
                   <hr className="my-0" />
                   <div className="table-responsive text-nowrap">
-                    {!isloadingPrBlueprint && responseProductBlueprint && (
+                    {!isloadingPrBlueprint &&
+                    responseProductBlueprint &&
+                    responseProductBlueprint.data.length > 0 ? (
                       <table className="table table-sm ">
                         <thead>
                           <tr>
@@ -594,6 +602,10 @@ export default function ProductDetails(props: IProductDetailsProps) {
                           )
                         )}
                       </table>
+                    ) : (
+                      <div className="h3 text-center p-3">
+                        This product does not have any blueprint yet
+                      </div>
                     )}
                   </div>
                 </div>
@@ -627,23 +639,21 @@ export default function ProductDetails(props: IProductDetailsProps) {
 
                 <h5 className="card-header">Sizes & Colors</h5>
                 <div>
-                  <Fab
-                    className="badge bg-success ms-2"
-                    variant="extended"
-                    size="small"
-                    aria-label="add"
+                  <button
+                    className="btn btn-success ms-4 text-dark"
                     onClick={handleOpenCreateSizeColorDialog}
                   >
                     <AddIcon sx={{ mr: 1 }} />
                     Create New Sizes & Colors
-                  </Fab>
+                  </button>
                 </div>
                 <br className="my-4" />
                 <hr className="my-0" />
                 <div className="card">
                   <div className="card-body">
                     <div className="table-responsive text-nowrap">
-                      {responseSizesColorById && (
+                      {responseSizesColorById &&
+                      responseSizesColorById.data.sizes.length > 0 ? (
                         <div key={nanoid()}>
                           <table className="table table-sm mb-3 col-md-6">
                             <thead>
@@ -698,6 +708,10 @@ export default function ProductDetails(props: IProductDetailsProps) {
                               )}
                             </tbody>
                           </table>
+                        </div>
+                      ) : (
+                        <div className="h3 text-center p-3">
+                          This product does not have any Sizes and Colors yet
                         </div>
                       )}
                     </div>

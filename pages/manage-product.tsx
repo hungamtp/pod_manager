@@ -348,11 +348,7 @@ export default function ManageProduct(props: IManageProductProps) {
                             </span>
                           )}
                         </td>
-                        <td>
-                          <textarea disabled rows={3}>
-                            {x.description}
-                          </textarea>
-                        </td>
+                        <td>{x.description}</td>
 
                         {/* <td>{x.productTags[0].tag.name}</td> */}
                         <td>

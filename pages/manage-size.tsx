@@ -54,16 +54,13 @@ export default function ManageSize(props: IManageSize) {
           <h4 className="fw-bold py-3 mb-4">
             <span className="text-muted fw-light">Tables /</span> Basic Tables
           </h4>
-          <Fab
-            className="badge bg-success"
-            variant="extended"
-            size="small"
-            aria-label="add"
+          <button
+            className="btn btn-success ms-4 text-dark"
             onClick={handleOpenCreate}
           >
             <AddIcon sx={{ mr: 1 }} />
             Create New Size
-          </Fab>
+          </button>
 
           <hr className="my-4" />
           <Dialog
@@ -85,7 +82,7 @@ export default function ManageSize(props: IManageSize) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Factory management</h5>
+            <h5 className="card-header">Sizes management</h5>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>
