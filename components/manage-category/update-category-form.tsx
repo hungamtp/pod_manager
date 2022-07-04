@@ -105,12 +105,6 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
 
                 <div className="col-sm-10">
                   <div className="input-group input-group-merge">
-                    <span
-                      id="basic-icon-default-fullname2"
-                      className="input-group-text"
-                    >
-                      <i className="bx bx-user" />
-                    </span>
                     <input
                       type="text"
                       className="form-control"
@@ -163,12 +157,9 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
                           onClick={onImageUpload}
                           {...dragProps}
                           type="button"
+                          className="btn btn-primary"
                         >
-                          Thêm ảnh
-                        </button>
-                        &nbsp;
-                        <button onClick={onImageRemoveAll} type="button">
-                          Xóa ảnh
+                          Update Image
                         </button>
                       </div>
                     )}

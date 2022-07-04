@@ -18,7 +18,7 @@ const useDeleteProduct = () => {
 		{
 			onSuccess: (data) => {
                 queryClient.invalidateQueries("Products")
-				enqueueSnackbar("Create successfully!", {
+				enqueueSnackbar("Delete successfully!", {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });

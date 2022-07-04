@@ -62,18 +62,16 @@ export default function ManageColor(props: IManageColor) {
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
           <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Tables /</span> Basic Tables
+            <span className="text-muted fw-light">Manage Product /</span> Manage
+            Color
           </h4>
-          <Fab
-            className="badge bg-success"
-            variant="extended"
-            size="small"
-            aria-label="add"
+          <button
+            className="btn btn-success ms-4 text-dark"
             onClick={handleOpenCreate}
           >
             <AddIcon sx={{ mr: 1 }} />
             Create New Color
-          </Fab>
+          </button>
 
           <hr className="my-4" />
           <Dialog

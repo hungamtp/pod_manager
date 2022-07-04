@@ -119,16 +119,13 @@ export default function ManageFactory(props: IManageFactory) {
             <span className="text-muted fw-light">Mangage Account /</span>
             Manage Factory
           </h4>
-          <Fab
-            className="badge bg-success"
-            variant="extended"
-            size="small"
-            aria-label="add"
+          <button
+            className="btn btn-success ms-4 text-dark"
             onClick={handleOpenCreateDialog}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create New Account
-          </Fab>
+            Create New Factory
+          </button>
           <hr className="my-4" />
           <br />
           {/* Basic Bootstrap Table */}
@@ -138,7 +135,6 @@ export default function ManageFactory(props: IManageFactory) {
               <table className="table ">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
@@ -152,8 +148,9 @@ export default function ManageFactory(props: IManageFactory) {
                     response &&
                     response.content.map((x) => (
                       <tr key={x.id}>
-                        <td>{x.id}</td>
-                        <td>{x.name}</td>
+                        <td>
+                          <strong>{x.name}</strong>
+                        </td>
                         <td>{x.email}</td>
                         <td>{x.phone}</td>
                         <td>{x.address}</td>

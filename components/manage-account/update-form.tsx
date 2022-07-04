@@ -53,7 +53,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
     setRole(event.target.value);
   };
   const defaultValues: UpdateAccountDto = {
-    id: 0,
+    id: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -96,13 +96,39 @@ export default function UpdateForm(props: IUpdateFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
+                  htmlFor="basic-icon-default-fullname"
+                >
+                  Id
+                </label>
+
+                <div className="col-sm-9">
+                  <div className="input-group input-group-merge">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="basic-icon-default-fullname"
+                      disabled
+                      aria-describedby="basic-icon-default-fullname2"
+                      {...register("id")}
+                    />
+                  </div>
+                  {errors.id && (
+                    <span id="error-pwd-message" className="text-danger">
+                      {errors.id.message}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="row mb-3">
+                <label
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   First Name
                 </label>
 
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-fullname2"
@@ -129,12 +155,12 @@ export default function UpdateForm(props: IUpdateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Last Name
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-fullname2"
@@ -162,12 +188,12 @@ export default function UpdateForm(props: IUpdateFormProps) {
 
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-email"
                 >
                   Email
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <input
                       type="text"
@@ -185,19 +211,16 @@ export default function UpdateForm(props: IUpdateFormProps) {
                       {errors.email.message}
                     </span>
                   )}
-                  <div className="form-text">
-                    You can use letters, numbers &amp; periods
-                  </div>
                 </div>
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 form-label"
+                  className="col-sm-3 form-label"
                   htmlFor="basic-icon-default-phone"
                 >
                   Phone No
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-phone2"
@@ -209,8 +232,8 @@ export default function UpdateForm(props: IUpdateFormProps) {
                       type="text"
                       id="basic-icon-default-phone"
                       className="form-control phone-mask"
-                      placeholder="658 799 8941"
-                      aria-label="658 799 8941"
+                      placeholder="093 8257 485"
+                      aria-label="093 8257 485"
                       aria-describedby="basic-icon-default-phone2"
                       {...register("phone")}
                     />
@@ -224,12 +247,12 @@ export default function UpdateForm(props: IUpdateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 form-label"
+                  className="col-sm-3 form-label"
                   htmlFor="basic-icon-default-message"
                 >
                   Address
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-message2"
@@ -240,8 +263,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
                     <textarea
                       id="basic-icon-default-message"
                       className="form-control"
-                      placeholder="Hi, Do you have a moment to talk Joe?"
-                      aria-label="Hi, Do you have a moment to talk Joe?"
+                      placeholder="Quan 9, TP. Ho Chi Minh"
                       aria-describedby="basic-icon-default-message2"
                       {...register("address")}
                     />
@@ -255,12 +277,12 @@ export default function UpdateForm(props: IUpdateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-company"
                 >
                   Role Name
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                     <InputLabel id="demo-select-small">Role</InputLabel>
                     <Select

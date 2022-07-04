@@ -14,7 +14,6 @@ const useUpdateProduct = (handleCloseDialog:() => void) => {
 	return useMutation(
 		      
         async (data: UpdateProductDto) => {
-            console.log(data, 'datane');
 			return await updateProduct(data);
 			
 		},
@@ -23,7 +22,7 @@ const useUpdateProduct = (handleCloseDialog:() => void) => {
 				//because data:any
                 handleCloseDialog()
                 queryClient.invalidateQueries("Products")
-				enqueueSnackbar("Create successfully!", {
+				enqueueSnackbar("Update successfully!", {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });

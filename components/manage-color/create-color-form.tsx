@@ -71,12 +71,12 @@ export default function CreateColorForm(props: ICreateColorFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Color Name
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <input
                       type="text"
@@ -94,12 +94,12 @@ export default function CreateColorForm(props: ICreateColorFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Color Image
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <input
                       type="color"

@@ -276,7 +276,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                     {...dragProps}
                                     type="button"
                                   >
-                                    Thêm ảnh
+                                    Update Image
                                   </button>
                                   &nbsp;
                                   <button
@@ -284,7 +284,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                     type="button"
                                     onClick={onImageRemoveAll}
                                   >
-                                    Xóa ảnh
+                                    Clear
                                   </button>
                                 </div>
                               )}

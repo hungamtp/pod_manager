@@ -22,6 +22,8 @@ import {
 } from "firebase/storage";
 import useUpdateProduct from "hooks/products/use-update-products";
 import { UpdateProductDto } from "@/services/products/dto/update-product-dto";
+import useCategories from "hooks/categories/use-categories";
+import { Filter } from "@/services/categories";
 
 export interface IUpdateProductFormProps {
   handleCloseDialog: () => void;
@@ -38,10 +40,19 @@ const schema = yup.object().shape({
 
 export default function UpdateProductForm(props: IUpdateProductFormProps) {
   const { handleCloseDialog, product } = props;
-
+  const [categoryName, setCategoryName] = React.useState("");
+  const handleChange = (event: SelectChangeEvent) => {
+    setCategoryName(event.target.value);
+  };
   const [images, setImages] = React.useState<ImageListType>(
     product.images.map((image) => ({ data_url: image }))
   );
+  const [filter, setFilter] = React.useState<Filter>({
+    pageNumber: 0,
+    pageSize: 10,
+  });
+  const { data: response, isLoading: isLoadingCategory } =
+    useCategories(filter);
 
   const defaultValues: UpdateProductDto = {
     id: "",
@@ -63,6 +74,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
 
   React.useEffect(() => {
     reset(product);
+    setCategoryName(product.categoryName);
   }, [product]);
 
   const { mutate: updateProduct, error } = useUpdateProduct(handleCloseDialog);
@@ -101,6 +113,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
   };
 
   const onSubmit: SubmitHandler<UpdateProductDto> = (data) => {
+    data.categoryName = categoryName;
     onUploadImage(data);
   };
 
@@ -112,13 +125,13 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Name
                 </label>
 
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-fullname2"
@@ -145,46 +158,47 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Category Name
                 </label>
 
-                <div className="col-sm-10">
-                  <div className="input-group input-group-merge">
-                    <span
-                      id="basic-icon-default-fullname2"
-                      className="input-group-text"
+                <div className="col-sm-9">
+                  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                    <InputLabel id="demo-select-small">Category</InputLabel>
+                    <Select
+                      labelId="demo-select-small"
+                      id="demo-select-small"
+                      value={categoryName}
+                      label="categoryName"
+                      onChange={handleChange}
                     >
-                      <i className="bx bx-user" />
-                    </span>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="basic-icon-default-fullname"
-                      placeholder="Hoodies"
-                      aria-label="Hoodies"
-                      aria-describedby="basic-icon-default-fullname2"
-                      {...register("categoryName")}
-                    />
-                  </div>
-                  {errors.categoryName && (
-                    <span id="error-pwd-message" className="text-danger">
-                      {errors.categoryName.message}
-                    </span>
-                  )}
+                      {!isLoadingCategory &&
+                        response &&
+                        response.content.map((categoryN) => (
+                          <MenuItem
+                            className="d-flex flex-column"
+                            key={categoryN.name}
+                            value={categoryN.name}
+                            {...register("categoryName")}
+                          >
+                            {categoryN.name}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
                 </div>
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Description
                 </label>
 
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-fullname2"
@@ -211,12 +225,12 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Images
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <ImageUploading
                     value={images}
                     onChange={onChange}
@@ -245,12 +259,17 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
                           onClick={onImageUpload}
                           {...dragProps}
                           type="button"
+                          className="btn btn-primary"
                         >
-                          Thêm ảnh
+                          Update Image
                         </button>
                         &nbsp;
-                        <button type="button" onClick={onImageRemoveAll}>
-                          Xóa ảnh
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          onClick={onImageRemoveAll}
+                        >
+                          Clear
                         </button>
                       </div>
                     )}
