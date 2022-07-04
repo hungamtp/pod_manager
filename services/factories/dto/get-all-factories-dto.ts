@@ -11,8 +11,8 @@ export interface GetAllFactoriesDto extends ISuccessHttpResponse {
 }
 
 export interface FactoryDto{
-    id:number;
-    credentialId:number;
+    id:string;
+    credentialId:string;
     name: string;
     email: string;
     phone: string;

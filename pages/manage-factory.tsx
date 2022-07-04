@@ -10,6 +10,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import useDeleteFactory from "hooks/factories/use-delete-factory-account";
 import useFactories from "hooks/factories/use-factories";
 import { useRouter } from "next/router";
 import * as React from "react";
@@ -29,6 +30,7 @@ export default function ManageFactory(props: IManageFactory) {
     setFilter({ ...filter, pageNumber: value - 1 });
   };
   const { data: response, isLoading: isLoadingAccount } = useFactories(filter);
+  const { mutate: deleteFactory, error } = useDeleteFactory();
 
   // const { mutate: deleteAccount, error } = useDeleteAccount();
 
@@ -36,8 +38,11 @@ export default function ManageFactory(props: IManageFactory) {
   //   deleteAccount(id);
   //   setOpenDeleteDialog(false);
   // };
-
-  const hanldeIsDelete = (x: number) => {
+  const onDelete = (id: string) => {
+    deleteFactory(id);
+    setOpenDeleteDialog(false);
+  };
+  const hanldeIsDelete = (x: string) => {
     setIsDelete(x);
     setOpenDeleteDialog(true);
   };
@@ -56,7 +61,7 @@ export default function ManageFactory(props: IManageFactory) {
 
   /* {open Dialog} */
   const router = useRouter();
-  const [isDelete, setIsDelete] = useState(0);
+  const [isDelete, setIsDelete] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
 
@@ -113,6 +118,40 @@ export default function ManageFactory(props: IManageFactory) {
           </DialogContent>
           <DialogActions></DialogActions>
         </Dialog>
+        <Dialog
+          open={openDeleteDialog}
+          onClose={handleCloseDeleteDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          fullWidth={true}
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Do you want to delete this Category?"}
+          </DialogTitle>
+          <DialogContent>
+            <div className="d-flex justify-content-center">
+              <div className="col-sm-10 d-flex justify-content-around">
+                <button
+                  className="btn btn-danger"
+                  color="danger"
+                  onClick={() => {
+                    onDelete(isDelete);
+                  }}
+                >
+                  Delete
+                </button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={handleCloseDeleteDialog}
+                  autoFocus
+                >
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </DialogContent>
+          <DialogActions></DialogActions>
+        </Dialog>
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
           <h4 className="fw-bold py-3 mb-4">
@@ -141,6 +180,7 @@ export default function ManageFactory(props: IManageFactory) {
                     <th>Location</th>
                     <th>Is Collaborating</th>
                     <th>Actions</th>
+                    <th>Details</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">
@@ -160,34 +200,44 @@ export default function ManageFactory(props: IManageFactory) {
                               TRUE
                             </span>
                           )}
+                          {x.collaborating == false && (
+                            <span className="badge bg-label-danger me-1">
+                              FALSE
+                            </span>
+                          )}
                         </td>
 
                         <td>
-                          <div>
-                            <IconButton
-                              onClick={() => {
-                                {
-                                }
-                              }}
-                            >
-                              <DeleteIcon fontSize="medium" color="error" />
-                            </IconButton>
-                          </div>
+                          {x.collaborating == true && (
+                            <div>
+                              <IconButton
+                                onClick={() => {
+                                  {
+                                    hanldeIsDelete(x.id);
+                                  }
+                                }}
+                              >
+                                <DeleteIcon fontSize="medium" color="error" />
+                              </IconButton>
+                            </div>
+                          )}
                         </td>
                         <td>
-                          <div>
-                            <button
-                              type="button"
-                              className="btn btn-primary btn-sm"
-                              onClick={() => {
-                                router.push(
-                                  `/factory-details?id=${x.credentialId}&factoryid=${x.id}`
-                                );
-                              }}
-                            >
-                              Detail
-                            </button>
-                          </div>
+                          {x.collaborating == true && (
+                            <div>
+                              <button
+                                type="button"
+                                className="btn btn-primary btn-sm"
+                                onClick={() => {
+                                  router.push(
+                                    `/factory-details?id=${x.credentialId}&factoryid=${x.id}`
+                                  );
+                                }}
+                              >
+                                Detail
+                              </button>
+                            </div>
+                          )}
                         </td>
                       </tr>
                     ))}
