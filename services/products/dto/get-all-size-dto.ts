@@ -11,7 +11,7 @@ export interface GetAllSizesDto extends ISuccessHttpResponse {
 }
 
 export interface SizeDto{
-    id:number;
+    id:string;
     name: string;
    
 }
