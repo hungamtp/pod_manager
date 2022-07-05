@@ -147,18 +147,10 @@ export default function CreateProductBlueprintForm(
 
                   <div className="col-sm-9">
                     <div className="input-group input-group-merge">
-                      <span
-                        id="basic-icon-default-fullname2"
-                        className="input-group-text"
-                      >
-                        <i className="bx bx-user" />
-                      </span>
                       <input
                         type="text"
                         className="form-control"
                         id="basic-icon-default-fullname"
-                        placeholder="Hoodies"
-                        aria-label="Hoodies"
                         aria-describedby="basic-icon-default-fullname2"
                         {...register("placeHolderTop")}
                       />
@@ -180,18 +172,10 @@ export default function CreateProductBlueprintForm(
 
                   <div className="col-sm-9">
                     <div className="input-group input-group-merge">
-                      <span
-                        id="basic-icon-default-fullname2"
-                        className="input-group-text"
-                      >
-                        <i className="bx bx-user" />
-                      </span>
                       <input
                         type="text"
                         className="form-control"
                         id="basic-icon-default-fullname"
-                        placeholder="Hoodies"
-                        aria-label="Hoodies"
                         aria-describedby="basic-icon-default-fullname2"
                         {...register("placeHolderHeight")}
                       />
@@ -213,12 +197,6 @@ export default function CreateProductBlueprintForm(
 
                   <div className="col-sm-9">
                     <div className="input-group input-group-merge">
-                      <span
-                        id="basic-icon-default-fullname2"
-                        className="input-group-text"
-                      >
-                        <i className="bx bx-user" />
-                      </span>
                       <input
                         type="text"
                         className="form-control"
@@ -270,6 +248,7 @@ export default function CreateProductBlueprintForm(
                           onClick={onImageUpload}
                           {...dragProps}
                           type="button"
+                          className="btn btn-primary"
                         >
                           Update Image
                         </button>

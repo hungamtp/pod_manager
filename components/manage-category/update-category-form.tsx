@@ -40,6 +40,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
   const [images, setImages] = React.useState<ImageListType>([
     { data_url: category.image },
   ]);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const defaultValues: UpdateCategoryDto = {
     id: "",
@@ -60,8 +61,14 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
     reset(category);
   }, [category]);
 
-  const { mutate: updateCategory, error } =
+  const { mutate: updateCategory, isLoading: isLoadingUpdateCategory } =
     useUpdateCategory(handleCloseDialog);
+
+  React.useEffect(() => {
+    if (isLoadingUpdateCategory === false) {
+      setIsLoading(false);
+    }
+  }, [isLoadingUpdateCategory]);
 
   const maxNumber = 69;
   const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
@@ -69,6 +76,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
     // data for submit
   };
   const onUploadImage = (data: { name: string; image: string }) => {
+    setIsLoading(true);
     if (images !== null) {
       const file = images[0].file;
       const imageRef = ref(storage, `images/${file?.name}`);
@@ -178,6 +186,13 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
                     color="primary"
                     type="submit"
                   >
+                    {isLoading === true && (
+                      <span
+                        className="spinner-border spinner-border-sm me-1"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    )}
                     UPDATE
                   </button>
                   <button

@@ -43,6 +43,7 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
   const { handleCloseDialog } = props;
   const [role, setRole] = React.useState("USER");
   const [images, setImages] = React.useState<ImageListType>([]);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleChange = (event: SelectChangeEvent) => {
     setRole(event.target.value);
@@ -67,6 +68,7 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
     // data for submit
   };
   const onUploadImage = (data: { name: string; image: string }) => {
+    setIsLoading(true);
     if (images !== null) {
       const file = images[0].file;
       const imageRef = ref(storage, `images/${file?.name}`);
@@ -78,12 +80,17 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
       });
     }
   };
-  const { mutate: addCategory, error } = useCreateCategory(handleCloseDialog);
+  const { mutate: addCategory, isLoading: isLoadingCreateCategory } =
+    useCreateCategory(handleCloseDialog);
 
   const onSubmit: SubmitHandler<FormCreateAccount> = (data) => {
     onUploadImage(data);
   };
-
+  React.useEffect(() => {
+    if (isLoadingCreateCategory === false) {
+      setIsLoading(false);
+    }
+  }, [isLoadingCreateCategory]);
   return (
     <>
       <div className="col-xxl">
@@ -173,6 +180,13 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
                     color="primary"
                     type="submit"
                   >
+                    {isLoading === true && (
+                      <span
+                        className="spinner-border spinner-border-sm me-1"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    )}
                     CREATE
                   </button>
                   <button

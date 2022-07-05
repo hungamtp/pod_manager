@@ -53,6 +53,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
   });
   const { data: response, isLoading: isLoadingCategory } =
     useCategories(filter);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const defaultValues: UpdateProductDto = {
     id: "",
@@ -77,8 +78,13 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
     setCategoryName(product.categoryName);
   }, [product]);
 
-  const { mutate: updateProduct, error } = useUpdateProduct(handleCloseDialog);
-
+  const { mutate: updateProduct, isLoading: isLoadingUpdateProduct } =
+    useUpdateProduct(handleCloseDialog);
+  React.useEffect(() => {
+    if (isLoadingUpdateProduct === false) {
+      setIsLoading(false);
+    }
+  }, [isLoadingUpdateProduct]);
   const maxNumber = 69;
   const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
     setImages(imageList);
@@ -90,6 +96,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
     description: string;
     categoryName: string;
   }) => {
+    setIsLoading(true);
     if (images !== null) {
       const imageList = [] as string[];
       images?.map((image) => {
@@ -283,6 +290,13 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
                     color="primary"
                     type="submit"
                   >
+                    {isLoading === true && (
+                      <span
+                        className="spinner-border spinner-border-sm me-1"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    )}
                     UPDATE
                   </button>
                   <button
