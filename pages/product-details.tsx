@@ -32,6 +32,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { UpdateProductBlueprintDto } from "@/services/products/dto/update-product-blueprint-dto";
 import { ProductBlueprintDto } from "@/services/products/dto/get-product-blueprint-dto";
 import UpdateProductBlueprintForm from "@/components/manage-product/update-product-blueprint-form";
+import { numberWithCommas } from "@/helpers/number-util";
 
 export interface IProductDetailsProps {}
 
@@ -425,13 +426,23 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                                     {x.factory.name}
                                                   </strong>
                                                 </td>
-                                                <td>
+                                                <td
+                                                  style={{
+                                                    whiteSpace: "pre-wrap",
+                                                    wordWrap: "break-word",
+                                                  }}
+                                                >
                                                   <strong>
-                                                    {x.factory.location}
+                                                    {x.factory.location}{" "}
                                                   </strong>
                                                 </td>
                                                 <td>
-                                                  <strong>{x.price}</strong>
+                                                  <strong>
+                                                    {numberWithCommas(
+                                                      Number(x.price)
+                                                    )}{" "}
+                                                    VNĐ
+                                                  </strong>
                                                 </td>
                                               </tr>
                                             </tbody>
@@ -655,59 +666,61 @@ export default function ProductDetails(props: IProductDetailsProps) {
                       {responseSizesColorById &&
                       responseSizesColorById.data.sizes.length > 0 ? (
                         <div key={nanoid()}>
-                          <table className="table table-sm mb-3 col-md-6">
-                            <thead>
-                              <tr>
-                                <th>
-                                  <strong>Size</strong>
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="table-border-bottom-0">
-                              {responseSizesColorById.data.sizes.map(
-                                (sizes) => (
-                                  <tr key={nanoid()}>
-                                    <td>
-                                      <strong>{sizes}</strong>
-                                    </td>
-                                  </tr>
-                                )
-                              )}
-                            </tbody>
-                          </table>
-                          <table className="table table-sm mb-3 col-md-6">
-                            <thead>
-                              <tr>
-                                <th>
-                                  <strong>Color</strong>
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody className="table-border-bottom-0">
-                              {responseSizesColorById.data.colors.map(
-                                (colors) => (
-                                  <tr key={nanoid()}>
-                                    <td>
-                                      <img
-                                        key={colors.image}
-                                        width={25}
-                                        height={25}
-                                        className="rounded-circle border me-1"
-                                        src={
-                                          "https://images.printify.com/5853fec7ce46f30f8328200a"
-                                        }
-                                        style={{
-                                          backgroundColor: colors.image,
-                                        }}
-                                        alt={colors.image}
-                                      />
-                                      <strong>{colors.name}</strong>
-                                    </td>
-                                  </tr>
-                                )
-                              )}
-                            </tbody>
-                          </table>
+                          <div className="d-flex">
+                            <table className="table table-borderless ">
+                              <thead className="border-bottom">
+                                <tr>
+                                  <th>
+                                    <strong>Size</strong>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody className="table-border-bottom-0">
+                                {responseSizesColorById.data.sizes.map(
+                                  (sizes) => (
+                                    <tr key={nanoid()}>
+                                      <td>
+                                        <strong>{sizes}</strong>
+                                      </td>
+                                    </tr>
+                                  )
+                                )}
+                              </tbody>
+                            </table>
+                            <table className="table table-borderless ">
+                              <thead className="border-bottom">
+                                <tr>
+                                  <th>
+                                    <strong>Color</strong>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody className="table-border-bottom-0">
+                                {responseSizesColorById.data.colors.map(
+                                  (colors) => (
+                                    <tr key={nanoid()}>
+                                      <td>
+                                        <img
+                                          key={colors.image}
+                                          width={25}
+                                          height={25}
+                                          className="rounded-circle border me-1"
+                                          src={
+                                            "https://images.printify.com/5853fec7ce46f30f8328200a"
+                                          }
+                                          style={{
+                                            backgroundColor: colors.image,
+                                          }}
+                                          alt={colors.image}
+                                        />
+                                        <strong>{colors.name}</strong>
+                                      </td>
+                                    </tr>
+                                  )
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
                       ) : (
                         <div className="h3 text-center p-3">

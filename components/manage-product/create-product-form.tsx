@@ -54,7 +54,7 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
   const { handleCloseDialog } = props;
   const [categoryName, setCategoryName] = React.useState("");
   const [images, setImages] = React.useState<ImageListType>([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleChange = (event: SelectChangeEvent) => {
     setCategoryName(event.target.value);
   };
@@ -78,6 +78,7 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
   const maxNumber = 69;
   const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
     setImages(imageList);
+
     // data for submit
   };
   const onUploadImage = (data: {
@@ -88,6 +89,7 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
   }) => {
     if (images !== null) {
       const imageList = [] as string[];
+      setIsLoading(true);
       images.map((image) => {
         const file = image.file;
         const imageRef = ref(storage, `images/${file?.name}`);
@@ -103,13 +105,21 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
       });
     }
   };
+
   const [filter, setFilter] = useState<Filter>({
     pageNumber: 0,
     pageSize: 10,
   });
   const { data: response, isLoading: isLoadingCategory } =
     useCategories(filter);
-  const { mutate: addProduct, error } = useCreateProduct(handleCloseDialog);
+  const { mutate: addProduct, isLoading: isLoadingCreateProduct } =
+    useCreateProduct(handleCloseDialog);
+
+  React.useEffect(() => {
+    if (isLoadingCreateProduct === false) {
+      setIsLoading(false);
+    }
+  }, [isLoadingCreateProduct]);
 
   const onSubmit: SubmitHandler<FormCreateProduct> = (data) => {
     data.categoryName = categoryName;
@@ -267,6 +277,13 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                     color="primary"
                     type="submit"
                   >
+                    {isLoading === true && (
+                      <span
+                        className="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    )}
                     CREATE
                   </button>
                   <button

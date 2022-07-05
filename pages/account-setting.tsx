@@ -44,7 +44,7 @@ const schema = yup.object().shape({
   address: yup
     .string()
     .min(10, "Địa chỉ cần ít nhất 10 kí tự")
-    .max(50, "Địa chỉ tối đa 50 kí tự")
+    .max(300, "Địa chỉ tối đa 300 kí tự")
     .required("Địa chỉ không được để trống"),
 });
 
