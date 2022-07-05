@@ -56,9 +56,10 @@ const schema = yup.object().shape({
 export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
   const { handleCloseDialog } = props;
   const [role, setRole] = React.useState("USER");
-  const { mutate: addFactoryAcount, error } =
+  const { mutate: addFactoryAcount, isLoading: isLoadingCreateFactoryAccount } =
     useCreateFactoryAccount(handleCloseDialog);
   const [images, setImages] = React.useState<ImageListType>([]);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleChange = (event: SelectChangeEvent) => {
     setRole(event.target.value);
@@ -81,12 +82,19 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
     resolver: yupResolver(schema),
   });
 
+  React.useEffect(() => {
+    if (isLoadingCreateFactoryAccount === false) {
+      setIsLoading(false);
+    }
+  }, [isLoadingCreateFactoryAccount]);
+
   const maxNumber = 69;
   const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
     setImages(imageList);
     // data for submit
   };
   const onUploadImage = (data: FormCreateFactoryAccount) => {
+    setIsLoading(true);
     if (images !== null) {
       const file = images[0].file;
       const imageRef = ref(storage, `images/${file?.name}`);
@@ -319,6 +327,13 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                     color="primary"
                     type="submit"
                   >
+                    {isLoading === true && (
+                      <span
+                        className="spinner-border spinner-border-sm me-1"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    )}
                     CREATE
                   </button>
                   <button
