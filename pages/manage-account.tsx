@@ -308,10 +308,13 @@ export default function ManageAccount(props: IManageAccountProps) {
 
                         <td>{x.email}</td>
                         <td>{x.phone}</td>
-                        <td>
-                          <textarea rows={3} disabled>
-                            {x.address}
-                          </textarea>
+                        <td
+                          style={{
+                            whiteSpace: "pre-wrap",
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          {x.address}
                         </td>
                         <td>
                           {x.roleName == "ADMIN" && (

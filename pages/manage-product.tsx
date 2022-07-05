@@ -345,7 +345,14 @@ export default function ManageProduct(props: IManageProductProps) {
                             </span>
                           )}
                         </td>
-                        <td>{x.description}</td>
+                        <td
+                          style={{
+                            whiteSpace: "pre-wrap",
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          {x.description}{" "}
+                        </td>
 
                         {/* <td>{x.productTags[0].tag.name}</td> */}
                         <td>

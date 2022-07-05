@@ -15,6 +15,7 @@ import DialogContent from "@mui/material/DialogContent";
 import { nanoid } from "@reduxjs/toolkit";
 import useGetProductForFactory from "hooks/factories/use-get-product-for-factory";
 import useGetSizesColorsById from "hooks/products/use-get-sizes-colors-by-id";
+import SizesColorsProduct from "@/components/manage-factory/size-color-product";
 export interface FactoryDetailsProps {}
 
 const schema = yup.object().shape({
@@ -106,7 +107,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                     handleCloseDialog={handleCloseCreateDialog}
                     factoryId={responseFactory?.data.id}
                     productId={productId}
-                    colors={responseSizesColorById?.data.colors}
+                    colors={responseSizesColorById.data.colors}
                     sizes={responseSizesColorById.data.sizes}
                   />
                 </DialogContent>
@@ -119,46 +120,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                 fullWidth={true}
               >
                 <DialogContent>
-                  <div className="card">
-                    <h5 className="card-header">Size-Color</h5>
-                    <div className="table-responsive text-nowrap">
-                      {!isLoadingFactory &&
-                      responseFactory &&
-                      responseFactory.data.productDtoList[index].sizeColors
-                        .length > 0 ? (
-                        <table className="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th>
-                                <strong>color</strong>
-                              </th>
-                              <th>
-                                <strong>Size</strong>
-                              </th>
-                              <th>
-                                <strong>quantity</strong>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {responseFactory.data.productDtoList[
-                              index
-                            ]?.sizeColors.map((x) => (
-                              <tr key={nanoid()}>
-                                <td>{x.colorImage}</td>
-                                <td>{x.size}</td>
-                                <td>{x.quantity}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      ) : (
-                        <div className="h4 text-center p-3">
-                          This product does not have any Sizes-Colors yet
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  <SizesColorsProduct factoryId={id as string} index={index} />
                 </DialogContent>
               </Dialog>
             </>

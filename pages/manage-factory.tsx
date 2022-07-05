@@ -193,7 +193,14 @@ export default function ManageFactory(props: IManageFactory) {
                         </td>
                         <td>{x.email}</td>
                         <td>{x.phone}</td>
-                        <td>{x.address}</td>
+                        <td
+                          style={{
+                            whiteSpace: "pre-wrap",
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          {x.address}
+                        </td>
                         <td>
                           {x.collaborating == true && (
                             <span className="badge bg-label-info me-1">
