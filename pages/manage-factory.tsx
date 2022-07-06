@@ -152,7 +152,7 @@ export default function ManageFactory(props: IManageFactory) {
         </Dialog>
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4"></h4>
+          <h3 className="fw-bold py-3 mb-4">Nhà Máy</h3>
           <button
             className="btn btn-success ms-4 text-dark"
             onClick={handleOpenCreateDialog}

@@ -214,7 +214,7 @@ export default function NavBar({}: Props) {
             <ListItemIcon className="pl-2p">
               <AccountCircleIcon />
             </ListItemIcon>
-            <ListItemText primary="Quản lý tài khoản" />
+            <ListItemText primary="Tài khoản cá nhân" />
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
           <Collapse in={open} timeout="auto" className="pl-4p " unmountOnExit>
@@ -227,7 +227,7 @@ export default function NavBar({}: Props) {
                 <ListItemIcon>
                   <AccountCircleIcon />
                 </ListItemIcon>
-                <ListItemText primary="Tài khoản" />
+                <ListItemText primary="Thông tin" />
               </ListItemButton>
             </List>
             <List component="div">
@@ -246,9 +246,6 @@ export default function NavBar({}: Props) {
         </List>
         {/* {Manage Account} */}
 
-        <li className="menu-header small text-uppercase">
-          <span className="menu-header-text">Quản lý tài khoản</span>
-        </li>
         <List
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
         >
