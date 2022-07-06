@@ -101,7 +101,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
 
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4"></h4>
+          <h3 className="fw-bold py-3 mb-4">Category</h3>
           <button
             className="btn btn-success ms-4 mb-4 text-dark"
             onClick={handleIsEditFalse}
@@ -186,7 +186,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Categories management</h5>
+            <h5 className="card-header">Quản lý Categories</h5>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>
