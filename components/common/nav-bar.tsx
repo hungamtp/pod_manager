@@ -201,7 +201,7 @@ export default function NavBar({}: Props) {
 
         {/* {Account Setting} */}
         <li className="menu-header small text-uppercase">
-          <span className="menu-header-text">Account Setting</span>
+          <span className="menu-header-text">Quản lý tài khoản</span>
         </li>
 
         {/* {Manage Account} */}
@@ -214,7 +214,7 @@ export default function NavBar({}: Props) {
             <ListItemIcon className="pl-2p">
               <AccountCircleIcon />
             </ListItemIcon>
-            <ListItemText primary="Account Setting" />
+            <ListItemText primary="Quản lý tài khoản" />
             {open ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
           <Collapse in={open} timeout="auto" className="pl-4p " unmountOnExit>
@@ -227,7 +227,7 @@ export default function NavBar({}: Props) {
                 <ListItemIcon>
                   <AccountCircleIcon />
                 </ListItemIcon>
-                <ListItemText primary="Account" />
+                <ListItemText primary="Tài khoản" />
               </ListItemButton>
             </List>
             <List component="div">
@@ -239,7 +239,7 @@ export default function NavBar({}: Props) {
                 <ListItemIcon>
                   <LogoutIcon />
                 </ListItemIcon>
-                <ListItemText primary="Log out" />
+                <ListItemText primary="Đăng xuất" />
               </ListItemButton>
             </List>
           </Collapse>
@@ -247,7 +247,7 @@ export default function NavBar({}: Props) {
         {/* {Manage Account} */}
 
         <li className="menu-header small text-uppercase">
-          <span className="menu-header-text">manage account</span>
+          <span className="menu-header-text">Quản lý tài khoản</span>
         </li>
         <List
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
@@ -260,7 +260,7 @@ export default function NavBar({}: Props) {
             <ListItemIcon className="pl-2p">
               <BadgeIcon />
             </ListItemIcon>
-            <ListItemText primary="Manage Account" />
+            <ListItemText primary="Quản lý tài khoản" />
           </ListItemButton>
         </List>
 
@@ -275,7 +275,7 @@ export default function NavBar({}: Props) {
             <ListItemIcon className="pl-2p">
               <FactoryIcon />
             </ListItemIcon>
-            <ListItemText primary="Manage Factory" />
+            <ListItemText primary="Quản lý Nhà máy" />
           </ListItemButton>
         </List>
 
@@ -283,7 +283,7 @@ export default function NavBar({}: Props) {
 
         {/* {Manage designed product} */}
         <li className="menu-header small text-uppercase">
-          <span className="menu-header-text">Manage product</span>
+          <span className="menu-header-text">Quản lý Sản phẩm</span>
         </li>
 
         <List
@@ -324,7 +324,7 @@ export default function NavBar({}: Props) {
                 </g>
               </svg>
             </ListItemIcon>
-            <ListItemText primary="Manage Product" />
+            <ListItemText primary="Quản lý sản phẩm thô" />
           </ListItemButton>
         </List>
         <List
@@ -338,7 +338,7 @@ export default function NavBar({}: Props) {
             <ListItemIcon className="pl-2p">
               <CategoryIcon />
             </ListItemIcon>
-            <ListItemText primary="Manage category" />
+            <ListItemText primary="Quản lý Category" />
           </ListItemButton>
         </List>
 
@@ -353,7 +353,7 @@ export default function NavBar({}: Props) {
             <ListItemIcon className="pl-2p">
               <HeightIcon />
             </ListItemIcon>
-            <ListItemText primary="Manage Size" />
+            <ListItemText primary="Quản lý Kích thước" />
           </ListItemButton>
         </List>
 
@@ -368,93 +368,12 @@ export default function NavBar({}: Props) {
             <ListItemIcon className="pl-2p">
               <ColorLensIcon />
             </ListItemIcon>
-            <ListItemText primary="Manage Color" />
+            <ListItemText primary="Quản lý màu" />
           </ListItemButton>
         </List>
         {/* {/Manage designed product} */}
 
         {/* {Manage Order} */}
-        <li className="menu-header small text-uppercase">
-          <span className="menu-header-text">Order</span>
-        </li>
-        <li className="menu-item">
-          <a href="\table" className="menu-link">
-            <i className="menu-icon tf-icons bx bx-box"></i>
-            <div data-i18n="Tables">Check Order</div>
-          </a>
-        </li>
-        {/* {/Manage Order} */}
-
-        {/* {Manage Discount} */}
-        <li className="menu-header small text-uppercase">
-          <span className="menu-header-text">Manage Discount</span>
-        </li>
-        <li className="menu-item">
-          <a href="" className="menu-link menu-toggle">
-            <i className="menu-icon tf-icons bx bx-crown"></i>
-            <div data-i18n="Form Layouts">Discount</div>
-          </a>
-          <ul className="menu-sub">
-            <li className="menu-item">
-              <a href="\basic-input" className="menu-link">
-                <div data-i18n="Horizontal Form">abc</div>
-              </a>
-            </li>
-            <li className="menu-item">
-              <a href="\horizontal-form" className="menu-link">
-                <div data-i18n="Horizontal Form">asdasd</div>
-              </a>
-            </li>
-          </ul>
-        </li>
-        {/* {/Manage Order} */}
-        <li className="menu-header small text-uppercase">
-          <span className="menu-header-text">Forms &amp; Tables</span>
-        </li>
-        <li className="menu-item">
-          <a href="" className="menu-link menu-toggle">
-            <i className="menu-icon tf-icons bx bx-detail"></i>
-            <div data-i18n="Form Layouts">Form Layouts</div>
-          </a>
-          <ul className="menu-sub">
-            <li className="menu-item">
-              <a href="\basic-input" className="menu-link">
-                <div data-i18n="Horizontal Form">basic input</div>
-              </a>
-            </li>
-            <li className="menu-item">
-              <a href="\horizontal-form" className="menu-link">
-                <div data-i18n="Horizontal Form">Horizontal Form</div>
-              </a>
-            </li>
-          </ul>
-        </li>
-
-        <li className="menu-item">
-          <a href="\table" className="menu-link">
-            <i className="menu-icon tf-icons bx bx-table"></i>
-            <div data-i18n="Tables">Tables</div>
-          </a>
-        </li>
-
-        <li className="menu-header small text-uppercase">
-          <span className="menu-header-text">Misc</span>
-        </li>
-        <li className="menu-item">
-          <a href="https://gitlab.com/duynk-hub" className="menu-link">
-            <i className="menu-icon tf-icons bx bx-support"></i>
-            <div data-i18n="Support">Support</div>
-          </a>
-        </li>
-        <li className="menu-item">
-          <a
-            href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
-            className="menu-link"
-          >
-            <i className="menu-icon tf-icons bx bx-file"></i>
-            <div data-i18n="Documentation">Documentation</div>
-          </a>
-        </li>
       </ul>
     </aside>
   );

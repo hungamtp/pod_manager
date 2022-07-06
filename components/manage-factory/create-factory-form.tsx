@@ -120,13 +120,13 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Name
+                  Tên nhà máy
                 </label>
 
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-fullname2"
@@ -137,7 +137,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                     <input
                       type="text"
                       className="form-control"
-                      placeholder="Potato Factory"
+                      placeholder="A company"
                       id="basic-icon-default-fullname"
                       aria-describedby="basic-icon-default-fullname2"
                       {...register("name")}
@@ -152,12 +152,12 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-company"
                 >
-                  Pass Word
+                  Mật khẩu
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-company2"
@@ -184,12 +184,12 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-email"
                 >
                   Email
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span className="input-group-text">
                       <i className="bx bx-envelope" />
@@ -198,7 +198,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                       type="text"
                       id="basic-icon-default-email"
                       className="form-control"
-                      placeholder="john.doe@gmail.com"
+                      placeholder="acompany@gmail.com"
                       aria-describedby="basic-icon-default-email2"
                       {...register("email")}
                     />
@@ -212,12 +212,12 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 form-label"
+                  className="col-sm-3 form-label"
                   htmlFor="basic-icon-default-phone"
                 >
-                  Phone No
+                  Số điện thoại
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-phone2"
@@ -229,7 +229,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                       type="text"
                       id="basic-icon-default-phone"
                       className="form-control phone-mask"
-                      placeholder="093 847 8347"
+                      placeholder="0938478347"
                       aria-describedby="basic-icon-default-phone2"
                       {...register("phone")}
                     />
@@ -243,12 +243,12 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 form-label"
+                  className="col-sm-3 form-label"
                   htmlFor="basic-icon-default-message"
                 >
-                  Address
+                  Địa chỉ
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-message2"
@@ -273,12 +273,12 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Logo
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <ImageUploading
                     value={images}
                     onChange={onChange}
@@ -308,7 +308,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                           {...dragProps}
                           type="button"
                         >
-                          Update image
+                          Tải lên
                         </button>
                       </div>
                     )}
@@ -321,7 +321,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                 </div>
               </div>
               <div className="d-flex justify-content-center">
-                <div className="col-sm-10 d-flex justify-content-around">
+                <div className="col-sm-9 d-flex justify-content-around">
                   <button
                     className="btn btn-primary"
                     color="primary"
@@ -334,7 +334,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                         aria-hidden="true"
                       ></span>
                     )}
-                    CREATE
+                    Tạo mới
                   </button>
                   <button
                     className="btn btn-secondary"
@@ -342,7 +342,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                     autoFocus
                     type="button"
                   >
-                    CANCEL
+                    Hủy
                   </button>
                 </div>
               </div>

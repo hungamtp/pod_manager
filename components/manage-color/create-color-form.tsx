@@ -74,7 +74,7 @@ export default function CreateColorForm(props: ICreateColorFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Color Name
+                  Tên màu
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
@@ -97,7 +97,7 @@ export default function CreateColorForm(props: ICreateColorFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Color Image
+                  Chọn màu
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
@@ -123,7 +123,7 @@ export default function CreateColorForm(props: ICreateColorFormProps) {
                     color="primary"
                     type="submit"
                   >
-                    CREATE
+                    Tạo mới
                   </button>
                   <button
                     className="btn btn-secondary"
@@ -131,7 +131,7 @@ export default function CreateColorForm(props: ICreateColorFormProps) {
                     autoFocus
                     type="button"
                   >
-                    CANCEL
+                    Hủy
                   </button>
                 </div>
               </div>

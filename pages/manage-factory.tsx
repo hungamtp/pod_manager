@@ -77,7 +77,7 @@ export default function ManageFactory(props: IManageFactory) {
           fullWidth={true}
         >
           <DialogTitle id="alert-dialog-title">
-            {"Bạn có muốn delete category này không?"}
+            {"Bạn có muốn ngừng hợp tác với nhà máy này không?"}
           </DialogTitle>
           <DialogContent>
             <div className="d-flex justify-content-center">
@@ -89,14 +89,14 @@ export default function ManageFactory(props: IManageFactory) {
                     // onDelete(isDelete);
                   }}
                 >
-                  Delete
+                  Ngừng
                 </button>
                 <button
                   className="btn btn-secondary"
                   onClick={handleCloseDeleteDialog}
                   autoFocus
                 >
-                  CANCEL
+                  Hủy
                 </button>
               </div>
             </div>
@@ -110,9 +110,7 @@ export default function ManageFactory(props: IManageFactory) {
           aria-describedby="alert-dialog-description"
           fullWidth={true}
         >
-          <DialogTitle id="alert-dialog-title">
-            {"Create New Factory"}
-          </DialogTitle>
+          <DialogTitle id="alert-dialog-title">{"Tạo mới nhà máy"}</DialogTitle>
           <DialogContent>
             <CreateFactoryForm handleCloseDialog={handleCloseCreateDialog} />
           </DialogContent>
@@ -126,7 +124,7 @@ export default function ManageFactory(props: IManageFactory) {
           fullWidth={true}
         >
           <DialogTitle id="alert-dialog-title">
-            {"Do you want to delete this Category?"}
+            {"Bạn có muốn ngừng hợp tác với nhà máy này không?"}
           </DialogTitle>
           <DialogContent>
             <div className="d-flex justify-content-center">
@@ -138,14 +136,14 @@ export default function ManageFactory(props: IManageFactory) {
                     onDelete(isDelete);
                   }}
                 >
-                  Delete
+                  Có
                 </button>
                 <button
                   className="btn btn-secondary"
                   onClick={handleCloseDeleteDialog}
                   autoFocus
                 >
-                  CANCEL
+                  Không
                 </button>
               </div>
             </div>
@@ -154,33 +152,30 @@ export default function ManageFactory(props: IManageFactory) {
         </Dialog>
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Mangage Account /</span>
-            Manage Factory
-          </h4>
+          <h4 className="fw-bold py-3 mb-4"></h4>
           <button
             className="btn btn-success ms-4 text-dark"
             onClick={handleOpenCreateDialog}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create New Factory
+            Tạo Mới Nhà Máy
           </button>
           <hr className="my-4" />
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Factory management</h5>
+            <h5 className="card-header">Quản lý Nhà Máy</h5>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>
                   <tr>
-                    <th>Name</th>
+                    <th>Tên</th>
                     <th>Email</th>
-                    <th>Phone</th>
-                    <th>Location</th>
-                    <th>Is Collaborating</th>
-                    <th>Actions</th>
-                    <th>Details</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Trạng thái</th>
+                    <th>Hành Động</th>
+                    <th>Chi tiết</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">
@@ -241,7 +236,7 @@ export default function ManageFactory(props: IManageFactory) {
                                   );
                                 }}
                               >
-                                Detail
+                                Chi tiết
                               </button>
                             </div>
                           )}

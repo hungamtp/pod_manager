@@ -51,19 +51,15 @@ export default function ManageSize(props: IManageSize) {
 
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Manage Product /</span> Manage
-            Size
-          </h4>
+          <h4 className="fw-bold py-3 mb-4"></h4>
           <button
-            className="btn btn-success ms-4 text-dark"
+            className="btn btn-success ms-4 mb-4 text-dark"
             onClick={handleOpenCreate}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create New Size
+            Tạo mới kích thước
           </button>
 
-          <hr className="my-4" />
           <Dialog
             open={openDialog}
             onClose={handleCloseDialog}
@@ -72,7 +68,7 @@ export default function ManageSize(props: IManageSize) {
             fullWidth={true}
           >
             <DialogTitle id="alert-dialog-title">
-              {"Create New Size"}
+              {"Tạo mới kích thước"}
             </DialogTitle>
             <DialogContent>
               <CreateSizeForm handleCloseDialog={handleCloseDialog} />
@@ -83,13 +79,13 @@ export default function ManageSize(props: IManageSize) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Sizes management</h5>
+            <h4 className="card-header">Quản lý Kích thước</h4>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Name</th>
+                    <th>Kích thước</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">

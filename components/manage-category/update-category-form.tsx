@@ -108,7 +108,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
                   className="col-sm-2 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Category Name
+                  Tên Category
                 </label>
 
                 <div className="col-sm-10">
@@ -135,7 +135,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
                   className="col-sm-2 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Image
+                  Hình ảnh
                 </label>
                 <div className="col-sm-10">
                   <ImageUploading
@@ -167,7 +167,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
                           type="button"
                           className="btn btn-primary"
                         >
-                          Update Image
+                          Tải lên
                         </button>
                       </div>
                     )}
@@ -193,7 +193,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
                         aria-hidden="true"
                       ></span>
                     )}
-                    UPDATE
+                    Thay đổi
                   </button>
                   <button
                     className="btn btn-secondary"
@@ -201,7 +201,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
                     autoFocus
                     type="button"
                   >
-                    CANCEL
+                    Hủy
                   </button>
                 </div>
               </div>

@@ -127,7 +127,7 @@ export default function CreateSizeColorProductForm(
                   className="col-sm-2 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Color
+                  Màu
                 </label>
 
                 <FormControl sx={{ mb: 1, width: 400 }}>
@@ -196,7 +196,7 @@ export default function CreateSizeColorProductForm(
                   className="col-sm-2 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Sizes
+                  Kích thước
                 </label>
                 <FormControl sx={{ mb: 1, width: 400 }}>
                   <Select
@@ -242,7 +242,7 @@ export default function CreateSizeColorProductForm(
                   className="col-sm-2 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Quantity
+                  Số lượng
                 </label>
 
                 <div className="col-sm-10">
@@ -273,7 +273,7 @@ export default function CreateSizeColorProductForm(
                     color="primary"
                     type="submit"
                   >
-                    CREATE
+                    Tạo mới
                   </button>
                   <button
                     className="btn btn-secondary"
@@ -281,7 +281,7 @@ export default function CreateSizeColorProductForm(
                     autoFocus
                     type="button"
                   >
-                    CANCEL
+                    Hủy
                   </button>
                 </div>
               </div>

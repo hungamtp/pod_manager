@@ -99,13 +99,13 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Category Name
+                  Tên Category
                 </label>
 
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <input
                       type="text"
@@ -129,7 +129,7 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
                   className="col-sm-2 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Image
+                  Hình ảnh
                 </label>
                 <div className="col-sm-10">
                   <ImageUploading
@@ -161,7 +161,7 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
                           type="button"
                           className="btn btn-primary"
                         >
-                          Update Image
+                          Tải lên
                         </button>
                       </div>
                     )}
@@ -187,7 +187,7 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
                         aria-hidden="true"
                       ></span>
                     )}
-                    CREATE
+                    Tạo mới
                   </button>
                   <button
                     className="btn btn-secondary"
@@ -195,7 +195,7 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
                     autoFocus
                     type="button"
                   >
-                    CANCEL
+                    Hủy
                   </button>
                 </div>
               </div>

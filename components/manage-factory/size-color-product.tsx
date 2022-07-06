@@ -15,7 +15,7 @@ export default function SizesColorsProduct(props: ISizesColorsProductProps) {
   return (
     <>
       <div className="card">
-        <h5 className="card-header">Size-Color</h5>
+        <h5 className="card-header">Bảng Thông tin</h5>
         <div className="table-responsive text-nowrap">
           {!isLoadingFactory &&
           responseFactory &&
@@ -24,13 +24,13 @@ export default function SizesColorsProduct(props: ISizesColorsProductProps) {
               <thead>
                 <tr>
                   <th>
-                    <strong>color</strong>
+                    <strong>Màu</strong>
                   </th>
                   <th>
-                    <strong>Size</strong>
+                    <strong>Kích thước</strong>
                   </th>
                   <th>
-                    <strong>quantity</strong>
+                    <strong>Số lượng</strong>
                   </th>
                 </tr>
               </thead>
@@ -48,7 +48,7 @@ export default function SizesColorsProduct(props: ISizesColorsProductProps) {
             </table>
           ) : (
             <div className="h4 text-center p-3">
-              This product does not have any Sizes-Colors yet
+              Sản phẩm này tạm thời chưa có dữ liệu
             </div>
           )}
         </div>

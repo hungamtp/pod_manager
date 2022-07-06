@@ -137,7 +137,7 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Name
+                  Tên sản phẩm
                 </label>
 
                 <div className="col-sm-9">
@@ -146,8 +146,8 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                       type="text"
                       className="form-control"
                       id="basic-icon-default-fullname"
-                      placeholder="Product Name"
-                      aria-label="Product Name"
+                      placeholder="Tên sản phẩm"
+                      aria-label="Tên sản phẩm"
                       aria-describedby="basic-icon-default-fullname2"
                       {...register("name")}
                     />
@@ -164,7 +164,7 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Category Name
+                  Category
                 </label>
                 <div className="col-sm-9">
                   <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -196,7 +196,7 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-company"
                 >
-                  Description
+                  Mô tả
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
@@ -204,8 +204,8 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                       type="text"
                       id="basic-icon-default-company"
                       className="form-control"
-                      placeholder="Description"
-                      aria-label="Description"
+                      placeholder="Mô tả...."
+                      aria-label="Mô tả...."
                       aria-describedby="basic-icon-default-company2"
                       {...register("description")}
                     />
@@ -222,7 +222,7 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Image
+                  Hình ảnh
                 </label>
                 <div className="col-sm-9">
                   <ImageUploading
@@ -255,7 +255,7 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                           className="btn btn-primary"
                           type="button"
                         >
-                          Update Image
+                          Tải lên
                         </button>
                         &nbsp;
                         <button
@@ -263,7 +263,7 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                           className="btn btn-secondary"
                           onClick={onImageRemoveAll}
                         >
-                          Clear
+                          xóa
                         </button>
                       </div>
                     )}
@@ -284,7 +284,7 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                         aria-hidden="true"
                       ></span>
                     )}
-                    CREATE
+                    Tạo mới
                   </button>
                   <button
                     className="btn btn-secondary"
@@ -292,7 +292,7 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                     autoFocus
                     type="button"
                   >
-                    CANCEL
+                    Hủy
                   </button>
                 </div>
               </div>

@@ -135,7 +135,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Name
+                  Tên sản phẩm
                 </label>
 
                 <div className="col-sm-9">
@@ -143,9 +143,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
                     <span
                       id="basic-icon-default-fullname2"
                       className="input-group-text"
-                    >
-                      <i className="bx bx-user" />
-                    </span>
+                    ></span>
                     <input
                       type="text"
                       className="form-control"
@@ -168,7 +166,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Category Name
+                  Thể loại
                 </label>
 
                 <div className="col-sm-9">
@@ -202,7 +200,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Description
+                  Mô tả
                 </label>
 
                 <div className="col-sm-9">
@@ -210,11 +208,9 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
                     <span
                       id="basic-icon-default-fullname2"
                       className="input-group-text"
-                    >
-                      <i className="bx bx-user" />
-                    </span>
-                    <input
-                      type="text"
+                    ></span>
+                    <textarea
+                      rows={3}
                       className="form-control"
                       id="basic-icon-default-fullname"
                       placeholder="Hoodies"
@@ -235,7 +231,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Images
+                  Hình ảnh
                 </label>
                 <div className="col-sm-9">
                   <ImageUploading
@@ -268,7 +264,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
                           type="button"
                           className="btn btn-primary"
                         >
-                          Update Image
+                          Tải lên
                         </button>
                         &nbsp;
                         <button
@@ -276,7 +272,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
                           className="btn btn-secondary"
                           onClick={onImageRemoveAll}
                         >
-                          Clear
+                          Xóa
                         </button>
                       </div>
                     )}
@@ -297,7 +293,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
                         aria-hidden="true"
                       ></span>
                     )}
-                    UPDATE
+                    Thay đổi
                   </button>
                   <button
                     className="btn btn-secondary"
@@ -305,7 +301,7 @@ export default function UpdateProductForm(props: IUpdateProductFormProps) {
                     autoFocus
                     type="button"
                   >
-                    CANCEL
+                    Hủy
                   </button>
                 </div>
               </div>
