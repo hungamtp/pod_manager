@@ -42,7 +42,7 @@ export default function PublishProduct(props: IPublishProductProps) {
             onPublish(idProduct);
           }}
         >
-          YES
+          Có
         </button>
         <button
           className="btn btn-secondary"
@@ -50,7 +50,7 @@ export default function PublishProduct(props: IPublishProductProps) {
           autoFocus
           type="button"
         >
-          CANCEL
+          Không
         </button>
       </div>
     </div>

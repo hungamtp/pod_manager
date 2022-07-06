@@ -125,7 +125,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  First Name
+                  Tên
                 </label>
 
                 <div className="col-sm-9">
@@ -140,8 +140,8 @@ export default function UpdateForm(props: IUpdateFormProps) {
                       type="text"
                       className="form-control"
                       id="basic-icon-default-fullname"
-                      placeholder="John"
-                      aria-label="John"
+                      placeholder="A"
+                      aria-label="A"
                       aria-describedby="basic-icon-default-fullname2"
                       {...register("firstName")}
                     />
@@ -158,7 +158,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Last Name
+                  Họ
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
@@ -172,8 +172,8 @@ export default function UpdateForm(props: IUpdateFormProps) {
                       type="text"
                       className="form-control"
                       id="basic-icon-default-fullname"
-                      placeholder="Doe"
-                      aria-label="Doe"
+                      placeholder="Nguyen Van"
+                      aria-label="Nguyen Van"
                       aria-describedby="basic-icon-default-fullname2"
                       {...register("lastName")}
                     />
@@ -199,8 +199,8 @@ export default function UpdateForm(props: IUpdateFormProps) {
                       type="text"
                       id="basic-icon-default-email"
                       className="form-control"
-                      placeholder="john.doe"
-                      aria-label="john.doe"
+                      placeholder="nvana@gmail.com"
+                      aria-label="nvana@gmail.com"
                       readOnly
                       aria-describedby="basic-icon-default-email2"
                       {...register("email")}
@@ -218,7 +218,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
                   className="col-sm-3 form-label"
                   htmlFor="basic-icon-default-phone"
                 >
-                  Phone No
+                  Số điện thoại
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
@@ -250,7 +250,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
                   className="col-sm-3 form-label"
                   htmlFor="basic-icon-default-message"
                 >
-                  Address
+                  Địa chỉ
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
@@ -280,7 +280,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-company"
                 >
-                  Role Name
+                  Vị trí
                 </label>
                 <div className="col-sm-9">
                   <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -314,7 +314,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
                     color="primary"
                     type="submit"
                   >
-                    UPDATE
+                    Thay đổi
                   </button>
                   <button
                     className="btn btn-secondary"
@@ -322,7 +322,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
                     autoFocus
                     type="button"
                   >
-                    CANCEL
+                    hủy
                   </button>
                 </div>
               </div>

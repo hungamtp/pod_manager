@@ -138,16 +138,13 @@ export default function ManageProduct(props: IManageProductProps) {
 
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Manage Product /</span> Manage
-            Raw Product
-          </h4>
+          <h4 className="fw-bold py-3 mb-4"></h4>
           <button
             className="btn btn-success ms-4 text-dark"
             onClick={handleIsEditFalse}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create New Product
+            Tạo mới sản phẩm thô
           </button>
 
           <hr className="my-4" />
@@ -160,7 +157,7 @@ export default function ManageProduct(props: IManageProductProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Create New Product"}
+                {"Tạo mới sản phẩm thô"}
               </DialogTitle>
               <DialogContent>
                 <CreateProductForm handleCloseDialog={handleCloseDialog} />
@@ -177,7 +174,7 @@ export default function ManageProduct(props: IManageProductProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Update Product"}
+                {"Chỉnh sửa sản phẩm"}
               </DialogTitle>
               <DialogContent>
                 <UpdateProductForm
@@ -198,7 +195,7 @@ export default function ManageProduct(props: IManageProductProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Do you want to unpublish this Raw Product?"}
+                {"Bạn có muốn ngừng công bố sản phẩm thô này không?"}
               </DialogTitle>
               <DialogContent>
                 <UnPublishProduct
@@ -219,7 +216,7 @@ export default function ManageProduct(props: IManageProductProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Do you want to Publish this Raw Product?"}
+                {"Bạn có muốn công bố sản phẩm thô này không?"}
               </DialogTitle>
               <DialogContent>
                 <PublishProduct
@@ -239,7 +236,7 @@ export default function ManageProduct(props: IManageProductProps) {
             fullWidth={true}
           >
             <DialogTitle id="alert-dialog-title">
-              {"Do you want to delete this Raw Product?"}
+              {"Bạn có muốn xóa sản phẩm thô này không?"}
             </DialogTitle>
             <DialogContent>
               <div className="d-flex justify-content-center">
@@ -251,14 +248,14 @@ export default function ManageProduct(props: IManageProductProps) {
                       onDelete(isDelete);
                     }}
                   >
-                    Delete
+                    Xóa
                   </button>
                   <button
                     className="btn btn-secondary"
                     onClick={handleCloseDeleteDialog}
                     autoFocus
                   >
-                    CANCEL
+                    không
                   </button>
                 </div>
               </div>
@@ -296,19 +293,19 @@ export default function ManageProduct(props: IManageProductProps) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Products management</h5>
+            <h4 className="card-header">Quản lý sản phẩm thô</h4>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Product Image</th>
-                    <th>Category Name</th>
-                    <th>IS Public</th>
-                    <th>Description</th>
-                    <th>is Delete</th>
-                    <th>Actions</th>
-                    <th>Details</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Hình ảnh</th>
+                    <th>Thể loại</th>
+                    <th>Publish</th>
+                    <th>Mô tả sản phẩm</th>
+                    <th>Delete</th>
+                    <th>hành động</th>
+                    <th>Chi tiết</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">
@@ -424,7 +421,7 @@ export default function ManageProduct(props: IManageProductProps) {
                                 router.push(`/product-details?id=${x.id}`);
                               }}
                             >
-                              Detail
+                              Chi tiết
                             </button>
                           </div>
                         </td>

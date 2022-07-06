@@ -61,19 +61,15 @@ export default function ManageColor(props: IManageColor) {
 
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Manage Product /</span> Manage
-            Color
-          </h4>
+          <h4 className="fw-bold py-3 mb-4"></h4>
           <button
-            className="btn btn-success ms-4 text-dark"
+            className="btn btn-success ms-4 mb-4 text-dark"
             onClick={handleOpenCreate}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create New Color
+            Tạo màu mới
           </button>
 
-          <hr className="my-4" />
           <Dialog
             open={openDialog}
             onClose={handleCloseDialog}
@@ -81,9 +77,7 @@ export default function ManageColor(props: IManageColor) {
             aria-describedby="alert-dialog-description"
             fullWidth={true}
           >
-            <DialogTitle id="alert-dialog-title">
-              {"Create New Color"}
-            </DialogTitle>
+            <DialogTitle id="alert-dialog-title">{"Tạo màu mới"}</DialogTitle>
             <DialogContent>
               <CreateColorForm handleCloseDialog={handleCloseDialog} />
             </DialogContent>
@@ -99,7 +93,7 @@ export default function ManageColor(props: IManageColor) {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Name</th>
+                    <th>Màu</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">

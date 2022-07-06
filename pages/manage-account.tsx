@@ -129,16 +129,13 @@ export default function ManageAccount(props: IManageAccountProps) {
 
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Manage Account /</span> Manage
-            Account
-          </h4>
+          <h4 className="fw-bold py-3 mb-4"></h4>
           <button
             className="btn btn-success ms-4 text-dark"
             onClick={handleIsEditFalse}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create New Account
+            Tạo mới tài khoản
           </button>
 
           <hr className="my-4" />
@@ -151,7 +148,7 @@ export default function ManageAccount(props: IManageAccountProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Create New Account"}
+                {"Tạo mới tài khoản"}
               </DialogTitle>
               <DialogContent>
                 <CreateForm handleCloseDialog={handleCloseDialog} />
@@ -187,7 +184,7 @@ export default function ManageAccount(props: IManageAccountProps) {
             fullWidth={true}
           >
             <DialogTitle id="alert-dialog-title">
-              {"Bạn có muốn delete category này không?"}
+              {"Bạn có muốn xóa tài khoản này không?"}
             </DialogTitle>
             <DialogContent>
               <div className="d-flex justify-content-center">
@@ -199,14 +196,14 @@ export default function ManageAccount(props: IManageAccountProps) {
                       onDelete(isDelete);
                     }}
                   >
-                    Delete
+                    Xóa
                   </button>
                   <button
                     className="btn btn-secondary"
                     onClick={handleCloseDeleteDialog}
                     autoFocus
                   >
-                    CANCEL
+                    Hủy
                   </button>
                 </div>
               </div>
@@ -239,7 +236,7 @@ export default function ManageAccount(props: IManageAccountProps) {
                   variant="standard"
                 >
                   <MenuItem className="d-flex flex-column" value="All">
-                    All
+                    Tất cả
                   </MenuItem>
                   {/* <MenuItem className="d-flex flex-column" value="ID">
                     ID
@@ -248,7 +245,7 @@ export default function ManageAccount(props: IManageAccountProps) {
                     Email
                   </MenuItem>
                   <MenuItem className="d-flex flex-column" value="RoleName">
-                    Role Name
+                    Vị trí
                   </MenuItem>
                 </Select>
               </FormControl>
@@ -278,19 +275,19 @@ export default function ManageAccount(props: IManageAccountProps) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Account management</h5>
+            <h5 className="card-header">Quản lý tài khoản</h5>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>
                   <tr>
-                    <th>Last Name</th>
-                    <th>First Name</th>
+                    <th>Họ</th>
+                    <th>Tên</th>
                     <th>Email</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>Số điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th>Vị trí</th>
+                    <th>Trạng thái</th>
+                    <th>hành động</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">

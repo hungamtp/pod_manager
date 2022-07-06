@@ -102,17 +102,17 @@ export default function CreateProductBlueprintForm(
                   className="col-sm-2 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Position
+                  Vị trí
                 </label>
 
                 <div className="col-sm-10">
                   <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                    <InputLabel id="demo-select-small">Position</InputLabel>
+                    <InputLabel id="demo-select-small">Vị trí</InputLabel>
                     <Select
                       labelId="demo-select-small"
                       id="demo-select-small"
                       value={position}
-                      label="Position"
+                      label="Vị trí"
                       onChange={handleChange}
                     >
                       <MenuItem className="d-flex flex-column" value="Back">
@@ -218,7 +218,7 @@ export default function CreateProductBlueprintForm(
                   className="col-sm-2 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Image
+                  Hình ảnh
                 </label>
                 <div className="col-sm-10">
                   <ImageUploading
@@ -250,7 +250,7 @@ export default function CreateProductBlueprintForm(
                           type="button"
                           className="btn btn-primary"
                         >
-                          Update Image
+                          Tải lên
                         </button>
                       </div>
                     )}
@@ -269,7 +269,7 @@ export default function CreateProductBlueprintForm(
                     color="primary"
                     type="submit"
                   >
-                    CREATE
+                    Tạo mới
                   </button>
                   <button
                     className="btn btn-secondary"
@@ -277,7 +277,7 @@ export default function CreateProductBlueprintForm(
                     autoFocus
                     type="button"
                   >
-                    CANCEL
+                    Hủy
                   </button>
                 </div>
               </div>

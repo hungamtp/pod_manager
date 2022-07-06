@@ -28,7 +28,7 @@ export default function UnPublishProduct(props: IUnPublishProductProps) {
             handleClosePublishDialog;
           }}
         >
-          YES
+          Có
         </button>
         <button
           className="btn btn-secondary"
@@ -36,7 +36,7 @@ export default function UnPublishProduct(props: IUnPublishProductProps) {
           autoFocus
           type="button"
         >
-          CANCEL
+          Không
         </button>
       </div>
     </div>

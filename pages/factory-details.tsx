@@ -146,10 +146,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
 
       <div>
         <div className="container-xxl flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Manage Factory /</span>{" "}
-            Factory Details
-          </h4>
+          <h4 className="fw-bold py-3 mb-4"></h4>
           <div className="card-body">
             <div className="d-flex align-items-start align-items-sm-center gap-4">
               <img
@@ -171,7 +168,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
             <div className="col-md-12">
               {!isLoadingFactory && responseFactory && (
                 <div className="card mb-4">
-                  <h5 className="card-header">Factory Details</h5>
+                  <h4 className="card-header">Thông tin chi tiết</h4>
                   {/* Account */}
 
                   <div className="card-body">
@@ -193,7 +190,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                           />
                         </div>
                         <div className="mb-3 col-md-6">
-                          <label className="form-label">Name</label>
+                          <label className="form-label">Tên</label>
 
                           <input
                             className="form-control"
@@ -217,7 +214,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
 
                         <div className="mb-3 col-md-6">
                           <label htmlFor="organization" className="form-label">
-                            location
+                            Địa chỉ
                           </label>
                           <textarea
                             className="form-control"
@@ -229,7 +226,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                         </div>
                         <div className="mb-3 col-md-6">
                           <label htmlFor="organization" className="form-label">
-                            Phone Number
+                            Số điện thoại
                           </label>
                           <input
                             disabled
@@ -262,7 +259,9 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
             <div className="col-md-12">
               <div className="card mb-4">
                 {/* Account */}
-                <h5 className="card-header">Product By Factory</h5>
+                <h4 className="card-header">
+                  Sản phẩm của nhà máy đang sản xuất
+                </h4>
                 <hr className="my-0" />
                 <div className="card">
                   <div className="table-responsive text-nowrap">
@@ -273,16 +272,16 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                         <thead>
                           <tr>
                             <th>
-                              <strong>Name</strong>
+                              <strong>Tên</strong>
                             </th>
                             <th>
-                              <strong>category Name</strong>
+                              <strong>Category</strong>
                             </th>
                             <th>
-                              <strong>Image</strong>
+                              <strong>Hình ảnh</strong>
                             </th>
                             <th>
-                              <strong>Sizes&Colors</strong>
+                              <strong>Màu và Kích thước</strong>
                             </th>
                           </tr>
                         </thead>
@@ -310,7 +309,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                                     }
                                     className="btn btn-primary me-2"
                                   >
-                                    View
+                                    Xem
                                   </button>
                                   <button
                                     type="button"
@@ -322,7 +321,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                                     }
                                     className="btn btn-success me-2"
                                   >
-                                    Create
+                                    Tạo mới
                                   </button>
                                 </td>
                               </tr>
@@ -332,7 +331,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                       </table>
                     ) : (
                       <div className="h3 text-center p-3">
-                        Factory does not have any product yet
+                        Nhà máy này hiện chưa có sản phẩm nào
                       </div>
                     )}
                   </div>
@@ -355,7 +354,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
               <div className="card mb-4">
                 {/* Account */}
                 <h5 className="card-header">
-                  Product For Factory Does not have
+                  Sản phẩm chưa được nhà máy sản xuất
                 </h5>
                 <hr className="my-0" />
                 <div className="card">
@@ -364,10 +363,10 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                       <thead>
                         <tr>
                           <th>
-                            <strong>Name</strong>
+                            <strong>Tên</strong>
                           </th>
                           <th>
-                            <strong>Action</strong>
+                            <strong>hành động</strong>
                           </th>
                         </tr>
                       </thead>
@@ -387,7 +386,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                                 }
                                 className="btn btn-primary me-2"
                               >
-                                Add Price
+                                Thêm giá sản phẩm
                               </button>
                             </td>
                           </tr>

@@ -101,19 +101,15 @@ export default function ManageCategory(props: IManageCategoryProps) {
 
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Manage Product /</span> Manage
-            Category
-          </h4>
+          <h4 className="fw-bold py-3 mb-4"></h4>
           <button
-            className="btn btn-success ms-4 text-dark"
+            className="btn btn-success ms-4 mb-4 text-dark"
             onClick={handleIsEditFalse}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Create New Category
+            Tạo mới Category
           </button>
 
-          <hr className="my-4" />
           {isEdit == false && (
             <Dialog
               open={openDialog}
@@ -123,7 +119,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Create New Category"}
+                {"Tạo mới Category"}
               </DialogTitle>
               <DialogContent>
                 <CreateCategoryForm handleCloseDialog={handleCloseDialog} />
@@ -140,7 +136,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
               fullWidth={true}
             >
               <DialogTitle id="alert-dialog-title">
-                {"Update Category"}
+                {"Chỉnh sửa Category"}
               </DialogTitle>
               <DialogContent>
                 <UpdateCategoryForm
@@ -160,7 +156,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
             fullWidth={true}
           >
             <DialogTitle id="alert-dialog-title">
-              {"Do you want to delete this Category?"}
+              {"Bạn có muốn xóa Category này không?"}
             </DialogTitle>
             <DialogContent>
               <div className="d-flex justify-content-center">
@@ -172,14 +168,14 @@ export default function ManageCategory(props: IManageCategoryProps) {
                       onDelete(isDelete);
                     }}
                   >
-                    Delete
+                    xóa
                   </button>
                   <button
                     className="btn btn-secondary"
                     onClick={handleCloseDeleteDialog}
                     autoFocus
                   >
-                    CANCEL
+                    Không
                   </button>
                 </div>
               </div>
@@ -195,10 +191,10 @@ export default function ManageCategory(props: IManageCategoryProps) {
               <table className="table ">
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Image</th>
+                    <th>Tên</th>
+                    <th>Hình ảnh</th>
                     <th>isDelete</th>
-                    <th>Status</th>
+                    <th>Hành động</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">

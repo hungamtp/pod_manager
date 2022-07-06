@@ -170,7 +170,7 @@ export default function UpdateProductBlueprintForm(
                   className="col-sm-2 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Image
+                  Hình ảnh
                 </label>
                 <div className="col-sm-10">
                   <ImageUploading
@@ -202,7 +202,7 @@ export default function UpdateProductBlueprintForm(
                           type="button"
                           className="btn btn-primary"
                         >
-                          Update Image
+                          Tải lên
                         </button>
                       </div>
                     )}
@@ -221,7 +221,7 @@ export default function UpdateProductBlueprintForm(
                     color="primary"
                     type="submit"
                   >
-                    Update
+                    Thay đổi
                   </button>
                   <button
                     className="btn btn-secondary"
@@ -229,7 +229,7 @@ export default function UpdateProductBlueprintForm(
                     autoFocus
                     type="button"
                   >
-                    CANCEL
+                    Hủy
                   </button>
                 </div>
               </div>

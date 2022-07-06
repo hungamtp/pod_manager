@@ -221,15 +221,12 @@ export default function ProductDetails(props: IProductDetailsProps) {
     <>
       <div>
         <div className="container-xxl flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4">
-            <span className="text-muted fw-light">Product Details /</span>{" "}
-            Product
-          </h4>
+          <h4 className="fw-bold py-3 mb-4"></h4>
           <div className="row">
             <div className="col-md-12">
               {!isLoadingProduct && responseProduct && (
                 <div className="card mb-4">
-                  <h5 className="card-header">Product Details</h5>
+                  <h4 className="card-header">Thông tin chi tiết</h4>
                   {/* Account */}
 
                   <div className="card-body">
@@ -277,7 +274,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                     {...dragProps}
                                     type="button"
                                   >
-                                    Update Image
+                                    Tải lên
                                   </button>
                                   &nbsp;
                                   <button
@@ -285,7 +282,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                     type="button"
                                     onClick={onImageRemoveAll}
                                   >
-                                    Clear
+                                    Xóa
                                   </button>
                                 </div>
                               )}
@@ -307,7 +304,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                           />
                         </div>
                         <div className="mb-3 col-md-6">
-                          <label className="form-label">Name</label>
+                          <label className="form-label">Tên sản phẩm</label>
                           {errors.name && (
                             <span
                               id="error-pwd-message"
@@ -328,7 +325,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
 
                         <div className="mb-3 col-md-6">
                           <label htmlFor="organization" className="form-label">
-                            Description
+                            Mô tả
                           </label>
                           <textarea
                             disabled={isDisabled}
@@ -341,11 +338,11 @@ export default function ProductDetails(props: IProductDetailsProps) {
                         </div>
 
                         <div className="mb-3 col-md-6">
-                          <label className="form-label">Category Name</label>
+                          <label className="form-label">Thể loại</label>
                           <div className="mb-3 col-md-6">
                             {categoryName && (
                               <FormControl
-                                sx={{ m: 1, minWidth: 120 }}
+                                sx={{ m: 1, minWidth: 200 }}
                                 size="small"
                                 className="mb-3 col-md-6"
                                 disabled={isDisabled}
@@ -378,7 +375,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                         </div>
 
                         <div className="mb-3 col-md-6 ">
-                          <label className="form-label me-3">Product tag</label>
+                          <label className="form-label me-3">tag</label>
                           {responseProduct.data.productTags.map((tag) => (
                             <Chip
                               className=" me-2"
@@ -394,7 +391,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                               <div className="card mb-4">
                                 {/* Account */}
                                 <div className="card">
-                                  <h5 className="card-header">Factories</h5>
+                                  <h5 className="card-header">Nhà máy</h5>
                                   <div className="table-responsive text-nowrap">
                                     {responseProduct &&
                                     responseProduct.data.priceByFactories
@@ -403,13 +400,13 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                         <thead>
                                           <tr>
                                             <th>
-                                              <strong>Name</strong>
+                                              <strong>Tên Nhà máy</strong>
                                             </th>
                                             <th>
-                                              <strong>Location</strong>
+                                              <strong>Địa chỉ</strong>
                                             </th>
                                             <th>
-                                              <strong>Price</strong>
+                                              <strong>giá sản phẩm</strong>
                                             </th>
                                           </tr>
                                         </thead>
@@ -472,7 +469,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                           Edit
                         </button>
                         <button type="submit" className="btn btn-primary me-2">
-                          Save changes
+                          Lưu thay đổi
                         </button>
                         <button
                           type="button"
@@ -481,7 +478,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                             router.push("manage-product");
                           }}
                         >
-                          Cancel
+                          Hủy
                         </button>
                       </div>
                     </form>
@@ -532,14 +529,14 @@ export default function ProductDetails(props: IProductDetailsProps) {
               <div className="card mb-4">
                 {/* Account */}
                 <div className="card">
-                  <h5 className="card-header">Product Blueprints</h5>
+                  <h5 className="card-header">Bản thiết kế của Sản phẩm</h5>
                   <div>
                     <button
                       className="btn btn-success ms-4 text-dark"
                       onClick={handleCreateProductBlueprint}
                     >
                       <AddIcon sx={{ mr: 1 }} />
-                      Create Product Blueprints
+                      Tạo mới bản thiết kế
                     </button>
                   </div>
                   <br className="my-4" />
@@ -552,17 +549,17 @@ export default function ProductDetails(props: IProductDetailsProps) {
                         <thead>
                           <tr>
                             <th>
-                              <strong>frame Image</strong>
+                              <strong>Frame image</strong>
                             </th>
                             <th>
                               <strong>placeholder</strong>
                             </th>
 
                             <th>
-                              <strong>position</strong>
+                              <strong>Vị trí</strong>
                             </th>
                             <th>
-                              <strong>Actions</strong>
+                              <strong>Hành động</strong>
                             </th>
                           </tr>
                         </thead>
@@ -615,7 +612,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                       </table>
                     ) : (
                       <div className="h3 text-center p-3">
-                        This product does not have any blueprint yet
+                        Sản phẩm này hiện chưa có bản thiết kế
                       </div>
                     )}
                   </div>
@@ -648,14 +645,14 @@ export default function ProductDetails(props: IProductDetailsProps) {
               <div className="card mb-4">
                 {/* Account */}
 
-                <h5 className="card-header">Sizes & Colors</h5>
+                <h5 className="card-header">Màu & kích thước</h5>
                 <div>
                   <button
                     className="btn btn-success ms-4 text-dark"
                     onClick={handleOpenCreateSizeColorDialog}
                   >
                     <AddIcon sx={{ mr: 1 }} />
-                    Create New Sizes & Colors
+                    Tạo mới màu & kích thước
                   </button>
                 </div>
                 <br className="my-4" />
@@ -671,7 +668,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                               <thead className="border-bottom">
                                 <tr>
                                   <th>
-                                    <strong>Size</strong>
+                                    <strong>Kích thước</strong>
                                   </th>
                                 </tr>
                               </thead>
@@ -691,7 +688,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                               <thead className="border-bottom">
                                 <tr>
                                   <th>
-                                    <strong>Color</strong>
+                                    <strong>Màu</strong>
                                   </th>
                                 </tr>
                               </thead>

@@ -52,12 +52,12 @@ export default function CreateSizeForm(props: ICreateSizeFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Size Name
+                  Tên Kích thước
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <input
                       type="text"
@@ -81,7 +81,7 @@ export default function CreateSizeForm(props: ICreateSizeFormProps) {
                     color="primary"
                     type="submit"
                   >
-                    CREATE
+                    Tạo mới
                   </button>
                   <button
                     className="btn btn-secondary"
@@ -89,7 +89,7 @@ export default function CreateSizeForm(props: ICreateSizeFormProps) {
                     autoFocus
                     type="button"
                   >
-                    CANCEL
+                    Hủy
                   </button>
                 </div>
               </div>

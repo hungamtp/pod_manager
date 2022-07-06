@@ -104,7 +104,7 @@ export default function CreateForm(props: ICreateFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  First Name
+                  Tên
                 </label>
 
                 <div className="col-sm-9">
@@ -119,8 +119,8 @@ export default function CreateForm(props: ICreateFormProps) {
                       type="text"
                       className="form-control"
                       id="basic-icon-default-fullname"
-                      placeholder="John"
-                      aria-label="John"
+                      placeholder="A"
+                      aria-label="A"
                       aria-describedby="basic-icon-default-fullname2"
                       {...register("firstName")}
                     />
@@ -137,7 +137,7 @@ export default function CreateForm(props: ICreateFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Last Name
+                  Họ
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
@@ -151,8 +151,8 @@ export default function CreateForm(props: ICreateFormProps) {
                       type="text"
                       className="form-control"
                       id="basic-icon-default-fullname"
-                      placeholder="Doe"
-                      aria-label="Doe"
+                      placeholder="Nguyen Van"
+                      aria-label="Nguyen Van"
                       aria-describedby="basic-icon-default-fullname2"
                       {...register("lastName")}
                     />
@@ -169,7 +169,7 @@ export default function CreateForm(props: ICreateFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-company"
                 >
-                  Pass Word
+                  Mật khẩu
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
@@ -212,7 +212,7 @@ export default function CreateForm(props: ICreateFormProps) {
                       type="text"
                       id="basic-icon-default-email"
                       className="form-control"
-                      placeholder="john.doe@gmail.com"
+                      placeholder="nvana@gmail.com"
                       aria-describedby="basic-icon-default-email2"
                       {...register("email")}
                     />
@@ -229,7 +229,7 @@ export default function CreateForm(props: ICreateFormProps) {
                   className="col-sm-3 form-label"
                   htmlFor="basic-icon-default-phone"
                 >
-                  Phone No
+                  Số điện thoại
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
@@ -243,7 +243,7 @@ export default function CreateForm(props: ICreateFormProps) {
                       type="text"
                       id="basic-icon-default-phone"
                       className="form-control phone-mask"
-                      placeholder="091 234 8473"
+                      placeholder="0912348473"
                       aria-describedby="basic-icon-default-phone2"
                       {...register("phone")}
                     />
@@ -260,7 +260,7 @@ export default function CreateForm(props: ICreateFormProps) {
                   className="col-sm-3 form-label"
                   htmlFor="basic-icon-default-message"
                 >
-                  Address
+                  Địa chỉ
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
@@ -290,7 +290,7 @@ export default function CreateForm(props: ICreateFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-company"
                 >
-                  Role Name
+                  Vị trí
                 </label>
                 <div className="col-sm-9">
                   <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
@@ -325,7 +325,7 @@ export default function CreateForm(props: ICreateFormProps) {
                     color="primary"
                     type="submit"
                   >
-                    CREATE
+                    Tạo tài khoản
                   </button>
                   <button
                     className="btn btn-secondary"
@@ -333,7 +333,7 @@ export default function CreateForm(props: ICreateFormProps) {
                     autoFocus
                     type="button"
                   >
-                    CANCEL
+                    Hủy
                   </button>
                 </div>
               </div>
