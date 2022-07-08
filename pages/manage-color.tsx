@@ -87,7 +87,7 @@ export default function ManageColor(props: IManageColor) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Color management</h5>
+            <h5 className="card-header">Quản lý màu</h5>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>
