@@ -82,7 +82,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
   };
 
   const handleCreateProductBlueprint = () => {
-    setOpenCreateProductBlueprint(true);
+    router.push("/create-blueprint");
   };
 
   const handleCloseCreateProductBlueprint = () => {
