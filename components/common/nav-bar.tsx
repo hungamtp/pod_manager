@@ -173,6 +173,7 @@ export default function NavBar({}: Props) {
                 </g>
               </g>
             </svg>
+            
           </span>
           <span className="app-brand-text text-uppercase demo menu-text fw-bolder ms-2">
             podoc
