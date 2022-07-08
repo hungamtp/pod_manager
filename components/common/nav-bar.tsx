@@ -14,6 +14,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import TableViewIcon from "@mui/icons-material/TableView";
+import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import { Router, useRouter } from "next/router";
 type Props = {};
 
@@ -369,7 +370,24 @@ export default function NavBar({}: Props) {
           </ListItemButton>
         </List>
         {/* {/Manage designed product} */}
+        <li className="menu-header small text-uppercase">
+          <span className="menu-header-text">Quản lý Nhà Máy</span>
+        </li>
 
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        >
+          <ListItemButton
+            onClick={() => {
+              router.push("manage-order");
+            }}
+          >
+            <ListItemIcon className="pl-2p">
+              <ShoppingBasketIcon />
+            </ListItemIcon>
+            <ListItemText primary="Quản lý Đơn Hàng" />
+          </ListItemButton>
+        </List>
         {/* {Manage Order} */}
       </ul>
     </aside>
