@@ -1,5 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "@/redux/slices/auth";
+import previewsReducer from "@/redux/slices/previews";
+import blueprintReducer from "@/redux/slices/blueprints";
 import {
   persistStore,
   persistReducer,
@@ -16,11 +18,13 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  blacklist: ["infoManageData"],
+  blacklist: ["previews,blueprint"],
 };
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  previews: previewsReducer,
+  blueprint: blueprintReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
