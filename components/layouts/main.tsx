@@ -9,7 +9,7 @@ export interface IMainLayoutProps {}
 export function MainLayout({ children }: LayoutProps) {
   const auth = useAppSelector((state) => state.auth);
   const router = useRouter();
-  if (!auth.isAuth) {
+  if (auth.roleName !== "ADMIN" && auth.roleName !== "FACTORY") {
     router.push("/login");
   }
   return (
