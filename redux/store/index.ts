@@ -18,7 +18,7 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  blacklist: ["previews,blueprint"],
+  blacklist: ["previews", "blueprint"],
 };
 
 const rootReducer = combineReducers({

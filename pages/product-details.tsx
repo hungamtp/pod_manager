@@ -33,6 +33,9 @@ import { UpdateProductBlueprintDto } from "@/services/products/dto/update-produc
 import { ProductBlueprintDto } from "@/services/products/dto/get-product-blueprint-dto";
 import UpdateProductBlueprintForm from "@/components/manage-product/update-product-blueprint-form";
 import { numberWithCommas } from "@/helpers/number-util";
+import { Blueprint } from "../models";
+import { useAppDispatch } from "@/components/hooks/reduxHook";
+import { loadBlueprint } from "@/redux/slices/blueprints";
 
 export interface IProductDetailsProps {}
 
@@ -50,14 +53,7 @@ const schema = yup.object().shape({
 export default function ProductDetails(props: IProductDetailsProps) {
   const router = useRouter();
   const id = router.asPath.split("id=")[1];
-  const ProductBlueprintValues: UpdateProductBlueprintDto = {
-    id: "",
-    frameImage: "",
-    position: "",
-    placeHolderTop: 0,
-    placeHolderHeight: 0,
-    placeHolderWidth: 0,
-  };
+
   const { data: responseProduct, isLoading: isLoadingProduct } =
     useGetProductById(id);
   const { data: responseProductBlueprint, isLoading: isloadingPrBlueprint } =
@@ -68,11 +64,10 @@ export default function ProductDetails(props: IProductDetailsProps) {
     React.useState(false);
   const [openUpdateProductBlueprint, setOpenUpdateProductBlueprint] =
     React.useState(false);
-  const [productBlueprint, setProductBlueprint] =
-    React.useState<UpdateProductBlueprintDto>(ProductBlueprintValues);
   const [checked, setChecked] = React.useState(true);
   const [checkValue, setCheckValue] = React.useState("");
   const [isDisabled, setIsDisabled] = React.useState(true);
+  const dispatch = useAppDispatch();
 
   const maxNumber = 69;
 
@@ -82,7 +77,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
   };
 
   const handleCreateProductBlueprint = () => {
-    router.push("/create-blueprint");
+    router.push(`/create-blueprint?productId=${id}`);
   };
 
   const handleCloseCreateProductBlueprint = () => {
@@ -92,16 +87,21 @@ export default function ProductDetails(props: IProductDetailsProps) {
   const handleUpdateProductBlueprint = (
     productBlueprint: ProductBlueprintDto
   ) => {
-    const tmpData: UpdateProductBlueprintDto = {
-      id: productBlueprint.id,
-      frameImage: productBlueprint.frameImage,
+    const tmpData: Blueprint = {
+      blueprintId: productBlueprint.id,
+      isEdit: true,
+      key: "",
+      width: productBlueprint.placeholder.width,
+      height: productBlueprint.placeholder.height,
       position: productBlueprint.position,
-      placeHolderTop: productBlueprint.placeholder.top,
-      placeHolderHeight: productBlueprint.placeholder.height,
-      placeHolderWidth: productBlueprint.placeholder.width,
+      widthRate: productBlueprint.placeholder.widthRate,
+      heightRate: productBlueprint.placeholder.heightRate,
+      topRate: productBlueprint.placeholder.top,
+      src: productBlueprint.frameImage,
+      tmpSrc: productBlueprint.frameImage,
     };
-    setProductBlueprint(tmpData);
-    setOpenUpdateProductBlueprint(true);
+    dispatch(loadBlueprint(tmpData));
+    router.push(`/update-blueprint?productId=${id}`);
   };
   const handleCloseUpdateProductBlueprint = () => {
     setOpenUpdateProductBlueprint(false);
@@ -495,34 +495,6 @@ export default function ProductDetails(props: IProductDetailsProps) {
         <div className="content-backdrop fade" />
       </div>
       <div>
-        <Dialog
-          open={openCreateProductBlueprint}
-          onClose={handleCloseCreateProductBlueprint}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          fullWidth={true}
-        >
-          <DialogContent>
-            <CreateProductBlueprintForm
-              handleCloseDialog={handleCloseCreateProductBlueprint}
-              id={id}
-            />
-          </DialogContent>
-        </Dialog>
-        <Dialog
-          open={openUpdateProductBlueprint}
-          onClose={handleCloseUpdateProductBlueprint}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          fullWidth={true}
-        >
-          <DialogContent>
-            <UpdateProductBlueprintForm
-              handleCloseDialog={handleCloseUpdateProductBlueprint}
-              productBlueprint={productBlueprint}
-            />
-          </DialogContent>
-        </Dialog>
         <div className="container-xxl flex-grow-1 container-p-y ">
           <div className="row">
             <div className="col-md-12">

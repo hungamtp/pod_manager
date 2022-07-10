@@ -2,7 +2,12 @@ import { Blueprint } from "@/models/blueprint";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: Blueprint = {
+  blueprintId: "",
   key: "",
+  isEdit: false,
+  width: 0,
+  height: 0,
+  position: "",
   widthRate: 0.1,
   heightRate: 0.1,
   topRate: 0,
@@ -28,6 +33,32 @@ export const designSlice = createSlice({
       };
     },
 
+    setKey: (state, action) => {
+      return {
+        ...state,
+        key: action.payload,
+      };
+    },
+
+    setRealWidth: (state, action) => {
+      console.log(action.payload, "payload");
+      return {
+        ...state,
+        width: action.payload,
+      };
+    },
+
+    setRealHeight: (state, action) => {
+      return {
+        ...state,
+        height: action.payload,
+      };
+    },
+
+    loadBlueprint: (state, action) => {
+      return action.payload;
+    },
+
     updateImgSrc: (state, action) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
@@ -47,6 +78,14 @@ export const designSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setValue, resetDesigns, updateImgSrc } = designSlice.actions;
+export const {
+  setValue,
+  setKey,
+  resetDesigns,
+  updateImgSrc,
+  loadBlueprint,
+  setRealWidth,
+  setRealHeight,
+} = designSlice.actions;
 
 export default designSlice.reducer;

@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 const useLogin = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const auth = useAppSelector(state=>state.auth);
+  const auth = useAppSelector((state) => state.auth);
   return useMutation(
     async (data: LoginDto) => {
       return await login(data);
@@ -19,13 +19,12 @@ const useLogin = () => {
       onSuccess: (data) => {
         dispatch(loginAction(data));
         console.log(data, "success");
-        if(auth.roleName==="ADMIN")
-        //because data:any
-        router.push('/');
-        else if(auth.roleName==="FACTORY")
-        router.push('/factory');
+        if (auth.roleName === "ADMIN")
+          //because data:any
+          router.push("/");
+        else if (auth.roleName === "FACTORY") router.push("/factory");
         // router.back();
-        else 
+        else router.push("/login");
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         console.log(error.response?.data.errorMessage, "errorrrrrrrrrrr");
