@@ -6,20 +6,20 @@ import PlaceHolderInfoMemo from "@/components/manage-blueprint/place-holder-info
 import {
   resetDesigns,
   setKey,
+  setRealHeight,
+  setRealWidth,
   setValue,
   updateImgSrc,
 } from "@/redux/slices/blueprints";
 import { setChoosenKey } from "@/redux/slices/choosenKey";
+import { width } from "@mui/system";
 import { fabric } from "fabric";
 import _ from "lodash";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { Blueprint } from "../models";
-export interface ICreateBlueprint {}
-const hightRate = 1.2337;
-const placeHolderAndOuterRate = 1.5;
-const DPI = 300;
+export interface IUpdateBlueprint {}
 
 const resizer = (
   canvasSize: { width: number; height: number },
@@ -87,15 +87,11 @@ const initCanvas = (
   return tmpCanvas;
 };
 
-export default function CreateBlueprint(props: ICreateBlueprint) {
-  const pageHeight = Math.max(
-    document.documentElement.clientHeight || 0,
-    window.innerHeight || 0
-  );
-
+export default function UpdateBlueprint(props: IUpdateBlueprint) {
   const dispatch = useAppDispatch();
 
   const [canvas, setCanvas] = React.useState<fabric.Canvas>();
+
   const router = useRouter();
 
   React.useEffect(() => {
@@ -119,8 +115,14 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
       router.events.off("routeChangeStart", handleRouteChange);
     };
   }, []);
+
   const blueprint = useAppSelector((state) => state.blueprint);
-  console.log(blueprint);
+
+  React.useEffect(() => {
+    if (blueprint.blueprintId) {
+      uploadBackgroundImage(blueprint.src, blueprint.tmpSrc);
+    }
+  }, [canvas]);
 
   const [backGroundImage, setBackgroundImage] = React.useState<fabric.Image>();
 
@@ -182,7 +184,7 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
           dispatch(setValue({ ...tmpDesignData }));
         }
       });
-      addNewRect(backGroundImage);
+      addNewRect();
     }
   }, [backGroundImage]);
 
@@ -222,36 +224,51 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
     }
   };
 
-  const addNewRect = (backGroundImage: fabric.Image) => {
-    if (canvas) {
+  const addNewRect = () => {
+    if (canvas && backGroundImage) {
       const newName = nanoid();
 
+      console.log(blueprint.topRate, "rateeee");
+      console.log(
+        (blueprint.topRate / 100) * backGroundImage.getScaledHeight(),
+        "backGroundImage.getScaledHeight()"
+      );
       const rect = new fabric.Rect({
         borderColor: "rgba(255,255,255,1.0)",
         backgroundColor: "rgba(255,255,255,1.0)",
+        centeredScaling: true,
         strokeDashArray: [5, 5],
         lockMovementX: true,
-        strokeWidth: 0.2,
-        width: 10,
-        height: 10,
-        opacity: 0.4,
+        strokeWidth: 4,
+        opacity: 0.1,
+        width: blueprint.widthRate
+          ? (blueprint.widthRate / 100) * backGroundImage.getScaledHeight()
+          : 150,
+        height: blueprint.heightRate
+          ? (blueprint.heightRate / 100) * backGroundImage.getScaledHeight()
+          : 150,
+        top: blueprint.blueprintId
+          ? (blueprint.topRate / 100) * backGroundImage.getScaledHeight()
+          : backGroundImage.getScaledHeight() / 2,
       });
 
       rect.set("name", newName);
 
       rect.set("noScaleCache", true);
       rect.transparentCorners = true;
-      rect.centeredScaling = true;
-
-      rect.scaleToWidth(150);
-      rect.scaleToHeight(100);
+      console.log(rect.top, "rect.top");
 
       rect.setControlsVisibility({
         mtr: false,
+        ml: false,
+        mr: false,
+        mt: false,
+        mb: false,
       });
 
       canvas.add(rect);
-      canvas.centerObject(rect);
+      canvas.centerObjectH(rect);
+      console.log(rect.top, "rect.top");
 
       const tmpDesignData = calculateRate(
         rect.top || 200,
@@ -354,4 +371,4 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
     </>
   );
 }
-CreateBlueprint.Layout = MainLayout;
+UpdateBlueprint.Layout = MainLayout;

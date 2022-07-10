@@ -1,136 +1,200 @@
 import { Blueprint } from "@/models/blueprint";
+import {
+  resetDesigns,
+  setRealHeight,
+  setRealWidth,
+} from "@/redux/slices/blueprints";
 import { yupResolver } from "@hookform/resolvers/yup";
+import useCreateProductBlueprint from "hooks/products/use-create-product-blueprint";
+import useUpdateProductBlueprint from "hooks/products/use-update-product-blueprint";
+import { useRouter } from "next/router";
 import * as React from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
-import { useAppSelector } from "../hooks/reduxHook";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHook";
+import SingleInputMemo from "./single-input";
 import { UploadImage } from "./upload-image";
 
 export interface IPlaceHolderInfoProps {
   uploadBackgroundImage: (tmpSrc: string, src: string) => void;
+  changeWidth: (widthRate: number) => void;
 }
 const get2Decimal = (num: number): number => {
   return Number(Number(num).toFixed(2));
 };
 
-const schema = yup.object().shape({
-  width: yup
-    .number()
-    .min(6, "Chiều rộng tối thiểu là 6 inches")
-    .max(30, "Chiều rộng tối đa là 30 inches")
-    .required(" Chiều rộng không được để trống"),
-  height: yup
-    .number()
-    .min(6, "Chiều dài tối thiểu là 6 inches")
-    .max(30, "Chiều dài tối đa là 30 inches")
-    .required(" Chiều dài không được để trống"),
-});
+const PlaceHolderInfo = ({
+  uploadBackgroundImage,
+  changeWidth,
+}: IPlaceHolderInfoProps) => {
+  const dispatch = useAppDispatch();
 
-const PlaceHolderInfo = ({ uploadBackgroundImage }: IPlaceHolderInfoProps) => {
-  let designPosInitVal: {
-    top: number;
-    left: number;
-    scale: number;
-    rotate: number;
-  } = { top: 0, left: 0, scale: 0, rotate: 0 };
+  const blueprint = useAppSelector((state) => state.blueprint);
+
   const defaultValues = {
-    width: 14,
-    height: 16,
+    width: blueprint.width || 14,
+    height: blueprint.height || 14,
+    position: blueprint.position || "front",
   };
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<{ width: number; height: number }>({
+  } = useForm<{ position: string }>({
     defaultValues,
-    resolver: yupResolver(schema),
   });
 
-  const blueprint = useAppSelector((state) => state.blueprint);
+  const handleChangeWidth = (data: string) => {
+    const width = Number(data);
+    dispatch(setRealWidth(width));
+  };
+  const handleChangeHeight = (data: string) => {
+    const height = Number(data);
+    dispatch(setRealHeight(height));
+  };
+
+  const executeRate = () => {
+    const newWidthRate =
+      (blueprint.width / blueprint.height) * blueprint.heightRate;
+    changeWidth(newWidthRate);
+  };
+
+  const router = useRouter();
+
+  const productId = router.asPath.split("productId=")[1];
+
+  const { mutate: createProductBlueprint } =
+    useCreateProductBlueprint(productId);
+
+  const { mutate: updateProductBlueprint } = useUpdateProductBlueprint();
+
+  const onSubmit: SubmitHandler<{ position: string }> = ({ position }) => {
+    console.log(blueprint.widthRate, "blueprint.widthRate");
+    console.log(blueprint.heightRate, "blueprint.heightRate");
+    const submitData = {
+      frameImage: blueprint.src,
+      position: position,
+      placeHolderTop: blueprint.topRate,
+      placeHolderWidth: blueprint.width,
+      placeHolderHeight: blueprint.height,
+      widthRate: blueprint.widthRate,
+      heightRate: blueprint.heightRate,
+    };
+    if (blueprint.isEdit) {
+      updateProductBlueprint({ ...submitData, id: blueprint.blueprintId });
+    } else {
+      createProductBlueprint(submitData);
+    }
+  };
 
   return (
-    <div>
-      <div key={blueprint.key} className="mb-6 bg-white border  cursor-pointer">
-        <div className="py-3 ps-4 pe-2">
-          <table className="w-full p-5 text-gray-700">
-            <tbody>
-              <tr className="">
-                <td>Width</td>
-                <td>Height</td>
-              </tr>
-              <tr className="">
-                <td className=" pe-4">
-                  <div className="d-flex ">
-                    <input
-                      type="number"
-                      className="custom-input"
-                      aria-label="Inches (with dot and two decimal places)"
-                      {...register("width")}
-                    />
-                    <span className="custom-input-tag">in</span>
-                  </div>
-                </td>
-                <td className=" pe-4">
-                  <div className="d-flex ">
-                    <input
-                      type="number"
-                      className="custom-input"
-                      aria-label="Inches (with dot and two decimal places)"
-                      {...register("height")}
-                    />
-                    <span className="custom-input-tag">in</span>
-                  </div>
-                </td>
-              </tr>
-              <tr className="">
-                <td>
-                  <div className="mt-3">Top</div>
-                </td>
-                <td>
-                  <div className="mt-3">Mặt</div>
-                </td>
-              </tr>
-              <tr>
-                <td className=" pe-4">
-                  <div className="d-flex ">
-                    <input
-                      type="number"
-                      className="custom-input"
-                      aria-label="Inches (with dot and two decimal places)"
-                      value={blueprint.topRate}
-                    />
-                    <span className="custom-input-tag">%</span>
-                  </div>
-                </td>
-                <td className=" pe-4">
-                  <div className="d-flex ">
-                    <select
-                      className="form-select custom-input"
-                      aria-label="Default select example"
-                    >
-                      <option selected value="front">
-                        Trước
-                      </option>
-                      <option value="back">Sau</option>
-                      <option value="3">Three</option>
-                    </select>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-            <tbody>
-              <tr></tr>
-            </tbody>
-          </table>
+    <div
+      key={blueprint.position}
+      className="mb-6 bg-white border  cursor-pointer"
+    >
+      <div className="py-3 ps-4 pe-2">
+        <table className="w-full p-5 text-gray-700">
+          <tbody>
+            <tr className="">
+              <td>Width</td>
+              <td>Height</td>
+            </tr>
+            <tr className="">
+              <td className=" pe-4">
+                <div className="d-flex ">
+                  <SingleInputMemo
+                    type="number"
+                    handleChange={handleChangeWidth}
+                    defaultVal={get2Decimal(blueprint.width) + ""}
+                  />
+                  <span className="custom-input-tag">in</span>
+                </div>
+              </td>
+              <td className=" pe-4">
+                <div className="d-flex ">
+                  <SingleInputMemo
+                    type="number"
+                    handleChange={handleChangeHeight}
+                    defaultVal={get2Decimal(blueprint.height) + ""}
+                  />
+                  <span className="custom-input-tag">in</span>
+                </div>
+              </td>
+            </tr>
+            <tr className="">
+              <td>
+                <div className="mt-3"></div>
+              </td>
+            </tr>
+            <tr className="">
+              <td className=" pe-4">
+                <div className="d-flex ">
+                  <button
+                    onClick={() => {
+                      executeRate();
+                    }}
+                    className="btn btn-secondary"
+                  >
+                    Xử lý
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr className="">
+              <td>
+                <div className="mt-3">Top</div>
+              </td>
+              <td>
+                <div className="mt-3">Mặt</div>
+              </td>
+            </tr>
+            <tr>
+              <td className=" pe-4">
+                <div className="d-flex ">
+                  <input
+                    type="number"
+                    className="custom-input"
+                    aria-label="Inches (with dot and two decimal places)"
+                    value={blueprint.topRate}
+                  />
+                  <span className="custom-input-tag">%</span>
+                </div>
+              </td>
+              <td className=" pe-4">
+                <div className="d-flex ">
+                  <select
+                    className="form-select custom-input"
+                    aria-label="Default select example"
+                    {...register("position")}
+                  >
+                    <option selected value="front">
+                      Trước
+                    </option>
+                    <option value="back">Sau</option>
+                    <option value="front">Trước</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tbody>
+            <tr></tr>
+          </tbody>
+        </table>
 
-          <div className="mt-5 ">
-            <UploadImage uploadBackgroundImage={uploadBackgroundImage} />
-          </div>
-          <button type="button" className="btn btn-primary ">
+        <div className="mt-5 ">
+          <UploadImage uploadBackgroundImage={uploadBackgroundImage} />
+        </div>
+        {blueprint.src && (
+          <button
+            type="button"
+            className="btn btn-primary "
+            onClick={handleSubmit(onSubmit)}
+          >
             Lưu lại
           </button>
-        </div>
+        )}
       </div>
     </div>
   );
