@@ -198,6 +198,11 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
           "width",
           (widthRate / 100) * backGroundImage.getScaledHeight()
         );
+        console.log(
+          (widthRate / 100) * backGroundImage.getScaledHeight(),
+          "(widthRate / 100) * backGroundImage.getScaledHeight()"
+        );
+        console.log(widthRate, "widthRate");
         const tmpDesignData = calculateRate(
           object.top || 200,
           object.getScaledHeight(),

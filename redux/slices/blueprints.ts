@@ -5,12 +5,12 @@ const initialState: Blueprint = {
   blueprintId: "",
   key: "",
   isEdit: false,
-  width: 0,
-  height: 0,
+  width: 14,
+  height: 14,
   position: "",
-  widthRate: 0.1,
-  heightRate: 0.1,
-  topRate: 0,
+  widthRate: 20,
+  heightRate: 20,
+  topRate: 1,
   src: "",
   tmpSrc: "",
 };
@@ -72,6 +72,7 @@ export const designSlice = createSlice({
       };
     },
     resetDesigns: () => {
+      console.log("xin m dayy");
       return initialState;
     },
   },

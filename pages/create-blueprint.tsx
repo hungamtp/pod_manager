@@ -182,7 +182,7 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
           dispatch(setValue({ ...tmpDesignData }));
         }
       });
-      addNewRect(backGroundImage);
+      addNewRect();
     }
   }, [backGroundImage]);
 
@@ -196,6 +196,11 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
           "width",
           (widthRate / 100) * backGroundImage.getScaledHeight()
         );
+        console.log(
+          (widthRate / 100) * backGroundImage.getScaledHeight(),
+          "(widthRate / 100) * backGroundImage.getScaledHeight()"
+        );
+        console.log(widthRate, "widthRate");
         const tmpDesignData = calculateRate(
           object.top || 200,
           object.getScaledHeight(),
@@ -222,36 +227,51 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
     }
   };
 
-  const addNewRect = (backGroundImage: fabric.Image) => {
-    if (canvas) {
+  const addNewRect = () => {
+    if (canvas && backGroundImage) {
       const newName = nanoid();
 
+      console.log(blueprint.topRate, "rateeee");
+      console.log(
+        (blueprint.topRate / 100) * backGroundImage.getScaledHeight(),
+        "backGroundImage.getScaledHeight()"
+      );
       const rect = new fabric.Rect({
         borderColor: "rgba(255,255,255,1.0)",
         backgroundColor: "rgba(255,255,255,1.0)",
+        centeredScaling: true,
         strokeDashArray: [5, 5],
         lockMovementX: true,
-        strokeWidth: 0.2,
-        width: 10,
-        height: 10,
-        opacity: 0.4,
+        strokeWidth: 4,
+        opacity: 0.1,
+        width: blueprint.widthRate
+          ? (blueprint.widthRate / 100) * backGroundImage.getScaledHeight()
+          : 150,
+        height: blueprint.heightRate
+          ? (blueprint.heightRate / 100) * backGroundImage.getScaledHeight()
+          : 150,
+        top: blueprint.blueprintId
+          ? (blueprint.topRate / 100) * backGroundImage.getScaledHeight()
+          : backGroundImage.getScaledHeight() / 2,
       });
 
       rect.set("name", newName);
 
       rect.set("noScaleCache", true);
       rect.transparentCorners = true;
-      rect.centeredScaling = true;
-
-      rect.scaleToWidth(150);
-      rect.scaleToHeight(100);
+      console.log(rect.top, "rect.top");
 
       rect.setControlsVisibility({
         mtr: false,
+        ml: false,
+        mr: false,
+        mt: false,
+        mb: false,
       });
 
       canvas.add(rect);
-      canvas.centerObject(rect);
+      canvas.centerObjectH(rect);
+      console.log(rect.top, "rect.top");
 
       const tmpDesignData = calculateRate(
         rect.top || 200,

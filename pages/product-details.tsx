@@ -5,7 +5,7 @@ import { Filter } from "@/services/categories";
 import { UpdateProductDto } from "@/services/products/dto/update-product-dto";
 import { yupResolver } from "@hookform/resolvers/yup";
 import AddIcon from "@mui/icons-material/Add";
-import { Fab, IconButton, InputLabel, MenuItem } from "@mui/material";
+import { IconButton, InputLabel, MenuItem } from "@mui/material";
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -22,20 +22,16 @@ import ImageUploading, { ImageListType } from "react-images-uploading";
 import * as yup from "yup";
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
-import CreateSizeColorProductForm from "@/components/manage-factory/create-size-color-product-form";
+import { useAppDispatch } from "@/components/hooks/reduxHook";
+import CreateNewSizeColorForProductForm from "@/components/manage-product/create-new-size-color-for-product-form";
+import { numberWithCommas } from "@/helpers/number-util";
+import { loadBlueprint, resetDesigns } from "@/redux/slices/blueprints";
+import { ProductBlueprintDto } from "@/services/products/dto/get-product-blueprint-dto";
+import EditIcon from "@mui/icons-material/Edit";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import CreateNewSizeColorForProductForm from "@/components/manage-product/create-new-size-color-for-product-form";
 import useGetProductBlueprint from "hooks/products/use-get-product-blueprint";
-import CreateProductBlueprintForm from "@/components/manage-product/create-product-blueprint-form";
-import EditIcon from "@mui/icons-material/Edit";
-import { UpdateProductBlueprintDto } from "@/services/products/dto/update-product-blueprint-dto";
-import { ProductBlueprintDto } from "@/services/products/dto/get-product-blueprint-dto";
-import UpdateProductBlueprintForm from "@/components/manage-product/update-product-blueprint-form";
-import { numberWithCommas } from "@/helpers/number-util";
 import { Blueprint } from "../models";
-import { useAppDispatch } from "@/components/hooks/reduxHook";
-import { loadBlueprint } from "@/redux/slices/blueprints";
 
 export interface IProductDetailsProps {}
 
@@ -77,6 +73,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
   };
 
   const handleCreateProductBlueprint = () => {
+    dispatch(resetDesigns);
     router.push(`/create-blueprint?productId=${id}`);
   };
 

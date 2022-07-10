@@ -70,8 +70,6 @@ const PlaceHolderInfo = ({
   const { mutate: updateProductBlueprint } = useUpdateProductBlueprint();
 
   const onSubmit: SubmitHandler<{ position: string }> = ({ position }) => {
-    console.log(blueprint.widthRate, "blueprint.widthRate");
-    console.log(blueprint.heightRate, "blueprint.heightRate");
     const submitData = {
       frameImage: blueprint.src,
       position: position,
@@ -81,6 +79,7 @@ const PlaceHolderInfo = ({
       widthRate: blueprint.widthRate,
       heightRate: blueprint.heightRate,
     };
+    console.log(blueprint.isEdit, "blueprint.isEdit");
     if (blueprint.isEdit) {
       updateProductBlueprint({ ...submitData, id: blueprint.blueprintId });
     } else {
@@ -168,9 +167,6 @@ const PlaceHolderInfo = ({
                     aria-label="Default select example"
                     {...register("position")}
                   >
-                    <option selected value="front">
-                      Trước
-                    </option>
                     <option value="back">Sau</option>
                     <option value="front">Trước</option>
                   </select>
@@ -186,7 +182,7 @@ const PlaceHolderInfo = ({
         <div className="mt-5 ">
           <UploadImage uploadBackgroundImage={uploadBackgroundImage} />
         </div>
-        {blueprint.src && (
+        {blueprint.key && (
           <button
             type="button"
             className="btn btn-primary "
