@@ -25,7 +25,11 @@ import * as yup from "yup";
 import { useAppDispatch } from "@/components/hooks/reduxHook";
 import CreateNewSizeColorForProductForm from "@/components/manage-product/create-new-size-color-for-product-form";
 import { numberWithCommas } from "@/helpers/number-util";
-import { loadBlueprint, resetDesigns } from "@/redux/slices/blueprints";
+import {
+  loadBlueprint,
+  resetDesigns,
+  setProductName,
+} from "@/redux/slices/blueprints";
 import { ProductBlueprintDto } from "@/services/products/dto/get-product-blueprint-dto";
 import EditIcon from "@mui/icons-material/Edit";
 import Dialog from "@mui/material/Dialog";
@@ -73,7 +77,8 @@ export default function ProductDetails(props: IProductDetailsProps) {
   };
 
   const handleCreateProductBlueprint = () => {
-    dispatch(resetDesigns);
+    dispatch(setProductName(responseProduct?.data.name || ""));
+
     router.push(`/create-blueprint?productId=${id}`);
   };
 
@@ -86,6 +91,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
   ) => {
     const tmpData: Blueprint = {
       blueprintId: productBlueprint.id,
+      productName: responseProduct?.data.name || "",
       isEdit: true,
       key: "",
       width: productBlueprint.placeholder.width,

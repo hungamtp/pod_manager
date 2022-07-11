@@ -23,7 +23,7 @@ const useCreateProductBlueprint = (id: string) => {
         //because data:any
         queryClient.invalidateQueries("GetProductBlueprint");
         queryClient.invalidateQueries("GetProductById");
-        dispatch(resetDesigns);
+        dispatch(resetDesigns());
         router.back();
         enqueueSnackbar("Create successfully!", {
           autoHideDuration: 3000,

@@ -21,7 +21,7 @@ const useUpdateProductBlueprint = () => {
       onSuccess: (data) => {
         queryClient.invalidateQueries("GetProductById");
         queryClient.invalidateQueries("GetProductBlueprint");
-        dispatch(resetDesigns);
+        dispatch(resetDesigns());
         router.back();
         enqueueSnackbar("Update successfully!", {
           autoHideDuration: 3000,

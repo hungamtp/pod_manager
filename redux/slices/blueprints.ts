@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState: Blueprint = {
   blueprintId: "",
   key: "",
+  productName: "",
   isEdit: false,
   width: 14,
   height: 14,
@@ -71,8 +72,13 @@ export const designSlice = createSlice({
         src: action.payload.src,
       };
     },
+    setProductName: (state, action) => {
+      return {
+        ...state,
+        productName: action.payload,
+      };
+    },
     resetDesigns: () => {
-      console.log("xin m dayy");
       return initialState;
     },
   },
@@ -87,6 +93,7 @@ export const {
   loadBlueprint,
   setRealWidth,
   setRealHeight,
+  setProductName,
 } = designSlice.actions;
 
 export default designSlice.reducer;

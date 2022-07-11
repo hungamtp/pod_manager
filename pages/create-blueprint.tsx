@@ -109,7 +109,7 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
     }, 200);
 
     const handleRouteChange = (url: any) => {
-      dispatch(resetDesigns);
+      dispatch(resetDesigns());
     };
 
     router.events.on("routeChangeStart", handleRouteChange);
@@ -187,29 +187,33 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
   }, [backGroundImage]);
 
   const changeWidth = (widthRate: number) => {
+    console.log(widthRate, "www");
     if (blueprint.heightRate && canvas && backGroundImage) {
       const object = _.find(canvas._objects, function (o) {
         return o.name === blueprint.key;
       });
+      const width = (widthRate / 100) * backGroundImage.getScaledHeight();
+      const height =
+        (blueprint.heightRate / 100) * backGroundImage.getScaledHeight();
+
       if (object) {
-        object.set(
-          "width",
-          (widthRate / 100) * backGroundImage.getScaledHeight()
+        object.set("width", width);
+        object.set("height", height);
+
+        dispatch(
+          setValue({
+            topRate: blueprint.topRate,
+            widthRate: widthRate,
+            heightRate: blueprint.heightRate,
+          })
         );
-        console.log(
-          (widthRate / 100) * backGroundImage.getScaledHeight(),
-          "(widthRate / 100) * backGroundImage.getScaledHeight()"
-        );
-        console.log(widthRate, "widthRate");
-        const tmpDesignData = calculateRate(
-          object.top || 200,
-          object.getScaledHeight(),
-          object.getScaledWidth()
-        );
-        dispatch(setValue({ ...tmpDesignData }));
+
         canvas.centerObject(object);
 
         canvas.renderAll();
+        console.log(
+          (object.width || 5 / backGroundImage.getScaledHeight()) * 100
+        );
       }
     }
   };
@@ -345,7 +349,7 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card">
-            <h5 className="card-header">Bản thiết kế</h5>
+            <h5 className="card-header">{blueprint.productName}</h5>
             <>
               <div className="row ">
                 <div className="col-lg-9 col-12 px-0 d-flex flex-column ">

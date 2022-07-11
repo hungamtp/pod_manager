@@ -1,16 +1,9 @@
-import { Blueprint } from "@/models/blueprint";
-import {
-  resetDesigns,
-  setRealHeight,
-  setRealWidth,
-} from "@/redux/slices/blueprints";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { setRealHeight, setRealWidth } from "@/redux/slices/blueprints";
 import useCreateProductBlueprint from "hooks/products/use-create-product-blueprint";
 import useUpdateProductBlueprint from "hooks/products/use-update-product-blueprint";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import * as yup from "yup";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHook";
 import SingleInputMemo from "./single-input";
 import { UploadImage } from "./upload-image";
@@ -56,7 +49,7 @@ const PlaceHolderInfo = ({
 
   const executeRate = () => {
     const newWidthRate =
-      (blueprint.width / blueprint.height) * blueprint.heightRate;
+      blueprint.heightRate * (blueprint.width / blueprint.height);
     changeWidth(newWidthRate);
   };
 
@@ -79,7 +72,7 @@ const PlaceHolderInfo = ({
       widthRate: blueprint.widthRate,
       heightRate: blueprint.heightRate,
     };
-    console.log(blueprint.isEdit, "blueprint.isEdit");
+    console.log(blueprint, "blueprint.isEdit");
     if (blueprint.isEdit) {
       updateProductBlueprint({ ...submitData, id: blueprint.blueprintId });
     } else {
