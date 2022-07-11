@@ -187,7 +187,6 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
   }, [backGroundImage]);
 
   const changeWidth = (widthRate: number) => {
-    console.log(widthRate, "www");
     if (blueprint.heightRate && canvas && backGroundImage) {
       const object = _.find(canvas._objects, function (o) {
         return o.name === blueprint.key;
@@ -197,23 +196,20 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
         (blueprint.heightRate / 100) * backGroundImage.getScaledHeight();
 
       if (object) {
-        object.set("width", width);
-        object.set("height", height);
+        const scale = object.getObjectScaling();
+        object.set("width", width / scale.scaleX);
+        object.set("height", height / scale.scaleY);
+        object.setCoords();
 
-        dispatch(
-          setValue({
-            topRate: blueprint.topRate,
-            widthRate: widthRate,
-            heightRate: blueprint.heightRate,
-          })
+        const tmpDesignData = calculateRate(
+          object.top || 200,
+          object.getScaledHeight(),
+          object.getScaledWidth()
         );
-
+        dispatch(setValue(tmpDesignData));
         canvas.centerObject(object);
 
         canvas.renderAll();
-        console.log(
-          (object.width || 5 / backGroundImage.getScaledHeight()) * 100
-        );
       }
     }
   };

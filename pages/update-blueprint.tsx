@@ -138,6 +138,11 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
       canvas.on("object:moving", function (options) {
         const obj = options.target;
         if (obj) {
+          console.log(obj.getObjectScaling().scaleX, "scale");
+          console.log(
+            obj.getScaledWidth() / obj.getObjectScaling().scaleX,
+            "width"
+          );
           if (obj.top) {
             const top = obj.top;
             const bottom = top + obj.getScaledHeight();
@@ -193,16 +198,17 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
         (blueprint.heightRate / 100) * backGroundImage.getScaledHeight();
 
       if (object) {
-        object.set("width", width);
-        object.set("height", height);
+        const scale = object.getObjectScaling();
+        object.set("width", width / scale.scaleX);
+        object.set("height", height / scale.scaleY);
+        object.setCoords();
 
-        dispatch(
-          setValue({
-            topRate: blueprint.topRate,
-            widthRate: widthRate,
-            heightRate: blueprint.heightRate,
-          })
+        const tmpDesignData = calculateRate(
+          object.top || 200,
+          object.getScaledHeight(),
+          object.getScaledWidth()
         );
+        dispatch(setValue(tmpDesignData));
         canvas.centerObject(object);
 
         canvas.renderAll();
