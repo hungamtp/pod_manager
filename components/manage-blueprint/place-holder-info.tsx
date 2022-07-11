@@ -128,7 +128,7 @@ const PlaceHolderInfo = ({
                     }}
                     className="btn btn-secondary"
                   >
-                    Xử lý
+                    Áp dụng
                   </button>
                 </div>
               </td>

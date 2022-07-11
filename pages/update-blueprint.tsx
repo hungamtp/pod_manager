@@ -233,11 +233,12 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
     if (canvas && backGroundImage) {
       const newName = nanoid();
 
-      console.log(blueprint.topRate, "rateeee");
-      console.log(
-        (blueprint.topRate / 100) * backGroundImage.getScaledHeight(),
-        "backGroundImage.getScaledHeight()"
-      );
+      const width = blueprint.widthRate
+        ? (blueprint.widthRate / 100) * backGroundImage.getScaledHeight()
+        : 150;
+      const height = blueprint.heightRate
+        ? (blueprint.heightRate / 100) * backGroundImage.getScaledHeight()
+        : 150;
       const rect = new fabric.Rect({
         borderColor: "rgba(255,255,255,1.0)",
         backgroundColor: "rgba(255,255,255,1.0)",
@@ -246,12 +247,8 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
         lockMovementX: true,
         strokeWidth: 4,
         opacity: 0.1,
-        width: blueprint.widthRate
-          ? (blueprint.widthRate / 100) * backGroundImage.getScaledHeight()
-          : 150,
-        height: blueprint.heightRate
-          ? (blueprint.heightRate / 100) * backGroundImage.getScaledHeight()
-          : 150,
+        width: width,
+        height: height,
         top: blueprint.blueprintId
           ? (blueprint.topRate / 100) * backGroundImage.getScaledHeight()
           : backGroundImage.getScaledHeight() / 2,
@@ -261,7 +258,6 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
 
       rect.set("noScaleCache", true);
       rect.transparentCorners = true;
-      console.log(rect.top, "rect.top");
 
       rect.setControlsVisibility({
         mtr: false,
@@ -269,6 +265,23 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
         mr: false,
         mt: false,
         mb: false,
+      });
+
+      const maxScaleY = backGroundImage.getScaledHeight() / (height * 2);
+
+      const maxScaleX = maxScaleY;
+
+      rect.on("scaling", function () {
+        if (rect.scaleX && rect.scaleY) {
+          if (rect.scaleX > maxScaleX) {
+            rect.scaleX = maxScaleX;
+            canvas.centerObject(rect);
+          }
+          if (rect.scaleY > maxScaleY) {
+            canvas.centerObject(rect);
+            rect.scaleY = maxScaleY;
+          }
+        }
       });
 
       canvas.add(rect);
