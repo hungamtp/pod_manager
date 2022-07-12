@@ -451,8 +451,8 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                       </table>
                                     ) : (
                                       <div className="h3 text-center p-3">
-                                        There is no factories support this
-                                        product yet
+                                        Sản phẩm này hiện chưa có nhà máy nào
+                                        sản xuất
                                       </div>
                                     )}
                                   </div>
@@ -696,7 +696,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                         </div>
                       ) : (
                         <div className="h3 text-center p-3">
-                          This product does not have any Sizes and Colors yet
+                          Sản phẩm này chưa có màu và kích thước
                         </div>
                       )}
                     </div>

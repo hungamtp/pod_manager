@@ -174,7 +174,6 @@ export default function NavBar({}: Props) {
                 </g>
               </g>
             </svg>
-            
           </span>
           <span className="app-brand-text text-uppercase demo menu-text fw-bolder ms-2">
             podoc
@@ -207,7 +206,7 @@ export default function NavBar({}: Props) {
         </li>
 
         {/* {Manage Account} */}
-        <List
+        {/* <List
           className="w-screen"
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           component="nav"
@@ -245,8 +244,22 @@ export default function NavBar({}: Props) {
               </ListItemButton>
             </List>
           </Collapse>
-        </List>
+        </List> */}
         {/* {Manage Account} */}
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        >
+          <ListItemButton
+            onClick={() => {
+              router.push("account-setting");
+            }}
+          >
+            <ListItemIcon className="pl-2p">
+              <AccountCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Thông tin cá nhân" />
+          </ListItemButton>
+        </List>
 
         <List
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
@@ -389,6 +402,24 @@ export default function NavBar({}: Props) {
             <ListItemText primary="Quản lý Đơn Hàng" />
           </ListItemButton>
         </List>
+        <li className="menu-header small text-uppercase">
+          <span className="menu-header-text">Đăng xuất</span>
+        </li>
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+        >
+          <ListItemButton
+            onClick={() => {
+              logout();
+            }}
+          >
+            <ListItemIcon className="pl-2p">
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Đăng xuất" />
+          </ListItemButton>
+        </List>
+
         {/* {Manage Order} */}
       </ul>
     </aside>
