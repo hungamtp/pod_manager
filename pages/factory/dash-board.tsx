@@ -1,8 +1,9 @@
+import { MainLayout } from "@/components/layouts";
 import * as React from "react";
 
-export interface IDashBoardProps {}
+export interface IDashBoardFactoryProps {}
 
-export default function DashBoard(props: IDashBoardProps) {
+export default function DashBoardFactory(props: IDashBoardFactoryProps) {
   return (
     <>
       <div>
@@ -845,3 +846,5 @@ export default function DashBoard(props: IDashBoardProps) {
     </>
   );
 }
+
+DashBoardFactory.Layout = MainLayout;

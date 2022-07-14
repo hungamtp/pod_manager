@@ -40,7 +40,7 @@ export default function ManageColor(props: IManageColor) {
   ) => {
     setFilter({ ...filter, pageNumber: value - 1 });
   };
-  const { data: response, isLoading: isLoadingAccount } = useColors(filter);
+  const { data: response, isLoading: isLoadingColors } = useColors(filter);
   //  menu button
 
   const handleCloseDialog = () => {
@@ -97,7 +97,7 @@ export default function ManageColor(props: IManageColor) {
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">
-                  {!isLoadingAccount &&
+                  {!isLoadingColors &&
                     response &&
                     response.content.map((x) => (
                       <tr key={x.id}>

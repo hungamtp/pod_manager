@@ -10,15 +10,10 @@ import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
 import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
+import { StepLabel } from "@mui/material";
 export interface OrderDetailsProps {}
 
-const steps = [
-  "Chờ xác nhận",
-  "Chờ lấy hàng",
-  "Đang giao",
-  "Đã giao",
-  "Đã Hủy",
-];
+const steps = ["Chờ xác nhận", "Chờ lấy hàng", "Đang giao", "Đã giao"];
 
 export default function OrderDetails(props: OrderDetailsProps) {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -26,6 +21,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
     [k: number]: boolean;
   }>({});
 
+  const [isCancel, setIsCancel] = React.useState(false);
   const totalSteps = () => {
     return steps.length;
   };
@@ -52,7 +48,10 @@ export default function OrderDetails(props: OrderDetailsProps) {
     setActiveStep(newActiveStep);
   };
 
-  const handleCancel = () => {};
+  const handleCancel = () => {
+    setIsCancel(true);
+    setActiveStep(totalSteps() - 1);
+  };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -63,6 +62,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
   };
 
   const handleComplete = () => {
+    console.log(steps[activeStep], "neee");
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
@@ -154,16 +154,30 @@ export default function OrderDetails(props: OrderDetailsProps) {
                             nonLinear
                             activeStep={activeStep}
                           >
-                            {steps.map((label, index) => (
-                              <Step key={label} completed={completed[index]}>
-                                <StepButton
-                                  color="inherit"
-                                  onClick={handleStep(index)}
-                                >
-                                  {label}
-                                </StepButton>
-                              </Step>
-                            ))}
+                            {!isCancel &&
+                              steps.map((label, index) => (
+                                <Step key={label} completed={completed[index]}>
+                                  <StepButton color="inherit">
+                                    {label}
+                                  </StepButton>
+                                </Step>
+                              ))}
+                            {isCancel &&
+                              steps.map((label, index) => {
+                                const labelProps: {
+                                  optional?: React.ReactNode;
+                                  error?: boolean;
+                                } = {};
+                                labelProps.error = true;
+
+                                return (
+                                  <Step key={label}>
+                                    <StepLabel {...labelProps}>
+                                      {label}
+                                    </StepLabel>
+                                  </Step>
+                                );
+                              })}
                           </Stepper>
                           <div>
                             {allStepsCompleted() ? (
@@ -190,48 +204,46 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                 </Box>
                               </React.Fragment>
                             ) : (
-                              <React.Fragment>
-                                <Typography sx={{ mt: 2, mb: 1 }}>
-                                  Step {activeStep + 1}
-                                </Typography>
-                                <Box
-                                  sx={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    pt: 2,
-                                  }}
-                                >
-                                  <Button
-                                    color="inherit"
-                                    disabled={activeStep === 0}
-                                    onClick={handleBack}
-                                    sx={{ mr: 1 }}
-                                  >
-                                    Back
-                                  </Button>
-                                  <Button onClick={handleNext} sx={{ mr: 1 }}>
-                                    Next
-                                  </Button>
-                                  <Button onClick={handleCancel} sx={{ mr: 1 }}>
-                                    Hủy
-                                  </Button>
-                                  {activeStep !== steps.length &&
-                                    (completed[activeStep] ? (
-                                      <Typography
-                                        variant="caption"
-                                        sx={{ display: "inline-block" }}
+                              <>
+                                {!isCancel && (
+                                  <React.Fragment>
+                                    <Typography sx={{ mt: 2, mb: 1 }}>
+                                      Step {activeStep + 1}
+                                    </Typography>
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        pt: 2,
+                                      }}
+                                    >
+                                      <Button
+                                        onClick={handleCancel}
+                                        sx={{ mr: 1 }}
                                       >
-                                        Step {activeStep + 1} already completed
-                                      </Typography>
-                                    ) : (
-                                      <Button onClick={handleComplete}>
-                                        {completedSteps() === totalSteps() - 2
-                                          ? "Finish"
-                                          : "Complete Step"}
+                                        Hủy
                                       </Button>
-                                    ))}
-                                </Box>
-                              </React.Fragment>
+                                      {activeStep !== steps.length &&
+                                        (completed[activeStep] ? (
+                                          <Typography
+                                            variant="caption"
+                                            sx={{ display: "inline-block" }}
+                                          >
+                                            Step {activeStep + 1} already
+                                            completed
+                                          </Typography>
+                                        ) : (
+                                          <Button onClick={handleComplete}>
+                                            {completedSteps() ===
+                                            totalSteps() - 2
+                                              ? "Finish"
+                                              : "Complete Step"}
+                                          </Button>
+                                        ))}
+                                    </Box>
+                                  </React.Fragment>
+                                )}
+                              </>
                             )}
                           </div>
                         </Box>

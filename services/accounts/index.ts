@@ -1,12 +1,11 @@
 import {
-    GetAllAccountsDto,
-  } from "./dto/get-all-accounts-dto";
+  GetAllAccountsDto
+} from "./dto/get-all-accounts-dto";
   
   import { API } from "@/api-client/axios";
 import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
+import { getAccountByIdResponse } from "./dto/get-accounts-by-id-dto";
 import { UpdateAccountDto, UpdateAccountResponse, UpdateImageAccountDto, UpdateImageAccountResponse } from "./dto/update-accounts-dto";
-import { getProductByIdDtos } from "../products/dto/get-products-by-id-dto";
-import { AccountByIdDtos , getAccountByIdResponse } from "./dto/get-accounts-by-id-dto";
   
   export interface Filter {
     searchValues?: string;
