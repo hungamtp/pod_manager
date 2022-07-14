@@ -16,6 +16,8 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import TableViewIcon from "@mui/icons-material/TableView";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import { Router, useRouter } from "next/router";
+import { useAppSelector } from "../hooks/reduxHook";
+import Link from "next/link";
 type Props = {};
 
 export default function NavBar({}: Props) {
@@ -28,6 +30,7 @@ export default function NavBar({}: Props) {
     localStorage.removeItem("persist:root");
     router.push("/login");
   };
+  const auth = useAppSelector((state) => state.auth);
 
   return (
     <aside
@@ -190,23 +193,24 @@ export default function NavBar({}: Props) {
 
       <div className="menu-inner-shadow"></div>
 
-      <ul className="menu-inner py-1">
-        {/* {Dashboard} */}
-        <li className="menu-item active">
-          <a href="\" className="menu-link">
-            <i className="menu-icon tf-icons bx bx-home-circle"></i>
-            <div data-i18n="Analytics">Dashboard</div>
-          </a>
-        </li>
-        {/* {Dashboard} */}
+      {auth.roleName == "ADMIN" ? (
+        <ul className="menu-inner py-1">
+          {/* {Dashboard} */}
+          <li className="menu-item active">
+            <a href="\" className="menu-link">
+              <i className="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Dashboard</div>
+            </a>
+          </li>
+          {/* {Dashboard} */}
 
-        {/* {Account Setting} */}
-        <li className="menu-header small text-uppercase">
-          <span className="menu-header-text">Quản lý tài khoản</span>
-        </li>
+          {/* {Account Setting} */}
+          <li className="menu-header small text-uppercase">
+            <span className="menu-header-text">Quản lý tài khoản</span>
+          </li>
 
-        {/* {Manage Account} */}
-        {/* <List
+          {/* {Manage Account} */}
+          {/* <List
           className="w-screen"
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           component="nav"
@@ -245,86 +249,86 @@ export default function NavBar({}: Props) {
             </List>
           </Collapse>
         </List> */}
-        {/* {Manage Account} */}
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          <ListItemButton
-            onClick={() => {
-              router.push("account-setting");
-            }}
+          {/* {Manage Account} */}
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           >
-            <ListItemIcon className="pl-2p">
-              <AccountCircleIcon />
-            </ListItemIcon>
-            <ListItemText primary="Thông tin cá nhân" />
-          </ListItemButton>
-        </List>
+            <ListItemButton
+              onClick={() => {
+                router.push("account-setting");
+              }}
+            >
+              <ListItemIcon className="pl-2p">
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Thông tin cá nhân" />
+            </ListItemButton>
+          </List>
 
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          <ListItemButton
-            onClick={() => {
-              router.push("manage-account");
-            }}
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           >
-            <ListItemIcon className="pl-2p">
-              <BadgeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Quản lý tài khoản" />
-          </ListItemButton>
-        </List>
+            <ListItemButton
+              onClick={() => {
+                router.push("manage-account");
+              }}
+            >
+              <ListItemIcon className="pl-2p">
+                <BadgeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Quản lý tài khoản" />
+            </ListItemButton>
+          </List>
 
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          <ListItemButton
-            onClick={() => {
-              router.push("manage-factory");
-            }}
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           >
-            <ListItemIcon className="pl-2p">
-              <FactoryIcon />
-            </ListItemIcon>
-            <ListItemText primary="Quản lý Nhà máy" />
-          </ListItemButton>
-        </List>
+            <ListItemButton
+              onClick={() => {
+                router.push("manage-factory");
+              }}
+            >
+              <ListItemIcon className="pl-2p">
+                <FactoryIcon />
+              </ListItemIcon>
+              <ListItemText primary="Quản lý Nhà máy" />
+            </ListItemButton>
+          </List>
 
-        {/* {Manage Account} */}
+          {/* {Manage Account} */}
 
-        {/* {Manage designed product} */}
-        <li className="menu-header small text-uppercase">
-          <span className="menu-header-text">Quản lý Sản phẩm</span>
-        </li>
+          {/* {Manage designed product} */}
+          <li className="menu-header small text-uppercase">
+            <span className="menu-header-text">Quản lý Sản phẩm</span>
+          </li>
 
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          <ListItemButton
-            onClick={() => {
-              router.push("manage-product");
-            }}
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           >
-            <ListItemIcon className="pl-2p">
-              <svg
-                version="1.1"
-                id="Capa_1"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlnsXlink="http://www.w3.org/1999/xlink"
-                x="0px"
-                y="0px"
-                viewBox="0 0 295.526 295.526"
-                style={{ width: 25, opacity: 0.6 }}
-                xmlSpace="preserve"
-              >
-                <g>
-                  <path
-                    d="M147.763,44.074c12.801,0,23.858-8.162,27.83-20.169c-7.578,2.086-17.237,3.345-27.83,3.345
+            <ListItemButton
+              onClick={() => {
+                router.push("manage-product");
+              }}
+            >
+              <ListItemIcon className="pl-2p">
+                <svg
+                  version="1.1"
+                  id="Capa_1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                  x="0px"
+                  y="0px"
+                  viewBox="0 0 295.526 295.526"
+                  style={{ width: 25, opacity: 0.6 }}
+                  xmlSpace="preserve"
+                >
+                  <g>
+                    <path
+                      d="M147.763,44.074c12.801,0,23.858-8.162,27.83-20.169c-7.578,2.086-17.237,3.345-27.83,3.345
 		c-10.592,0-20.251-1.259-27.828-3.345C123.905,35.911,134.961,44.074,147.763,44.074z"
-                  />
-                  <path
-                    d="M295.158,58.839c-0.608-1.706-1.873-3.109-3.521-3.873l-56.343-26.01c-11.985-4.06-24.195-7.267-36.524-9.611
+                    />
+                    <path
+                      d="M295.158,58.839c-0.608-1.706-1.873-3.109-3.521-3.873l-56.343-26.01c-11.985-4.06-24.195-7.267-36.524-9.611
 		c-0.434-0.085-0.866-0.126-1.292-0.126c-3.052,0-5.785,2.107-6.465,5.197c-4.502,19.82-22.047,34.659-43.251,34.659
 		c-21.203,0-38.749-14.838-43.25-34.659c-0.688-3.09-3.416-5.197-6.466-5.197c-0.426,0-0.858,0.041-1.292,0.126
 		c-12.328,2.344-24.538,5.551-36.542,9.611L3.889,54.965c-1.658,0.764-2.932,2.167-3.511,3.873
@@ -332,96 +336,149 @@ export default function NavBar({}: Props) {
 		l27.167-8.052v161.97c0,3.678,3.001,6.678,6.689,6.678h161.723c3.678,0,6.67-3.001,6.67-6.678V107.66l27.186,8.052
 		c0.636,0.191,1.28,0.283,1.915,0.283c2.459,0,4.779-1.375,5.94-3.666l24.469-48.272C295.629,62.428,295.747,60.565,295.158,58.839z
 		"
-                  />
-                </g>
-              </svg>
-            </ListItemIcon>
-            <ListItemText primary="Quản lý sản phẩm thô" />
-          </ListItemButton>
-        </List>
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          <ListItemButton
-            onClick={() => {
-              router.push("manage-category");
-            }}
+                    />
+                  </g>
+                </svg>
+              </ListItemIcon>
+              <ListItemText primary="Quản lý sản phẩm thô" />
+            </ListItemButton>
+          </List>
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           >
-            <ListItemIcon className="pl-2p">
-              <CategoryIcon />
-            </ListItemIcon>
-            <ListItemText primary="Quản lý Category" />
-          </ListItemButton>
-        </List>
+            <ListItemButton
+              onClick={() => {
+                router.push("manage-category");
+              }}
+            >
+              <ListItemIcon className="pl-2p">
+                <CategoryIcon />
+              </ListItemIcon>
+              <ListItemText primary="Quản lý Category" />
+            </ListItemButton>
+          </List>
 
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          <ListItemButton
-            onClick={() => {
-              router.push("manage-size");
-            }}
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           >
-            <ListItemIcon className="pl-2p">
-              <HeightIcon />
-            </ListItemIcon>
-            <ListItemText primary="Quản lý Kích thước" />
-          </ListItemButton>
-        </List>
+            <ListItemButton
+              onClick={() => {
+                router.push("manage-size");
+              }}
+            >
+              <ListItemIcon className="pl-2p">
+                <HeightIcon />
+              </ListItemIcon>
+              <ListItemText primary="Quản lý Kích thước" />
+            </ListItemButton>
+          </List>
 
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          <ListItemButton
-            onClick={() => {
-              router.push("manage-color");
-            }}
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           >
-            <ListItemIcon className="pl-2p">
-              <ColorLensIcon />
-            </ListItemIcon>
-            <ListItemText primary="Quản lý màu" />
-          </ListItemButton>
-        </List>
-        {/* {/Manage designed product} */}
-        <li className="menu-header small text-uppercase">
-          <span className="menu-header-text">Quản lý Nhà Máy</span>
-        </li>
+            <ListItemButton
+              onClick={() => {
+                router.push("manage-color");
+              }}
+            >
+              <ListItemIcon className="pl-2p">
+                <ColorLensIcon />
+              </ListItemIcon>
+              <ListItemText primary="Quản lý màu" />
+            </ListItemButton>
+          </List>
+          {/* {/Manage designed product} */}
 
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          <ListItemButton
-            onClick={() => {
-              router.push("manage-order");
-            }}
+          <li className="menu-header small text-uppercase">
+            <span className="menu-header-text">Đăng xuất</span>
+          </li>
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           >
-            <ListItemIcon className="pl-2p">
-              <ShoppingBasketIcon />
-            </ListItemIcon>
-            <ListItemText primary="Quản lý Đơn Hàng" />
-          </ListItemButton>
-        </List>
-        <li className="menu-header small text-uppercase">
-          <span className="menu-header-text">Đăng xuất</span>
-        </li>
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          <ListItemButton
-            onClick={() => {
-              logout();
-            }}
-          >
-            <ListItemIcon className="pl-2p">
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText primary="Đăng xuất" />
-          </ListItemButton>
-        </List>
+            <ListItemButton
+              onClick={() => {
+                logout();
+              }}
+            >
+              <ListItemIcon className="pl-2p">
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Đăng xuất" />
+            </ListItemButton>
+          </List>
 
-        {/* {Manage Order} */}
-      </ul>
+          {/* {Manage Order} */}
+        </ul>
+      ) : (
+        <ul className="menu-inner py-1">
+          {/* {Dashboard} */}
+          <li className="menu-item active">
+            <Link href="/factory/dash-board">
+              <a className="menu-link">
+                <i className="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">Dashboard</div>
+              </a>
+            </Link>
+          </li>
+          {/* {Dashboard} */}
+
+          <li className="menu-header small text-uppercase">
+            <span className="menu-header-text">Quản lý tài khoản</span>
+          </li>
+
+          {/* {Manage Account} */}
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+          >
+            <ListItemButton
+              onClick={() => {
+                router.push("/factory/account-setting");
+              }}
+            >
+              <ListItemIcon className="pl-2p">
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Thông tin cá nhân" />
+            </ListItemButton>
+          </List>
+
+          {/* {Manage designed product} */}
+
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+          >
+            <ListItemButton
+              onClick={() => {
+                router.push("/factory/manage-order");
+              }}
+            >
+              <ListItemIcon className="pl-2p">
+                <ShoppingBasketIcon />
+              </ListItemIcon>
+              <ListItemText primary="Quản lý Đơn Hàng" />
+            </ListItemButton>
+          </List>
+          <li className="menu-header small text-uppercase">
+            <span className="menu-header-text">Đăng xuất</span>
+          </li>
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+          >
+            <ListItemButton
+              onClick={() => {
+                logout();
+              }}
+            >
+              <ListItemIcon className="pl-2p">
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Đăng xuất" />
+            </ListItemButton>
+          </List>
+
+          {/* {Manage Order} */}
+        </ul>
+      )}
     </aside>
   );
 }

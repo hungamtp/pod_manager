@@ -3,26 +3,9 @@
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
 import { MainLayout } from "@/components/layouts";
-import CreateForm from "@/components/manage-account/create-form";
-import UpdateForm from "@/components/manage-account/update-form";
-import CreateColorForm from "@/components/manage-color/create-color-form";
 import { Filter } from "@/services/accounts";
-import { AccountDto } from "@/services/accounts/dto/get-all-accounts-dto";
-import { UpdateAccountDto } from "@/services/accounts/dto/update-accounts-dto";
-import { Fab } from "@material-ui/core";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { IconButton, Pagination, Stack } from "@mui/material";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import useAccounts from "hooks/accounts/use-accounts";
-import useDeleteAccount from "hooks/accounts/use-delete-accounts";
+import { Pagination, Stack } from "@mui/material";
 import useColors from "hooks/colors/use-colors";
-import useFactories from "hooks/factories/use-factories";
-import useSizes from "hooks/sizes/use-sizes";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useState } from "react";
@@ -91,7 +74,7 @@ export default function ManageOrder(props: IManageOrder) {
                         type="button"
                         className="btn btn-primary btn-sm"
                         onClick={() => {
-                          router.push(`/order-details`);
+                          router.push(`/factory/order-details`);
                         }}
                       >
                         Chi tiết

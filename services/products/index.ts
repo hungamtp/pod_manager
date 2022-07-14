@@ -1,5 +1,5 @@
 import {
-    GetAllProductsDto, GetColors, GetSizes,
+    GetAllProductsDto, 
   } from "./dto/get-all-products-dto";
   
   import { API } from "@/api-client/axios";
