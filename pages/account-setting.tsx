@@ -122,6 +122,7 @@ export default function AccountSetting(props: IAccountSettingProps) {
       phone: data.phone.toString(),
       roleName: data.roleName,
       email: data.email,
+      image: data.image,
     };
     updateProfile(tmpData);
   };
@@ -179,6 +180,12 @@ export default function AccountSetting(props: IAccountSettingProps) {
                                 >
                                   Tải lên
                                 </button>
+                                {/* <button
+                                  onClick={() => onUploadImage("")}
+                                  className="btn btn-primary me-2  ms-2 mt-5"
+                                >
+                                  Lưu
+                                </button> */}
                               </div>
                             )}
                           </ImageUploading>
@@ -291,10 +298,10 @@ export default function AccountSetting(props: IAccountSettingProps) {
                           <label htmlFor="address" className="form-label">
                             Địa chỉ
                           </label>
-                          <input
-                            type="text"
+                          <textarea
                             className="form-control"
                             id="address"
+                            rows={3}
                             disabled={isDisable}
                             defaultValue={responseAccount.data.address}
                             {...register("address")}

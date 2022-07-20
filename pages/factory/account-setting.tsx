@@ -29,16 +29,38 @@ const schema = yup.object().shape({
 
 export default function AccountSetting(props: AccountSettingProps) {
   const credentialId = useAppSelector((state) => state.auth.userId);
+  const [index, setIndex] = React.useState(0);
+  const [openDialog, setOpenDialog] = React.useState(false);
 
   const { data: responseFactory, isLoading: isLoadingFactory } =
     useGetFactoryById(credentialId);
-
+  const handleOpenSizeColorDialog = (index: number, productId: string) => {
+    setIndex(index);
+    setOpenDialog(true);
+  };
   React.useEffect(() => {
     responseFactory?.data;
   }, [responseFactory]);
 
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
   return (
     <>
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        fullWidth={true}
+      >
+        <DialogContent>
+          <SizesColorsProduct
+            factoryId={credentialId as string}
+            index={index}
+          />
+        </DialogContent>
+      </Dialog>
       <div>
         <div className="container-xxl flex-grow-1 container-p-y">
           <h4 className="fw-bold py-3 mb-4"></h4>
@@ -153,6 +175,87 @@ export default function AccountSetting(props: AccountSettingProps) {
       {/* / Layout page */}
       {/* Overlay */}
       <div className="layout-overlay layout-menu-toggle" />
+      <div>
+        <div className="container-xxl flex-grow-1 container-p-y">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="card mb-4">
+                {/* Account */}
+                <h4 className="card-header">
+                  Sản phẩm của nhà máy đang sản xuất
+                </h4>
+                <hr className="my-0" />
+                <div className="card">
+                  <div className="table-responsive text-nowrap">
+                    {!isLoadingFactory &&
+                    responseFactory &&
+                    responseFactory.data.productDtoList.length > 0 ? (
+                      <table className="table table-sm">
+                        <thead>
+                          <tr>
+                            <th>
+                              <strong>Tên</strong>
+                            </th>
+                            <th>
+                              <strong>Category</strong>
+                            </th>
+                            <th>
+                              <strong>Hình ảnh</strong>
+                            </th>
+                            <th>
+                              <strong>Màu và Kích thước</strong>
+                            </th>
+                          </tr>
+                        </thead>
+                        {responseFactory?.data.productDtoList.map(
+                          (x, index) => (
+                            <tbody key={x.id} className="table-border-bottom-0">
+                              <tr>
+                                <td>
+                                  <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
+                                  <strong>{x.name}</strong>
+                                </td>
+                                <td>{x.categoryName}</td>
+                                <td>
+                                  <img
+                                    src={x.productImages[0].image}
+                                    width="100"
+                                    height="100"
+                                  />
+                                </td>
+                                <td>
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleOpenSizeColorDialog(index, x.id)
+                                    }
+                                    className="btn btn-primary me-2"
+                                  >
+                                    Xem
+                                  </button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          )
+                        )}
+                      </table>
+                    ) : (
+                      <div className="h3 text-center p-3">
+                        Nhà máy này hiện chưa có sản phẩm nào
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {/* /Account */}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* / Content */}
+
+        <div className="content-backdrop fade" />
+      </div>
     </>
   );
 }

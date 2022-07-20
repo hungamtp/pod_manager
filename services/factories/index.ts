@@ -8,6 +8,7 @@ import {
 } from "./dto/create-size-color-product-dto";
 import { getProductForFactoryDtos } from "./dto/get-product-for-factory-dto";
 import { CreateFactoryDto, CreateFactoryResponse } from "./dto/create-factory-dto";
+import {  GetAllOrdersFactoriesResponse } from "./dto/get-all-orders-factory";
 
 export interface Filter {
   pageSize?: number;
@@ -23,6 +24,18 @@ export const getFactories = async (filter?: Filter) => {
   });
   const { data } = await API.get<GetAllFactoriesDto>(
     `/factory?${query.toString()}`
+  );
+  return data.data;
+};
+export const getOrdersFactory = async (credentialId: string, filter?: Filter) => {
+  const pageNumber = 0;
+  const pageSize = 10;
+  const query = new URLSearchParams({
+    pageNumber: filter?.pageNumber?.toString() || pageNumber.toString(),
+    pageSize: filter?.pageSize?.toString() || pageSize.toString(),
+  });
+  const { data } = await API.get<GetAllOrdersFactoriesResponse>(
+    `/factory/order-details/${credentialId}?${query.toString()}`
   );
   return data.data;
 };

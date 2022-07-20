@@ -1,31 +1,20 @@
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
-import KeyIcon from "@mui/icons-material/Key";
-import * as React from "react";
-import * as yup from "yup";
-import { useState } from "react";
+import { storage } from "@/firebase/firebase";
+import { Filter } from "@/services/categories";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { SubmitHandler, useForm } from "react-hook-form";
-import useCreateAccount from "hooks/accounts/use-create-account";
+import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import useCreateCategory from "hooks/categories/use-create-categories";
-import ImageUploading, { ImageListType } from "react-images-uploading";
-import { storage } from "@/firebase/firebase";
-import DescriptionIcon from "@mui/icons-material/Description";
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  listAll,
-  list,
-} from "firebase/storage";
-import useCreateProduct from "hooks/products/use-create-products";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import useCategories from "hooks/categories/use-categories";
-import { Filter } from "@/services/categories";
-import { MenuList } from "@mui/material";
+import useCreateProduct from "hooks/products/use-create-products";
+import * as React from "react";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import ImageUploading, { ImageListType } from "react-images-uploading";
+import * as yup from "yup";
 
 export interface ICreateProductFormProps {
   handleCloseDialog: () => void;
