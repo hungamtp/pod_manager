@@ -11,6 +11,9 @@ import StepButton from "@mui/material/StepButton";
 import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
 import { StepLabel } from "@mui/material";
+import { useRouter } from "next/router";
+import useGetOrderDetails from "hooks/factories/use-get-order-details";
+
 export interface OrderDetailsProps {}
 
 const steps = ["Chờ xác nhận", "Chờ lấy hàng", "Đang giao", "Đã giao"];
@@ -20,8 +23,15 @@ export default function OrderDetails(props: OrderDetailsProps) {
   const [completed, setCompleted] = React.useState<{
     [k: number]: boolean;
   }>({});
-
   const [isCancel, setIsCancel] = React.useState(false);
+  const router = useRouter();
+  const { orderId, designId, credentialId } = router.query;
+  const { data: responseOrderDetails } = useGetOrderDetails(
+    orderId as string,
+    designId as string,
+    credentialId as string
+  );
+  console.log(responseOrderDetails, "obj");
   const totalSteps = () => {
     return steps.length;
   };

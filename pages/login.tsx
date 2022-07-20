@@ -40,9 +40,7 @@ export default function Login(props: ILoginProps) {
   });
 
   const onSubmit: SubmitHandler<FormLogin> = (data) => {
-    console.log(data, "loginn");
     const res = login({ email: data.email, password: data.password });
-    console.log(res);
   };
   return (
     <>

@@ -22,7 +22,8 @@ const useLogin = () => {
         if (auth.roleName === "ADMIN")
           //because data:any
           router.push("/");
-        else if (auth.roleName === "FACTORY") router.push("/factory/dash-board");
+        else if (auth.roleName === "FACTORY")
+          router.push("/factory/dash-board");
         // router.back();
         else router.push("/login");
       },

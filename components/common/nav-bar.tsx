@@ -16,18 +16,20 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import TableViewIcon from "@mui/icons-material/TableView";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import { Router, useRouter } from "next/router";
-import { useAppSelector } from "../hooks/reduxHook";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHook";
 import Link from "next/link";
+import { logout } from "@/redux/slices/auth";
 type Props = {};
 
 export default function NavBar({}: Props) {
   const [open, setOpen] = React.useState(false);
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const handleClick = () => {
     setOpen(!open);
   };
-  const logout = () => {
-    localStorage.removeItem("persist:root");
+  const handleLogout = () => {
+    dispatch(logout());
     router.push("/login");
   };
   const auth = useAppSelector((state) => state.auth);
@@ -238,7 +240,7 @@ export default function NavBar({}: Props) {
             <List component="div">
               <ListItemButton
                 onClick={() => {
-                  logout();
+                  handleLogout();
                 }}
               >
                 <ListItemIcon>
@@ -397,7 +399,7 @@ export default function NavBar({}: Props) {
           >
             <ListItemButton
               onClick={() => {
-                logout();
+                handleLogout();
               }}
             >
               <ListItemIcon className="pl-2p">
@@ -466,7 +468,7 @@ export default function NavBar({}: Props) {
           >
             <ListItemButton
               onClick={() => {
-                logout();
+                handleLogout();
               }}
             >
               <ListItemIcon className="pl-2p">

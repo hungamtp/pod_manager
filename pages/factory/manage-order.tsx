@@ -71,7 +71,9 @@ export default function ManageOrder(props: IManageOrder) {
                             type="button"
                             className="btn btn-primary btn-sm"
                             onClick={() => {
-                              router.push(`/factory/order-details`);
+                              router.push(
+                                `/factory/order-details-printing/?orderId=${orders.orderId}&designId=${orders.designId}&credentialId=${credentialId}`
+                              );
                             }}
                           >
                             Chi tiết

@@ -7,8 +7,12 @@ import {
   CreateSizeColorProductDto,
 } from "./dto/create-size-color-product-dto";
 import { getProductForFactoryDtos } from "./dto/get-product-for-factory-dto";
-import { CreateFactoryDto, CreateFactoryResponse } from "./dto/create-factory-dto";
-import {  GetAllOrdersFactoriesResponse } from "./dto/get-all-orders-factory";
+import {
+  CreateFactoryDto,
+  CreateFactoryResponse,
+} from "./dto/create-factory-dto";
+import { GetAllOrdersFactoriesResponse } from "./dto/get-all-orders-factory";
+import { getOrdersDetailResponse } from "./dto/get-orders-detail-dto";
 
 export interface Filter {
   pageSize?: number;
@@ -27,7 +31,10 @@ export const getFactories = async (filter?: Filter) => {
   );
   return data.data;
 };
-export const getOrdersFactory = async (credentialId: string, filter?: Filter) => {
+export const getOrdersFactory = async (
+  credentialId: string,
+  filter?: Filter
+) => {
   const pageNumber = 0;
   const pageSize = 10;
   const query = new URLSearchParams({
@@ -48,18 +55,28 @@ export const createAccountFactory = async (requestData: CreateFactoryDto) => {
   return data;
 };
 export const DeleteAccountFactory = async (id: string) => {
-await API.patch(
-    `/factory/collaborating/${id}?collaborating=false`,
-  );
+  await API.patch(`/factory/collaborating/${id}?collaborating=false`);
 };
 
 export const getFactoryById = async (id: string) => {
   const { data } = await API.get<getFactoryByIdDtos>(`/factory/${id}`);
   return data;
 };
+export const getOrderDetails = async (
+  orderId: string,
+  designId: string,
+  credentialId: string
+) => {
+  const { data } = await API.get<getOrdersDetailResponse>(
+    `/factory/order-details-printing?orderId=${orderId}&designId=${designId}&credentialId=${credentialId}`
+  );
+  return data;
+};
 
 export const getProductForFactory = async (id: string) => {
-  const { data } = await API.get<getProductForFactoryDtos>(`/product/product-for-factory?factoryId=${id}`);
+  const { data } = await API.get<getProductForFactoryDtos>(
+    `/product/product-for-factory?factoryId=${id}`
+  );
   return data;
 };
 
@@ -80,7 +97,7 @@ export const createProductPrice = async (
   price: number
 ) => {
   const { data } = await API.post(
-    `/factory/add-price?factoryId=${factoryId}&productId=${productId}&price=${price}`,
+    `/factory/add-price?factoryId=${factoryId}&productId=${productId}&price=${price}`
   );
   return data;
 };
