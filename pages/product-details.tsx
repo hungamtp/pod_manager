@@ -36,6 +36,14 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import useGetProductBlueprint from "hooks/products/use-get-product-blueprint";
 import { Blueprint } from "../models";
+import useGetSizeProductByProductId from "hooks/products/use-get-product-size-by-productId";
+import { useEffect } from "react";
+import { ProductSizeDto } from "@/services/products/dto/product-size-dto";
+import useCreateProductSize from "hooks/products/use-create-product-size";
+import useUpdateSizeProduct from "hooks/products/use-update-product-size";
+import CreateProductSizeForm from "@/components/manage-product/create-new-size-data-form";
+import { string } from "yup/lib/locale";
+import UpdateProductSizeForm from "@/components/manage-product/update-size-data-for-product";
 
 export interface IProductDetailsProps {}
 
@@ -58,15 +66,74 @@ export default function ProductDetails(props: IProductDetailsProps) {
     useGetProductById(id);
   const { data: responseProductBlueprint, isLoading: isloadingPrBlueprint } =
     useGetProductBlueprint(id);
+
   const { data: responseSizesColorById } = useGetSizesColorsById(id);
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
-  const [openCreateProductBlueprint, setOpenCreateProductBlueprint] =
+  const [openCreateProductSize, setOpenCreateProductSize] =
     React.useState(false);
-  const [openUpdateProductBlueprint, setOpenUpdateProductBlueprint] =
-    React.useState(false);
+  const [isCreateProductSize, setIsCreateProductSize] = React.useState(true);
+  const [sizeCreateData, setSizeCreateData] = React.useState("");
+  const [productSizeUpdateData, setProductSizeUpdateData] =
+    React.useState<ProductSizeDto>({
+      size: "",
+      width: 0,
+      height: 0,
+      id: "",
+    });
   const [checked, setChecked] = React.useState(true);
   const [checkValue, setCheckValue] = React.useState("");
   const [isDisabled, setIsDisabled] = React.useState(true);
+
+  const { data: sizeProductResponse } = useGetSizeProductByProductId(id);
+
+  const [renderedSizeList, setRenderSizeList] =
+    React.useState<ProductSizeDto[]>();
+
+  React.useEffect(() => {
+    const newRenderedSizeList: {
+      size: string;
+      width: number;
+      height: number;
+      id: string;
+    }[] = [];
+    if (sizeProductResponse) {
+      responseSizesColorById?.data.sizes.forEach((size) => {
+        let hasSize = false;
+        sizeProductResponse.forEach((sizeWithMeasurement) => {
+          if (sizeWithMeasurement.size === size) {
+            newRenderedSizeList.push({
+              id: sizeWithMeasurement.id,
+              size: sizeWithMeasurement.size,
+              width: sizeWithMeasurement.width,
+              height: sizeWithMeasurement.height,
+            });
+            hasSize = true;
+          }
+        });
+        if (!hasSize)
+          newRenderedSizeList.push({
+            size: size,
+            width: 0,
+            height: 0,
+            id: "none",
+          });
+      });
+
+      setRenderSizeList(newRenderedSizeList);
+    }
+  }, [sizeProductResponse]);
+
+  const handleCreateProductSize = (size: string) => {
+    setSizeCreateData(size);
+    setIsCreateProductSize(true);
+    setOpenCreateProductSize(true);
+  };
+  const handleUpdateProductSize = (productSizeData: ProductSizeDto) => {
+    setProductSizeUpdateData(productSizeData);
+    setIsCreateProductSize(false);
+    setOpenCreateProductSize(true);
+  };
+
   const dispatch = useAppDispatch();
 
   const maxNumber = 69;
@@ -80,10 +147,6 @@ export default function ProductDetails(props: IProductDetailsProps) {
     dispatch(setProductName(responseProduct?.data.name || ""));
 
     router.push(`/create-blueprint?productId=${id}`);
-  };
-
-  const handleCloseCreateProductBlueprint = () => {
-    setOpenCreateProductBlueprint(false);
   };
 
   const handleUpdateProductBlueprint = (
@@ -105,9 +168,6 @@ export default function ProductDetails(props: IProductDetailsProps) {
     };
     dispatch(loadBlueprint(tmpData));
     router.push(`/update-blueprint?productId=${id}`);
-  };
-  const handleCloseUpdateProductBlueprint = () => {
-    setOpenUpdateProductBlueprint(false);
   };
 
   const handleCloseCreateDialog = () => {
@@ -635,8 +695,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                 <div className="card">
                   <div className="card-body">
                     <div className="table-responsive text-nowrap">
-                      {responseSizesColorById &&
-                      responseSizesColorById.data.sizes.length > 0 ? (
+                      {responseSizesColorById && renderedSizeList ? (
                         <div key={nanoid()}>
                           <div className="d-flex">
                             <table className="table table-borderless ">
@@ -645,20 +704,82 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                   <th>
                                     <strong>Kích thước</strong>
                                   </th>
+                                  <th>
+                                    <strong>Chiều rộng</strong>
+                                  </th>
+                                  <th>
+                                    <strong>Chiều dài</strong>
+                                  </th>
+                                  <th>
+                                    <strong>Hành động</strong>
+                                  </th>
                                 </tr>
                               </thead>
                               <tbody className="table-border-bottom-0">
-                                {responseSizesColorById.data.sizes.map(
-                                  (sizes) => (
-                                    <tr key={nanoid()}>
-                                      <td>
-                                        <strong>{sizes}</strong>
-                                      </td>
-                                    </tr>
-                                  )
-                                )}
+                                {renderedSizeList.map((data) => (
+                                  <tr key={nanoid()}>
+                                    <td>
+                                      <strong>{data.size}</strong>
+                                    </td>
+                                    <td>
+                                      <strong>{data.width}</strong>
+                                    </td>
+                                    <td>
+                                      <strong>{data.height}</strong>
+                                    </td>
+                                    <td>
+                                      {data.id === "none" ? (
+                                        <button
+                                          className="btn btn-primary"
+                                          onClick={() =>
+                                            handleCreateProductSize(data.size)
+                                          }
+                                        >
+                                          Thêm size
+                                        </button>
+                                      ) : (
+                                        <button
+                                          className="btn btn-secondary"
+                                          onClick={() =>
+                                            handleUpdateProductSize(data)
+                                          }
+                                        >
+                                          Chỉnh sửa
+                                        </button>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))}
                               </tbody>
                             </table>
+                            <Dialog
+                              open={openCreateProductSize}
+                              onClose={handleCloseCreateDialog}
+                              aria-labelledby="alert-dialog-title"
+                              aria-describedby="alert-dialog-description"
+                              fullWidth={true}
+                            >
+                              <DialogContent>
+                                {isCreateProductSize ? (
+                                  <CreateProductSizeForm
+                                    setOpenCreateProductSize={
+                                      setOpenCreateProductSize
+                                    }
+                                    productId={id}
+                                    size={sizeCreateData}
+                                  />
+                                ) : (
+                                  <UpdateProductSizeForm
+                                    setOpenCreateProductSize={
+                                      setOpenCreateProductSize
+                                    }
+                                    productSizeUpdateData={
+                                      productSizeUpdateData
+                                    }
+                                  />
+                                )}
+                              </DialogContent>
+                            </Dialog>
                             <table className="table table-borderless ">
                               <thead className="border-bottom">
                                 <tr>
