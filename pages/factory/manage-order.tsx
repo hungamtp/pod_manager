@@ -2,10 +2,14 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
+import { useAppSelector } from "@/components/hooks/reduxHook";
 import { MainLayout } from "@/components/layouts";
+import { numberWithCommas } from "@/helpers/number-util";
 import { Filter } from "@/services/accounts";
 import { Pagination, Stack } from "@mui/material";
+import { nanoid } from "@reduxjs/toolkit";
 import useColors from "hooks/colors/use-colors";
+import useOrdersFactory from "hooks/factories/use-orders-factory";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useState } from "react";
@@ -14,6 +18,7 @@ export interface IManageOrder {}
 const ITEM_HEIGHT = 48;
 
 export default function ManageOrder(props: IManageOrder) {
+  const credentialId = useAppSelector((state) => state.auth.userId);
   const [filter, setFilter] = useState<Filter>({
     pageNumber: 0,
     pageSize: 10,
@@ -26,20 +31,9 @@ export default function ManageOrder(props: IManageOrder) {
   ) => {
     setFilter({ ...filter, pageNumber: value - 1 });
   };
-  const { data: response, isLoading: isLoadingAccount } = useColors(filter);
-  //  menu button
+  const { data: ordersFactoryresponse, isLoading: isLoadingOrdersFactory } =
+    useOrdersFactory(credentialId, filter);
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-  };
-
-  /*{form add account }*/
-  const handleOpenCreate = () => {
-    setOpenDialog(true);
-  };
-
-  /* {open Dialog} */
-  const [openDialog, setOpenDialog] = React.useState(false);
   return (
     <>
       <div>
@@ -60,132 +54,62 @@ export default function ManageOrder(props: IManageOrder) {
                     <th>Chi Tiết</th>
                     <th>Tên sản phẩm</th>
                     <th>Hình Ảnh</th>
-                    <th>Địa chỉ</th>
-                    <th>Số điện thoại</th>
+                    <th>Màu</th>
+                    <th>Kích thước</th>
                     <th>Giá đơn Hàng</th>
                     <th>Số lượng</th>
                     <th>Trạng thái</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">
-                  <tr>
-                    <td>
-                      <button
-                        type="button"
-                        className="btn btn-primary btn-sm"
-                        onClick={() => {
-                          router.push(`/factory/order-details`);
-                        }}
-                      >
-                        Chi tiết
-                      </button>
-                    </td>
-                    <td>Áo hoodies mũ cụp</td>
-                    <td>
-                      <img
-                        className=""
-                        src="https://firebasestorage.googleapis.com/v0/b/assignment1-302217.appspot.com/o/images%2Fao-hoodies-cup-nu.jpg?alt=media&token=b458f12f-7e5e-4d2b-9663-d72d236c86d0"
-                        height={100}
-                        width={100}
-                      />
-                    </td>
-                    <td
-                      style={{
-                        whiteSpace: "pre-wrap",
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      145 Trần Thị Cờ, Quận 9, TP. Hồ Chí Minh
-                    </td>
-                    <td>0914354763</td>
-                    <td>
-                      <strong>200.000 VND</strong>
-                    </td>
-                    <td style={{ textAlign: "center" }}>2</td>
-                    <td>
-                      <span className="badge bg-label-warning me-1">
-                        Đang xử lý
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <button
-                        type="button"
-                        className="btn btn-primary btn-sm"
-                        onClick={() => {
-                          router.push(`/order-details`);
-                        }}
-                      >
-                        Chi tiết
-                      </button>
-                    </td>
-                    <td>Áo hoodies mũ cụp</td>
-                    <td>
-                      <img
-                        src="https://firebasestorage.googleapis.com/v0/b/assignment1-302217.appspot.com/o/images%2Fao-hoodies-cup-nu.jpg?alt=media&token=b458f12f-7e5e-4d2b-9663-d72d236c86d0"
-                        height={100}
-                        width={100}
-                      />
-                    </td>
-                    <td
-                      style={{
-                        whiteSpace: "pre-wrap",
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      145 Trần Thị Cờ, Quận 9, TP. Hồ Chí Minh
-                    </td>
-                    <td>0914354763</td>
-                    <td>
-                      <strong>200.000 VND</strong>
-                    </td>
-                    <td style={{ textAlign: "center" }}>2</td>
-                    <td>
-                      <span className="badge bg-label-primary me-1">
-                        Đang Vận Chuyển
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <button
-                        type="button"
-                        className="btn btn-primary btn-sm"
-                        onClick={() => {
-                          router.push(`/order-details`);
-                        }}
-                      >
-                        Chi tiết
-                      </button>
-                    </td>
-                    <td>Áo hoodies mũ cụp</td>
-                    <td>
-                      <img
-                        src="https://firebasestorage.googleapis.com/v0/b/assignment1-302217.appspot.com/o/images%2Fao-hoodies-cup-nu.jpg?alt=media&token=b458f12f-7e5e-4d2b-9663-d72d236c86d0"
-                        height={100}
-                        width={100}
-                      />
-                    </td>
-                    <td
-                      style={{
-                        whiteSpace: "pre-wrap",
-                        wordWrap: "break-word",
-                      }}
-                    >
-                      145 Trần Thị Cờ, Quận 9, TP. Hồ Chí Minh
-                    </td>
-                    <td>0914354763</td>
-                    <td>
-                      <strong>200.000 VND</strong>
-                    </td>
-                    <td style={{ textAlign: "center" }}>2</td>
-                    <td>
-                      <span className="badge bg-label-success me-1">
-                        Hoàn thành
-                      </span>
-                    </td>
-                  </tr>
+                  {!isLoadingOrdersFactory &&
+                    ordersFactoryresponse &&
+                    ordersFactoryresponse.content.map((orders) => (
+                      <tr key={nanoid()}>
+                        <td>
+                          <button
+                            type="button"
+                            className="btn btn-primary btn-sm"
+                            onClick={() => {
+                              router.push(`/factory/order-details`);
+                            }}
+                          >
+                            Chi tiết
+                          </button>
+                        </td>
+                        <td>{orders.designName}</td>
+                        <td>
+                          <img
+                            className="border border-secondary"
+                            src={orders.designedImage}
+                            height={100}
+                            width={100}
+                          />
+                        </td>
+                        <td
+                          style={{
+                            whiteSpace: "pre-wrap",
+                            wordWrap: "break-word",
+                          }}
+                        >
+                          {orders.color}
+                        </td>
+                        <td style={{ textAlign: "center" }}>{orders.size}</td>
+                        <td>
+                          <strong>{numberWithCommas(orders.price)} VND</strong>
+                        </td>
+                        <td style={{ textAlign: "center" }}>
+                          {orders.quantity} sản phẩm
+                        </td>
+                        <td>
+                          {orders.status === "PENDING" && (
+                            <span className="badge bg-label-warning me-1">
+                              CHỜ XÁC NHẬN
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
@@ -196,7 +120,7 @@ export default function ManageOrder(props: IManageOrder) {
             <Pagination
               shape="circular"
               size="large"
-              count={response?.totalPages}
+              count={ordersFactoryresponse?.totalPages}
               onChange={handlePageChange}
               color="secondary"
             />
