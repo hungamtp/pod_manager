@@ -9,17 +9,12 @@ import {
   setValue,
   updateImgSrc,
 } from "@/redux/slices/blueprints";
-import { setChoosenKey } from "@/redux/slices/choosenKey";
 import { fabric } from "fabric";
 import _ from "lodash";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import * as React from "react";
-import { Blueprint } from "../models";
 export interface ICreateBlueprint {}
-const hightRate = 1.2337;
-const placeHolderAndOuterRate = 1.5;
-const DPI = 300;
 
 const resizer = (
   canvasSize: { width: number; height: number },
@@ -62,19 +57,6 @@ const resizer = (
   };
 };
 
-const getBase64FromUrl = async (url: string): Promise<string> => {
-  const data = await fetch(url);
-  const blob = await data.blob();
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    reader.onloadend = () => {
-      const base64data = reader.result + "" || url;
-      resolve(base64data);
-    };
-  });
-};
-
 const initCanvas = (
   defaultWidth: number,
   defaultHeight: number,
@@ -88,11 +70,6 @@ const initCanvas = (
 };
 
 export default function CreateBlueprint(props: ICreateBlueprint) {
-  const pageHeight = Math.max(
-    document.documentElement.clientHeight || 0,
-    window.innerHeight || 0
-  );
-
   const dispatch = useAppDispatch();
 
   const [canvas, setCanvas] = React.useState<fabric.Canvas>();
@@ -108,8 +85,10 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
       }
     }, 200);
 
-    const handleRouteChange = (url: any) => {
-      dispatch(resetDesigns());
+    const handleRouteChange = (url: string) => {
+      if (!url.includes("create-blueprint")) {
+        dispatch(resetDesigns());
+      }
     };
 
     router.events.on("routeChangeStart", handleRouteChange);
@@ -192,8 +171,7 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
         return o.name === blueprint.key;
       });
       const width = (widthRate / 100) * backGroundImage.getScaledHeight();
-      const height =
-        (blueprint.heightRate / 100) * backGroundImage.getScaledHeight();
+      const height = (width * blueprint.height) / blueprint.width;
 
       if (object) {
         const scale = object.getObjectScaling();
@@ -259,11 +237,15 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
       console.log(rect.top, "rect.top");
 
       rect.setControlsVisibility({
-        mtr: false,
-        ml: false,
-        mr: false,
         mt: false,
         mb: false,
+        ml: false,
+        mr: false,
+        bl: false,
+        br: false,
+        tl: false,
+        tr: false,
+        mtr: false,
       });
 
       const maxScaleY = backGroundImage.getScaledHeight() / (height * 2);

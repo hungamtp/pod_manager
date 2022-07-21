@@ -3,6 +3,8 @@ export interface Blueprint {
   key: string;
   productName: string;
   isEdit: boolean;
+  maxWidth: number;
+  maxHeight: number;
   width: number;
   height: number;
   position: string;

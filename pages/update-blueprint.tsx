@@ -99,8 +99,8 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
       }
     }, 200);
 
-    const handleRouteChange = (url: any) => {
-      dispatch(resetDesigns());
+    const handleRouteChange = (url: string) => {
+      if (!url.includes("update-blueprint")) dispatch(resetDesigns());
     };
 
     router.events.on("routeChangeStart", handleRouteChange);
@@ -194,8 +194,7 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
         return o.name === blueprint.key;
       });
       const width = (widthRate / 100) * backGroundImage.getScaledHeight();
-      const height =
-        (blueprint.heightRate / 100) * backGroundImage.getScaledHeight();
+      const height = (width * blueprint.height) / blueprint.width;
 
       if (object) {
         const scale = object.getObjectScaling();
@@ -260,13 +259,16 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
       rect.transparentCorners = true;
 
       rect.setControlsVisibility({
-        mtr: false,
-        ml: false,
-        mr: false,
         mt: false,
         mb: false,
+        ml: false,
+        mr: false,
+        bl: false,
+        br: false,
+        tl: false,
+        tr: false,
+        mtr: false,
       });
-
       const maxScaleY = backGroundImage.getScaledHeight() / (height * 2);
 
       const maxScaleX = maxScaleY;

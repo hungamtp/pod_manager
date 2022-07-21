@@ -8,6 +8,8 @@ const initialState: Blueprint = {
   isEdit: false,
   width: 14,
   height: 14,
+  maxWidth: 19,
+  maxHeight: 24,
   position: "",
   widthRate: 25,
   heightRate: 25,
@@ -55,6 +57,13 @@ export const designSlice = createSlice({
         height: action.payload,
       };
     },
+    setMaxWidthAndHeight: (state, action) => {
+      return {
+        ...state,
+        maxWidth: action.payload.maxWidth,
+        maxHeight: action.payload.maxHeight,
+      };
+    },
 
     loadBlueprint: (state, action) => {
       return action.payload;
@@ -94,6 +103,7 @@ export const {
   setRealWidth,
   setRealHeight,
   setProductName,
+  setMaxWidthAndHeight,
 } = designSlice.actions;
 
 export default designSlice.reducer;

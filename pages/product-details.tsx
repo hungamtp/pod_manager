@@ -29,6 +29,7 @@ import {
   loadBlueprint,
   resetDesigns,
   setProductName,
+  setRealHeight,
   setRealWidth,
 } from "@/redux/slices/blueprints";
 import { ProductBlueprintDto } from "@/services/products/dto/get-product-blueprint-dto";
@@ -149,14 +150,15 @@ export default function ProductDetails(props: IProductDetailsProps) {
       let realSizeData: ProductSizeDto = {
         id: "none",
         size: "L",
-        width: 28,
-        height: 16,
+        width: 19,
+        height: 24,
       };
       sizeProductResponse.forEach((element) => {
         if (element.size === "L") realSizeData = element;
       });
       dispatch(setProductName(responseProduct?.data.name || ""));
       dispatch(setRealWidth(realSizeData.width / 2));
+      dispatch(setRealHeight(realSizeData.width / 2));
     }
 
     router.push(`/create-blueprint?productId=${id}`);
@@ -165,6 +167,18 @@ export default function ProductDetails(props: IProductDetailsProps) {
   const handleUpdateProductBlueprint = (
     productBlueprint: ProductBlueprintDto
   ) => {
+    let realSizeData: ProductSizeDto = {
+      id: "none",
+      size: "L",
+      width: 19,
+      height: 24,
+    };
+    if (sizeProductResponse) {
+      sizeProductResponse.forEach((element) => {
+        if (element.size === "L") realSizeData = element;
+      });
+    }
+
     const tmpData: Blueprint = {
       blueprintId: productBlueprint.id,
       productName: responseProduct?.data.name || "",
@@ -172,6 +186,8 @@ export default function ProductDetails(props: IProductDetailsProps) {
       key: "",
       width: productBlueprint.placeholder.width,
       height: productBlueprint.placeholder.height,
+      maxWidth: realSizeData.width || 19,
+      maxHeight: realSizeData.height || 24,
       position: productBlueprint.position,
       widthRate: productBlueprint.placeholder.widthRate,
       heightRate: productBlueprint.placeholder.heightRate,
@@ -750,7 +766,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                             handleCreateProductSize(data.size)
                                           }
                                         >
-                                          Thêm size
+                                          Thêm số đo
                                         </button>
                                       ) : (
                                         <button
