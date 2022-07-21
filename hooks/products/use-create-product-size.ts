@@ -26,7 +26,8 @@ const useCreateProductSize = (
       onSuccess: (data) => {
         //because data:any
         setOpenCreateProductSize(false);
-        queryClient.invalidateQueries(`GetSizeProductByProductId${productId}`);
+        queryClient.invalidateQueries(`GetSizeProductByProductId`);
+        queryClient.invalidateQueries("GetSizesColorsById");
         enqueueSnackbar("Thêm kích thước thành công!", {
           autoHideDuration: 3000,
           variant: "success",

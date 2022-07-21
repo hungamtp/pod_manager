@@ -84,7 +84,8 @@ export default function ProductDetails(props: IProductDetailsProps) {
   const [checkValue, setCheckValue] = React.useState("");
   const [isDisabled, setIsDisabled] = React.useState(true);
 
-  const { data: sizeProductResponse } = useGetSizeProductByProductId(id);
+  const { data: sizeProductResponse, isLoading: isLoadingSizeProductResponse } =
+    useGetSizeProductByProductId(id);
 
   const [renderedSizeList, setRenderSizeList] =
     React.useState<ProductSizeDto[]>();
@@ -118,8 +119,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
             id: "none",
           });
       });
-
-      setRenderSizeList(newRenderedSizeList);
+      setRenderSizeList([...newRenderedSizeList]);
     }
   }, [sizeProductResponse]);
 
@@ -695,7 +695,9 @@ export default function ProductDetails(props: IProductDetailsProps) {
                 <div className="card">
                   <div className="card-body">
                     <div className="table-responsive text-nowrap">
-                      {responseSizesColorById && renderedSizeList ? (
+                      {responseSizesColorById &&
+                      renderedSizeList &&
+                      !isLoadingSizeProductResponse ? (
                         <div key={nanoid()}>
                           <div className="d-flex">
                             <table className="table table-borderless ">

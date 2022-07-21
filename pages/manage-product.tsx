@@ -1,35 +1,29 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import { MainLayout } from "@/components/layouts";
-import CreateForm from "@/components/manage-account/create-form";
-import UpdateForm from "@/components/manage-account/update-form";
+import CreateProductForm from "@/components/manage-product/create-product-form";
+import PublishProduct from "@/components/manage-product/publish-product-form";
+import UnPublishProduct from "@/components/manage-product/un-publish-product-form";
+import UpdateProductForm from "@/components/manage-product/update-product-form";
 import { Filter } from "@/services/accounts";
-import { Fab } from "@material-ui/core";
+import { ProductDto } from "@/services/products/dto/get-all-products-dto";
+import { UpdateProductDto } from "@/services/products/dto/update-product-dto";
 import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import PublicIcon from "@mui/icons-material/Public";
+import PublicOffIcon from "@mui/icons-material/PublicOff";
 import { IconButton, Pagination, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import useProducts from "hooks/products/use-products";
-import Image from "next/image";
-import * as React from "react";
-import { useState } from "react";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CreateProductForm from "@/components/manage-product/create-product-form";
 import useDeleteProduct from "hooks/products/use-delete-products";
-import { UpdateProductDto } from "@/services/products/dto/update-product-dto";
-import UpdateProductForm from "@/components/manage-product/update-product-form";
-import { ProductDto } from "@/services/products/dto/get-all-products-dto";
-import PublicIcon from "@mui/icons-material/Public";
-import PublicOffIcon from "@mui/icons-material/PublicOff";
-import PublishProduct from "@/components/manage-product/publish-product-form";
-import UnPublishProduct from "@/components/manage-product/un-publish-product-form";
+import useProducts from "hooks/products/use-products";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import ProductDetails from "./product-details";
-import usePublishProduct from "hooks/products/use-publish-product";
+import * as React from "react";
+import { useState } from "react";
 
 export interface IManageProductProps {}
 const ITEM_HEIGHT = 48;
