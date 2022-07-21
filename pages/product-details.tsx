@@ -29,6 +29,7 @@ import {
   loadBlueprint,
   resetDesigns,
   setProductName,
+  setRealWidth,
 } from "@/redux/slices/blueprints";
 import { ProductBlueprintDto } from "@/services/products/dto/get-product-blueprint-dto";
 import EditIcon from "@mui/icons-material/Edit";
@@ -121,7 +122,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
       });
       setRenderSizeList([...newRenderedSizeList]);
     }
-  }, [sizeProductResponse]);
+  }, [sizeProductResponse, responseSizesColorById]);
 
   const handleCreateProductSize = (size: string) => {
     setSizeCreateData(size);
@@ -144,7 +145,19 @@ export default function ProductDetails(props: IProductDetailsProps) {
   };
 
   const handleCreateProductBlueprint = () => {
-    dispatch(setProductName(responseProduct?.data.name || ""));
+    if (sizeProductResponse) {
+      let realSizeData: ProductSizeDto = {
+        id: "none",
+        size: "L",
+        width: 28,
+        height: 16,
+      };
+      sizeProductResponse.forEach((element) => {
+        if (element.size === "L") realSizeData = element;
+      });
+      dispatch(setProductName(responseProduct?.data.name || ""));
+      dispatch(setRealWidth(realSizeData.width / 2));
+    }
 
     router.push(`/create-blueprint?productId=${id}`);
   };
