@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import { StepLabel } from "@mui/material";
 import { useRouter } from "next/router";
 import useGetOrderDetails from "hooks/factories/use-get-order-details";
+import ViewOrder from "@/components/manage-factory/view-order";
 
 export interface OrderDetailsProps {}
 
@@ -31,7 +32,9 @@ export default function OrderDetails(props: OrderDetailsProps) {
     designId as string,
     credentialId as string
   );
-  console.log(responseOrderDetails, "obj");
+
+  const [isViewOrder, setIsViewOrder] = React.useState(false);
+
   const totalSteps = () => {
     return steps.length;
   };
@@ -105,120 +108,131 @@ export default function OrderDetails(props: OrderDetailsProps) {
           </div>
           <hr className="my-0" />
           <div className="row">
-            <div className="col-md-12">
-              <div className="card mb-4">
-                <h4 className="card-header">Thông tin chi tiết</h4>
-                {/* Account */}
-
-                <div className="card-body">
-                  <form id="formAccountSettings">
-                    <div className="card-body">
-                      <div className="d-flex align-items-start align-items-sm-center gap-4"></div>
+            {responseOrderDetails ? (
+              <div className="col-md-12">
+                {isViewOrder && responseOrderDetails ? (
+                  <>
+                    <ViewOrder
+                      setIsViewOrder={setIsViewOrder}
+                      responseOrderDetails={responseOrderDetails}
+                    />
+                  </>
+                ) : (
+                  <div className="card mb-4">
+                    <div className="d-flex justify-content-between p-4">
+                      <h4 className="">Thông tin chi tiết</h4>
+                      <button
+                        className="btn btn-primary py-0"
+                        onClick={() => setIsViewOrder(true)}
+                      >
+                        Xem đơn hàng
+                      </button>
                     </div>
-                    <hr className="my-0" />
-                    <div className="row">
-                      <div className="mb-3 col-md-6">
-                        <label className="form-label">Tên Khách Hàng</label>
+                    {/* Account */}
 
-                        <input
-                          className="form-control"
-                          type="text"
-                          disabled
-                          id="Name"
-                        />
-                      </div>
+                    <div className="card-body">
+                      <form id="formAccountSettings">
+                        <div className="card-body">
+                          <div className="d-flex align-items-start align-items-sm-center gap-4"></div>
+                        </div>
+                        <hr className="my-0" />
+                        <div className="row">
+                          <div className="mb-3 col-md-6">
+                            <label className="form-label">Tên Khách Hàng</label>
 
-                      <div className="mb-3 col-md-6">
-                        <label htmlFor="organization" className="form-label">
-                          email
-                        </label>
-                        <input disabled className="form-control" />
-                      </div>
+                            <input
+                              className="form-control"
+                              type="text"
+                              disabled
+                              id="Name"
+                            />
+                          </div>
 
-                      <div className="mb-3 col-md-6">
-                        <label htmlFor="organization" className="form-label">
-                          Địa chỉ
-                        </label>
-                        <textarea
-                          className="form-control"
-                          id="exampleFormControlTextarea1"
-                          disabled
-                          rows={3}
-                        />
-                      </div>
-                      <div className="mb-3 col-md-6">
-                        <label htmlFor="organization" className="form-label">
-                          Số điện thoại
-                        </label>
-                        <input disabled className="form-control" />
-                      </div>
+                          <div className="mb-3 col-md-6">
+                            <label
+                              htmlFor="organization"
+                              className="form-label"
+                            >
+                              email
+                            </label>
+                            <input disabled className="form-control" />
+                          </div>
 
-                      {/* Small table */}
+                          <div className="mb-3 col-md-6">
+                            <label
+                              htmlFor="organization"
+                              className="form-label"
+                            >
+                              Địa chỉ
+                            </label>
+                            <textarea
+                              className="form-control"
+                              id="exampleFormControlTextarea1"
+                              disabled
+                              rows={3}
+                            />
+                          </div>
+                          <div className="mb-3 col-md-6">
+                            <label
+                              htmlFor="organization"
+                              className="form-label"
+                            >
+                              Số điện thoại
+                            </label>
+                            <input disabled className="form-control" />
+                          </div>
 
-                      <hr className="my-5" />
+                          {/* Small table */}
 
-                      <div>
-                        <Box sx={{ width: "100%" }}>
-                          <Stepper
-                            alternativeLabel
-                            nonLinear
-                            activeStep={activeStep}
-                          >
-                            {!isCancel &&
-                              steps.map((label, index) => (
-                                <Step key={label} completed={completed[index]}>
-                                  <StepButton color="inherit">
-                                    {label}
-                                  </StepButton>
-                                </Step>
-                              ))}
-                            {isCancel &&
-                              steps.map((label, index) => {
-                                const labelProps: {
-                                  optional?: React.ReactNode;
-                                  error?: boolean;
-                                } = {};
-                                labelProps.error = true;
+                          <hr className="my-5" />
 
-                                return (
-                                  <Step key={label}>
-                                    <StepLabel {...labelProps}>
-                                      {label}
-                                    </StepLabel>
-                                  </Step>
-                                );
-                              })}
-                          </Stepper>
                           <div>
-                            {allStepsCompleted() ? (
-                              <React.Fragment>
-                                <Typography
-                                  sx={{
-                                    mt: 2,
-                                    mb: 1,
-                                    textAlign: "center",
-                                    color: "green",
-                                  }}
-                                >
-                                  Đơn hàng đã hoàn thành
-                                </Typography>
-                                <Box
-                                  sx={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    pt: 2,
-                                  }}
-                                >
-                                  <Box sx={{ flex: "1 1 auto" }} />
-                                  <Button onClick={handleReset}>Reset</Button>
-                                </Box>
-                              </React.Fragment>
-                            ) : (
-                              <>
-                                {!isCancel && (
+                            <Box sx={{ width: "100%" }}>
+                              <Stepper
+                                alternativeLabel
+                                nonLinear
+                                activeStep={activeStep}
+                              >
+                                {!isCancel &&
+                                  steps.map((label, index) => (
+                                    <Step
+                                      key={label}
+                                      completed={completed[index]}
+                                    >
+                                      <StepButton color="inherit">
+                                        {label}
+                                      </StepButton>
+                                    </Step>
+                                  ))}
+                                {isCancel &&
+                                  steps.map((label, index) => {
+                                    const labelProps: {
+                                      optional?: React.ReactNode;
+                                      error?: boolean;
+                                    } = {};
+                                    labelProps.error = true;
+
+                                    return (
+                                      <Step key={label}>
+                                        <StepLabel {...labelProps}>
+                                          {label}
+                                        </StepLabel>
+                                      </Step>
+                                    );
+                                  })}
+                              </Stepper>
+                              <div>
+                                {allStepsCompleted() ? (
                                   <React.Fragment>
-                                    <Typography sx={{ mt: 2, mb: 1 }}>
-                                      Step {activeStep + 1}
+                                    <Typography
+                                      sx={{
+                                        mt: 2,
+                                        mb: 1,
+                                        textAlign: "center",
+                                        color: "green",
+                                      }}
+                                    >
+                                      Đơn hàng đã hoàn thành
                                     </Typography>
                                     <Box
                                       sx={{
@@ -227,43 +241,67 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                         pt: 2,
                                       }}
                                     >
-                                      <Button
-                                        onClick={handleCancel}
-                                        sx={{ mr: 1 }}
-                                      >
-                                        Hủy
+                                      <Box sx={{ flex: "1 1 auto" }} />
+                                      <Button onClick={handleReset}>
+                                        Reset
                                       </Button>
-                                      {activeStep !== steps.length &&
-                                        (completed[activeStep] ? (
-                                          <Typography
-                                            variant="caption"
-                                            sx={{ display: "inline-block" }}
-                                          >
-                                            Step {activeStep + 1} already
-                                            completed
-                                          </Typography>
-                                        ) : (
-                                          <Button onClick={handleComplete}>
-                                            {completedSteps() ===
-                                            totalSteps() - 2
-                                              ? "Finish"
-                                              : "Complete Step"}
-                                          </Button>
-                                        ))}
                                     </Box>
                                   </React.Fragment>
+                                ) : (
+                                  <>
+                                    {!isCancel && (
+                                      <React.Fragment>
+                                        <Typography sx={{ mt: 2, mb: 1 }}>
+                                          Step {activeStep + 1}
+                                        </Typography>
+                                        <Box
+                                          sx={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            pt: 2,
+                                          }}
+                                        >
+                                          <Button
+                                            onClick={handleCancel}
+                                            sx={{ mr: 1 }}
+                                          >
+                                            Hủy
+                                          </Button>
+                                          {activeStep !== steps.length &&
+                                            (completed[activeStep] ? (
+                                              <Typography
+                                                variant="caption"
+                                                sx={{ display: "inline-block" }}
+                                              >
+                                                Step {activeStep + 1} already
+                                                completed
+                                              </Typography>
+                                            ) : (
+                                              <Button onClick={handleComplete}>
+                                                {completedSteps() ===
+                                                totalSteps() - 2
+                                                  ? "Finish"
+                                                  : "Complete Step"}
+                                              </Button>
+                                            ))}
+                                        </Box>
+                                      </React.Fragment>
+                                    )}
+                                  </>
                                 )}
-                              </>
-                            )}
+                              </div>
+                            </Box>
                           </div>
-                        </Box>
-                      </div>
+                        </div>
+                      </form>
                     </div>
-                  </form>
-                </div>
-                {/* /Account */}
+                    {/* /Account */}
+                  </div>
+                )}
               </div>
-            </div>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
 

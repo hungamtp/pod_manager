@@ -209,6 +209,7 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
         );
         dispatch(setValue(tmpDesignData));
         canvas.centerObject(object);
+        console.log(object, "object");
 
         canvas.renderAll();
       }

@@ -24,28 +24,24 @@ import * as yup from "yup";
 /* eslint-disable @next/next/no-sync-scripts */
 import { useAppDispatch } from "@/components/hooks/reduxHook";
 import CreateNewSizeColorForProductForm from "@/components/manage-product/create-new-size-color-for-product-form";
+import CreateProductSizeForm from "@/components/manage-product/create-new-size-data-form";
+import UpdateProductSizeForm from "@/components/manage-product/update-size-data-for-product";
 import { numberWithCommas } from "@/helpers/number-util";
 import {
   loadBlueprint,
-  resetDesigns,
+  setMaxWidthAndHeight,
   setProductName,
   setRealHeight,
   setRealWidth,
 } from "@/redux/slices/blueprints";
 import { ProductBlueprintDto } from "@/services/products/dto/get-product-blueprint-dto";
+import { ProductSizeDto } from "@/services/products/dto/product-size-dto";
 import EditIcon from "@mui/icons-material/Edit";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import useGetProductBlueprint from "hooks/products/use-get-product-blueprint";
-import { Blueprint } from "../models";
 import useGetSizeProductByProductId from "hooks/products/use-get-product-size-by-productId";
-import { useEffect } from "react";
-import { ProductSizeDto } from "@/services/products/dto/product-size-dto";
-import useCreateProductSize from "hooks/products/use-create-product-size";
-import useUpdateSizeProduct from "hooks/products/use-update-product-size";
-import CreateProductSizeForm from "@/components/manage-product/create-new-size-data-form";
-import { string } from "yup/lib/locale";
-import UpdateProductSizeForm from "@/components/manage-product/update-size-data-for-product";
+import { Blueprint } from "../models";
 
 export interface IProductDetailsProps {}
 
@@ -159,6 +155,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
       dispatch(setProductName(responseProduct?.data.name || ""));
       dispatch(setRealWidth(realSizeData.width / 2));
       dispatch(setRealHeight(realSizeData.width / 2));
+      dispatch(setMaxWidthAndHeight(realSizeData.width));
     }
 
     router.push(`/create-blueprint?productId=${id}`);
@@ -196,6 +193,8 @@ export default function ProductDetails(props: IProductDetailsProps) {
       tmpSrc: productBlueprint.frameImage,
     };
     dispatch(loadBlueprint(tmpData));
+    dispatch(setMaxWidthAndHeight(realSizeData.width));
+
     router.push(`/update-blueprint?productId=${id}`);
   };
 

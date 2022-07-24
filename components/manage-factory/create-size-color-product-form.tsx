@@ -253,6 +253,7 @@ export default function CreateSizeColorProductForm(
                     ></span>
                     <input
                       type="number"
+                      step="any"
                       className="form-control"
                       id="basic-icon-default-fullname"
                       aria-describedby="basic-icon-default-fullname2"

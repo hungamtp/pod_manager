@@ -1,3 +1,4 @@
+import { DesignState } from "@/models/designState";
 import { ISuccessHttpResponse } from "@/models/success_http_response.interface";
 
 export interface OrdersDetailDtos {
@@ -18,7 +19,7 @@ export interface OrdersDetailDtos {
       widthRate: number;
       heightRate: string;
     };
-    designInfos: [];
+    designInfos: DesignState[];
   }[];
   orderDetailsSupportDtos: {
     orderDetailsId: string;

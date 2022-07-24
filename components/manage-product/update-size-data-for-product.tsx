@@ -86,6 +86,7 @@ export default function UpdateProductSizeForm(
                   <div className="input-group input-group-merge">
                     <input
                       type="number"
+                      step="any"
                       className="form-control"
                       aria-describedby="basic-icon-default-fullname2"
                       {...register("width")}
@@ -109,6 +110,7 @@ export default function UpdateProductSizeForm(
                   <div className="input-group input-group-merge">
                     <input
                       type="number"
+                      step="any"
                       className="form-control"
                       aria-describedby="basic-icon-default-fullname2"
                       {...register("height")}

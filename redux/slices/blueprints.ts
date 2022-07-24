@@ -60,8 +60,8 @@ export const designSlice = createSlice({
     setMaxWidthAndHeight: (state, action) => {
       return {
         ...state,
-        maxWidth: action.payload.maxWidth,
-        maxHeight: action.payload.maxHeight,
+        maxWidth: action.payload,
+        maxHeight: action.payload,
       };
     },
 

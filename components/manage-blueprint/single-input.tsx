@@ -19,6 +19,7 @@ const SingleInput = (props: ISingleInputProps) => {
     <div>
       <input
         type={type}
+        step="any"
         className="custom-input"
         aria-label="Inches (with dot and two decimal places)"
         onChange={(e: any) => {

@@ -6,6 +6,7 @@ import { useAppSelector } from "@/components/hooks/reduxHook";
 import { MainLayout } from "@/components/layouts";
 import { numberWithCommas } from "@/helpers/number-util";
 import { Filter } from "@/services/accounts";
+import { OrderFactoryDto } from "@/services/factories/dto/get-all-orders-factory";
 import { Pagination, Stack } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
 import useColors from "hooks/colors/use-colors";
@@ -23,16 +24,51 @@ export default function ManageOrder(props: IManageOrder) {
     pageNumber: 0,
     pageSize: 10,
   });
+
+  const [unitedOrderDetail, setUnitedOrderDetail] =
+    useState<OrderFactoryDto[]>();
   const router = useRouter();
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    value: number
-  ) => {
-    setFilter({ ...filter, pageNumber: value - 1 });
-  };
   const { data: ordersFactoryresponse, isLoading: isLoadingOrdersFactory } =
     useOrdersFactory(credentialId, filter);
+
+  React.useEffect(() => {
+    if (ordersFactoryresponse && ordersFactoryresponse.content.length > 0) {
+      let newLength = 1;
+      if (ordersFactoryresponse.content.length > 2) {
+        let i, j;
+
+        let keep = true;
+        let count = 0;
+        for (i = 1; i < ordersFactoryresponse.content.length; i++) {
+          for (j = 0; j < newLength; j++) {
+            if (
+              ordersFactoryresponse.content[j].designId ===
+              ordersFactoryresponse.content[i].designId
+            ) {
+              count++;
+              break;
+            }
+          }
+          keep = true;
+          if (j === newLength) {
+            ordersFactoryresponse.content[newLength++] =
+              ordersFactoryresponse.content[i];
+          }
+        }
+        if (count === ordersFactoryresponse.content.length - 1)
+          setUnitedOrderDetail([ordersFactoryresponse.content[0]]);
+        else
+          setUnitedOrderDetail(
+            ordersFactoryresponse.content.slice(0, newLength)
+          );
+      } else {
+        setUnitedOrderDetail(ordersFactoryresponse.content);
+      }
+    }
+
+    //nho them else
+  }, [ordersFactoryresponse]);
 
   return (
     <>
@@ -53,7 +89,6 @@ export default function ManageOrder(props: IManageOrder) {
                   <tr>
                     <th>Chi Tiết</th>
                     <th>Tên sản phẩm</th>
-                    <th>Hình Ảnh</th>
                     <th>Màu</th>
                     <th>Kích thước</th>
                     <th>Giá đơn Hàng</th>
@@ -62,9 +97,8 @@ export default function ManageOrder(props: IManageOrder) {
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">
-                  {!isLoadingOrdersFactory &&
-                    ordersFactoryresponse &&
-                    ordersFactoryresponse.content.map((orders) => (
+                  {unitedOrderDetail &&
+                    unitedOrderDetail.map((orders) => (
                       <tr key={nanoid()}>
                         <td>
                           <button
@@ -80,14 +114,6 @@ export default function ManageOrder(props: IManageOrder) {
                           </button>
                         </td>
                         <td>{orders.designName}</td>
-                        <td>
-                          <img
-                            className="border border-secondary"
-                            src={orders.designedImage}
-                            height={100}
-                            width={100}
-                          />
-                        </td>
                         <td
                           style={{
                             whiteSpace: "pre-wrap",
@@ -118,15 +144,6 @@ export default function ManageOrder(props: IManageOrder) {
           </div>
           <br />
           {/*/ Table within card */}
-          <Stack spacing={2}>
-            <Pagination
-              shape="circular"
-              size="large"
-              count={ordersFactoryresponse?.totalPages}
-              onChange={handlePageChange}
-              color="secondary"
-            />
-          </Stack>
           <hr className="my-5" />
         </div>
 

@@ -49,6 +49,9 @@ const PlaceHolderInfo = ({
 
   const executeRate = () => {
     const newWidthRate = ((blueprint.width / blueprint.maxWidth) * 100) / 2;
+    console.log(blueprint.width, "blueprint.width");
+    console.log(blueprint.maxWidth, "blueprint.maxWidth");
+    console.log(newWidthRate, "newWidthRate");
     changeWidth(newWidthRate);
   };
 
