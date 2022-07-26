@@ -141,6 +141,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
   const [isImageChange, setIsImageChange] = React.useState(false);
 
   const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
+    console.log(imageList, "imageList");
     setUploadImages(imageList);
     setRenderImages((state) => [...(state as any), ...imageList]);
     setIsImageChange(true);
@@ -242,40 +243,26 @@ export default function ProductDetails(props: IProductDetailsProps) {
     categoryName: string;
   }) => {
     if (uploadImages) {
-      if (isImageChange) {
-        const imageList = [] as string[];
-        uploadImages.map((image) => {
-          const file = image.file;
-          const imageRef = ref(storage, `images/${file?.name}`);
-          uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
-            getDownloadURL(snapshot.ref).then((url) => {
-              imageList.push(url);
-              if (imageList.length === uploadImages.length) {
-                const finalImages = [...imageList, ...submitImages];
-                const submitData = {
-                  ...data,
-                  id: responseProduct?.data.id,
-                  images: finalImages,
-                } as UpdateProductDto;
-                updateProduct(submitData);
-                setIsImageChange(false);
-              }
-            });
+      const imageList = [] as string[];
+      uploadImages.map((image) => {
+        const file = image.file;
+        const imageRef = ref(storage, `images/${file?.name}`);
+        uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
+          getDownloadURL(snapshot.ref).then((url) => {
+            imageList.push(url);
+            if (imageList.length === uploadImages.length) {
+              const finalImages = [...imageList, ...submitImages];
+              const submitData = {
+                ...data,
+                id: responseProduct?.data.id,
+                images: finalImages,
+              } as UpdateProductDto;
+              updateProduct(submitData);
+              setIsImageChange(false);
+            }
           });
         });
-      } else {
-        if (responseProduct?.data.productImages) {
-          const tmpImages = responseProduct.data.productImages.map(
-            (image) => image.image
-          );
-          const submitData = {
-            ...data,
-            id: responseProduct?.data.id,
-            images: tmpImages,
-          } as UpdateProductDto;
-          updateProduct(submitData);
-        }
-      }
+      });
     }
   };
 
@@ -324,7 +311,22 @@ export default function ProductDetails(props: IProductDetailsProps) {
       categoryName: categoryName as string,
       images: data.images,
     };
-    onUploadImage(tmpData);
+
+    if (isImageChange) {
+      onUploadImage(tmpData);
+    } else {
+      if (responseProduct?.data.productImages) {
+        const tmpImages = responseProduct.data.productImages.map(
+          (image) => image.image
+        );
+        const submitData = {
+          ...data,
+          id: responseProduct?.data.id,
+          images: tmpImages,
+        } as UpdateProductDto;
+        updateProduct(submitData);
+      }
+    }
   };
 
   const [filter, setFilter] = React.useState<Filter>({
@@ -353,9 +355,9 @@ export default function ProductDetails(props: IProductDetailsProps) {
                     >
                       <div className="card-body">
                         <div className="d-flex align-items-start align-items-sm-center gap-4">
-                          {renderImages && (
+                          {
                             <ImageUploading
-                              value={renderImages}
+                              value={[]}
                               onChange={onChange}
                               maxNumber={maxNumber}
                               dataURLKey="data_url"
@@ -372,7 +374,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                               }) => (
                                 // write your building UI
                                 <div className="upload__image-wrapper">
-                                  {imageList?.map((image, index) => (
+                                  {renderImages?.map((image, index) => (
                                     <img
                                       alt="user-avatar"
                                       key={index}
@@ -411,7 +413,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                 </div>
                               )}
                             </ImageUploading>
-                          )}
+                          }
                         </div>
                       </div>
                       <hr className="my-0" />
