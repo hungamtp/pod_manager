@@ -293,7 +293,6 @@ export default function ManageProduct(props: IManageProductProps) {
                 <thead>
                   <tr>
                     <th>Tên sản phẩm</th>
-                    <th>Hình ảnh</th>
                     <th>Thể loại</th>
                     <th>Publish</th>
                     <th>Mô tả sản phẩm</th>
@@ -314,14 +313,6 @@ export default function ManageProduct(props: IManageProductProps) {
                               {x.name}
                             </Link>
                           </strong>
-                        </td>
-                        <td>
-                          <img
-                            src={x.productImages[0].image}
-                            className="d-block rounded"
-                            height={100}
-                            width={100}
-                          />
                         </td>
                         <td>{x.categoryName}</td>
                         <td>
