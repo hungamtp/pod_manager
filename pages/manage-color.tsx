@@ -92,7 +92,6 @@ export default function ManageColor(props: IManageColor) {
               <table className="table ">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>Màu</th>
                   </tr>
                 </thead>
@@ -101,7 +100,6 @@ export default function ManageColor(props: IManageColor) {
                     response &&
                     response.content.map((x) => (
                       <tr key={x.id}>
-                        <td>{x.id}</td>
                         <td>
                           <img
                             key={x.imageColor}

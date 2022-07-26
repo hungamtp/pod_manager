@@ -84,7 +84,6 @@ export default function ManageSize(props: IManageSize) {
               <table className="table ">
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>Kích thước</th>
                   </tr>
                 </thead>
@@ -93,7 +92,6 @@ export default function ManageSize(props: IManageSize) {
                     response &&
                     response.content.map((x) => (
                       <tr key={x.id}>
-                        <td>{x.id}</td>
                         <td>{x.name}</td>
                       </tr>
                     ))}
