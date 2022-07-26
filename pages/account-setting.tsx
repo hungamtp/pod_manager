@@ -93,7 +93,7 @@ export default function AccountSetting(props: IAccountSettingProps) {
   };
 
   const onUploadImage = (image: string) => {
-    if (images !== null) {
+    if (images !== null && images[0].data_url !== responseAccount?.data.image) {
       const file = images[0].file;
       const imageRef = ref(storage, `images/${file?.name}`);
       uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
@@ -105,6 +105,12 @@ export default function AccountSetting(props: IAccountSettingProps) {
           updateImageAccount(submitData);
         });
       });
+    } else {
+      const submitData = {
+        id: credentialId,
+        image: images[0].data_url,
+      };
+      updateImageAccount(submitData);
     }
   };
 

@@ -81,6 +81,9 @@ export default function ProductDetails(props: IProductDetailsProps) {
   const [checked, setChecked] = React.useState(true);
   const [checkValue, setCheckValue] = React.useState("");
   const [isDisabled, setIsDisabled] = React.useState(true);
+  const [renderImages, setRenderImages] = React.useState<ImageListType>();
+  const [uploadImages, setUploadImages] = React.useState<ImageListType>();
+  const [submitImages, setSubmitImages] = React.useState<string[]>([]);
 
   const { data: sizeProductResponse, isLoading: isLoadingSizeProductResponse } =
     useGetSizeProductByProductId(id);
@@ -135,9 +138,12 @@ export default function ProductDetails(props: IProductDetailsProps) {
   const dispatch = useAppDispatch();
 
   const maxNumber = 69;
+  const [isImageChange, setIsImageChange] = React.useState(false);
 
   const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
-    setImages(imageList);
+    setUploadImages(imageList);
+    setRenderImages((state) => [...(state as any), ...imageList]);
+    setIsImageChange(true);
     // data for submit
   };
 
@@ -235,25 +241,41 @@ export default function ProductDetails(props: IProductDetailsProps) {
     description: string;
     categoryName: string;
   }) => {
-    if (images !== null) {
-      const imageList = [] as string[];
-      images?.map((image) => {
-        const file = image.file;
-        const imageRef = ref(storage, `images/${file?.name}`);
-        uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
-          getDownloadURL(snapshot.ref).then((url) => {
-            imageList.push(url);
-            if (imageList.length === images.length) {
-              const submitData = {
-                ...data,
-                id: responseProduct?.data.id,
-                images: imageList,
-              } as UpdateProductDto;
-              updateProduct(submitData);
-            }
+    if (uploadImages) {
+      if (isImageChange) {
+        const imageList = [] as string[];
+        uploadImages.map((image) => {
+          const file = image.file;
+          const imageRef = ref(storage, `images/${file?.name}`);
+          uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
+            getDownloadURL(snapshot.ref).then((url) => {
+              imageList.push(url);
+              if (imageList.length === uploadImages.length) {
+                const finalImages = [...imageList, ...submitImages];
+                const submitData = {
+                  ...data,
+                  id: responseProduct?.data.id,
+                  images: finalImages,
+                } as UpdateProductDto;
+                updateProduct(submitData);
+                setIsImageChange(false);
+              }
+            });
           });
         });
-      });
+      } else {
+        if (responseProduct?.data.productImages) {
+          const tmpImages = responseProduct.data.productImages.map(
+            (image) => image.image
+          );
+          const submitData = {
+            ...data,
+            id: responseProduct?.data.id,
+            images: tmpImages,
+          } as UpdateProductDto;
+          updateProduct(submitData);
+        }
+      }
     }
   };
 
@@ -282,11 +304,16 @@ export default function ProductDetails(props: IProductDetailsProps) {
 
   React.useEffect(() => {
     setCategoryName(responseProduct?.data.categoryName);
-    setImages(
-      responseProduct?.data.productImages.map((image) => ({
-        data_url: image.image,
-      }))
-    );
+    if (responseProduct) {
+      setSubmitImages(
+        responseProduct?.data.productImages.map((image) => image.image)
+      );
+      setRenderImages(
+        responseProduct?.data.productImages.map((image) => ({
+          data_url: image.image,
+        }))
+      );
+    }
   }, [responseProduct]);
 
   const onSubmit: SubmitHandler<UpdateProductDto> = (data) => {
@@ -294,13 +321,12 @@ export default function ProductDetails(props: IProductDetailsProps) {
       id: data.id,
       name: data.name,
       description: data.description,
-      categoryName: data.categoryName,
+      categoryName: categoryName as string,
       images: data.images,
     };
     onUploadImage(tmpData);
   };
 
-  const [images, setImages] = React.useState<ImageListType>();
   const [filter, setFilter] = React.useState<Filter>({
     pageNumber: 0,
     pageSize: 10,
@@ -327,9 +353,9 @@ export default function ProductDetails(props: IProductDetailsProps) {
                     >
                       <div className="card-body">
                         <div className="d-flex align-items-start align-items-sm-center gap-4">
-                          {images && (
+                          {renderImages && (
                             <ImageUploading
-                              value={images}
+                              value={renderImages}
                               onChange={onChange}
                               maxNumber={maxNumber}
                               dataURLKey="data_url"
@@ -361,7 +387,9 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                     style={
                                       isDragging ? { color: "red" } : undefined
                                     }
-                                    onClick={onImageUpload}
+                                    onClick={() => {
+                                      onImageUpload();
+                                    }}
                                     {...dragProps}
                                     type="button"
                                   >
@@ -371,7 +399,12 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                   <button
                                     className="btn btn-outline-secondary account-image-reset mb-4"
                                     type="button"
-                                    onClick={onImageRemoveAll}
+                                    onClick={() => {
+                                      onImageRemoveAll();
+                                      setRenderImages([]);
+                                      setUploadImages([]);
+                                      setSubmitImages([]);
+                                    }}
                                   >
                                     Xóa
                                   </button>

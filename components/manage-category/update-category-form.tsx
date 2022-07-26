@@ -77,7 +77,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
   };
   const onUploadImage = (data: { name: string; image: string }) => {
     setIsLoading(true);
-    if (images !== null) {
+    if (images !== null && images[0].data_url !== category.image) {
       const file = images[0].file;
       const imageRef = ref(storage, `images/${file?.name}`);
       uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
@@ -90,6 +90,13 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
           updateCategory(submitData);
         });
       });
+    } else {
+      const submitData = {
+        ...data,
+        id: category.id,
+        image: images[0].data_url,
+      } as UpdateCategoryDto;
+      updateCategory(submitData);
     }
   };
 
