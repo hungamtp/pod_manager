@@ -13,6 +13,7 @@ import {
 } from "./dto/create-factory-dto";
 import { GetAllOrdersFactoriesResponse } from "./dto/get-all-orders-factory";
 import { getOrdersDetailResponse } from "./dto/get-orders-detail-dto";
+import { CreatePriceMaterialDto } from "./dto/create-price-material-dto";
 
 export interface Filter {
   pageSize?: number;
@@ -94,10 +95,11 @@ export const createSizeColorProduct = async (
 export const createProductPrice = async (
   factoryId: string,
   productId: string,
-  price: number
+  requestData: CreatePriceMaterialDto
 ) => {
   const { data } = await API.post(
-    `/factory/add-price?factoryId=${factoryId}&productId=${productId}&price=${price}`
+    `/factory/add-price?factoryId=${factoryId}&productId=${productId}`,
+    requestData
   );
   return data;
 };
