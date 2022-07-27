@@ -529,6 +529,9 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                               <strong>Tên Nhà máy</strong>
                                             </th>
                                             <th>
+                                              <strong>Chất liệu vải</strong>
+                                            </th>
+                                            <th>
                                               <strong>Địa chỉ</strong>
                                             </th>
                                             <th>
@@ -548,6 +551,9 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                                   <strong>
                                                     {x.factory.name}
                                                   </strong>
+                                                </td>
+                                                <td>
+                                                  <strong>{x.material}</strong>
                                                 </td>
                                                 <td
                                                   style={{

@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
+import { CreatePriceMaterialDto } from "@/services/factories/dto/create-price-material-dto";
 import { CreateSizeColorProductDto } from "@/services/factories/dto/create-size-color-product-dto";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useCreateSizeColorProduct from "hooks/factories/use-create-factory";
@@ -33,8 +34,9 @@ const MenuProps = {
 const schema = yup.object().shape({
   price: yup
     .number()
-    .min(10, "quantity phải lớn hơn 10")
-    .required("quantity không được để trống"),
+    .min(10, "Giá sản phẩm phải lớn hơn 10")
+    .required("Giá sản phẩm không được để trống"),
+  material: yup.string().required("Chất liệu vải không được để trống"),
 });
 
 export default function CreateProductPriceForm(
@@ -42,20 +44,21 @@ export default function CreateProductPriceForm(
 ) {
   const { handleCloseDialog, factoryId, productId } = props;
 
-  const defaultValues: { price: number } = {
-    price: 0,
+  const defaultValues: CreatePriceMaterialDto = {
+    price: "",
+    material: "",
   };
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<{ price: number }>({
+  } = useForm<CreatePriceMaterialDto>({
     defaultValues,
     resolver: yupResolver(schema),
   });
-  const onSubmit: SubmitHandler<{ price: number }> = (data) => {
-    addProductPrice(data.price);
+  const onSubmit: SubmitHandler<CreatePriceMaterialDto> = (data) => {
+    addProductPrice(data);
   };
   const [price, setPrice] = useState(0);
 
@@ -95,6 +98,34 @@ export default function CreateProductPriceForm(
                   {errors.price && (
                     <span id="error-pwd-message" className="text-danger">
                       {errors.price.message}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="row mb-3">
+                <label
+                  className="col-sm-3 col-form-label"
+                  htmlFor="basic-icon-default-fullname"
+                >
+                  Chất liệu vải
+                </label>
+                <div className="col-sm-9">
+                  <div className="input-group input-group-merge">
+                    <span
+                      id="basic-icon-default-fullname2"
+                      className="input-group-text"
+                    ></span>
+                    <input
+                      step="any"
+                      className="form-control"
+                      id="basic-icon-default-fullname"
+                      aria-describedby="basic-icon-default-fullname2"
+                      {...register("material")}
+                    />
+                  </div>
+                  {errors.material && (
+                    <span id="error-pwd-message" className="text-danger">
+                      {errors.material.message}
                     </span>
                   )}
                 </div>

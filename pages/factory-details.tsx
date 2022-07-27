@@ -386,7 +386,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                                 }
                                 className="btn btn-primary me-2"
                               >
-                                Thêm giá sản phẩm
+                                Thêm giá và Chất liệu sản phẩm
                               </button>
                             </td>
                           </tr>

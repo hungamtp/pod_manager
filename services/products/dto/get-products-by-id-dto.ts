@@ -8,7 +8,8 @@ export interface ProductByIdDtos {
     categoryName: string;
     productTags: {tag:{name:string}}[]
     priceByFactories: {
-        price: string
+        price: string;
+        material: string;
         factory: {
             name: string,
             location: string,
