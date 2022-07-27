@@ -13,11 +13,11 @@ export interface OrdersDetailDtos {
     frameImage: string;
     position: string;
     placeholder: {
-      top: string;
-      width: string;
-      height: string;
+      top: number;
+      width: number;
+      height: number;
       widthRate: number;
-      heightRate: string;
+      heightRate: number;
     };
     designInfos: DesignState[];
   }[];

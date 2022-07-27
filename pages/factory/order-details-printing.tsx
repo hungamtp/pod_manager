@@ -14,6 +14,7 @@ import { StepLabel } from "@mui/material";
 import { useRouter } from "next/router";
 import useGetOrderDetails from "hooks/factories/use-get-order-details";
 import ViewOrder from "@/components/manage-factory/view-order";
+import useGetSizeProductByProductId from "hooks/products/use-get-product-size-by-productId";
 
 export interface OrderDetailsProps {}
 
@@ -21,6 +22,7 @@ const steps = ["Chờ xác nhận", "Chờ lấy hàng", "Đang giao", "Đã gia
 
 export default function OrderDetails(props: OrderDetailsProps) {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [colorList, setColorList] = React.useState<string[]>([]);
   const [completed, setCompleted] = React.useState<{
     [k: number]: boolean;
   }>({});
@@ -32,6 +34,39 @@ export default function OrderDetails(props: OrderDetailsProps) {
     designId as string,
     credentialId as string
   );
+
+  const { data: sizeProductResponse, isLoading: isLoadingSizeProductResponse } =
+    useGetSizeProductByProductId(responseOrderDetails?.data.productId || "");
+
+  React.useEffect(() => {
+    if (responseOrderDetails) {
+      const colorList = responseOrderDetails.data.orderDetailsSupportDtos.map(
+        (data) => data.color
+      );
+      if (colorList.length > 1) {
+        let newLength = 1;
+        let i;
+        let j;
+        let count = 0;
+        for (i = 1; i < colorList.length; i++) {
+          for (j = 0; j < newLength; j++) {
+            if (colorList[i] === colorList[j]) {
+              count++;
+              break;
+            }
+          }
+          if (newLength === j) {
+            colorList[newLength++] = colorList[i];
+          }
+        }
+        if (count === colorList.length - 1) {
+          setColorList([colorList[0]]);
+        } else {
+          setColorList(colorList.slice(0, newLength));
+        }
+      }
+    }
+  }, [responseOrderDetails]);
 
   const [isViewOrder, setIsViewOrder] = React.useState(false);
 
@@ -86,100 +121,126 @@ export default function OrderDetails(props: OrderDetailsProps) {
     setActiveStep(0);
     setCompleted({});
   };
+
   return (
     <>
       <div>
         <div className="container-xxl flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4"></h4>
-          <div className="card-body">
-            <div className="d-flex align-items-start align-items-sm-center gap-4">
-              <img
-                src=""
-                alt="user-avatar"
-                className="d-block rounded"
-                height={100}
-                width={100}
-                id="uploadedAvatar"
-              />
-              <div className="button-wrapper">
-                <p className="text-muted mb-0"></p>
-              </div>
-            </div>
-          </div>
+          <h4 className="fw-bold py-3 mb-4">Chi tiết đơn hàng</h4>
+          <div className="card-body"></div>
           <hr className="my-0" />
           <div className="row">
             {responseOrderDetails ? (
               <div className="col-md-12">
-                {isViewOrder && responseOrderDetails ? (
+                {isViewOrder && responseOrderDetails && sizeProductResponse ? (
                   <>
                     <ViewOrder
                       setIsViewOrder={setIsViewOrder}
                       responseOrderDetails={responseOrderDetails}
+                      sizeProductResponse={sizeProductResponse}
                     />
                   </>
                 ) : (
                   <div className="card mb-4">
                     <div className="d-flex justify-content-between p-4">
-                      <h4 className="">Thông tin chi tiết</h4>
                       <button
-                        className="btn btn-primary py-0"
+                        className="btn btn-primary p-2"
                         onClick={() => setIsViewOrder(true)}
                       >
-                        Xem đơn hàng
+                        Hướng dẫn in
                       </button>
                     </div>
+                    <hr className="my-0" />
                     {/* Account */}
 
                     <div className="card-body">
                       <form id="formAccountSettings">
-                        <div className="card-body">
-                          <div className="d-flex align-items-start align-items-sm-center gap-4"></div>
-                        </div>
-                        <hr className="my-0" />
                         <div className="row">
                           <div className="mb-3 col-md-6">
-                            <label className="form-label">Tên Khách Hàng</label>
-
-                            <input
-                              className="form-control"
-                              type="text"
-                              disabled
-                              id="Name"
-                            />
+                            <p className="h4">Thông tin khách hàng</p>
+                            <div className="row ms-2">
+                              <div className=" border p-2 col-md-4">
+                                Tên khách hàng
+                              </div>
+                              <div className=" border p-2 col-md-4">{}</div>
+                            </div>
+                            <div className="row ms-2">
+                              <div className=" border p-2 col-md-4">Email</div>
+                              <div className=" border p-2 col-md-4">{}</div>
+                            </div>
+                            <div className="row ms-2">
+                              <div className=" border p-2 col-md-4">
+                                Số điện thoại
+                              </div>
+                              <div className=" border p-2 col-md-4">{}</div>
+                            </div>
+                            <div className="row ms-2">
+                              <div className=" border p-2 col-md-4">
+                                Địa chỉ nhận hàng
+                              </div>
+                              <div className=" border p-2 col-md-4">{}</div>
+                            </div>
                           </div>
 
                           <div className="mb-3 col-md-6">
-                            <label
-                              htmlFor="organization"
-                              className="form-label"
-                            >
-                              email
-                            </label>
-                            <input disabled className="form-control" />
+                            <p className="h4">Thông tin sản phẩm</p>
+                            <div className="row ms-2">
+                              <div className=" border p-2 col-md-4">
+                                Mã sản phẩm
+                              </div>
+                              <div className=" border p-2 col-md-4">{}</div>
+                            </div>
+                            <div className="row ms-2">
+                              <div className=" border p-2 col-md-4">
+                                Tên sản phẩm
+                              </div>
+                              <div className=" border p-2 col-md-4">{}</div>
+                            </div>
+                            <div className="row ms-2">
+                              <div className=" border p-2 col-md-4">
+                                Tên thiết kế
+                              </div>
+                              <div className=" border p-2 col-md-4">{}</div>
+                            </div>
                           </div>
 
-                          <div className="mb-3 col-md-6">
-                            <label
-                              htmlFor="organization"
-                              className="form-label"
-                            >
-                              Địa chỉ
-                            </label>
-                            <textarea
-                              className="form-control"
-                              id="exampleFormControlTextarea1"
-                              disabled
-                              rows={3}
-                            />
-                          </div>
-                          <div className="mb-3 col-md-6">
-                            <label
-                              htmlFor="organization"
-                              className="form-label"
-                            >
-                              Số điện thoại
-                            </label>
-                            <input disabled className="form-control" />
+                          <div className="mb-3">
+                            <p className="h4 mt-4">Thông tin đặt hàng</p>
+                            <div className="w-75 ms-3">
+                              <div className="row ">
+                                <div className="col-md-2 p-0">
+                                  <div className="border p-2">Màu/Size</div>
+                                  {colorList.map((color) => (
+                                    <div key={color} className="border p-2">
+                                      {color}
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="col-md-10 p-0">
+                                  <div className="d-flex flex-col">
+                                    {responseOrderDetails.data.orderDetailsSupportDtos.map(
+                                      (data) => (
+                                        <div key={data.orderDetailsId}>
+                                          <div className="border py-2 px-4">
+                                            {data.size}
+                                          </div>
+                                          {colorList.map((color) => {
+                                            if (color)
+                                              return (
+                                                <div className="border py-2 px-4">
+                                                  {data.color === color
+                                                    ? data.quantity
+                                                    : 0}
+                                                </div>
+                                              );
+                                          })}
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
 
                           {/* Small table */}

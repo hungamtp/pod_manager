@@ -35,7 +35,7 @@ export default function ManageOrder(props: IManageOrder) {
   React.useEffect(() => {
     if (ordersFactoryresponse && ordersFactoryresponse.content.length > 0) {
       let newLength = 1;
-      if (ordersFactoryresponse.content.length > 2) {
+      if (ordersFactoryresponse.content.length > 1) {
         let i, j;
 
         let keep = true;
@@ -122,13 +122,11 @@ export default function ManageOrder(props: IManageOrder) {
                         >
                           {orders.color}
                         </td>
-                        <td style={{ textAlign: "center" }}>{orders.size}</td>
+                        <td>{orders.size}</td>
                         <td>
                           <strong>{numberWithCommas(orders.price)} VND</strong>
                         </td>
-                        <td style={{ textAlign: "center" }}>
-                          {orders.quantity} sản phẩm
-                        </td>
+                        <td>{orders.quantity} sản phẩm</td>
                         <td>
                           {orders.status === "PENDING" && (
                             <span className="badge bg-label-warning me-1">

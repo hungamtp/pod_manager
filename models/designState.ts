@@ -1,6 +1,6 @@
 export interface DesignState {
   key: string;
-  name?: string;
+  name: string;
   types: "image/png" | "image/jpg" | "image/jpeg" | "text";
   height: number;
   width: number;

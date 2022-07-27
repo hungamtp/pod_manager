@@ -37,7 +37,7 @@ export default function NavBar({}: Props) {
   return (
     <aside
       id="layout-menu"
-      className="layout-menu menu-vertical menu bg-menu-theme"
+      className="layout-menu menu-vertical menu bg-menu-theme "
     >
       <div className="app-brand demo">
         <a href="\" className="app-brand-link">

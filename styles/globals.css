@@ -51,6 +51,11 @@ font-size: larger;
   
 }
 
+.headline {
+  z-index: 1080;
+  top:5%;
+}
+
 .designTable{
   height: 100%;
 }
