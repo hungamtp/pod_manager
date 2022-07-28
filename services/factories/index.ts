@@ -14,6 +14,7 @@ import {
 import { GetAllOrdersFactoriesResponse } from "./dto/get-all-orders-factory";
 import { getOrdersDetailResponse } from "./dto/get-orders-detail-dto";
 import { CreatePriceMaterialDto } from "./dto/create-price-material-dto";
+import { UpdatePriceMaterialDto, UpdatePriceMaterialResponse } from "./dto/update-price-material-dto";
 
 export interface Filter {
   pageSize?: number;
@@ -99,6 +100,14 @@ export const createProductPrice = async (
 ) => {
   const { data } = await API.post(
     `/factory/add-price?factoryId=${factoryId}&productId=${productId}`,
+    requestData
+  );
+  return data;
+};
+
+export const updatePriceMaterialProduct = async (requestData: UpdatePriceMaterialDto, factoryId: string, productId: string) => {
+  const { data } = await API.patch<UpdatePriceMaterialResponse>(
+    `/factory/update-price?factoryId=${factoryId}&productId=${productId}`,
     requestData
   );
   return data;
