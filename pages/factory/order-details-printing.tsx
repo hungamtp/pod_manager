@@ -38,7 +38,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
   }>({});
   const [isCancel, setIsCancel] = React.useState(false);
   const router = useRouter();
-  const { orderId, designId, credentialId } = router.query;
+  const { orderId, designId, credentialId, designname } = router.query;
   const { data: responseOrderDetails } = useGetOrderDetails(
     orderId as string,
     designId as string,
@@ -266,9 +266,9 @@ export default function OrderDetails(props: OrderDetailsProps) {
                           </div>
 
                           <div className="mb-3 col-md-6">
-                            {/* <p className="h4">Thông tin sản phẩm</p> */}
                             {productResponse && (
                               <>
+                                <p className="h4">Thông tin sản phẩm</p>
                                 <div className="row ms-2">
                                   <div className=" border p-2 col-md-4">
                                     Mã sản phẩm
@@ -289,7 +289,9 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                   <div className=" border p-2 col-md-4">
                                     Tên thiết kế
                                   </div>
-                                  <div className=" border p-2 col-md-4">{}</div>
+                                  <div className=" border p-2 col-md-4">
+                                    {designname}
+                                  </div>
                                 </div>
                               </>
                             )}

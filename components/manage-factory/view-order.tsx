@@ -143,142 +143,150 @@ export default function ViewOrder({
                     });
 
                     return (
-                      <div key={nanoid()}>
-                        <div className=" row w-75 mx-auto position-relative">
-                          <div className="h1 text-center position-absolute headline">
-                            {blueprint.position === "front"
-                              ? "Mặt trước"
-                              : "Mặt sau"}
-                          </div>
-                          <Image
-                            src={renderedImage.image}
-                            alt="Picture of the author"
-                            width={2000}
-                            height={2000}
-                            objectFit="cover"
-                          />
-                        </div>
-                        <p className="h3">Các mẫu thiết kế</p>
-                        {renderData.length > 0 &&
-                          renderData.map((designData) => (
-                            <div key={designData.name} className="row w-">
-                              <div className="col-lg-4">
-                                {designData.type === "text" ? (
-                                  <p className="h2">{designData.src}</p>
-                                ) : (
-                                  <div
-                                    onClick={() =>
-                                      save(designData.name, designData.src)
-                                    }
-                                  >
-                                    <Image
-                                      src={designData.src}
-                                      alt="Picture of the author"
-                                      width={1000}
-                                      height={1000}
-                                    />
-                                  </div>
-                                )}
+                      <>
+                        {blueprint.designInfos.length > 0 ? (
+                          <div key={nanoid()}>
+                            <div className=" row w-75 mx-auto position-relative">
+                              <div className="h1 text-center position-absolute headline">
+                                {blueprint.position === "front"
+                                  ? "Mặt trước"
+                                  : "Mặt sau"}
                               </div>
-                              <div className="col-lg-8">
-                                <>
-                                  <p className="h5">Thông tin mô tả</p>
-                                  <div className="row mb-5">
-                                    {designData.type !== "text" && (
-                                      <>
-                                        <div className="col-6 ">
-                                          Tên thiết kế: {designData.name}
-                                        </div>
-                                      </>
-                                    )}
-
-                                    {designData.type === "text" && (
-                                      <>
-                                        <div className="">
-                                          Font chữ: {designData.font}
-                                        </div>
-                                        <div className="">
-                                          Màu chữ: {designData.textColor}
-                                        </div>
-                                      </>
-                                    )}
-                                  </div>
-
-                                  <div className="d-flex justify-content-between pe-0">
-                                    <p className="h5">Thông tin số đo</p>
-                                    <div className="d-flex justify-content-end w-25">
-                                      <p className=" m-auto ">Đơn vị:</p>
-                                      <select
-                                        className="form-select w-50  mb-1"
-                                        aria-label="Default select example"
-                                        value={measurementType.value}
-                                        onChange={(e: any) => {
-                                          const selectedOption =
-                                            e.target.options[
-                                              e.target.selectedIndex
-                                            ];
-                                          setMeasurementType({
-                                            name: selectedOption.innerHTML,
-                                            value: selectedOption.value,
-                                          });
-                                        }}
-                                      >
-                                        {measurementList.map((measurement) => (
-                                          <option
-                                            key={measurement.name}
-                                            value={measurement.value}
-                                          >
-                                            {measurement.name}
-                                          </option>
-                                        ))}
-                                      </select>
-                                    </div>
-                                  </div>
-
-                                  <div className="d-flex">
-                                    <div className="w-100">
-                                      <div className=" border p-2 ">
-                                        Kích thước
-                                      </div>
-                                      <div className=" border p-2 ">
-                                        Cách cổ ({measurementType.name})
-                                      </div>
-                                      <div className=" border p-2 ">
-                                        Chiều rộng ({measurementType.name})
-                                      </div>
-                                      <div className=" border p-2 ">
-                                        Chiều dài ({measurementType.name})
-                                      </div>
-                                      <div className=" border p-2 ">
-                                        Cách trái ({measurementType.name})
-                                      </div>
-                                    </div>
-                                    {designData.data.map((data) => (
-                                      <div key={data.size} className="w-50">
-                                        <div className=" border p-2">
-                                          {data.size}
-                                        </div>
-                                        <div className=" border p-2">
-                                          {data.top}
-                                        </div>
-                                        <div className=" border p-2">
-                                          {data.width}
-                                        </div>
-                                        <div className=" border p-2">
-                                          {data.height}
-                                        </div>
-
-                                        <div className=" border p-2">
-                                          {data.left}
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </>
-                              </div>
+                              <Image
+                                src={renderedImage.image}
+                                alt="Picture of the author"
+                                width={2000}
+                                height={2000}
+                                objectFit="cover"
+                              />
                             </div>
-                          ))}
-                      </div>
+                            <p className="h3">Các mẫu thiết kế</p>
+                            {renderData.length > 0 &&
+                              renderData.map((designData) => (
+                                <div key={designData.name} className="row w-">
+                                  <div className="col-lg-4">
+                                    {designData.type === "text" ? (
+                                      <p className="h2">{designData.src}</p>
+                                    ) : (
+                                      <div
+                                        onClick={() =>
+                                          save(designData.name, designData.src)
+                                        }
+                                      >
+                                        <Image
+                                          src={designData.src}
+                                          alt="Picture of the author"
+                                          width={1000}
+                                          height={1000}
+                                        />
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="col-lg-8">
+                                    <>
+                                      <p className="h5">Thông tin mô tả</p>
+                                      <div className="row mb-5">
+                                        {designData.type !== "text" && (
+                                          <>
+                                            <div className="col-6 ">
+                                              Tên thiết kế: {designData.name}
+                                            </div>
+                                          </>
+                                        )}
+
+                                        {designData.type === "text" && (
+                                          <>
+                                            <div className="">
+                                              Font chữ: {designData.font}
+                                            </div>
+                                            <div className="">
+                                              Màu chữ: {designData.textColor}
+                                            </div>
+                                          </>
+                                        )}
+                                      </div>
+
+                                      <div className="d-flex justify-content-between pe-0">
+                                        <p className="h5">Thông tin số đo</p>
+                                        <div className="d-flex justify-content-end w-25">
+                                          <p className=" m-auto ">Đơn vị:</p>
+                                          <select
+                                            className="form-select w-50  mb-1"
+                                            aria-label="Default select example"
+                                            value={measurementType.value}
+                                            onChange={(e: any) => {
+                                              const selectedOption =
+                                                e.target.options[
+                                                  e.target.selectedIndex
+                                                ];
+                                              setMeasurementType({
+                                                name: selectedOption.innerHTML,
+                                                value: selectedOption.value,
+                                              });
+                                            }}
+                                          >
+                                            {measurementList.map(
+                                              (measurement) => (
+                                                <option
+                                                  key={measurement.name}
+                                                  value={measurement.value}
+                                                >
+                                                  {measurement.name}
+                                                </option>
+                                              )
+                                            )}
+                                          </select>
+                                        </div>
+                                      </div>
+
+                                      <div className="d-flex">
+                                        <div className="w-100">
+                                          <div className=" border p-2 ">
+                                            Kích thước
+                                          </div>
+                                          <div className=" border p-2 ">
+                                            Cách cổ ({measurementType.name})
+                                          </div>
+                                          <div className=" border p-2 ">
+                                            Chiều rộng ({measurementType.name})
+                                          </div>
+                                          <div className=" border p-2 ">
+                                            Chiều dài ({measurementType.name})
+                                          </div>
+                                          <div className=" border p-2 ">
+                                            Cách trái ({measurementType.name})
+                                          </div>
+                                        </div>
+                                        {designData.data.map((data) => (
+                                          <div key={data.size} className="w-50">
+                                            <div className=" border p-2">
+                                              {data.size}
+                                            </div>
+                                            <div className=" border p-2">
+                                              {data.top}
+                                            </div>
+                                            <div className=" border p-2">
+                                              {data.width}
+                                            </div>
+                                            <div className=" border p-2">
+                                              {data.height}
+                                            </div>
+
+                                            <div className=" border p-2">
+                                              {data.left}
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </>
+                                  </div>
+                                </div>
+                              ))}
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </>
                     );
                   })}
                 </div>
