@@ -3,6 +3,10 @@ import { ISuccessHttpResponse } from "@/models/success_http_response.interface";
 
 export interface OrdersDetailDtos {
   orderId: string;
+  customerName: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
   previewImages: {
     image: string;
     position: string;

@@ -82,63 +82,71 @@ export default function ManageOrder(props: IManageOrder) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Quản lý đơn hàng</h5>
-            <div className="table-responsive text-nowrap ">
-              <table className="table ">
-                <thead>
-                  <tr>
-                    <th>Chi Tiết</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Màu</th>
-                    <th>Kích thước</th>
-                    <th>Giá đơn Hàng</th>
-                    <th>Số lượng</th>
-                    <th>Trạng thái</th>
-                  </tr>
-                </thead>
-                <tbody className="table-border-bottom-0">
-                  {unitedOrderDetail &&
-                    unitedOrderDetail.map((orders) => (
-                      <tr key={nanoid()}>
-                        <td>
-                          <button
-                            type="button"
-                            className="btn btn-primary btn-sm"
-                            onClick={() => {
-                              router.push(
-                                `/factory/order-details-printing/?orderId=${orders.orderId}&designId=${orders.designId}&credentialId=${credentialId}`
-                              );
-                            }}
-                          >
-                            Chi tiết
-                          </button>
-                        </td>
-                        <td>{orders.designName}</td>
-                        <td
-                          style={{
-                            whiteSpace: "pre-wrap",
-                            wordWrap: "break-word",
-                          }}
-                        >
-                          {orders.color}
-                        </td>
-                        <td>{orders.size}</td>
-                        <td>
-                          <strong>{numberWithCommas(orders.price)} VND</strong>
-                        </td>
-                        <td>{orders.quantity} sản phẩm</td>
-                        <td>
-                          {orders.status === "PENDING" && (
-                            <span className="badge bg-label-warning me-1">
-                              CHỜ XÁC NHẬN
-                            </span>
-                          )}
-                        </td>
+            {ordersFactoryresponse && unitedOrderDetail ? (
+              <>
+                <h5 className="card-header">Quản lý đơn hàng</h5>
+                <div className="table-responsive text-nowrap ">
+                  <table className="table ">
+                    <thead>
+                      <tr>
+                        <th>Chi Tiết</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Màu</th>
+                        <th>Kích thước</th>
+                        <th>Giá đơn Hàng</th>
+                        <th>Số lượng</th>
+                        <th>Trạng thái</th>
                       </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+                    </thead>
+                    <tbody className="table-border-bottom-0">
+                      {unitedOrderDetail &&
+                        unitedOrderDetail.map((orders) => (
+                          <tr key={nanoid()}>
+                            <td>
+                              <button
+                                type="button"
+                                className="btn btn-primary btn-sm"
+                                onClick={() => {
+                                  router.push(
+                                    `/factory/order-details-printing/?orderId=${orders.orderId}&designId=${orders.designId}&credentialId=${credentialId}`
+                                  );
+                                }}
+                              >
+                                Chi tiết
+                              </button>
+                            </td>
+                            <td>{orders.designName}</td>
+                            <td
+                              style={{
+                                whiteSpace: "pre-wrap",
+                                wordWrap: "break-word",
+                              }}
+                            >
+                              {orders.color}
+                            </td>
+                            <td>{orders.size}</td>
+                            <td>
+                              <strong>
+                                {numberWithCommas(orders.price)} VND
+                              </strong>
+                            </td>
+                            <td>{orders.quantity} sản phẩm</td>
+                            <td>
+                              {orders.status === "PENDING" && (
+                                <span className="badge bg-label-warning me-1">
+                                  CHỜ XÁC NHẬN
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            ) : (
+              <div className="h4 m-0 p-4">Chưa có đơn hàng nào</div>
+            )}
           </div>
           <br />
           {/*/ Table within card */}

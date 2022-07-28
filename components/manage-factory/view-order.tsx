@@ -162,7 +162,7 @@ export default function ViewOrder({
                         {renderData.length > 0 &&
                           renderData.map((designData) => (
                             <div key={designData.name} className="row">
-                              <div className="col-4">
+                              <div className="col-lg-4">
                                 {designData.type === "text" ? (
                                   <p className="h2">{designData.src}</p>
                                 ) : (
@@ -180,7 +180,7 @@ export default function ViewOrder({
                                   </div>
                                 )}
                               </div>
-                              <div className="col-8">
+                              <div className="col-lg-8">
                                 <>
                                   <p className="h5">Thông tin mô tả</p>
                                   <div className="row mb-5">
@@ -204,10 +204,10 @@ export default function ViewOrder({
                                     )}
                                   </div>
 
-                                  <div className="d-flex justify-content-between">
+                                  <div className="d-flex justify-content-between pe-3">
                                     <p className="h5">Thông tin số đo</p>
                                     <div className="d-flex col-2">
-                                      <p className="w-75 m-0 m-auto">Đơn vị:</p>
+                                      <p className="w-75 m-auto">Đơn vị:</p>
                                       <select
                                         className="form-select"
                                         aria-label="Default select example"
@@ -235,7 +235,7 @@ export default function ViewOrder({
                                     </div>
                                   </div>
                                   <div className="d-flex">
-                                    <div className="col-2">
+                                    <div className="">
                                       <div className=" border p-2">
                                         Kích thước
                                       </div>

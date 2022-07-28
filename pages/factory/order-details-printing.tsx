@@ -15,6 +15,8 @@ import { useRouter } from "next/router";
 import useGetOrderDetails from "hooks/factories/use-get-order-details";
 import ViewOrder from "@/components/manage-factory/view-order";
 import useGetSizeProductByProductId from "hooks/products/use-get-product-size-by-productId";
+import { nanoid } from "@reduxjs/toolkit";
+import useGetProductById from "hooks/products/use-get-products-by-id";
 
 export interface OrderDetailsProps {}
 
@@ -22,7 +24,15 @@ const steps = ["Chờ xác nhận", "Chờ lấy hàng", "Đang giao", "Đã gia
 
 export default function OrderDetails(props: OrderDetailsProps) {
   const [activeStep, setActiveStep] = React.useState(0);
-  const [colorList, setColorList] = React.useState<string[]>([]);
+  const [renderedColorList, setRenderedColorList] = React.useState<string[]>(
+    []
+  );
+  const [sizeList, setSizeList] = React.useState<
+    {
+      size: string;
+      colorsData: { color: string; quantity: number }[];
+    }[]
+  >([]);
   const [completed, setCompleted] = React.useState<{
     [k: number]: boolean;
   }>({});
@@ -37,12 +47,18 @@ export default function OrderDetails(props: OrderDetailsProps) {
 
   const { data: sizeProductResponse, isLoading: isLoadingSizeProductResponse } =
     useGetSizeProductByProductId(responseOrderDetails?.data.productId || "");
+  console.log(responseOrderDetails, "responseOrderDetails");
+
+  const { data: productResponse, isLoading: isLoadingProductResponse } =
+    useGetProductById(responseOrderDetails?.data.productId || "");
 
   React.useEffect(() => {
     if (responseOrderDetails) {
       const colorList = responseOrderDetails.data.orderDetailsSupportDtos.map(
         (data) => data.color
       );
+      let loopColorList: string[] = [];
+
       if (colorList.length > 1) {
         let newLength = 1;
         let i;
@@ -60,10 +76,77 @@ export default function OrderDetails(props: OrderDetailsProps) {
           }
         }
         if (count === colorList.length - 1) {
-          setColorList([colorList[0]]);
+          loopColorList = [colorList[0]];
+          setRenderedColorList([colorList[0]]);
         } else {
-          setColorList(colorList.slice(0, newLength));
+          loopColorList = colorList.slice(0, newLength);
+          setRenderedColorList(colorList.slice(0, newLength));
         }
+      } else {
+        loopColorList = colorList;
+        setRenderedColorList(colorList);
+      }
+
+      const sizeList: {
+        size: string;
+        colorsData: { color: string; quantity: number }[];
+      }[] = [];
+      responseOrderDetails.data.orderDetailsSupportDtos.forEach((data) => {
+        const tmpSizeData: {
+          size: string;
+          colorsData: { color: string; quantity: number }[];
+        } = { size: data.size, colorsData: [] };
+
+        loopColorList.forEach((color) => {
+          if (color === data.color) {
+            tmpSizeData.colorsData.push({
+              color: color,
+              quantity: data.quantity,
+            });
+          } else {
+            tmpSizeData.colorsData.push({
+              color: color,
+              quantity: 0,
+            });
+          }
+        });
+        sizeList.push(tmpSizeData);
+      });
+      console.log(sizeList, "sizeList");
+
+      if (sizeList.length > 1) {
+        let newLength = 1;
+        let i: number;
+        let j: number;
+        let count = 0;
+        for (i = 1; i < sizeList.length; i++) {
+          for (j = 0; j < newLength; j++) {
+            if (sizeList[i].size === sizeList[j].size) {
+              sizeList[j].colorsData.forEach((colorData) => {
+                sizeList[i].colorsData.forEach((element) => {
+                  if (
+                    element.quantity !== 0 &&
+                    colorData.color === element.color
+                  ) {
+                    colorData.quantity = element.quantity;
+                  }
+                });
+              });
+              count++;
+              break;
+            }
+          }
+          if (newLength === j) {
+            sizeList[newLength++] = sizeList[i];
+          }
+        }
+        if (count === sizeList.length - 1) {
+          setSizeList([sizeList[0]]);
+        } else {
+          setSizeList(sizeList.slice(0, newLength));
+        }
+      } else {
+        setSizeList(sizeList);
       }
     }
   }, [responseOrderDetails]);
@@ -79,11 +162,11 @@ export default function OrderDetails(props: OrderDetailsProps) {
   };
 
   const isLastStep = () => {
-    return activeStep === totalSteps() - 1;
+    return activeStep === totalSteps() - 2;
   };
 
   const allStepsCompleted = () => {
-    return completedSteps() === totalSteps();
+    return completedSteps() === totalSteps() - 1;
   };
 
   const handleNext = () => {
@@ -99,14 +182,6 @@ export default function OrderDetails(props: OrderDetailsProps) {
   const handleCancel = () => {
     setIsCancel(true);
     setActiveStep(totalSteps() - 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleStep = (step: number) => () => {
-    setActiveStep(step);
   };
 
   const handleComplete = () => {
@@ -162,46 +237,62 @@ export default function OrderDetails(props: OrderDetailsProps) {
                               <div className=" border p-2 col-md-4">
                                 Tên khách hàng
                               </div>
-                              <div className=" border p-2 col-md-4">{}</div>
+                              <div className=" border p-2 col-md-4">
+                                {responseOrderDetails.data.customerName}
+                              </div>
                             </div>
                             <div className="row ms-2">
                               <div className=" border p-2 col-md-4">Email</div>
-                              <div className=" border p-2 col-md-4">{}</div>
+                              <div className=" border p-2 col-md-4">
+                                {responseOrderDetails.data.email}
+                              </div>
                             </div>
                             <div className="row ms-2">
                               <div className=" border p-2 col-md-4">
                                 Số điện thoại
                               </div>
-                              <div className=" border p-2 col-md-4">{}</div>
+                              <div className=" border p-2 col-md-4">
+                                {responseOrderDetails.data.phoneNumber}
+                              </div>
                             </div>
                             <div className="row ms-2">
                               <div className=" border p-2 col-md-4">
                                 Địa chỉ nhận hàng
                               </div>
-                              <div className=" border p-2 col-md-4">{}</div>
+                              <div className=" border p-2 col-md-4">
+                                {responseOrderDetails.data.address}
+                              </div>
                             </div>
                           </div>
 
                           <div className="mb-3 col-md-6">
                             <p className="h4">Thông tin sản phẩm</p>
-                            <div className="row ms-2">
-                              <div className=" border p-2 col-md-4">
-                                Mã sản phẩm
-                              </div>
-                              <div className=" border p-2 col-md-4">{}</div>
-                            </div>
-                            <div className="row ms-2">
-                              <div className=" border p-2 col-md-4">
-                                Tên sản phẩm
-                              </div>
-                              <div className=" border p-2 col-md-4">{}</div>
-                            </div>
-                            <div className="row ms-2">
-                              <div className=" border p-2 col-md-4">
-                                Tên thiết kế
-                              </div>
-                              <div className=" border p-2 col-md-4">{}</div>
-                            </div>
+                            {productResponse && (
+                              <>
+                                <div className="row ms-2">
+                                  <div className=" border p-2 col-md-4">
+                                    Mã sản phẩm
+                                  </div>
+                                  <div className=" border p-2 col-md-4">
+                                    {productResponse.data.id}
+                                  </div>
+                                </div>
+                                <div className="row ms-2">
+                                  <div className=" border p-2 col-md-4">
+                                    Tên sản phẩm
+                                  </div>
+                                  <div className=" border p-2 col-md-4">
+                                    {productResponse.data.name}
+                                  </div>
+                                </div>
+                                <div className="row ms-2">
+                                  <div className=" border p-2 col-md-4">
+                                    Tên thiết kế
+                                  </div>
+                                  <div className=" border p-2 col-md-4">{}</div>
+                                </div>
+                              </>
+                            )}
                           </div>
 
                           <div className="mb-3">
@@ -210,7 +301,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
                               <div className="row ">
                                 <div className="col-md-2 p-0">
                                   <div className="border p-2">Màu/Size</div>
-                                  {colorList.map((color) => (
+                                  {renderedColorList.map((color) => (
                                     <div key={color} className="border p-2">
                                       {color}
                                     </div>
@@ -218,25 +309,23 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                 </div>
                                 <div className="col-md-10 p-0">
                                   <div className="d-flex flex-col">
-                                    {responseOrderDetails.data.orderDetailsSupportDtos.map(
-                                      (data) => (
-                                        <div key={data.orderDetailsId}>
-                                          <div className="border py-2 px-4">
-                                            {data.size}
-                                          </div>
-                                          {colorList.map((color) => {
-                                            if (color)
-                                              return (
-                                                <div className="border py-2 px-4">
-                                                  {data.color === color
-                                                    ? data.quantity
-                                                    : 0}
-                                                </div>
-                                              );
-                                          })}
+                                    {sizeList.map((data) => (
+                                      <div key={nanoid()}>
+                                        <div className="border py-2 px-4">
+                                          {data.size}
                                         </div>
-                                      )
-                                    )}
+                                        {data.colorsData.map((dataColor) => {
+                                          return (
+                                            <div
+                                              key={dataColor.color}
+                                              className="border py-2 px-4"
+                                            >
+                                              {dataColor.quantity}
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    ))}
                                   </div>
                                 </div>
                               </div>
