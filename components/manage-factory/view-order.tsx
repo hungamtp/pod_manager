@@ -69,8 +69,8 @@ export default function ViewOrder({
   console.log(sizeProductResponse, "sizeProductResponse");
   //nho can phai load het nha
   return (
-    <div>
-      <div className="card mb-4">
+    <div className="container-xxl w-80p flex-grow-1 container-p-y ">
+      <div className="card ">
         <div className="d-flex justify-content-between p-4">
           <h4 className="">Chi tiết đơn hàng</h4>
           <button
@@ -144,7 +144,7 @@ export default function ViewOrder({
 
                     return (
                       <div key={nanoid()}>
-                        <div className="row w-75 mx-auto position-relative">
+                        <div className=" row w-75 mx-auto position-relative">
                           <div className="h1 text-center position-absolute headline">
                             {blueprint.position === "front"
                               ? "Mặt trước"
@@ -161,7 +161,7 @@ export default function ViewOrder({
                         <p className="h3">Các mẫu thiết kế</p>
                         {renderData.length > 0 &&
                           renderData.map((designData) => (
-                            <div key={designData.name} className="row">
+                            <div key={designData.name} className="row w-">
                               <div className="col-lg-4">
                                 {designData.type === "text" ? (
                                   <p className="h2">{designData.src}</p>
@@ -204,12 +204,12 @@ export default function ViewOrder({
                                     )}
                                   </div>
 
-                                  <div className="d-flex justify-content-between pe-3">
+                                  <div className="d-flex justify-content-between pe-0">
                                     <p className="h5">Thông tin số đo</p>
-                                    <div className="d-flex col-2">
-                                      <p className="w-75 m-auto">Đơn vị:</p>
+                                    <div className="d-flex justify-content-end w-25">
+                                      <p className=" m-auto ">Đơn vị:</p>
                                       <select
-                                        className="form-select"
+                                        className="form-select w-50  mb-1"
                                         aria-label="Default select example"
                                         value={measurementType.value}
                                         onChange={(e: any) => {
@@ -234,26 +234,27 @@ export default function ViewOrder({
                                       </select>
                                     </div>
                                   </div>
+
                                   <div className="d-flex">
-                                    <div className="">
-                                      <div className=" border p-2">
+                                    <div className="w-100">
+                                      <div className=" border p-2 ">
                                         Kích thước
                                       </div>
-                                      <div className=" border p-2">
+                                      <div className=" border p-2 ">
                                         Cách cổ ({measurementType.name})
                                       </div>
-                                      <div className=" border p-2">
+                                      <div className=" border p-2 ">
                                         Chiều rộng ({measurementType.name})
                                       </div>
-                                      <div className=" border p-2">
+                                      <div className=" border p-2 ">
                                         Chiều dài ({measurementType.name})
                                       </div>
-                                      <div className=" border p-2">
+                                      <div className=" border p-2 ">
                                         Cách trái ({measurementType.name})
                                       </div>
                                     </div>
                                     {designData.data.map((data) => (
-                                      <div key={data.size} className="col-2">
+                                      <div key={data.size} className="w-50">
                                         <div className=" border p-2">
                                           {data.size}
                                         </div>

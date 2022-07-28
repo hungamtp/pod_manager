@@ -260,13 +260,13 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                 Địa chỉ nhận hàng
                               </div>
                               <div className=" border p-2 col-md-4">
-                                {responseOrderDetails.data.address}
+                                175 Trần Thị Cờ, Quận 9, TP. Hồ Chí Minh
                               </div>
                             </div>
                           </div>
 
                           <div className="mb-3 col-md-6">
-                            <p className="h4">Thông tin sản phẩm</p>
+                            {/* <p className="h4">Thông tin sản phẩm</p> */}
                             {productResponse && (
                               <>
                                 <div className="row ms-2">
