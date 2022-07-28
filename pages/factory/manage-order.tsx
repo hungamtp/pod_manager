@@ -33,7 +33,7 @@ export default function ManageOrder(props: IManageOrder) {
     useOrdersFactory(credentialId, filter);
 
   React.useEffect(() => {
-    if (ordersFactoryresponse && ordersFactoryresponse.content.length > 0) {
+    if (ordersFactoryresponse && ordersFactoryresponse.totalElements > 0) {
       let newLength = 1;
       if (ordersFactoryresponse.content.length > 1) {
         let i, j;
@@ -46,6 +46,9 @@ export default function ManageOrder(props: IManageOrder) {
               ordersFactoryresponse.content[j].designId ===
               ordersFactoryresponse.content[i].designId
             ) {
+              ordersFactoryresponse.content[j].quantity =
+                ordersFactoryresponse.content[j].quantity +
+                ordersFactoryresponse.content[i].quantity;
               count++;
               break;
             }
@@ -91,8 +94,6 @@ export default function ManageOrder(props: IManageOrder) {
                       <tr>
                         <th>Chi Tiết</th>
                         <th>Tên sản phẩm</th>
-                        <th>Màu</th>
-                        <th>Kích thước</th>
                         <th>Giá đơn Hàng</th>
                         <th>Số lượng</th>
                         <th>Trạng thái</th>
@@ -108,7 +109,7 @@ export default function ManageOrder(props: IManageOrder) {
                                 className="btn btn-primary btn-sm"
                                 onClick={() => {
                                   router.push(
-                                    `/factory/order-details-printing/?orderId=${orders.orderId}&designId=${orders.designId}&credentialId=${credentialId}`
+                                    `/factory/order-details-printing/?orderId=${orders.orderId}&designId=${orders.designId}&credentialId=${credentialId}&designname=${orders.designName}`
                                   );
                                 }}
                               >
@@ -116,15 +117,7 @@ export default function ManageOrder(props: IManageOrder) {
                               </button>
                             </td>
                             <td>{orders.designName}</td>
-                            <td
-                              style={{
-                                whiteSpace: "pre-wrap",
-                                wordWrap: "break-word",
-                              }}
-                            >
-                              {orders.color}
-                            </td>
-                            <td>{orders.size}</td>
+
                             <td>
                               <strong>
                                 {numberWithCommas(orders.price)} VND
