@@ -11,6 +11,8 @@ export interface FactoryByIdDtos {
     productDtoList: {
         id: string;
         name: string;
+        price: number;
+        material: string;
         description: string;
         productImages: {image: string}[];
         categoryName: string;

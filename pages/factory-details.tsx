@@ -8,6 +8,7 @@ import * as React from "react";
 import * as yup from "yup";
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
+import EditIcon from "@mui/icons-material/Edit";
 import CreateProductPriceForm from "@/components/manage-factory/create-product-price-form";
 import CreateSizeColorProductForm from "@/components/manage-factory/create-size-color-product-form";
 import Dialog from "@mui/material/Dialog";
@@ -16,6 +17,10 @@ import { nanoid } from "@reduxjs/toolkit";
 import useGetProductForFactory from "hooks/factories/use-get-product-for-factory";
 import useGetSizesColorsById from "hooks/products/use-get-sizes-colors-by-id";
 import SizesColorsProduct from "@/components/manage-factory/size-color-product";
+import { IconButton } from "@mui/material";
+import { numberWithCommas } from "@/helpers/number-util";
+import { UpdatePriceMaterialDto } from "@/services/factories/dto/update-price-material-dto";
+import UpdateProductPriceForm from "@/components/manage-factory/update-price-material-form";
 export interface FactoryDetailsProps {}
 
 const schema = yup.object().shape({
@@ -31,6 +36,11 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
     pageNumber: 0,
     pageSize: 10,
   });
+  const defaultValues: UpdatePriceMaterialDto = {
+    price: 0,
+    material: "",
+  };
+
   const router = useRouter();
   const factoryId = router.asPath.split("id=")[2];
   const { id } = router.query;
@@ -40,8 +50,12 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
     useGetProductForFactory(factoryId);
   const [index, setIndex] = React.useState(0);
   const [productId, setProductId] = React.useState("");
+  const [priceMaterial, setPriceMaterial] =
+    React.useState<UpdatePriceMaterialDto>(defaultValues);
   const [productForFactoryId, setProductForFactoryId] = React.useState("");
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [openPriceMaterialDialog, setOpenPriceMaterialDialog] =
+    React.useState(false);
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
   const [openCreatePriceDialog, setOpenCreatePriceDialog] =
     React.useState(false);
@@ -61,6 +75,20 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
     setIndex(index);
     setOpenDialog(true);
   };
+  const handleOpenPriceMaterialDialog = (
+    productId: string,
+    price: number,
+    material: string
+  ) => {
+    const tmpData = {
+      price: price,
+      material: material,
+    };
+    setPriceMaterial(tmpData);
+    setProductId(productId);
+    setOpenPriceMaterialDialog(true);
+  };
+
   const handleOpenCreateSizeColorDialog = (
     index: number,
     productId: string
@@ -86,6 +114,9 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
   const handleCloseCreatePriceDialog = () => {
     setOpenCreatePriceDialog(false);
   };
+  const handleCloseUpdatePriceMaterialDialog = () => {
+    setOpenPriceMaterialDialog(false);
+  };
 
   return (
     <>
@@ -95,6 +126,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
         responseSizesColorById && (
           <>
             <>
+              {/* create size color quantity */}
               <Dialog
                 open={openCreateDialog}
                 onClose={handleCloseCreateDialog}
@@ -112,6 +144,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                   />
                 </DialogContent>
               </Dialog>
+              {/* View size color quantity */}
               <Dialog
                 open={openDialog}
                 onClose={handleCloseDialog}
@@ -125,6 +158,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
               </Dialog>
             </>
             <>
+              {/* add price */}
               <Dialog
                 open={openCreatePriceDialog}
                 onClose={handleCloseCreatePriceDialog}
@@ -141,6 +175,23 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                 </DialogContent>
               </Dialog>
             </>
+            {/* update price material  */}
+            <Dialog
+              open={openPriceMaterialDialog}
+              onClose={handleCloseUpdatePriceMaterialDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              fullWidth={true}
+            >
+              <DialogContent>
+                <UpdateProductPriceForm
+                  factoryId={factoryId as string}
+                  productId={productId}
+                  priceMaterial={priceMaterial}
+                  handleCloseDialog={handleCloseUpdatePriceMaterialDialog}
+                />
+              </DialogContent>
+            </Dialog>
           </>
         )}
 
@@ -278,10 +329,19 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                               <strong>Category</strong>
                             </th>
                             <th>
+                              <strong>Giá</strong>
+                            </th>
+                            <th>
+                              <strong>Chất liệu vải</strong>
+                            </th>
+                            <th>
                               <strong>Hình ảnh</strong>
                             </th>
                             <th>
                               <strong>Màu và Kích thước</strong>
+                            </th>
+                            <th>
+                              <strong>Hành động</strong>
                             </th>
                           </tr>
                         </thead>
@@ -294,6 +354,12 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                                   <strong>{x.name}</strong>
                                 </td>
                                 <td>{x.categoryName}</td>
+                                <td>
+                                  <strong>
+                                    {numberWithCommas(x.price)} VND
+                                  </strong>
+                                </td>
+                                <td>{x.material}</td>
                                 <td>
                                   <img
                                     src={x.productImages[0].image}
@@ -323,6 +389,22 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                                   >
                                     Tạo mới
                                   </button>
+                                </td>
+                                <td>
+                                  <IconButton
+                                    onClick={() => {
+                                      handleOpenPriceMaterialDialog(
+                                        x.id,
+                                        x.price,
+                                        x.material
+                                      );
+                                    }}
+                                  >
+                                    <EditIcon
+                                      fontSize="medium"
+                                      color="primary"
+                                    />
+                                  </IconButton>
                                 </td>
                               </tr>
                             </tbody>
