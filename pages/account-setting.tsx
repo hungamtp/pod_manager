@@ -53,12 +53,18 @@ export default function AccountSetting(props: IAccountSettingProps) {
   const { data: responseAccount, isLoading: isLoadingAccount } =
     useGetAccountById(credentialId);
   const { mutate: updateImageAccount, error } = useUpdateImageAccount();
+  const [isEditAccount, setIsEditAccount] = React.useState(false);
   const { mutate: updateProfile } = useUpdateProfile();
   const maxNumber = 69;
   const [images, setImages] = React.useState<ImageListType>([
     { data_url: responseAccount?.data.image },
   ]);
   const [isDisable, setIsDisable] = React.useState(true);
+
+  const handleEditAccount = () => {
+    setIsEditAccount(true);
+    setIsDisable(false);
+  };
 
   const defaultValues: AccountByIdDtos = {
     id: "",
@@ -114,10 +120,6 @@ export default function AccountSetting(props: IAccountSettingProps) {
     }
   };
 
-  const handleIsDisable = () => {
-    setIsDisable(!isDisable);
-  };
-
   const onSubmit: SubmitHandler<AccountByIdDtos> = (data) => {
     onUploadImage(data.image);
     const tmpData = {
@@ -131,6 +133,8 @@ export default function AccountSetting(props: IAccountSettingProps) {
       image: data.image,
     };
     updateProfile(tmpData);
+    setIsEditAccount(false);
+    setIsDisable(true);
   };
   return (
     <>
@@ -335,16 +339,25 @@ export default function AccountSetting(props: IAccountSettingProps) {
                         </div>
                       </div>
                       <div className="mt-2">
-                        <button type="submit" className="btn btn-primary me-2">
-                          lưu thay đổi
-                        </button>
-                        <button
-                          type="reset"
-                          className="btn btn-outline-secondary"
-                          onClick={handleIsDisable}
-                        >
-                          Edit
-                        </button>
+                        {isEditAccount && (
+                          <button
+                            type="submit"
+                            className="btn btn-primary me-2"
+                          >
+                            lưu thay đổi
+                          </button>
+                        )}
+                        {isEditAccount === false && (
+                          <button
+                            type="reset"
+                            className="btn btn-outline-secondary"
+                            onClick={() => {
+                              handleEditAccount();
+                            }}
+                          >
+                            Edit
+                          </button>
+                        )}
                       </div>
                     </form>
                   )}

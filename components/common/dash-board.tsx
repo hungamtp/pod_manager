@@ -179,9 +179,9 @@ export default function DashBoard(props: IDashBoardProps) {
               </div>
             </div>
             <div className="row">
-              <div className="col-lg col-sm order-1">
+              <div className="col-lg col-sm order-0">
                 <div className="row">
-                  <div className="col col-sm-2 col-6 mb-4">
+                  <div className="col col-sm-3 col-6 mb-4">
                     <div className="card">
                       <div className="card-body">
                         <div className="card-title d-flex align-items-start justify-content-between">
@@ -197,7 +197,7 @@ export default function DashBoard(props: IDashBoardProps) {
                           Tổng thu nhập
                         </span>
                         <h4 className="card-title mb">
-                          {numberWithCommas(response.income)} Đ
+                          {numberWithCommas(response.income)} VND
                         </h4>
                         {/* <small className="text-success fw-semibold">
                         <i className="bx bx-up-arrow-alt" /> +72.80%
@@ -259,7 +259,7 @@ export default function DashBoard(props: IDashBoardProps) {
 
               <div className="row">
                 {/* Order Statistics */}
-                <div className="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
+                <div className="col-md-6 col-lg-4 col-xl-4 order-1 mb-4">
                   <div className="card h-100">
                     <div className="card-header d-flex align-items-center justify-content-between pb-0">
                       <div className="card-title mb-0">
