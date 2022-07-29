@@ -208,7 +208,7 @@ export default function ViewOrder({
                                       {designData.type !== "text" && (
                                         <>
                                           <p className="h5">Thông tin mô tả</p>
-                                          <div className="row mb-5">
+                                          <div className="mb-5">
                                             <>
                                               <div className="col-6 h6">
                                                 Tên thiết kế: {designData.name}
