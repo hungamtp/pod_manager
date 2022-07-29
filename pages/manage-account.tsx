@@ -110,7 +110,6 @@ export default function ManageAccount(props: IManageAccountProps) {
   };
   const handleSearchChange = (event: SelectChangeEvent) => {
     setSearchCriteria(event.target.value);
-    console.log(event.target.value);
     setFilter((state) => ({ ...state, searchCriteria: event.target.value }));
   };
 
@@ -241,9 +240,9 @@ export default function ManageAccount(props: IManageAccountProps) {
                   {/* <MenuItem className="d-flex flex-column" value="ID">
                     ID
                   </MenuItem> */}
-                  <MenuItem className="d-flex flex-column" value="EMAIL">
+                  {/* <MenuItem className="d-flex flex-column" value="EMAIL">
                     Email
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem className="d-flex flex-column" value="RoleName">
                     Vị trí
                   </MenuItem>
@@ -293,7 +292,7 @@ export default function ManageAccount(props: IManageAccountProps) {
                 <tbody className="table-border-bottom-0">
                   {!isLoadingAccount &&
                     response &&
-                    response.content.map((x) => (
+                    response.content?.map((x) => (
                       <tr key={x.id}>
                         <td>
                           <strong>{x.userLastName}</strong>

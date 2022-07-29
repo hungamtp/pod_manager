@@ -5,7 +5,7 @@ import CreateProductForm from "@/components/manage-product/create-product-form";
 import PublishProduct from "@/components/manage-product/publish-product-form";
 import UnPublishProduct from "@/components/manage-product/un-publish-product-form";
 import UpdateProductForm from "@/components/manage-product/update-product-form";
-import { Filter } from "@/services/accounts";
+import { Filter } from "@/services/products";
 import { ProductDto } from "@/services/products/dto/get-all-products-dto";
 import { UpdateProductDto } from "@/services/products/dto/update-product-dto";
 import AddIcon from "@mui/icons-material/Add";
@@ -32,7 +32,13 @@ export default function ManageProduct(props: IManageProductProps) {
   const [filter, setFilter] = useState<Filter>({
     pageNumber: 0,
     pageSize: 10,
+    search: "",
   });
+
+  const inputHandler = (e: any) => {
+    var lowerCase = e.target.value.toLowerCase();
+    setFilter({ ...filter, search: lowerCase });
+  };
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -276,6 +282,7 @@ export default function ManageProduct(props: IManageProductProps) {
                 <i className="bx bx-search fs-4 lh-0" />
                 <input
                   type="text"
+                  onChange={inputHandler}
                   className="form-control border-0  shadow-none w-full"
                   placeholder="Search..."
                   aria-label="Search..."

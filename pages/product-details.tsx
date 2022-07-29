@@ -84,6 +84,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
   const [renderImages, setRenderImages] = React.useState<ImageListType>();
   const [uploadImages, setUploadImages] = React.useState<ImageListType>();
   const [submitImages, setSubmitImages] = React.useState<string[]>([]);
+  const [isEditProduct, setIsEditProduct] = React.useState(false);
 
   const { data: sizeProductResponse, isLoading: isLoadingSizeProductResponse } =
     useGetSizeProductByProductId(id);
@@ -123,6 +124,11 @@ export default function ProductDetails(props: IProductDetailsProps) {
       setRenderSizeList([...newRenderedSizeList]);
     }
   }, [sizeProductResponse, responseSizesColorById]);
+
+  const handleEditProduct = () => {
+    setIsEditProduct(true);
+    setIsDisabled(false);
+  };
 
   const handleCreateProductSize = (size: string) => {
     setSizeCreateData(size);
@@ -327,6 +333,8 @@ export default function ProductDetails(props: IProductDetailsProps) {
         updateProduct(submitData);
       }
     }
+    setIsEditProduct(false);
+    setIsDisabled(true);
   };
 
   const [filter, setFilter] = React.useState<Filter>({
@@ -384,32 +392,38 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                       className="me-2 border border-secondary rounded-3 "
                                     />
                                   ))}
-                                  <button
-                                    className="btn btn-primary me-2 mb-4 ms-2"
-                                    style={
-                                      isDragging ? { color: "red" } : undefined
-                                    }
-                                    onClick={() => {
-                                      onImageUpload();
-                                    }}
-                                    {...dragProps}
-                                    type="button"
-                                  >
-                                    Tải lên
-                                  </button>
-                                  &nbsp;
-                                  <button
-                                    className="btn btn-outline-secondary account-image-reset mb-4"
-                                    type="button"
-                                    onClick={() => {
-                                      onImageRemoveAll();
-                                      setRenderImages([]);
-                                      setUploadImages([]);
-                                      setSubmitImages([]);
-                                    }}
-                                  >
-                                    Xóa
-                                  </button>
+                                  {isEditProduct && (
+                                    <div className="mt-2">
+                                      <button
+                                        className="btn btn-primary "
+                                        style={
+                                          isDragging
+                                            ? { color: "red" }
+                                            : undefined
+                                        }
+                                        onClick={() => {
+                                          onImageUpload();
+                                        }}
+                                        {...dragProps}
+                                        type="button"
+                                      >
+                                        Tải lên
+                                      </button>
+                                      &nbsp;
+                                      <button
+                                        className="btn btn-outline-secondary account-image-reset "
+                                        type="button"
+                                        onClick={() => {
+                                          onImageRemoveAll();
+                                          setRenderImages([]);
+                                          setUploadImages([]);
+                                          setSubmitImages([]);
+                                        }}
+                                      >
+                                        Xóa
+                                      </button>
+                                    </div>
+                                  )}
                                 </div>
                               )}
                             </ImageUploading>
@@ -593,16 +607,26 @@ export default function ProductDetails(props: IProductDetailsProps) {
                         </div>
                       </div>
                       <div className="mt-2">
-                        <button
-                          type="button"
-                          onClick={handleIsDisabled}
-                          className="btn btn-primary me-2"
-                        >
-                          Edit
-                        </button>
-                        <button type="submit" className="btn btn-primary me-2">
-                          Lưu thay đổi
-                        </button>
+                        {isEditProduct === false && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              handleEditProduct();
+                            }}
+                            className="btn btn-primary me-2"
+                          >
+                            Edit
+                          </button>
+                        )}
+                        {isEditProduct && (
+                          <button
+                            type="submit"
+                            className="btn btn-primary me-2"
+                          >
+                            Lưu thay đổi
+                          </button>
+                        )}
+
                         <button
                           type="button"
                           className="btn btn-outline-secondary"
@@ -610,7 +634,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                             router.push("manage-product");
                           }}
                         >
-                          Hủy
+                          Trở về
                         </button>
                       </div>
                     </form>

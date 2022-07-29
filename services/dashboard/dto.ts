@@ -16,3 +16,9 @@ export interface DashboardDto{
         count: number;
     }[]
 }
+export interface DashboardFactoryDto{
+    income: number;
+    incomeCurrentMonth: number;
+    inProcessOrder: number;
+    doneOrder: number;
+}
