@@ -44,7 +44,9 @@ export default function ManageOrder(props: IManageOrder) {
           for (j = 0; j < newLength; j++) {
             if (
               ordersFactoryresponse.content[j].designId ===
-              ordersFactoryresponse.content[i].designId
+                ordersFactoryresponse.content[i].designId &&
+              ordersFactoryresponse.content[j].orderId ===
+                ordersFactoryresponse.content[i].orderId
             ) {
               ordersFactoryresponse.content[j].quantity =
                 ordersFactoryresponse.content[j].quantity +

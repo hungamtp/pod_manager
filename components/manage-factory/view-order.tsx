@@ -92,8 +92,12 @@ export default function ViewOrder({
                 <div className="d-flex flex-wrap">
                   {data.bluePrintDtos.map((blueprint) => {
                     let renderedImage = data.previewImages[0];
+                    const renderedColor = data.previewImages[0].color;
                     data.previewImages.forEach((image) => {
-                      if (image.position === blueprint.position) {
+                      if (
+                        image.position === blueprint.position &&
+                        image.color === renderedColor
+                      ) {
                         renderedImage = image;
                       }
                     });
@@ -163,11 +167,9 @@ export default function ViewOrder({
                             <p className="h3">Các mẫu thiết kế</p>
                             {renderData.length > 0 &&
                               renderData.map((designData) => (
-                                <div key={designData.name} className="row w-">
-                                  <div className="col-lg-4">
-                                    {designData.type === "text" ? (
-                                      <p className="h2">{designData.src}</p>
-                                    ) : (
+                                <div key={designData.name} className="row">
+                                  {designData.type !== "text" ? (
+                                    <div className={`col-lg-4`}>
                                       <div
                                         onClick={() =>
                                           save(designData.name, designData.src)
@@ -180,31 +182,44 @@ export default function ViewOrder({
                                           height={1000}
                                         />
                                       </div>
-                                    )}
-                                  </div>
-                                  <div className="col-lg-8">
-                                    <>
-                                      <p className="h5">Thông tin mô tả</p>
+                                    </div>
+                                  ) : (
+                                    <div className="col-md-4">
                                       <div className="row mb-5">
-                                        {designData.type !== "text" && (
-                                          <>
-                                            <div className="col-6 ">
-                                              Tên thiết kế: {designData.name}
-                                            </div>
-                                          </>
-                                        )}
-
-                                        {designData.type === "text" && (
-                                          <>
-                                            <div className="">
-                                              Font chữ: {designData.font}
-                                            </div>
-                                            <div className="">
-                                              Màu chữ: {designData.textColor}
-                                            </div>
-                                          </>
-                                        )}
+                                        <p className="h5">Thông tin mô tả</p>
+                                        <div className="mt-2">
+                                          Nội dung: {designData.src}
+                                        </div>
+                                        <div className="mt-2">
+                                          Font chữ: {designData.font}
+                                        </div>
+                                        <div className="mt-2">
+                                          Màu chữ: {designData.textColor}
+                                        </div>
+                                        <div className="mt-2">
+                                          Độ xoay: {designData.rotate}
+                                        </div>
                                       </div>
+                                    </div>
+                                  )}
+
+                                  <div className="col-md-8">
+                                    <>
+                                      {designData.type !== "text" && (
+                                        <>
+                                          <p className="h5">Thông tin mô tả</p>
+                                          <div className="row mb-5">
+                                            <>
+                                              <div className="col-6 h6">
+                                                Tên thiết kế: {designData.name}
+                                              </div>
+                                              <div className="col-6 h6 mt-2">
+                                                Độ xoay: {designData.rotate}
+                                              </div>
+                                            </>
+                                          </div>
+                                        </>
+                                      )}
 
                                       <div className="d-flex justify-content-between pe-0">
                                         <p className="h5">Thông tin số đo</p>
