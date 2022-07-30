@@ -85,7 +85,12 @@ export default function ProductDetails(props: IProductDetailsProps) {
   const [uploadImages, setUploadImages] = React.useState<ImageListType>();
   const [submitImages, setSubmitImages] = React.useState<string[]>([]);
   const [isEditProduct, setIsEditProduct] = React.useState(false);
-
+  const [filter, setFilter] = React.useState<Filter>({
+    pageNumber: 0,
+    pageSize: 10,
+  });
+  const { data: response, isLoading: isLoadingCategory } =
+    useCategories(filter);
   const { data: sizeProductResponse, isLoading: isLoadingSizeProductResponse } =
     useGetSizeProductByProductId(id);
 
@@ -329,6 +334,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
           ...data,
           id: responseProduct?.data.id,
           images: tmpImages,
+          categoryName: categoryName as string,
         } as UpdateProductDto;
         updateProduct(submitData);
       }
@@ -336,13 +342,6 @@ export default function ProductDetails(props: IProductDetailsProps) {
     setIsEditProduct(false);
     setIsDisabled(true);
   };
-
-  const [filter, setFilter] = React.useState<Filter>({
-    pageNumber: 0,
-    pageSize: 10,
-  });
-  const { data: response, isLoading: isLoadingCategory } =
-    useCategories(filter);
 
   return (
     <>

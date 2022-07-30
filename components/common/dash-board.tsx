@@ -369,17 +369,6 @@ export default function DashBoard(props: IDashBoardProps) {
                             </div>
                           </div>
                           <div id="incomeChart" />
-                          <div className="d-flex justify-content-center pt-4 gap-2">
-                            <div className="flex-shrink-0">
-                              <div id="expensesOfWeek" />
-                            </div>
-                            <div>
-                              <p className="mb-n1 mt-1">Expenses This Week</p>
-                              <small className="text-muted">
-                                $39 less than last week
-                              </small>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
