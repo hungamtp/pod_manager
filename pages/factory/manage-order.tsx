@@ -2,14 +2,13 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
-import { useAppSelector } from "@/components/hooks/reduxHook";
+import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import { MainLayout } from "@/components/layouts";
 import { numberWithCommas } from "@/helpers/number-util";
+import { addUnitedData } from "@/redux/slices/unitedOrderData";
 import { Filter } from "@/services/accounts";
 import { OrderFactoryDto } from "@/services/factories/dto/get-all-orders-factory";
-import { Pagination, Stack } from "@mui/material";
 import { nanoid } from "@reduxjs/toolkit";
-import useColors from "hooks/colors/use-colors";
 import useOrdersFactory from "hooks/factories/use-orders-factory";
 import { useRouter } from "next/router";
 import * as React from "react";
@@ -17,16 +16,18 @@ import { useState } from "react";
 export interface IManageOrder {}
 
 const ITEM_HEIGHT = 48;
-
+export interface UnitedData extends OrderFactoryDto {
+  orderDetailIdList: string[];
+}
 export default function ManageOrder(props: IManageOrder) {
   const credentialId = useAppSelector((state) => state.auth.userId);
   const [filter, setFilter] = useState<Filter>({
     pageNumber: 0,
     pageSize: 10,
   });
+  const dispatch = useAppDispatch();
 
-  const [unitedOrderDetail, setUnitedOrderDetail] =
-    useState<OrderFactoryDto[]>();
+  const [unitedOrderDetail, setUnitedOrderDetail] = useState<UnitedData[]>();
   const router = useRouter();
 
   const { data: ordersFactoryresponse, isLoading: isLoadingOrdersFactory } =
@@ -34,41 +35,44 @@ export default function ManageOrder(props: IManageOrder) {
 
   React.useEffect(() => {
     if (ordersFactoryresponse && ordersFactoryresponse.totalElements > 0) {
+      const newOrdersContent: UnitedData[] = ordersFactoryresponse.content.map(
+        (orderData) => {
+          return { ...orderData, orderDetailIdList: [orderData.id] };
+        }
+      );
       let newLength = 1;
-      if (ordersFactoryresponse.content.length > 1) {
+      if (newOrdersContent.length > 1) {
         let i, j;
 
         let keep = true;
         let count = 0;
-        for (i = 1; i < ordersFactoryresponse.content.length; i++) {
+        for (i = 1; i < newOrdersContent.length; i++) {
           for (j = 0; j < newLength; j++) {
             if (
-              ordersFactoryresponse.content[j].designId ===
-                ordersFactoryresponse.content[i].designId &&
-              ordersFactoryresponse.content[j].orderId ===
-                ordersFactoryresponse.content[i].orderId
+              newOrdersContent[j].designId === newOrdersContent[i].designId &&
+              newOrdersContent[j].orderId === newOrdersContent[i].orderId
             ) {
-              ordersFactoryresponse.content[j].quantity =
-                ordersFactoryresponse.content[j].quantity +
-                ordersFactoryresponse.content[i].quantity;
+              newOrdersContent[j].quantity =
+                newOrdersContent[j].quantity + newOrdersContent[i].quantity;
+              newOrdersContent[j].price =
+                newOrdersContent[j].price + newOrdersContent[i].price;
+              newOrdersContent[j].orderDetailIdList.push(
+                newOrdersContent[i].id
+              );
               count++;
               break;
             }
           }
           keep = true;
           if (j === newLength) {
-            ordersFactoryresponse.content[newLength++] =
-              ordersFactoryresponse.content[i];
+            newOrdersContent[newLength++] = newOrdersContent[i];
           }
         }
-        if (count === ordersFactoryresponse.content.length - 1)
-          setUnitedOrderDetail([ordersFactoryresponse.content[0]]);
-        else
-          setUnitedOrderDetail(
-            ordersFactoryresponse.content.slice(0, newLength)
-          );
+        if (count === newOrdersContent.length - 1)
+          setUnitedOrderDetail([newOrdersContent[0]]);
+        else setUnitedOrderDetail(newOrdersContent.slice(0, newLength));
       } else {
-        setUnitedOrderDetail(ordersFactoryresponse.content);
+        setUnitedOrderDetail(newOrdersContent);
       }
     }
 
@@ -110,8 +114,19 @@ export default function ManageOrder(props: IManageOrder) {
                                 type="button"
                                 className="btn btn-primary btn-sm"
                                 onClick={() => {
+                                  dispatch(
+                                    addUnitedData({
+                                      orderId: orders.orderId,
+                                      designId: orders.designId,
+                                      productName: orders.productName,
+                                      designName: orders.designName,
+                                      credentialId: credentialId,
+                                      orderDetailIdList:
+                                        orders.orderDetailIdList,
+                                    })
+                                  );
                                   router.push(
-                                    `/factory/order-details-printing/?orderId=${orders.orderId}&designId=${orders.designId}&credentialId=${credentialId}&designname=${orders.designName}`
+                                    `/factory/order-details-printing`
                                   );
                                 }}
                               >

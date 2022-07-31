@@ -17,6 +17,8 @@ import ViewOrder from "@/components/manage-factory/view-order";
 import useGetSizeProductByProductId from "hooks/products/use-get-product-size-by-productId";
 import { nanoid } from "@reduxjs/toolkit";
 import useGetProductById from "hooks/products/use-get-products-by-id";
+import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
+import { clearData } from "@/redux/slices/unitedOrderData";
 
 export interface OrderDetailsProps {}
 
@@ -30,6 +32,7 @@ const steps = [
 ];
 
 export default function OrderDetails(props: OrderDetailsProps) {
+  const dispatch = useAppDispatch();
   const [activeStep, setActiveStep] = React.useState(0);
   const [renderedColorList, setRenderedColorList] = React.useState<string[]>(
     []
@@ -43,14 +46,31 @@ export default function OrderDetails(props: OrderDetailsProps) {
   const [completed, setCompleted] = React.useState<{
     [k: number]: boolean;
   }>({});
+
+  React.useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      if (!url.includes("factory/order-details-printing")) {
+        dispatch(clearData());
+      }
+    };
+
+    router.events.on("routeChangeStart", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+    };
+  }, []);
+
   const [isCancel, setIsCancel] = React.useState(false);
   const router = useRouter();
-  const { orderId, designId, credentialId, designname } = router.query;
+  const { orderId, designId, credentialId, designName, orderDetailIdList } =
+    useAppSelector((state) => state.unitedData);
   const { data: responseOrderDetails } = useGetOrderDetails(
     orderId as string,
     designId as string,
     credentialId as string
   );
+  console.log(orderDetailIdList, "orderDetailIdList");
   const [orderStatus, setOrderStatus] = React.useState("PENDING");
   const { data: sizeProductResponse, isLoading: isLoadingSizeProductResponse } =
     useGetSizeProductByProductId(responseOrderDetails?.data.productId || "");
@@ -309,7 +329,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                     Tên thiết kế
                                   </div>
                                   <div className=" border p-2 col-md-4">
-                                    {designname}
+                                    {designName}
                                   </div>
                                 </div>
                               </>
