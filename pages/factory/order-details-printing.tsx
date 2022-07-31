@@ -20,7 +20,14 @@ import useGetProductById from "hooks/products/use-get-products-by-id";
 
 export interface OrderDetailsProps {}
 
-const steps = ["Chờ xác nhận", "Chờ lấy hàng", "Đang giao", "Đã giao"];
+const steps = [
+  "Chờ xác nhận",
+  "Đang xử lí",
+  "Đang đóng gói",
+  "Đang giao hàng",
+  "Đã giao",
+  "Hoàn thành",
+];
 
 export default function OrderDetails(props: OrderDetailsProps) {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -44,10 +51,9 @@ export default function OrderDetails(props: OrderDetailsProps) {
     designId as string,
     credentialId as string
   );
-
+  const [orderStatus, setOrderStatus] = React.useState("PENDING");
   const { data: sizeProductResponse, isLoading: isLoadingSizeProductResponse } =
     useGetSizeProductByProductId(responseOrderDetails?.data.productId || "");
-  console.log(responseOrderDetails, "responseOrderDetails");
 
   const { data: productResponse, isLoading: isLoadingProductResponse } =
     useGetProductById(responseOrderDetails?.data.productId || "");
@@ -112,7 +118,6 @@ export default function OrderDetails(props: OrderDetailsProps) {
         });
         sizeList.push(tmpSizeData);
       });
-      console.log(sizeList, "sizeList");
 
       if (sizeList.length > 1) {
         let newLength = 1;
@@ -166,7 +171,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
   };
 
   const allStepsCompleted = () => {
-    return completedSteps() === totalSteps() - 1;
+    return completedSteps() === totalSteps();
   };
 
   const handleNext = () => {
@@ -183,9 +188,23 @@ export default function OrderDetails(props: OrderDetailsProps) {
     setIsCancel(true);
     setActiveStep(totalSteps() - 1);
   };
-
+  let tmpOrderStatusData = "";
   const handleComplete = () => {
-    console.log(steps[activeStep], "neee");
+    if (steps[activeStep] === "Chờ xác nhận") {
+      tmpOrderStatusData = "PENDING";
+    } else if (steps[activeStep] === "Đang xử lí") {
+      tmpOrderStatusData = "PRINTING";
+    } else if (steps[activeStep] === "Đang đóng gói") {
+      tmpOrderStatusData = "PACKAGING";
+    } else if (steps[activeStep] === "Đang giao hàng") {
+      tmpOrderStatusData = "DELIVERING";
+    } else if (steps[activeStep] === "Đã giao") {
+      tmpOrderStatusData = "DELIVERED";
+    } else if (steps[activeStep] === "Hoàn thành") {
+      tmpOrderStatusData = "DONE";
+    }
+    setOrderStatus(tmpOrderStatusData);
+
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
@@ -403,9 +422,6 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                   <>
                                     {!isCancel && (
                                       <React.Fragment>
-                                        <Typography sx={{ mt: 2, mb: 1 }}>
-                                          Step {activeStep + 1}
-                                        </Typography>
                                         <Box
                                           sx={{
                                             display: "flex",
@@ -431,7 +447,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                             ) : (
                                               <Button onClick={handleComplete}>
                                                 {completedSteps() ===
-                                                totalSteps() - 2
+                                                totalSteps() - 1
                                                   ? "Finish"
                                                   : "Complete Step"}
                                               </Button>
