@@ -8,6 +8,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
 import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
 import { StepLabel } from "@mui/material";
@@ -19,6 +21,8 @@ import { nanoid } from "@reduxjs/toolkit";
 import useGetProductById from "hooks/products/use-get-products-by-id";
 import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import { clearData } from "@/redux/slices/unitedOrderData";
+import useUpdateOrderStatusFactory from "hooks/factories/use-update-order-status";
+import ConfirmOrderStatus from "@/components/manage-factory/confirm-order-status";
 
 export interface OrderDetailsProps {}
 
@@ -30,9 +34,18 @@ const steps = [
   "Đã giao",
   "Hoàn thành",
 ];
+const englishSteps = [
+  "PENDING",
+  "PRINTING",
+  "PACKAGING",
+  "DELIVERING",
+  "DELIVERED",
+  "DONE",
+];
 
 export default function OrderDetails(props: OrderDetailsProps) {
   const dispatch = useAppDispatch();
+
   const [activeStep, setActiveStep] = React.useState(0);
   const [renderedColorList, setRenderedColorList] = React.useState<string[]>(
     []
@@ -63,14 +76,23 @@ export default function OrderDetails(props: OrderDetailsProps) {
 
   const [isCancel, setIsCancel] = React.useState(false);
   const router = useRouter();
-  const { orderId, designId, credentialId, designName, orderDetailIdList } =
-    useAppSelector((state) => state.unitedData);
+
+  const {
+    orderId,
+    designId,
+    credentialId,
+    designName,
+    orderDetailIdList,
+    orderStatus: statusOfOrder,
+  } = useAppSelector((state) => state.unitedData);
+
   const { data: responseOrderDetails } = useGetOrderDetails(
     orderId as string,
     designId as string,
     credentialId as string
   );
-  console.log(orderDetailIdList, "orderDetailIdList");
+  // console.log(orderDetailIdList, "orderDetailIdList");
+
   const [orderStatus, setOrderStatus] = React.useState("PENDING");
   const { data: sizeProductResponse, isLoading: isLoadingSizeProductResponse } =
     useGetSizeProductByProductId(responseOrderDetails?.data.productId || "");
@@ -209,7 +231,8 @@ export default function OrderDetails(props: OrderDetailsProps) {
     setActiveStep(totalSteps() - 1);
   };
   let tmpOrderStatusData = "";
-  const handleComplete = () => {
+
+  const handleGetStatus = () => {
     if (steps[activeStep] === "Chờ xác nhận") {
       tmpOrderStatusData = "PENDING";
     } else if (steps[activeStep] === "Đang xử lí") {
@@ -224,16 +247,49 @@ export default function OrderDetails(props: OrderDetailsProps) {
       tmpOrderStatusData = "DONE";
     }
     setOrderStatus(tmpOrderStatusData);
+  };
 
+  const handleComplete = () => {
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
     handleNext();
   };
 
+  React.useEffect(() => {
+    if (statusOfOrder) {
+      let newStatusList = {};
+      let stepIndex = 0;
+      const BreakError = {};
+
+      try {
+        englishSteps.forEach((step, index) => {
+          newStatusList = { ...newStatusList, [index]: true };
+          if (step === statusOfOrder) {
+            stepIndex = index;
+            throw BreakError;
+          }
+        });
+      } catch (error) {
+        if (error !== BreakError) throw error;
+      }
+      setActiveStep(stepIndex + 1);
+      setCompleted(newStatusList);
+    }
+  }, [statusOfOrder]);
+
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
+  };
+  const [openOrderDialog, setOpenOrderDialog] = React.useState(false);
+
+  const handleClickOpenOrderDialog = () => {
+    setOpenOrderDialog(true);
+  };
+
+  const handleCloseOrderDialog = () => {
+    setOpenOrderDialog(false);
   };
 
   return (
@@ -425,18 +481,6 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                     >
                                       Đơn hàng đã hoàn thành
                                     </Typography>
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        pt: 2,
-                                      }}
-                                    >
-                                      <Box sx={{ flex: "1 1 auto" }} />
-                                      <Button onClick={handleReset}>
-                                        Reset
-                                      </Button>
-                                    </Box>
                                   </React.Fragment>
                                 ) : (
                                   <>
@@ -465,7 +509,12 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                                 completed
                                               </Typography>
                                             ) : (
-                                              <Button onClick={handleComplete}>
+                                              <Button
+                                                onClick={() => {
+                                                  handleGetStatus();
+                                                  handleClickOpenOrderDialog();
+                                                }}
+                                              >
                                                 {completedSteps() ===
                                                 totalSteps() - 1
                                                   ? "Finish"
@@ -483,6 +532,21 @@ export default function OrderDetails(props: OrderDetailsProps) {
                         </div>
                       </form>
                     </div>
+                    <Dialog
+                      open={openOrderDialog}
+                      onClose={handleCloseOrderDialog}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                    >
+                      <DialogContent>
+                        <ConfirmOrderStatus
+                          handleCloseDialog={handleCloseOrderDialog}
+                          orderDetailId={orderDetailIdList}
+                          orderStatus={orderStatus}
+                          handleComplete={handleComplete}
+                        />
+                      </DialogContent>
+                    </Dialog>
                     {/* /Account */}
                   </div>
                 )}
