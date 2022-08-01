@@ -123,6 +123,7 @@ export default function ManageOrder(props: IManageOrder) {
                                       credentialId: credentialId,
                                       orderDetailIdList:
                                         orders.orderDetailIdList,
+                                      orderStatus: orders.status,
                                     })
                                   );
                                   router.push(
@@ -145,6 +146,31 @@ export default function ManageOrder(props: IManageOrder) {
                               {orders.status === "PENDING" && (
                                 <span className="badge bg-label-warning me-1">
                                   CHỜ XÁC NHẬN
+                                </span>
+                              )}
+                              {orders.status === "PRINTING" && (
+                                <span className="badge bg-label-warning me-1">
+                                  CHỜ IN
+                                </span>
+                              )}
+                              {orders.status === "PACKAGING" && (
+                                <span className="badge bg-label-warning me-1">
+                                  ĐANG ĐÓNG GÓI
+                                </span>
+                              )}
+                              {orders.status === "DELIVERING" && (
+                                <span className="badge bg-label-warning me-1">
+                                  ĐANG GIAO HÀNG
+                                </span>
+                              )}
+                              {orders.status === "DELIVERED" && (
+                                <span className="badge bg-label-warning me-1">
+                                  ĐÃ GIAO
+                                </span>
+                              )}
+                              {orders.status === "DONE" && (
+                                <span className="badge bg-label-success me-1">
+                                  HOÀN THÀNH
                                 </span>
                               )}
                             </td>
