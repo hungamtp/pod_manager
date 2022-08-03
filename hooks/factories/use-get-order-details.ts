@@ -6,9 +6,13 @@ const useGetOrderDetails = (
   designId: string,
   credentialId: string
 ) => {
-  return useQuery(["GetOrderDetails"], async () => {
-    return await getOrderDetails(orderId, designId, credentialId);
-  });
+  return useQuery(
+    ["GetOrderDetails"],
+    async () => {
+      return await getOrderDetails(orderId, designId, credentialId);
+    },
+    { enabled: !!orderId && !!designId && !!credentialId }
+  );
 };
 
 export default useGetOrderDetails;

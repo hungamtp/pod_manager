@@ -22,7 +22,7 @@ export function MainLayout({ children }: LayoutProps) {
       <div className="layout-wrapper">
         <div className="layout-container">
           <NavBar />
-          <div className="layout-page">
+          <div className="layout-page w-75">
             <div className="content-wrapper">
               <div>{children}</div>
             </div>

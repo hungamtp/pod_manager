@@ -3,22 +3,21 @@
 /* eslint-disable @next/next/no-sync-scripts */
 import { CreatePriceMaterialDto } from "@/services/factories/dto/create-price-material-dto";
 import { CreateSizeColorProductDto } from "@/services/factories/dto/create-size-color-product-dto";
+import { UpdatePriceMaterialDto } from "@/services/factories/dto/update-price-material-dto";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useCreateSizeColorProduct from "hooks/factories/use-create-factory";
 import useCreateProductPrice from "hooks/factories/use-create-product-price";
-import { useState } from "react";
+import useUpdatePriceMaterialProduct from "hooks/factories/use-update-price-material";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-export interface ICreateProductPriceFormProps {
+export interface IUpdateProductPriceFormProps {
   handleCloseDialog: () => void;
   factoryId: string;
   productId: string;
+  priceMaterial: UpdatePriceMaterialDto;
 }
-
-type FormCreateProductPrice = {
-  price: number;
-};
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -39,13 +38,13 @@ const schema = yup.object().shape({
   material: yup.string().required("Chất liệu vải không được để trống"),
 });
 
-export default function CreateProductPriceForm(
-  props: ICreateProductPriceFormProps
+export default function UpdateProductPriceForm(
+  props: IUpdateProductPriceFormProps
 ) {
-  const { handleCloseDialog, factoryId, productId } = props;
+  const { handleCloseDialog, factoryId, productId, priceMaterial } = props;
 
-  const defaultValues: CreatePriceMaterialDto = {
-    price: "",
+  const defaultValues: UpdatePriceMaterialDto = {
+    price: 0,
     material: "",
   };
   const {
@@ -53,20 +52,21 @@ export default function CreateProductPriceForm(
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CreatePriceMaterialDto>({
+  } = useForm<UpdatePriceMaterialDto>({
     defaultValues,
     resolver: yupResolver(schema),
   });
-  const onSubmit: SubmitHandler<CreatePriceMaterialDto> = (data) => {
-    addProductPrice(data);
-  };
-  const [price, setPrice] = useState(0);
 
-  const { mutate: addProductPrice, error } = useCreateProductPrice(
-    handleCloseDialog,
-    factoryId,
-    productId
-  );
+  useEffect(() => {
+    reset(priceMaterial);
+  }, [priceMaterial]);
+
+  const onSubmit: SubmitHandler<UpdatePriceMaterialDto> = (data) => {
+    updateProductPriceMaterial(data);
+  };
+
+  const { mutate: updateProductPriceMaterial, error } =
+    useUpdatePriceMaterialProduct(handleCloseDialog, factoryId, productId);
   return (
     <>
       <div className="col-xxl">
@@ -137,7 +137,7 @@ export default function CreateProductPriceForm(
                     color="primary"
                     type="submit"
                   >
-                    Tạo mới
+                    Chỉnh sửa
                   </button>
                   <button
                     className="btn btn-secondary"

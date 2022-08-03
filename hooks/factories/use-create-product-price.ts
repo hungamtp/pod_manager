@@ -4,6 +4,7 @@ import { createProductPrice } from "@/services/factories";
 import { useSnackbar } from 'notistack';
 import { AxiosError } from "axios";
 import { ErrorHttpResponse } from "@/models/error_http_response.interface";
+import { CreatePriceMaterialDto } from "@/services/factories/dto/create-price-material-dto";
 
 const useCreateProductPrice = (
   handleCloseDialog: () => void,
@@ -13,8 +14,8 @@ const useCreateProductPrice = (
 	const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   return useMutation(
-    async (price: number) => {
-      return await createProductPrice(factoryId, productId, price);
+    async (data: CreatePriceMaterialDto) => {
+      return await createProductPrice(factoryId, productId, data);
     },
     {
       onSuccess: (data) => {

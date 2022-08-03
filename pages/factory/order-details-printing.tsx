@@ -8,30 +8,195 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Step from "@mui/material/Step";
 import StepButton from "@mui/material/StepButton";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
 import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
 import { StepLabel } from "@mui/material";
 import { useRouter } from "next/router";
 import useGetOrderDetails from "hooks/factories/use-get-order-details";
 import ViewOrder from "@/components/manage-factory/view-order";
+import useGetSizeProductByProductId from "hooks/products/use-get-product-size-by-productId";
+import { nanoid } from "@reduxjs/toolkit";
+import useGetProductById from "hooks/products/use-get-products-by-id";
+import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
+import { clearData } from "@/redux/slices/unitedOrderData";
+import useUpdateOrderStatusFactory from "hooks/factories/use-update-order-status";
+import ConfirmOrderStatus from "@/components/manage-factory/confirm-order-status";
 
 export interface OrderDetailsProps {}
 
-const steps = ["Chờ xác nhận", "Chờ lấy hàng", "Đang giao", "Đã giao"];
+const steps = [
+  "Chờ xác nhận",
+  "Đang xử lí",
+  "Đang đóng gói",
+  "Đang giao hàng",
+  "Đã giao",
+  "Hoàn thành",
+];
+const englishSteps = [
+  "PENDING",
+  "PRINTING",
+  "PACKAGING",
+  "DELIVERING",
+  "DELIVERED",
+  "DONE",
+];
 
 export default function OrderDetails(props: OrderDetailsProps) {
+  const dispatch = useAppDispatch();
+
   const [activeStep, setActiveStep] = React.useState(0);
+  const [renderedColorList, setRenderedColorList] = React.useState<string[]>(
+    []
+  );
+  const [sizeList, setSizeList] = React.useState<
+    {
+      size: string;
+      colorsData: { color: string; quantity: number }[];
+    }[]
+  >([]);
   const [completed, setCompleted] = React.useState<{
     [k: number]: boolean;
   }>({});
+
+  React.useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      if (!url.includes("factory/order-details-printing")) {
+        dispatch(clearData());
+      }
+    };
+
+    router.events.on("routeChangeStart", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+    };
+  }, []);
+
   const [isCancel, setIsCancel] = React.useState(false);
   const router = useRouter();
-  const { orderId, designId, credentialId } = router.query;
+
+  const {
+    orderId,
+    designId,
+    credentialId,
+    designName,
+    orderDetailIdList,
+    orderStatus: statusOfOrder,
+  } = useAppSelector((state) => state.unitedData);
+
   const { data: responseOrderDetails } = useGetOrderDetails(
     orderId as string,
     designId as string,
     credentialId as string
   );
+  // console.log(orderDetailIdList, "orderDetailIdList");
+
+  const [orderStatus, setOrderStatus] = React.useState("PENDING");
+  const { data: sizeProductResponse, isLoading: isLoadingSizeProductResponse } =
+    useGetSizeProductByProductId(responseOrderDetails?.data.productId || "");
+
+  const { data: productResponse, isLoading: isLoadingProductResponse } =
+    useGetProductById(responseOrderDetails?.data.productId || "");
+
+  React.useEffect(() => {
+    if (responseOrderDetails) {
+      const colorList = responseOrderDetails.data.orderDetailsSupportDtos.map(
+        (data) => data.color
+      );
+      let loopColorList: string[] = [];
+
+      if (colorList.length > 1) {
+        let newLength = 1;
+        let i;
+        let j;
+        let count = 0;
+        for (i = 1; i < colorList.length; i++) {
+          for (j = 0; j < newLength; j++) {
+            if (colorList[i] === colorList[j]) {
+              count++;
+              break;
+            }
+          }
+          if (newLength === j) {
+            colorList[newLength++] = colorList[i];
+          }
+        }
+        if (count === colorList.length - 1) {
+          loopColorList = [colorList[0]];
+          setRenderedColorList([colorList[0]]);
+        } else {
+          loopColorList = colorList.slice(0, newLength);
+          setRenderedColorList(colorList.slice(0, newLength));
+        }
+      } else {
+        loopColorList = colorList;
+        setRenderedColorList(colorList);
+      }
+
+      const sizeList: {
+        size: string;
+        colorsData: { color: string; quantity: number }[];
+      }[] = [];
+      responseOrderDetails.data.orderDetailsSupportDtos.forEach((data) => {
+        const tmpSizeData: {
+          size: string;
+          colorsData: { color: string; quantity: number }[];
+        } = { size: data.size, colorsData: [] };
+
+        loopColorList.forEach((color) => {
+          if (color === data.color) {
+            tmpSizeData.colorsData.push({
+              color: color,
+              quantity: data.quantity,
+            });
+          } else {
+            tmpSizeData.colorsData.push({
+              color: color,
+              quantity: 0,
+            });
+          }
+        });
+        sizeList.push(tmpSizeData);
+      });
+
+      if (sizeList.length > 1) {
+        let newLength = 1;
+        let i: number;
+        let j: number;
+        let count = 0;
+        for (i = 1; i < sizeList.length; i++) {
+          for (j = 0; j < newLength; j++) {
+            if (sizeList[i].size === sizeList[j].size) {
+              sizeList[j].colorsData.forEach((colorData) => {
+                sizeList[i].colorsData.forEach((element) => {
+                  if (
+                    element.quantity !== 0 &&
+                    colorData.color === element.color
+                  ) {
+                    colorData.quantity = element.quantity;
+                  }
+                });
+              });
+              count++;
+              break;
+            }
+          }
+          if (newLength === j) {
+            sizeList[newLength++] = sizeList[i];
+          }
+        }
+        if (count === sizeList.length - 1) {
+          setSizeList([sizeList[0]]);
+        } else {
+          setSizeList(sizeList.slice(0, newLength));
+        }
+      } else {
+        setSizeList(sizeList);
+      }
+    }
+  }, [responseOrderDetails]);
 
   const [isViewOrder, setIsViewOrder] = React.useState(false);
 
@@ -44,7 +209,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
   };
 
   const isLastStep = () => {
-    return activeStep === totalSteps() - 1;
+    return activeStep === totalSteps() - 2;
   };
 
   const allStepsCompleted = () => {
@@ -65,121 +230,203 @@ export default function OrderDetails(props: OrderDetailsProps) {
     setIsCancel(true);
     setActiveStep(totalSteps() - 1);
   };
+  let tmpOrderStatusData = "";
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleStep = (step: number) => () => {
-    setActiveStep(step);
+  const handleGetStatus = () => {
+    if (steps[activeStep] === "Chờ xác nhận") {
+      tmpOrderStatusData = "PENDING";
+    } else if (steps[activeStep] === "Đang xử lí") {
+      tmpOrderStatusData = "PRINTING";
+    } else if (steps[activeStep] === "Đang đóng gói") {
+      tmpOrderStatusData = "PACKAGING";
+    } else if (steps[activeStep] === "Đang giao hàng") {
+      tmpOrderStatusData = "DELIVERING";
+    } else if (steps[activeStep] === "Đã giao") {
+      tmpOrderStatusData = "DELIVERED";
+    } else if (steps[activeStep] === "Hoàn thành") {
+      tmpOrderStatusData = "DONE";
+    }
+    setOrderStatus(tmpOrderStatusData);
   };
 
   const handleComplete = () => {
-    console.log(steps[activeStep], "neee");
     const newCompleted = completed;
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
     handleNext();
   };
 
+  React.useEffect(() => {
+    if (statusOfOrder) {
+      let newStatusList = {};
+      let stepIndex = 0;
+      const BreakError = {};
+
+      try {
+        englishSteps.forEach((step, index) => {
+          newStatusList = { ...newStatusList, [index]: true };
+          if (step === statusOfOrder) {
+            stepIndex = index;
+            throw BreakError;
+          }
+        });
+      } catch (error) {
+        if (error !== BreakError) throw error;
+      }
+      setActiveStep(stepIndex + 1);
+      setCompleted(newStatusList);
+    }
+  }, [statusOfOrder]);
+
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
   };
+  const [openOrderDialog, setOpenOrderDialog] = React.useState(false);
+
+  const handleClickOpenOrderDialog = () => {
+    setOpenOrderDialog(true);
+  };
+
+  const handleCloseOrderDialog = () => {
+    setOpenOrderDialog(false);
+  };
+
   return (
     <>
       <div>
         <div className="container-xxl flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4"></h4>
-          <div className="card-body">
-            <div className="d-flex align-items-start align-items-sm-center gap-4">
-              <img
-                src=""
-                alt="user-avatar"
-                className="d-block rounded"
-                height={100}
-                width={100}
-                id="uploadedAvatar"
-              />
-              <div className="button-wrapper">
-                <p className="text-muted mb-0"></p>
-              </div>
-            </div>
-          </div>
+          <h4 className="fw-bold py-3 mb-4">Chi tiết đơn hàng</h4>
+          <div className="card-body"></div>
           <hr className="my-0" />
           <div className="row">
             {responseOrderDetails ? (
               <div className="col-md-12">
-                {isViewOrder && responseOrderDetails ? (
+                {isViewOrder && responseOrderDetails && sizeProductResponse ? (
                   <>
                     <ViewOrder
                       setIsViewOrder={setIsViewOrder}
                       responseOrderDetails={responseOrderDetails}
+                      sizeProductResponse={sizeProductResponse}
                     />
                   </>
                 ) : (
                   <div className="card mb-4">
                     <div className="d-flex justify-content-between p-4">
-                      <h4 className="">Thông tin chi tiết</h4>
                       <button
-                        className="btn btn-primary py-0"
+                        className="btn btn-primary p-2"
                         onClick={() => setIsViewOrder(true)}
                       >
-                        Xem đơn hàng
+                        Hướng dẫn in
                       </button>
                     </div>
+                    <hr className="my-0" />
                     {/* Account */}
 
                     <div className="card-body">
                       <form id="formAccountSettings">
-                        <div className="card-body">
-                          <div className="d-flex align-items-start align-items-sm-center gap-4"></div>
-                        </div>
-                        <hr className="my-0" />
                         <div className="row">
                           <div className="mb-3 col-md-6">
-                            <label className="form-label">Tên Khách Hàng</label>
-
-                            <input
-                              className="form-control"
-                              type="text"
-                              disabled
-                              id="Name"
-                            />
+                            <p className="h4">Thông tin khách hàng</p>
+                            <div className="row ms-2">
+                              <div className=" border p-2 col-md-4">
+                                Tên khách hàng
+                              </div>
+                              <div className=" border p-2 col-md-4">
+                                {responseOrderDetails.data.customerName}
+                              </div>
+                            </div>
+                            <div className="row ms-2">
+                              <div className=" border p-2 col-md-4">Email</div>
+                              <div className=" border p-2 col-md-4">
+                                {responseOrderDetails.data.email}
+                              </div>
+                            </div>
+                            <div className="row ms-2">
+                              <div className=" border p-2 col-md-4">
+                                Số điện thoại
+                              </div>
+                              <div className=" border p-2 col-md-4">
+                                {responseOrderDetails.data.phoneNumber}
+                              </div>
+                            </div>
+                            <div className="row ms-2">
+                              <div className=" border p-2 col-md-4">
+                                Địa chỉ nhận hàng
+                              </div>
+                              <div className=" border p-2 col-md-4">
+                                175 Trần Thị Cờ, Quận 9, TP. Hồ Chí Minh
+                              </div>
+                            </div>
                           </div>
 
                           <div className="mb-3 col-md-6">
-                            <label
-                              htmlFor="organization"
-                              className="form-label"
-                            >
-                              email
-                            </label>
-                            <input disabled className="form-control" />
+                            {productResponse && (
+                              <>
+                                <p className="h4">Thông tin sản phẩm</p>
+                                <div className="row ms-2">
+                                  <div className=" border p-2 col-md-4">
+                                    Mã sản phẩm
+                                  </div>
+                                  <div className=" border p-2 col-md-4">
+                                    {productResponse.data.id}
+                                  </div>
+                                </div>
+                                <div className="row ms-2">
+                                  <div className=" border p-2 col-md-4">
+                                    Tên sản phẩm
+                                  </div>
+                                  <div className=" border p-2 col-md-4">
+                                    {productResponse.data.name}
+                                  </div>
+                                </div>
+                                <div className="row ms-2">
+                                  <div className=" border p-2 col-md-4">
+                                    Tên thiết kế
+                                  </div>
+                                  <div className=" border p-2 col-md-4">
+                                    {designName}
+                                  </div>
+                                </div>
+                              </>
+                            )}
                           </div>
 
-                          <div className="mb-3 col-md-6">
-                            <label
-                              htmlFor="organization"
-                              className="form-label"
-                            >
-                              Địa chỉ
-                            </label>
-                            <textarea
-                              className="form-control"
-                              id="exampleFormControlTextarea1"
-                              disabled
-                              rows={3}
-                            />
-                          </div>
-                          <div className="mb-3 col-md-6">
-                            <label
-                              htmlFor="organization"
-                              className="form-label"
-                            >
-                              Số điện thoại
-                            </label>
-                            <input disabled className="form-control" />
+                          <div className="mb-3">
+                            <p className="h4 mt-4">Thông tin đặt hàng</p>
+                            <div className="w-75 ms-3">
+                              <div className="row ">
+                                <div className="col-md-2 p-0">
+                                  <div className="border p-2">Màu/Size</div>
+                                  {renderedColorList.map((color) => (
+                                    <div key={color} className="border p-2">
+                                      {color}
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="col-md-10 p-0">
+                                  <div className="d-flex flex-col">
+                                    {sizeList.map((data) => (
+                                      <div key={nanoid()}>
+                                        <div className="border py-2 px-4">
+                                          {data.size}
+                                        </div>
+                                        {data.colorsData.map((dataColor) => {
+                                          return (
+                                            <div
+                                              key={dataColor.color}
+                                              className="border py-2 px-4"
+                                            >
+                                              {dataColor.quantity}
+                                            </div>
+                                          );
+                                        })}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
 
                           {/* Small table */}
@@ -234,26 +481,11 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                     >
                                       Đơn hàng đã hoàn thành
                                     </Typography>
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        pt: 2,
-                                      }}
-                                    >
-                                      <Box sx={{ flex: "1 1 auto" }} />
-                                      <Button onClick={handleReset}>
-                                        Reset
-                                      </Button>
-                                    </Box>
                                   </React.Fragment>
                                 ) : (
                                   <>
                                     {!isCancel && (
                                       <React.Fragment>
-                                        <Typography sx={{ mt: 2, mb: 1 }}>
-                                          Step {activeStep + 1}
-                                        </Typography>
                                         <Box
                                           sx={{
                                             display: "flex",
@@ -277,9 +509,14 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                                 completed
                                               </Typography>
                                             ) : (
-                                              <Button onClick={handleComplete}>
+                                              <Button
+                                                onClick={() => {
+                                                  handleGetStatus();
+                                                  handleClickOpenOrderDialog();
+                                                }}
+                                              >
                                                 {completedSteps() ===
-                                                totalSteps() - 2
+                                                totalSteps() - 1
                                                   ? "Finish"
                                                   : "Complete Step"}
                                               </Button>
@@ -295,6 +532,21 @@ export default function OrderDetails(props: OrderDetailsProps) {
                         </div>
                       </form>
                     </div>
+                    <Dialog
+                      open={openOrderDialog}
+                      onClose={handleCloseOrderDialog}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                    >
+                      <DialogContent>
+                        <ConfirmOrderStatus
+                          handleCloseDialog={handleCloseOrderDialog}
+                          orderDetailId={orderDetailIdList}
+                          orderStatus={orderStatus}
+                          handleComplete={handleComplete}
+                        />
+                      </DialogContent>
+                    </Dialog>
                     {/* /Account */}
                   </div>
                 )}

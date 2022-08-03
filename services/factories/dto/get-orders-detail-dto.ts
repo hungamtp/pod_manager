@@ -3,6 +3,10 @@ import { ISuccessHttpResponse } from "@/models/success_http_response.interface";
 
 export interface OrdersDetailDtos {
   orderId: string;
+  customerName: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
   previewImages: {
     image: string;
     position: string;
@@ -13,11 +17,11 @@ export interface OrdersDetailDtos {
     frameImage: string;
     position: string;
     placeholder: {
-      top: string;
-      width: string;
-      height: string;
+      top: number;
+      width: number;
+      height: number;
       widthRate: number;
-      heightRate: string;
+      heightRate: number;
     };
     designInfos: DesignState[];
   }[];

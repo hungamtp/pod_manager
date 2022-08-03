@@ -1,12 +1,14 @@
-import { useQuery } from 'react-query';
-import { getProductById, getProducts  } from '@/services/products';
+import { useQuery } from "react-query";
+import { getProductById, getProducts } from "@/services/products";
 
 const useGetProductById = (id: string) => {
-	return useQuery(['GetProductById'],
-        async () => { 
-           return await getProductById(id)
-        }
-	);
+  return useQuery(
+    ["GetProductById"],
+    async () => {
+      return await getProductById(id);
+    },
+    { enabled: !!id }
+  );
 };
 
 export default useGetProductById;

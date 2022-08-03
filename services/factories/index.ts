@@ -13,6 +13,9 @@ import {
 } from "./dto/create-factory-dto";
 import { GetAllOrdersFactoriesResponse } from "./dto/get-all-orders-factory";
 import { getOrdersDetailResponse } from "./dto/get-orders-detail-dto";
+import { CreatePriceMaterialDto } from "./dto/create-price-material-dto";
+import { UpdatePriceMaterialDto, UpdatePriceMaterialResponse } from "./dto/update-price-material-dto";
+import { UpdateOrderStatusDto, UpdateOrderStatusResponse } from "./dto/update-order-status-dto";
 
 export interface Filter {
   pageSize?: number;
@@ -94,10 +97,26 @@ export const createSizeColorProduct = async (
 export const createProductPrice = async (
   factoryId: string,
   productId: string,
-  price: number
+  requestData: CreatePriceMaterialDto
 ) => {
   const { data } = await API.post(
-    `/factory/add-price?factoryId=${factoryId}&productId=${productId}&price=${price}`
+    `/factory/add-price?factoryId=${factoryId}&productId=${productId}`,
+    requestData
+  );
+  return data;
+};
+
+export const updatePriceMaterialProduct = async (requestData: UpdatePriceMaterialDto, factoryId: string, productId: string) => {
+  const { data } = await API.patch<UpdatePriceMaterialResponse>(
+    `/factory/update-price?factoryId=${factoryId}&productId=${productId}`,
+    requestData
+  );
+  return data;
+};
+export const updateOrderStatusFactory = async (requestData: UpdateOrderStatusDto) => {
+  const { data } = await API.put<UpdateOrderStatusResponse>(
+    `/order/update-order-status?orderStatus=${requestData.orderStatus}`,
+    requestData.orderDetailId
   );
   return data;
 };

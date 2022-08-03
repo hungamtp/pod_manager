@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { getAccounts, Filter, getAccountsByRoleName } from '@/services/accounts';
+import { getAccounts, Filter, getAccountsByRoleName, getAccountsByEmail } from '@/services/accounts';
 
 const useAccounts = (filter: Filter) => {
 	return useQuery(['Accounts', filter ],
@@ -9,6 +9,9 @@ const useAccounts = (filter: Filter) => {
                 }
            if (filter.searchCriteria === "RoleName") {
                 return await getAccountsByRoleName(filter)
+             }
+           if (filter.searchCriteria === "EMAIL") {
+                return await getAccountsByEmail(filter)
              }
         }
 	);

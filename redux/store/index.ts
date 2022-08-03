@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "@/redux/slices/auth";
 import previewsReducer from "@/redux/slices/previews";
 import blueprintReducer from "@/redux/slices/blueprints";
+import unitedDataReducer from "@/redux/slices/unitedOrderData";
 import {
   persistStore,
   persistReducer,
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   previews: previewsReducer,
   blueprint: blueprintReducer,
+  unitedData: unitedDataReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
