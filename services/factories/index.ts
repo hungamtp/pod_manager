@@ -45,7 +45,7 @@ export const getOrdersFactory = async (
     pageSize: filter?.pageSize?.toString() || pageSize.toString(),
   });
   const { data } = await API.get<GetAllOrdersFactoriesResponse>(
-    `/factory/order-details/${credentialId}?${query.toString()}`
+    `/factory/order-details/${credentialId}`
   );
   return data.data;
 };
