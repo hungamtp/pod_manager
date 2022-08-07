@@ -13,18 +13,24 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import PublicIcon from "@mui/icons-material/Public";
 import PublicOffIcon from "@mui/icons-material/PublicOff";
-import { IconButton, Pagination, Stack } from "@mui/material";
+import {
+  FormControl,
+  IconButton,
+  MenuItem,
+  Pagination,
+  Stack,
+} from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import useDeleteProduct from "hooks/products/use-delete-products";
 import useProducts from "hooks/products/use-products";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useState } from "react";
-
 export interface IManageProductProps {}
 const ITEM_HEIGHT = 48;
 
@@ -33,7 +39,10 @@ export default function ManageProduct(props: IManageProductProps) {
     pageNumber: 0,
     pageSize: 10,
     search: "",
+    searchValues: "",
   });
+  const [searchValue, setSearchValue] = React.useState("name");
+  const { data: response, isLoading: isLoadingProduct } = useProducts(filter);
 
   const inputHandler = (e: any) => {
     var lowerCase = e.target.value.toLowerCase();
@@ -46,7 +55,16 @@ export default function ManageProduct(props: IManageProductProps) {
   ) => {
     setFilter({ ...filter, pageNumber: value - 1 });
   };
-  const { data: response, isLoading: isLoadingProduct } = useProducts(filter);
+
+  const handleSearchClick = (event: SelectChangeEvent) => {
+    setSearchValue(event.target.value);
+    setFilter({ ...filter, searchValues: event.target.value });
+  };
+
+  React.useEffect(() => {
+    setFilter({ ...filter, searchValues: searchValue });
+  }, [response]);
+
   const { mutate: deleteProduct, error } = useDeleteProduct();
   const onDelete = (id: string) => {
     deleteProduct(id);
@@ -56,9 +74,7 @@ export default function ManageProduct(props: IManageProductProps) {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -277,6 +293,26 @@ export default function ManageProduct(props: IManageProductProps) {
               className="navbar-nav-right d-flex align-items-center"
               id="navbar-collapse"
             >
+              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                <Select
+                  labelId="demo-select-small"
+                  id="demo-select-small"
+                  value={searchValue}
+                  label="Role"
+                  onChange={handleSearchClick}
+                  inputProps={{
+                    disableUnderline: true,
+                  }}
+                  variant="standard"
+                >
+                  <MenuItem className="d-flex flex-column" value="name">
+                    Tên
+                  </MenuItem>
+                  <MenuItem className="d-flex flex-column" value="categoryName">
+                    Thể loại
+                  </MenuItem>
+                </Select>
+              </FormControl>
               {/* Search */}
               <div className="nav-item d-flex align-items-center w-full">
                 <i className="bx bx-search fs-4 lh-0" />

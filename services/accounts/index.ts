@@ -30,21 +30,35 @@ import { UpdateAccountDto, UpdateAccountResponse, UpdateImageAccountDto, UpdateI
   export const getAccountsByRoleName = async (filter?: Filter) => {
     const pageNumber = 0;
     const pageSize = 9;
-    const roleName = "";
+    let roleName = filter?.searchCriteria ||"";
+    
     const query = new URLSearchParams({
       pageNumber: filter?.pageNumber?.toString() || pageNumber.toString(),
       pageSize: filter?.pageSize?.toString() || pageSize.toString(),
-      roleName: filter?.searchValues || roleName,
     });
     const { data } = await API.get<GetAllAccountsDto>(
-      `/user/role?${query.toString()}`
+      `/user/role?${query.toString()}&roleName=${roleName}`
     );
     return data.data;
   };
   export const getAccountsByEmail = async (filter?: Filter) => {
    const email = filter?.searchValues?.toString() || "";
     const { data } = await API.get<GetAllAccountsDto>(
-      `/user/email/${email}`
+      `/user/email?email=${email}`
+    );
+    return data.data;
+  };
+  export const getAccountsByName = async (filter?: Filter) => {
+   const firstName =  "";
+   const pageNumber = 0;
+   const pageSize = 9;
+   const query = new URLSearchParams({
+    pageNumber: filter?.pageNumber?.toString() || pageNumber.toString(),
+    pageSize: filter?.pageSize?.toString() || pageSize.toString(),
+    firstName: filter?.searchValues || firstName,
+  });
+    const { data } = await API.get<GetAllAccountsDto>(
+      `/user/firstName?${query.toString()}`
     );
     return data.data;
   };
