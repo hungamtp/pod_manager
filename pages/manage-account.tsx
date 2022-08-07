@@ -27,7 +27,6 @@ import useDeleteAccount from "hooks/accounts/use-delete-accounts";
 import * as React from "react";
 import { useState } from "react";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { string } from "yup/lib/locale";
 
 export interface IManageAccountProps {}
 
@@ -35,7 +34,7 @@ const ITEM_HEIGHT = 48;
 
 export default function ManageAccount(props: IManageAccountProps) {
   const [filter, setFilter] = useState<Filter>({
-    searchCriteria: "All",
+    searchCriteria: "NAME",
     searchValues: "",
     pageNumber: 0,
     pageSize: 10,
@@ -114,13 +113,12 @@ export default function ManageAccount(props: IManageAccountProps) {
   };
 
   /* {open Dialog} */
-  const [searchCriteria, setSearchCriteria] = React.useState("All");
+  const [searchCriteria, setSearchCriteria] = React.useState("NAME");
   const [isEdit, setIsEdit] = useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [account, setAccount] = useState<UpdateAccountDto>(defaultValues);
   const [isDelete, setIsDelete] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
-
   return (
     <>
       <div>
@@ -234,17 +232,17 @@ export default function ManageAccount(props: IManageAccountProps) {
                   }}
                   variant="standard"
                 >
-                  <MenuItem className="d-flex flex-column" value="All">
-                    Tất cả
+                  <MenuItem className="d-flex flex-column" value="NAME">
+                    Tên
                   </MenuItem>
-                  {/* <MenuItem className="d-flex flex-column" value="ID">
-                    ID
-                  </MenuItem> */}
-                  {/* <MenuItem className="d-flex flex-column" value="EMAIL">
+                  <MenuItem className="d-flex flex-column" value="EMAIL">
                     Email
-                  </MenuItem> */}
-                  <MenuItem className="d-flex flex-column" value="RoleName">
-                    Vị trí
+                  </MenuItem>
+                  <MenuItem className="d-flex flex-column" value="USER">
+                    USER
+                  </MenuItem>
+                  <MenuItem className="d-flex flex-column" value="ADMIN">
+                    ADMIN
                   </MenuItem>
                 </Select>
               </FormControl>

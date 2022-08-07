@@ -27,6 +27,7 @@ import {
   UpdateProductBlueprintResponse,
 } from "./dto/update-product-blueprint-dto";
 import { ProductSizeDto } from "./dto/product-size-dto";
+import { Search } from "@material-ui/icons";
 // import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
 
 export interface Filter {
@@ -34,21 +35,22 @@ export interface Filter {
   pageNumber?: number;
   sort?: string;
   search?: string;
+  searchValues?: string;
 }
 
 export const getProducts = async (filter?: Filter) => {
   const pageNumber = 0;
   const pageSize = 9;
   const sort = "";
-  const search = "";
+  const search = filter?.search || "";
+  const searchValues = filter?.searchValues || "";
   const query = new URLSearchParams({
     pageNumber: filter?.pageNumber?.toString() || pageNumber.toString(),
     pageSize: filter?.pageSize?.toString() || pageSize.toString(),
     sort: filter?.sort || sort.toString(),
-    search: filter?.search || search.toString(),
   });
   const { data } = await API.get<GetAllProductsDto>(
-    `/product/admin?${query.toString()}`
+    `/product/admin?${query.toString()}&search=${searchValues}:${search}`
   );
   return data.data;
 };
