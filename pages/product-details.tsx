@@ -42,6 +42,70 @@ import DialogContent from "@mui/material/DialogContent";
 import useGetProductBlueprint from "hooks/products/use-get-product-blueprint";
 import useGetSizeProductByProductId from "hooks/products/use-get-product-size-by-productId";
 import { Blueprint } from "../models";
+import useColorSize from "hooks/sizes/use-get-color-size";
+import { SizesAndColorsMapDto } from "@/services/products/dto/get-all-color-size-map";
+
+const quickSort = (
+  arr: { size: string; dignity: number }[]
+): { size: string }[] => {
+  if (arr.length < 2) return arr;
+
+  // *** lấy phần tử cuối của 'arr' làm 'pivot'
+  const pivotIndex = arr.length - 1;
+  const pivot = arr[pivotIndex];
+
+  const left = [];
+  const right = [];
+
+  let currentItem;
+  // *** 'i < pivotIndex' => chúng ta sẽ không loop qua 'pivot' nữa
+  for (let i = 0; i < pivotIndex; i++) {
+    currentItem = arr[i];
+
+    if (currentItem.dignity < pivot.dignity) {
+      left.push(currentItem);
+    } else {
+      right.push(currentItem);
+    }
+  }
+
+  return [...quickSort(left), pivot, ...quickSort(right)];
+};
+
+const extractToStringArr = (sizeList: { size: string }[]): string[] => {
+  return sizeList.map((data) => data.size);
+};
+
+const sizeSort = (sizeList: string[]): { size: string; dignity: number }[] => {
+  const newList: { size: string; dignity: number }[] = [];
+  sizeList.forEach((size) => {
+    let dignity = 1;
+    for (let index = size.length - 1; index >= 0; index--) {
+      let isNum = false;
+      let num = 1;
+      try {
+        num = Number(size[index]);
+        isNum = true;
+      } catch (e) {
+        isNum = false;
+      }
+      if (size[index] === "x" || size[index] === "X") {
+        dignity = dignity * 2;
+      } else if (size[index] === "M" || size[index] === "m") {
+        dignity = dignity * 1;
+      } else if (size[index] === "L" || size[index] === "l") {
+        dignity = dignity * 2;
+      } else if (size[index] === "s" || size[index] === "S") {
+        dignity = dignity * -2;
+      } else if (isNum) {
+        dignity = dignity * num;
+      }
+    }
+    newList.push({ size: size, dignity: dignity });
+  });
+
+  return newList;
+};
 
 export interface IProductDetailsProps {}
 
@@ -64,6 +128,22 @@ export default function ProductDetails(props: IProductDetailsProps) {
     useGetProductById(id);
   const { data: responseProductBlueprint, isLoading: isloadingPrBlueprint } =
     useGetProductBlueprint(id);
+  const { data: responseColorSize, isLoading: isloadingColorSize } =
+    useColorSize(id);
+
+  const [renderColorSizeMap, setRenderColorSizeMap] =
+    React.useState<SizesAndColorsMapDto[]>();
+
+  React.useEffect(() => {
+    if (responseColorSize) {
+      responseColorSize.forEach((colorSize) => {
+        colorSize.sizes = extractToStringArr(
+          quickSort(sizeSort(colorSize.sizes))
+        );
+      });
+      setRenderColorSizeMap(responseColorSize);
+    }
+  }, [responseColorSize]);
 
   const { data: responseSizesColorById } = useGetSizesColorsById(id);
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
@@ -792,7 +872,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                       !isLoadingSizeProductResponse ? (
                         <div key={nanoid()}>
                           <div className="d-flex">
-                            <table className="table table-borderless ">
+                            <table className="table table-borderless w-50 d-inline">
                               <thead className="border-bottom">
                                 <tr>
                                   <th>
@@ -874,21 +954,24 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                 )}
                               </DialogContent>
                             </Dialog>
-                            <table className="table table-borderless ">
-                              <thead className="border-bottom">
-                                <tr>
-                                  <th>
-                                    <strong>Màu</strong>
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody className="table-border-bottom-0">
-                                {responseSizesColorById.data.colors.map(
-                                  (colors) => (
+                            {responseColorSize && responseColorSize.length > 0 && (
+                              <table className="table table-borderless w-50 d-inline">
+                                <thead className="border-bottom">
+                                  <tr>
+                                    <th>
+                                      <strong>Màu</strong>
+                                    </th>
+                                    <th>
+                                      <strong>Kích thước</strong>
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody className="table-border-bottom-0">
+                                  {responseColorSize.map((data) => (
                                     <tr key={nanoid()}>
-                                      <td>
+                                      <td className="align-top">
                                         <img
-                                          key={colors.image}
+                                          key={data.color.split("-")[0]}
                                           width={25}
                                           height={25}
                                           className="rounded-circle border me-1"
@@ -896,17 +979,29 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                             "https://images.printify.com/5853fec7ce46f30f8328200a"
                                           }
                                           style={{
-                                            backgroundColor: colors.image,
+                                            backgroundColor:
+                                              data.color.split("-")[1],
                                           }}
-                                          alt={colors.image}
+                                          alt={data.color.split("-")[0]}
                                         />
-                                        <strong>{colors.name}</strong>
+                                        <strong>
+                                          {data.color.split("-")[0]}
+                                        </strong>
+                                      </td>
+                                      <td className="align-top">
+                                        {data.sizes.map((size) => (
+                                          <Chip
+                                            key={size}
+                                            label={size}
+                                            sx={{ marginRight: 2 }}
+                                          />
+                                        ))}
                                       </td>
                                     </tr>
-                                  )
-                                )}
-                              </tbody>
-                            </table>
+                                  ))}
+                                </tbody>
+                              </table>
+                            )}
                           </div>
                         </div>
                       ) : (

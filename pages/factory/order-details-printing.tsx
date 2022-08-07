@@ -312,7 +312,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
                   </>
                 ) : (
                   <div className="card mb-4">
-                    <div className="d-flex justify-content-between p-4">
+                    <div className="d-flex justify-content-end p-4">
                       <button
                         className="btn btn-primary p-2"
                         onClick={() => setIsViewOrder(true)}

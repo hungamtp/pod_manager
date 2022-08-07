@@ -27,7 +27,11 @@ import {
   UpdateProductBlueprintResponse,
 } from "./dto/update-product-blueprint-dto";
 import { ProductSizeDto } from "./dto/product-size-dto";
+<<<<<<< HEAD
 import { Search } from "@material-ui/icons";
+=======
+import { getSizesAndColorsMap } from "./dto/get-all-color-size-map";
+>>>>>>> 9a3237e (fix size color ui)
 // import { CreateAccountDto, CreateAccountResponse } from "./dto/create-accounts-dto";
 
 export interface Filter {
@@ -67,6 +71,14 @@ export const getSizes = async (filter?: Filter) => {
   );
   return data.data;
 };
+
+export const getColorSize = async (productId: string) => {
+  const { data } = await API.get<getSizesAndColorsMap>(
+    `/product/size-color-raw/${productId}`
+  );
+  return data.data;
+};
+
 export const getColors = async (filter?: Filter) => {
   const pageNumber = 0;
   const pageSize = 9;

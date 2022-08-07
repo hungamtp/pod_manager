@@ -18,7 +18,8 @@ import {
 } from "@mui/material";
 import { color } from "@mui/system";
 import useCreateSizeColorProduct from "hooks/factories/use-create-factory";
-import { useState } from "react";
+import useColorSize from "hooks/sizes/use-get-color-size";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 
@@ -26,7 +27,6 @@ export interface ICreateSizeColorProductFormProps {
   handleCloseDialog: () => void;
   factoryId: string;
   productId: string;
-  sizes: string[];
   colors: ColorOfProductDto[];
 }
 
@@ -57,16 +57,42 @@ const schema = yup.object().shape({
 export default function CreateSizeColorProductForm(
   props: ICreateSizeColorProductFormProps
 ) {
-  const [colorsList, setColorsList] = useState<string[]>([]);
+  const { handleCloseDialog, factoryId, productId, colors } = props;
+
+  const { data: responseColorSize, isLoading: isloadingColorSize } =
+    useColorSize(productId);
+
+  const [selectedColor, setSelectedColor] = useState<string>("");
+
+  useEffect(() => {
+    if (responseColorSize) {
+      setSelectedColor(responseColorSize[0].color.split("-")[1]);
+    }
+  }, [responseColorSize]);
+
+  useEffect(() => {
+    if (responseColorSize) {
+      let sizeList = responseColorSize[0].sizes;
+      responseColorSize.forEach((data) => {
+        if (data.color.split("-")[1] === selectedColor) {
+          sizeList = data.sizes;
+        }
+      });
+      setSizesList([]);
+      setDropdownSizesList(sizeList);
+    }
+  }, [selectedColor]);
+
   const [sizesList, setSizesList] = useState<string[]>([]);
-  const handleChange = (event: SelectChangeEvent<typeof colorsList>) => {
+  const [dropdownSizesList, setDropdownSizesList] = useState<string[]>([]);
+  const handleChange = (event: SelectChangeEvent) => {
     const {
       target: { value },
     } = event;
 
-    setColorsList(
+    setSelectedColor(
       // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
+      value
     );
   };
   const handleChangeSize = (event: SelectChangeEvent<typeof sizesList>) => {
@@ -79,8 +105,6 @@ export default function CreateSizeColorProductForm(
       typeof value === "string" ? value.split(",") : value
     );
   };
-
-  const { handleCloseDialog, factoryId, productId, sizes, colors } = props;
 
   const defaultValues: { quantity: number } = {
     quantity: 0,
@@ -103,9 +127,11 @@ export default function CreateSizeColorProductForm(
   const onSubmit: SubmitHandler<{ quantity: number }> = (data) => {
     const quantity = data.quantity;
     const submitData: CreateSizeColorProductDto[] = [];
-    colorsList.forEach((color) => {
-      sizesList.forEach((size) => {
-        submitData.push({ size: size, colorImage: color, quantity: quantity });
+    sizesList.forEach((size) => {
+      submitData.push({
+        size: size,
+        colorImage: selectedColor,
+        quantity: quantity,
       });
     });
     addSizeColorProduct(submitData);
@@ -132,21 +158,15 @@ export default function CreateSizeColorProductForm(
 
                 <FormControl sx={{ mb: 1, width: 400 }}>
                   <Select
-                    multiple
                     disableUnderline
                     displayEmpty
-                    value={colorsList}
+                    value={selectedColor}
                     onChange={handleChange}
                     variant="standard"
                     renderValue={(selected) => {
-                      if (selected.length === 0) {
-                        return selected;
-                      }
-
-                      return selected.map((color) => (
-                        // eslint-disable-next-line @next/next/no-img-element
+                      return (
                         <img
-                          key={color}
+                          key={selected}
                           width={30}
                           height={30}
                           className="rounded-circle border"
@@ -154,13 +174,13 @@ export default function CreateSizeColorProductForm(
                             "https://images.printify.com/5853fec7ce46f30f8328200a"
                           }
                           style={{
-                            backgroundColor: color,
+                            backgroundColor: selected,
                             marginRight: "0.5rem",
                             opacity: "0.8",
                           }}
-                          alt={color}
+                          alt={selected}
                         />
-                      ));
+                      );
                     }}
                     MenuProps={MenuProps}
                     inputProps={{ "aria-label": "Without label" }}
@@ -224,7 +244,7 @@ export default function CreateSizeColorProductForm(
                     MenuProps={MenuProps}
                     inputProps={{ "aria-label": "Without label" }}
                   >
-                    {sizes.map((size) => (
+                    {dropdownSizesList.map((size) => (
                       <MenuItem
                         key={size}
                         value={size}

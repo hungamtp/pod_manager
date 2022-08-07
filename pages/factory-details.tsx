@@ -140,7 +140,6 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                     factoryId={responseFactory?.data.id}
                     productId={productId}
                     colors={responseSizesColorById.data.colors}
-                    sizes={responseSizesColorById.data.sizes}
                   />
                 </DialogContent>
               </Dialog>
