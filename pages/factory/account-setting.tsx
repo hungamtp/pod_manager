@@ -22,9 +22,9 @@ export interface AccountSettingProps {}
 const schema = yup.object().shape({
   name: yup
     .string()
-    .min(1, " Name cần ít nhất 1 kí tự")
-    .max(26, " Name tối đa 50 kí tự")
-    .required(" Name không được để trống"),
+    .min(1, " Tên cần ít nhất 1 kí tự")
+    .max(26, " Tên tối đa 50 kí tự")
+    .required(" Tên không được để trống"),
 });
 
 export default function AccountSetting(props: AccountSettingProps) {

@@ -29,24 +29,36 @@ type FormCreateProduct = {
 const schema = yup.object().shape({
   name: yup
     .string()
-    .min(1, "First Name cần ít nhất 1 kí tự")
-    .max(26, "First Name tối đa 50 kí tự")
-    .required("First Name không được để trống"),
+    .min(1, "Tên sản phẩm cần ít nhất 1 kí tự")
+    .max(26, "Tên sản phẩm tối đa 50 kí tự")
+    .required("Tên sản phẩm không được để trống"),
   description: yup
     .string()
-    .min(10, "Description cần ít nhất 10 kí tự")
-    .max(500, "Description tối đa 500 kí tự")
-    .required("Description không được để trống"),
+    .min(10, "Mô tả sản phẩm cần ít nhất 10 kí tự")
+    .max(500, "Mô tả sản phẩm tối đa 500 kí tự")
+    .required("Mô tả sản phẩm không được để trống"),
 });
 
 export default function CreateProductForm(props: ICreateProductFormProps) {
   const { handleCloseDialog } = props;
+  const [filter, setFilter] = useState<Filter>({
+    pageNumber: 0,
+    pageSize: 10,
+  });
+  const { data: response, isLoading: isLoadingCategory } =
+    useCategories(filter);
+
   const [categoryName, setCategoryName] = React.useState("");
   const [images, setImages] = React.useState<ImageListType>([]);
   const [isLoading, setIsLoading] = useState(false);
   const handleChange = (event: SelectChangeEvent) => {
     setCategoryName(event.target.value);
   };
+
+  React.useEffect(() => {
+    const tmpCate = response?.content[0].name || "";
+    setCategoryName(tmpCate);
+  }, [response]);
 
   const defaultValues: FormCreateProduct = {
     name: "",
@@ -95,12 +107,6 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
     }
   };
 
-  const [filter, setFilter] = useState<Filter>({
-    pageNumber: 0,
-    pageSize: 10,
-  });
-  const { data: response, isLoading: isLoadingCategory } =
-    useCategories(filter);
   const { mutate: addProduct, isLoading: isLoadingCreateProduct } =
     useCreateProduct(handleCloseDialog);
 

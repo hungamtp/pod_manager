@@ -25,13 +25,13 @@ type FormCreateFactoryAccount = {
 const schema = yup.object().shape({
   name: yup
     .string()
-    .min(1, "Name cần ít nhất 1 kí tự")
-    .max(26, "Name tối đa 50 kí tự")
-    .required("Name không được để trống"),
+    .min(1, "Tên nhà máy cần ít nhất 1 kí tự")
+    .max(50, "Tên nhà máy tối đa 50 kí tự")
+    .required("Tên nhà máy không được để trống"),
   password: yup
     .string()
     .min(8, "Mật khẩu cần ít nhất 8 kí tự")
-    .max(26, "Mật khẩu tối đa 50 kí tự")
+    .max(26, "Mật khẩu tối đa 26 kí tự")
     .required("Mật khẩu không được để trống"),
   email: yup
     .string()
@@ -49,7 +49,7 @@ const schema = yup.object().shape({
   address: yup
     .string()
     .min(10, "Địa chỉ cần ít nhất 10 kí tự")
-    .max(100, "Địa chỉ tối đa 100 kí tự")
+    .max(300, "Địa chỉ tối đa 300 kí tự")
     .required("Địa chỉ không được để trống"),
 });
 

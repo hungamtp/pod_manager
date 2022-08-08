@@ -396,14 +396,14 @@ export default function ManageProduct(props: IManageProductProps) {
                         <td>
                           {x.deleted == false && (
                             <div>
-                              <IconButton
+                              {/* <IconButton
                                 onClick={() => {
                                   handleIsEditTrue(x);
                                   handleClose();
                                 }}
                               >
                                 <EditIcon fontSize="medium" color="primary" />
-                              </IconButton>
+                              </IconButton> */}
 
                               <IconButton>
                                 <DeleteIcon

@@ -115,9 +115,14 @@ const ITEM_PADDING_TOP = 8;
 const schema = yup.object().shape({
   name: yup
     .string()
-    .min(1, " Name cần ít nhất 1 kí tự")
-    .max(26, " Name tối đa 50 kí tự")
-    .required(" Name không được để trống"),
+    .min(1, " Tên sản phẩm cần ít nhất 1 kí tự")
+    .max(50, " Tên sản phẩm tối đa 50 kí tự")
+    .required(" Tên sản phẩm không được để trống"),
+  description: yup
+    .string()
+    .min(1, " Mô tả sản phẩm cần ít nhất 1 kí tự")
+    .max(400, " Mô tả sản phẩm tối đa 400 kí tự")
+    .required(" Mô tả sản phẩm không được để trống"),
 });
 
 export default function ProductDetails(props: IProductDetailsProps) {
@@ -524,14 +529,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                         </div>
                         <div className="mb-3 col-md-6">
                           <label className="form-label">Tên sản phẩm</label>
-                          {errors.name && (
-                            <span
-                              id="error-pwd-message"
-                              className="text-danger"
-                            >
-                              {errors.name.message}
-                            </span>
-                          )}
+
                           <input
                             disabled={isDisabled}
                             className="form-control"
@@ -540,6 +538,14 @@ export default function ProductDetails(props: IProductDetailsProps) {
                             defaultValue={responseProduct.data.name}
                             {...register("name")}
                           />
+                          {errors.name && (
+                            <span
+                              id="error-pwd-message"
+                              className="text-danger"
+                            >
+                              {errors.name.message}
+                            </span>
+                          )}
                         </div>
 
                         <div className="mb-3 col-md-6">
@@ -554,6 +560,14 @@ export default function ProductDetails(props: IProductDetailsProps) {
                             defaultValue={responseProduct.data.description}
                             {...register("description")}
                           />
+                          {errors.description && (
+                            <span
+                              id="error-pwd-message"
+                              className="text-danger"
+                            >
+                              {errors.description.message}
+                            </span>
+                          )}
                         </div>
 
                         <div className="mb-3 col-md-6">
@@ -593,7 +607,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                           </div>
                         </div>
 
-                        <div className="mb-3 col-md-6 ">
+                        {/* <div className="mb-3 col-md-6 ">
                           <label className="form-label me-3">tag</label>
                           {responseProduct.data.productTags.map((tag) => (
                             <Chip
@@ -602,7 +616,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                               label={tag.tag.name}
                             />
                           ))}
-                        </div>
+                        </div> */}
                         {/* Small table */}
                         <div className="container-xxl flex-grow-1 container-p-y ">
                           <div className="row">
