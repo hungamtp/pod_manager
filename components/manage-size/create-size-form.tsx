@@ -17,9 +17,9 @@ type FormCreateAccount = {
 const schema = yup.object().shape({
   name: yup
     .string()
-    .min(1, "First Name cần ít nhất 1 kí tự")
-    .max(26, "First Name tối đa 50 kí tự")
-    .required("First Name không được để trống"),
+    .min(1, "Kích thước cần ít nhất 1 kí tự")
+    .max(26, "Kích thước tối đa 50 kí tự")
+    .required("Kích thước không được để trống"),
 });
 
 export default function CreateSizeForm(props: ICreateSizeFormProps) {

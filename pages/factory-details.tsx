@@ -26,9 +26,9 @@ export interface FactoryDetailsProps {}
 const schema = yup.object().shape({
   name: yup
     .string()
-    .min(1, " Name cần ít nhất 1 kí tự")
-    .max(26, " Name tối đa 50 kí tự")
-    .required(" Name không được để trống"),
+    .min(1, " Tên nhà máy cần ít nhất 1 kí tự")
+    .max(26, " Tên nhà máy tối đa 50 kí tự")
+    .required(" Tên nhà máy không được để trống"),
 });
 
 export default function FactoryDetails(props: FactoryDetailsProps) {

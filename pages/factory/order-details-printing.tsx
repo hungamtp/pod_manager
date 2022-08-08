@@ -493,12 +493,12 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                             pt: 2,
                                           }}
                                         >
-                                          <Button
+                                          {/* <Button
                                             onClick={handleCancel}
                                             sx={{ mr: 1 }}
                                           >
                                             Hủy
-                                          </Button>
+                                          </Button> */}
                                           {activeStep !== steps.length &&
                                             (completed[activeStep] ? (
                                               <Typography
@@ -517,8 +517,8 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                               >
                                                 {completedSteps() ===
                                                 totalSteps() - 1
-                                                  ? "Finish"
-                                                  : "Complete Step"}
+                                                  ? "Hoàn thành đơn hàng"
+                                                  : "Hoàn thành bước"}
                                               </Button>
                                             ))}
                                         </Box>
