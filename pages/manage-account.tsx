@@ -257,10 +257,11 @@ export default function ManageAccount(props: IManageAccountProps) {
                       searchValues: e.target[0].value,
                     }));
                   }}
+                  className="form-control border-0 shadow-none w-full"
                 >
                   <input
                     type="text"
-                    className="form-control border-0  shadow-none w-full"
+                    className="form-control border-0 shadow-none w-full"
                     placeholder="Search..."
                     aria-label="Search..."
                   />
