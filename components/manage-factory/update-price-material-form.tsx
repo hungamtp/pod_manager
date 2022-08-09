@@ -33,7 +33,7 @@ const MenuProps = {
 const schema = yup.object().shape({
   price: yup
     .number()
-    .min(10, "Giá sản phẩm phải lớn hơn 10")
+    .min(10, "Giá sản phẩm phải lớn hơn 10.000 VND")
     .required("Giá sản phẩm không được để trống"),
   material: yup.string().required("Chất liệu vải không được để trống"),
 });
@@ -78,7 +78,7 @@ export default function UpdateProductPriceForm(
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Giá sản phẩm
+                  Giá sản phẩm (VND)
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">

@@ -249,15 +249,17 @@ export default function ManageFactory(props: IManageFactory) {
           </div>
           <br />
           {/*/ Table within card */}
-          <Stack spacing={2}>
-            <Pagination
-              shape="circular"
-              size="large"
-              count={response?.totalPages}
-              onChange={handlePageChange}
-              color="secondary"
-            />
-          </Stack>
+          {response && response.totalPages > 1 && (
+            <Stack spacing={2}>
+              <Pagination
+                shape="circular"
+                size="large"
+                count={response?.totalPages}
+                onChange={handlePageChange}
+                color="secondary"
+              />
+            </Stack>
+          )}
           <hr className="my-5" />
           {/* Responsive Table */}
 
