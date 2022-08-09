@@ -21,7 +21,7 @@ const useUpdateAccount = (handleCloseDialog:() => void) => {
 				//because data:any
                 handleCloseDialog()
                 queryClient.invalidateQueries("Accounts")
-				enqueueSnackbar("Update successfully!", {
+				enqueueSnackbar("Chỉnh sửa tài khoản thành công!", {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });

@@ -179,17 +179,19 @@ export default function AccountSetting(props: IAccountSettingProps) {
                                     {...register("image")}
                                   />
                                 ))}
-                                <button
-                                  className="btn btn-primary me-2  ms-2 mt-5"
-                                  style={
-                                    isDragging ? { color: "red" } : undefined
-                                  }
-                                  onClick={onImageUpload}
-                                  {...dragProps}
-                                  type="button"
-                                >
-                                  Tải lên
-                                </button>
+                                {isEditAccount && (
+                                  <button
+                                    className="btn btn-primary me-2  ms-2 mt-5"
+                                    style={
+                                      isDragging ? { color: "red" } : undefined
+                                    }
+                                    onClick={onImageUpload}
+                                    {...dragProps}
+                                    type="button"
+                                  >
+                                    Tải lên
+                                  </button>
+                                )}
                                 {/* <button
                                   onClick={() => onUploadImage("")}
                                   className="btn btn-primary me-2  ms-2 mt-5"

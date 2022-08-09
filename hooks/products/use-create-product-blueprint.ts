@@ -25,7 +25,7 @@ const useCreateProductBlueprint = (id: string) => {
         queryClient.invalidateQueries("GetProductById");
         dispatch(resetDesigns());
         router.back();
-        enqueueSnackbar("Create successfully!", {
+        enqueueSnackbar("Tạo bản thiết kế thành công!", {
           autoHideDuration: 3000,
           variant: "success",
         });

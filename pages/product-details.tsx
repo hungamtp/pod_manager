@@ -170,6 +170,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
   const [uploadImages, setUploadImages] = React.useState<ImageListType>();
   const [submitImages, setSubmitImages] = React.useState<string[]>([]);
   const [isEditProduct, setIsEditProduct] = React.useState(false);
+  const [isImageError, setIsImageError] = React.useState(false);
   const [filter, setFilter] = React.useState<Filter>({
     pageNumber: 0,
     pageSize: 10,
@@ -338,7 +339,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
     description: string;
     categoryName: string;
   }) => {
-    if (uploadImages) {
+    if (uploadImages && uploadImages.length > 0) {
       const imageList = [] as string[];
       uploadImages.map((image) => {
         const file = image.file;
@@ -359,6 +360,10 @@ export default function ProductDetails(props: IProductDetailsProps) {
           });
         });
       });
+    } else {
+      setIsImageError(true);
+      setIsEditProduct(true);
+      setIsDisabled(false);
     }
   };
 
@@ -424,8 +429,10 @@ export default function ProductDetails(props: IProductDetailsProps) {
         updateProduct(submitData);
       }
     }
-    setIsEditProduct(false);
-    setIsDisabled(true);
+    if (isImageError === false) {
+      setIsEditProduct(false);
+      setIsDisabled(true);
+    }
   };
 
   return (
@@ -487,6 +494,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                         }
                                         onClick={() => {
                                           onImageUpload();
+                                          setIsImageError(false);
                                         }}
                                         {...dragProps}
                                         type="button"
@@ -502,6 +510,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                           setRenderImages([]);
                                           setUploadImages([]);
                                           setSubmitImages([]);
+                                          setIsImageError(true);
                                         }}
                                       >
                                         Xóa
@@ -512,6 +521,14 @@ export default function ProductDetails(props: IProductDetailsProps) {
                               )}
                             </ImageUploading>
                           }
+                          {isImageError && (
+                            <span
+                              id="error-pwd-message"
+                              className="text-danger"
+                            >
+                              {"Hình không được để trống"}
+                            </span>
+                          )}
                         </div>
                       </div>
                       <hr className="my-0" />

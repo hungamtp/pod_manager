@@ -42,6 +42,7 @@ const schema = yup.object().shape({
 export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
   const { handleCloseDialog } = props;
   const [role, setRole] = React.useState("USER");
+  const [isImgNull, setIsImgNull] = React.useState(false);
   const [images, setImages] = React.useState<ImageListType>([]);
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -69,8 +70,10 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
   };
   const onUploadImage = (data: { name: string; image: string }) => {
     setIsLoading(true);
-    if (images !== null) {
-      const file = images[0].file;
+    console.log(images, "asdasdas");
+    if (images !== null && images.length > 0) {
+      setIsImgNull(false);
+      const file = images[0]?.file;
       const imageRef = ref(storage, `images/${file?.name}`);
       uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
@@ -78,6 +81,9 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
           addCategory(submitData);
         });
       });
+    } else {
+      setIsLoading(false);
+      setIsImgNull(true);
     }
   };
   const { mutate: addCategory, isLoading: isLoadingCreateCategory } =
@@ -156,7 +162,10 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
                         ))}
                         <button
                           style={isDragging ? { color: "red" } : undefined}
-                          onClick={onImageUpload}
+                          onClick={() => {
+                            onImageUpload();
+                            setIsImgNull(false);
+                          }}
                           {...dragProps}
                           type="button"
                           className="btn btn-primary"
@@ -166,9 +175,9 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
                       </div>
                     )}
                   </ImageUploading>
-                  {errors.image && (
+                  {isImgNull && (
                     <span id="error-pwd-message" className="text-danger">
-                      {errors.image.message}
+                      {"Hình không được để trống"}
                     </span>
                   )}
                 </div>

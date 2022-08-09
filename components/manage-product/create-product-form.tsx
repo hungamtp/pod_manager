@@ -82,13 +82,14 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
 
     // data for submit
   };
+  const [isImageError, setIsImageError] = useState(false);
   const onUploadImage = (data: {
     name: string;
     categoryName: string;
     description: string;
     images: [];
   }) => {
-    if (images !== null) {
+    if (images !== null && images.length > 0) {
       const imageList = [] as string[];
       setIsLoading(true);
       images.map((image) => {
@@ -104,6 +105,8 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
           });
         });
       });
+    } else {
+      setIsImageError(true);
     }
   };
 
@@ -245,7 +248,10 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                         ))}
                         <button
                           style={isDragging ? { color: "red" } : undefined}
-                          onClick={onImageUpload}
+                          onClick={() => {
+                            onImageUpload();
+                            setIsImageError(false);
+                          }}
                           {...dragProps}
                           className="btn btn-primary"
                           type="button"
@@ -263,6 +269,11 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                       </div>
                     )}
                   </ImageUploading>
+                  {isImageError && (
+                    <span id="error-pwd-message" className="text-danger">
+                      {"Hình không được để trống"}
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="d-flex justify-content-center">

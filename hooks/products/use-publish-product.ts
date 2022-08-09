@@ -18,7 +18,7 @@ const usePublishProduct = (handleClosePublishDialog: () => void) => {
       onSuccess: (data) => {
         handleClosePublishDialog();
         queryClient.invalidateQueries("Products");
-        enqueueSnackbar("Pubish successfully!", {
+        enqueueSnackbar("Công bố sản phẩm thành công!", {
           autoHideDuration: 3000,
           variant: "success",
         });

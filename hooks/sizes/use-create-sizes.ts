@@ -16,16 +16,19 @@ const useCreateSize = (handleCloseDialog: () => void) => {
       onSuccess: (data) => {
         handleCloseDialog();
         queryClient.invalidateQueries("Sizes");
-        enqueueSnackbar("Create successfully!", {
+        enqueueSnackbar("Tạo kích thước thành công!", {
           autoHideDuration: 3000,
           variant: "success",
         });
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         if (error) {
+          let tmpError = error.response?.data.errorMessage;
+          if (tmpError?.includes("already existed")) {
+            tmpError = "Kích thước đã tồn tại";
+          }
           handleCloseDialog();
-
-          enqueueSnackbar(error.response?.data.errorMessage, {
+          enqueueSnackbar(tmpError, {
             autoHideDuration: 9000,
             variant: "error",
           });

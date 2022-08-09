@@ -1,42 +1,40 @@
-import { ErrorHttpResponse } from '@/models/error_http_response.interface';
-import { unPublishProduct } from '@/services/products';
-import { AxiosError } from 'axios';
-import { useRouter } from 'next/router';
-import { useSnackbar } from 'notistack';
-import { useMutation, useQueryClient } from 'react-query';
+import { ErrorHttpResponse } from "@/models/error_http_response.interface";
+import { unPublishProduct } from "@/services/products";
+import { AxiosError } from "axios";
+import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
+import { useMutation, useQueryClient } from "react-query";
 
+const useUnPublishProduct = (handleClosePublishDialog: () => void) => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
 
-const useUnPublishProduct = (handleClosePublishDialog:() => void) => {
-	const router = useRouter();
-    const queryClient = useQueryClient();
-	const { enqueueSnackbar } = useSnackbar();
+  return useMutation(
+    async (id: string) => {
+      return await unPublishProduct(id);
+    },
+    {
+      onSuccess: (data) => {
+        handleClosePublishDialog();
+        queryClient.invalidateQueries("Products");
+        enqueueSnackbar("Ngừng công bố sản phẩm thành công!", {
+          autoHideDuration: 3000,
+          variant: "success",
+        });
+      },
+      onError: (error: AxiosError<ErrorHttpResponse>) => {
+        if (error) {
+          handleClosePublishDialog();
 
-	return useMutation(
-		      
-        async (id: string) => {
-            return await unPublishProduct(id);
-		},
-		{
-			onSuccess: (data) => {
-				handleClosePublishDialog()
-                queryClient.invalidateQueries("Products")
-				enqueueSnackbar("UnPublish successfully!", {
-					autoHideDuration: 3000,
-					variant: "success",
-				  });
-			},onError: (error: AxiosError<ErrorHttpResponse>) => {
-				if (error) {
-				handleClosePublishDialog()
-
-					enqueueSnackbar(error.response?.data.errorMessage, {
-					  autoHideDuration: 9000,
-					  variant: "error",
-					});
-				  }
-			},
-			
-		}
-	);
+          enqueueSnackbar(error.response?.data.errorMessage, {
+            autoHideDuration: 9000,
+            variant: "error",
+          });
+        }
+      },
+    }
+  );
 };
 
 export default useUnPublishProduct;
