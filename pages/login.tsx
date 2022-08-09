@@ -40,7 +40,7 @@ export default function Login(props: ILoginProps) {
   });
 
   const onSubmit: SubmitHandler<FormLogin> = (data) => {
-    const res = login({ email: data.email, password: data.password });
+    login({ email: data.email, password: data.password });
   };
   return (
     <>
