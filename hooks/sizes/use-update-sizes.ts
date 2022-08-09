@@ -24,11 +24,22 @@ const useUpdateSize = (handleCloseDialog: () => void) => {
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         if (error) {
-          handleCloseDialog();
-          enqueueSnackbar(error.response?.data.errorMessage, {
-            autoHideDuration: 9000,
-            variant: "error",
-          });
+          // This size is already existed
+          let tmpError = error.response?.data.errorMessage;
+          if (tmpError?.includes("This size is already existed")) {
+            tmpError = "Kích thước này đã tồn tại";
+            enqueueSnackbar(tmpError, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
+            handleCloseDialog();
+          } else {
+            handleCloseDialog();
+            enqueueSnackbar(error.response?.data.errorMessage, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
+          }
         }
       },
     }
