@@ -72,6 +72,9 @@ font-size: larger;
 .w-half{
   width: 50%;
 }
+.w-100{
+  width: 300%;
+}
 .pl-4p {
   padding-left: 40px;
 }
