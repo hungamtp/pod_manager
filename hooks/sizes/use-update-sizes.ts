@@ -17,7 +17,7 @@ const useUpdateSize = (handleCloseDialog: () => void) => {
       onSuccess: (data) => {
         handleCloseDialog();
         queryClient.invalidateQueries("Sizes");
-        enqueueSnackbar("Update successfully!", {
+        enqueueSnackbar("Chỉnh sửa kích thước thành công!", {
           autoHideDuration: 3000,
           variant: "success",
         });

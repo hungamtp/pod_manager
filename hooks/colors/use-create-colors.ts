@@ -18,7 +18,7 @@ const useCreateColor = (handleCloseDialog:() => void) => {
 			onSuccess: (data) => {
                 handleCloseDialog()
                 queryClient.invalidateQueries("Colors")
-				enqueueSnackbar("Create successfully!", {
+				enqueueSnackbar("Tạo màu thành công!", {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });

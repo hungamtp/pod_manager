@@ -18,7 +18,7 @@ const useDeleteAccount = () => {
 		{
 			onSuccess: (data) => {
                 queryClient.invalidateQueries("Accounts")
-				enqueueSnackbar("Delete successfully!", {
+				enqueueSnackbar("Xóa tài khoản thành công!", {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });

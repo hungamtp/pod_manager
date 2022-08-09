@@ -18,7 +18,7 @@ const useUpdateColor = (handleCloseDialog:() => void) => {
 			onSuccess: (data) => {
                 handleCloseDialog()
                 queryClient.invalidateQueries("Colors")
-				enqueueSnackbar("Update successfully!", {
+				enqueueSnackbar("Chỉnh sửa màu thành công!", {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });

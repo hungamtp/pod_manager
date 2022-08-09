@@ -18,7 +18,7 @@ const useUpdateProfile = () => {
 		{
 			onSuccess: (data) => {
                 queryClient.invalidateQueries("GetAccountById")
-				enqueueSnackbar("Update successfully!", {
+				enqueueSnackbar("Chỉnh sửa thông tin thành công!", {
 					autoHideDuration: 3000,
 					variant: "success",
 				  });

@@ -23,7 +23,7 @@ const useUpdateProductBlueprint = () => {
         queryClient.invalidateQueries("GetProductBlueprint");
         dispatch(resetDesigns());
         router.back();
-        enqueueSnackbar("Update successfully!", {
+        enqueueSnackbar("Cập nhật thành công!", {
           autoHideDuration: 3000,
           variant: "success",
         });

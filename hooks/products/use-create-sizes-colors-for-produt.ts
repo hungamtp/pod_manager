@@ -24,7 +24,7 @@ const useCreateSizesColorsForProduct = (
         queryClient.invalidateQueries("GetProductById");
         queryClient.invalidateQueries("ColorSizeList");
         handleCloseDialog();
-        enqueueSnackbar("Create successfully!", {
+        enqueueSnackbar("Tạo mới thành công!", {
           autoHideDuration: 3000,
           variant: "success",
         });
