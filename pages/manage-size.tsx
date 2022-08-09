@@ -2,10 +2,12 @@
 /* eslint-disable @next/next/no-sync-scripts */
 import { MainLayout } from "@/components/layouts";
 import CreateSizeForm from "@/components/manage-size/create-size-form";
+import UpdateSizeForm from "@/components/manage-size/update-size-form";
 import { Filter } from "@/services/accounts";
-import { Fab } from "@material-ui/core";
+import { UpdateSizeDto } from "@/services/sizes/dto/update-sizes-dto";
 import AddIcon from "@mui/icons-material/Add";
-import { Pagination, Stack } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import { IconButton, Pagination, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -22,7 +24,13 @@ export default function ManageSize(props: IManageSize) {
     pageNumber: 0,
     pageSize: 10,
   });
+  const [isEdit, setIsEdit] = useState(false);
+  const defaultValue: UpdateSizeDto = {
+    id: "",
+    name: "",
+  };
 
+  const [size, setSize] = useState<UpdateSizeDto>(defaultValue);
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     value: number
@@ -41,6 +49,10 @@ export default function ManageSize(props: IManageSize) {
     setOpenDialog(true);
   };
 
+  const handleEdit = (size: UpdateSizeDto) => {
+    setSize(size);
+  };
+
   /* {open Dialog} */
   const [openDialog, setOpenDialog] = React.useState(false);
 
@@ -54,7 +66,10 @@ export default function ManageSize(props: IManageSize) {
           <h3 className="fw-bold py-3 mb-4">Kích thước</h3>
           <button
             className="btn btn-success ms-4 mb-4 text-dark"
-            onClick={handleOpenCreate}
+            onClick={() => {
+              handleOpenCreate();
+              setIsEdit(false);
+            }}
           >
             <AddIcon sx={{ mr: 1 }} />
             Tạo mới kích thước
@@ -68,12 +83,18 @@ export default function ManageSize(props: IManageSize) {
             fullWidth={true}
           >
             <DialogTitle id="alert-dialog-title">
-              {"Tạo mới kích thước"}
+              {isEdit === true ? "Chỉnh sửa kích thước" : "Tạo mới kích thước"}
             </DialogTitle>
             <DialogContent>
-              <CreateSizeForm handleCloseDialog={handleCloseDialog} />
+              {isEdit === true ? (
+                <UpdateSizeForm
+                  handleCloseDialog={handleCloseDialog}
+                  size={size}
+                />
+              ) : (
+                <CreateSizeForm handleCloseDialog={handleCloseDialog} />
+              )}
             </DialogContent>
-            <DialogActions></DialogActions>
           </Dialog>
 
           <br />
@@ -85,6 +106,7 @@ export default function ManageSize(props: IManageSize) {
                 <thead>
                   <tr>
                     <th>Kích thước</th>
+                    <th>Hành động</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">
@@ -93,6 +115,17 @@ export default function ManageSize(props: IManageSize) {
                     response.content.map((x) => (
                       <tr key={x.id}>
                         <td>{x.name}</td>
+                        <td>
+                          <IconButton
+                            onClick={() => {
+                              handleOpenCreate();
+                              handleEdit(x);
+                              setIsEdit(true);
+                            }}
+                          >
+                            <EditIcon fontSize="medium" color="primary" />
+                          </IconButton>
+                        </td>
                       </tr>
                     ))}
                 </tbody>
@@ -106,6 +139,7 @@ export default function ManageSize(props: IManageSize) {
               <Pagination
                 shape="circular"
                 size="large"
+                page={filter.pageNumber + 1}
                 count={response?.totalPages}
                 onChange={handlePageChange}
                 color="secondary"

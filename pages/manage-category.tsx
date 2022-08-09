@@ -261,6 +261,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
               <Pagination
                 shape="circular"
                 size="large"
+                page={filter.pageNumber + 1}
                 count={response?.totalPages}
                 onChange={handlePageChange}
                 color="secondary"

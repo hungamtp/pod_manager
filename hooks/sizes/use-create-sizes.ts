@@ -1,6 +1,6 @@
 import { ErrorHttpResponse } from "@/models/error_http_response.interface";
 import { createSize } from "@/services/sizes";
-import { CreateSizeDto } from "@/services/sizes/dto/create-colors-dto";
+import { CreateSizeDto } from "@/services/sizes/dto/create-sizes-dto";
 import { AxiosError } from "axios";
 import { useSnackbar } from "notistack";
 import { useMutation, useQueryClient } from "react-query";

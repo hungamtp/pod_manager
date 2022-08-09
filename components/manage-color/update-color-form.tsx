@@ -1,61 +1,58 @@
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
+import { UpdateColorDto } from "@/services/colors/dto/update-colors-dto";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useCreateColor from "hooks/colors/use-create-colors";
-import useCreateProductSize from "hooks/products/use-create-product-size";
-import useCreateSize from "hooks/sizes/use-create-sizes";
+import useUpdateColor from "hooks/colors/use-update-colors";
+import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-export interface ICreateProductSizeFormProps {
-  setOpenCreateProductSize: (isOpen: boolean) => void;
-  productId: string;
-  size: string;
+export interface IUpdateColorFormProps {
+  handleCloseDialog: () => void;
+  color: UpdateColorDto;
 }
 
-type FormCreateProductSize = {
-  width: number;
-  height: number;
+type FormUpdateColor = {
+  id: string;
+  name: string;
+  imageColor: string;
 };
 
 const schema = yup.object().shape({
-  width: yup
+  name: yup
     .string()
-    .min(1, "Chiều rộng cần phải lớn hơn 1")
-    .max(26, "Chiều rộng tối đa 26")
-    .required("Chiều rộng không được để trống"),
-  height: yup
-    .string()
-    .min(1, "Chiều dài cần phải lớn hơn 1")
-    .max(26, "Chiều dài tối đa 26")
-    .required("Chiều dài không được để trống"),
+    .min(1, "Màu cần ít nhất 1 kí tự")
+    .max(26, "Màu tối đa 50 kí tự")
+    .required("Màu không được để trống"),
 });
 
-export default function CreateProductSizeForm(
-  props: ICreateProductSizeFormProps
-) {
-  const { setOpenCreateProductSize, productId, size } = props;
+export default function UpdateColorForm(props: IUpdateColorFormProps) {
+  const { handleCloseDialog, color } = props;
 
-  const defaultValues: FormCreateProductSize = {
-    width: 10,
-    height: 10,
+  const defaultValues: FormUpdateColor = {
+    id: "",
+    name: "",
+    imageColor: "",
   };
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormCreateProductSize>({
+  } = useForm<FormUpdateColor>({
     defaultValues,
     resolver: yupResolver(schema),
   });
 
-  const { mutate: createProductSize } = useCreateProductSize(
-    setOpenCreateProductSize
-  );
+  useEffect(() => {
+    reset({ ...color, imageColor: color.imageColor });
+  }, [color]);
 
-  const onSubmit: SubmitHandler<FormCreateProductSize> = (data) => {
-    createProductSize({ ...data, productId: productId, size: size });
+  const { mutate: updateColor, error } = useUpdateColor(handleCloseDialog);
+
+  const onSubmit: SubmitHandler<FormUpdateColor> = (data) => {
+    updateColor(data);
   };
 
   return (
@@ -69,21 +66,20 @@ export default function CreateProductSizeForm(
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Chiều rộng
+                  Tên màu
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <input
-                      type="number"
-                      step="any"
+                      type="text"
                       className="form-control"
                       aria-describedby="basic-icon-default-fullname2"
-                      {...register("width")}
+                      {...register("name")}
                     />
                   </div>
-                  {errors.width && (
+                  {errors.name && (
                     <span id="error-pwd-message" className="text-danger">
-                      {errors.width.message}
+                      {errors.name.message}
                     </span>
                   )}
                 </div>
@@ -93,21 +89,20 @@ export default function CreateProductSizeForm(
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Chiều dài
+                  Chọn màu
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
                     <input
-                      type="number"
-                      step="any"
+                      type="color"
                       className="form-control"
                       aria-describedby="basic-icon-default-fullname2"
-                      {...register("height")}
+                      {...register("imageColor")}
                     />
                   </div>
-                  {errors.height && (
+                  {errors.imageColor && (
                     <span id="error-pwd-message" className="text-danger">
-                      {errors.height.message}
+                      {errors.imageColor.message}
                     </span>
                   )}
                 </div>
@@ -120,11 +115,11 @@ export default function CreateProductSizeForm(
                     color="primary"
                     type="submit"
                   >
-                    Tạo mới
+                    Chỉnh sửa
                   </button>
                   <button
                     className="btn btn-secondary"
-                    onClick={() => setOpenCreateProductSize(false)}
+                    onClick={handleCloseDialog}
                     autoFocus
                     type="button"
                   >

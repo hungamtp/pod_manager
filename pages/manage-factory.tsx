@@ -254,6 +254,7 @@ export default function ManageFactory(props: IManageFactory) {
               <Pagination
                 shape="circular"
                 size="large"
+                page={filter.pageNumber + 1}
                 count={response?.totalPages}
                 onChange={handlePageChange}
                 color="secondary"

@@ -5,9 +5,11 @@ import { MainLayout } from "@/components/layouts";
 import CreateForm from "@/components/manage-account/create-form";
 import UpdateForm from "@/components/manage-account/update-form";
 import CreateColorForm from "@/components/manage-color/create-color-form";
+import UpdateColorForm from "@/components/manage-color/update-color-form";
 import { Filter } from "@/services/accounts";
 import { AccountDto } from "@/services/accounts/dto/get-all-accounts-dto";
 import { UpdateAccountDto } from "@/services/accounts/dto/update-accounts-dto";
+import { UpdateColorDto } from "@/services/colors/dto/update-colors-dto";
 import { Fab } from "@material-ui/core";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -33,7 +35,13 @@ export default function ManageColor(props: IManageColor) {
     pageNumber: 0,
     pageSize: 10,
   });
-
+  const defaultValue: UpdateColorDto = {
+    id: "",
+    name: "",
+    imageColor: "",
+  };
+  const [color, setColor] = useState<UpdateColorDto>(defaultValue);
+  const [isEdit, setIsEdit] = useState(false);
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     value: number
@@ -51,6 +59,9 @@ export default function ManageColor(props: IManageColor) {
   const handleOpenCreate = () => {
     setOpenDialog(true);
   };
+  const handleEdit = (color: UpdateColorDto) => {
+    setColor(color);
+  };
 
   /* {open Dialog} */
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -64,7 +75,10 @@ export default function ManageColor(props: IManageColor) {
           <h3 className="fw-bold py-3 mb-4">Màu</h3>
           <button
             className="btn btn-success ms-4 mb-4 text-dark"
-            onClick={handleOpenCreate}
+            onClick={() => {
+              handleOpenCreate();
+              setIsEdit(false);
+            }}
           >
             <AddIcon sx={{ mr: 1 }} />
             Tạo màu mới
@@ -77,11 +91,19 @@ export default function ManageColor(props: IManageColor) {
             aria-describedby="alert-dialog-description"
             fullWidth={true}
           >
-            <DialogTitle id="alert-dialog-title">{"Tạo màu mới"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">
+              {isEdit === true ? "Chỉnh sửa màu" : "Tạo màu mới"}
+            </DialogTitle>
             <DialogContent>
-              <CreateColorForm handleCloseDialog={handleCloseDialog} />
+              {isEdit === true ? (
+                <UpdateColorForm
+                  handleCloseDialog={handleCloseDialog}
+                  color={color}
+                />
+              ) : (
+                <CreateColorForm handleCloseDialog={handleCloseDialog} />
+              )}
             </DialogContent>
-            <DialogActions></DialogActions>
           </Dialog>
 
           <br />
@@ -93,6 +115,7 @@ export default function ManageColor(props: IManageColor) {
                 <thead>
                   <tr>
                     <th>Màu</th>
+                    <th>Hành động</th>
                   </tr>
                 </thead>
                 <tbody className="table-border-bottom-0">
@@ -114,6 +137,17 @@ export default function ManageColor(props: IManageColor) {
                           />
                           {x.name}
                         </td>
+                        <td>
+                          <IconButton
+                            onClick={() => {
+                              handleOpenCreate();
+                              handleEdit(x);
+                              setIsEdit(true);
+                            }}
+                          >
+                            <EditIcon fontSize="medium" color="primary" />
+                          </IconButton>
+                        </td>
                       </tr>
                     ))}
                 </tbody>
@@ -127,6 +161,7 @@ export default function ManageColor(props: IManageColor) {
               <Pagination
                 shape="circular"
                 size="large"
+                page={filter.pageNumber + 1}
                 count={response?.totalPages}
                 onChange={handlePageChange}
                 color="secondary"

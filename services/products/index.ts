@@ -33,7 +33,7 @@ import { getSizesAndColorsMap } from "./dto/get-all-color-size-map";
 
 export interface Filter {
   pageSize?: number;
-  pageNumber?: number;
+  pageNumber: number;
   sort?: string;
   search?: string;
   searchValues?: string;

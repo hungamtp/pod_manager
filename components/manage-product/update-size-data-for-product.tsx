@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import useCreateColor from "hooks/colors/use-create-colors";
 import useCreateProductSize from "hooks/products/use-create-product-size";
 import useUpdateSizeProduct from "hooks/products/use-update-product-size";
-import useCreateSize from "hooks/sizes/use-create-colors";
+import useCreateSize from "hooks/sizes/use-create-sizes";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
