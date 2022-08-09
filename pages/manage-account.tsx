@@ -374,6 +374,7 @@ export default function ManageAccount(props: IManageAccountProps) {
               <Pagination
                 shape="circular"
                 size="large"
+                page={filter.pageNumber + 1}
                 count={response?.totalPages}
                 onChange={handlePageChange}
                 color="secondary"

@@ -465,6 +465,7 @@ export default function ManageProduct(props: IManageProductProps) {
             <Pagination
               shape="circular"
               size="large"
+              page={filter.pageNumber + 1}
               count={response?.totalPages}
               onChange={handlePageChange}
               color="secondary"
