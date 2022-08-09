@@ -11,7 +11,7 @@ import { UpdateAccountDto, UpdateAccountResponse, UpdateImageAccountDto, UpdateI
     searchValues?: string;
     searchCriteria?: string;
     pageSize?: number;
-    pageNumber?: number;
+    pageNumber: number;
   }
   
   export const getAccounts = async (filter?: Filter) => {

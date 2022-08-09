@@ -1,16 +1,20 @@
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
+import { UpdateSizeDto } from "@/services/sizes/dto/update-sizes-dto";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useCreateColor from "hooks/colors/use-create-colors";
 import useCreateSize from "hooks/sizes/use-create-sizes";
+import useUpdateSize from "hooks/sizes/use-update-sizes";
+import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-export interface ICreateSizeFormProps {
+export interface IUpdateSizeFormProps {
   handleCloseDialog: () => void;
+  size: UpdateSizeDto;
 }
 
-type FormCreateAccount = {
+type FormUpdateSize = {
+  id: string;
   name: string;
 };
 
@@ -22,10 +26,11 @@ const schema = yup.object().shape({
     .required("Kích thước không được để trống"),
 });
 
-export default function CreateSizeForm(props: ICreateSizeFormProps) {
-  const { handleCloseDialog } = props;
+export default function UpdateSizeForm(props: IUpdateSizeFormProps) {
+  const { handleCloseDialog, size } = props;
 
-  const defaultValues: FormCreateAccount = {
+  const defaultValues: FormUpdateSize = {
+    id: "",
     name: "",
   };
   const {
@@ -33,15 +38,19 @@ export default function CreateSizeForm(props: ICreateSizeFormProps) {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormCreateAccount>({
+  } = useForm<FormUpdateSize>({
     defaultValues,
     resolver: yupResolver(schema),
   });
 
-  const { mutate: addSize, error } = useCreateSize(handleCloseDialog);
+  useEffect(() => {
+    reset(size);
+  }, [size]);
 
-  const onSubmit: SubmitHandler<FormCreateAccount> = (data) => {
-    addSize(data);
+  const { mutate: updateSize, error } = useUpdateSize(handleCloseDialog);
+
+  const onSubmit: SubmitHandler<FormUpdateSize> = (data) => {
+    updateSize(data);
   };
 
   return (
@@ -81,7 +90,7 @@ export default function CreateSizeForm(props: ICreateSizeFormProps) {
                     color="primary"
                     type="submit"
                   >
-                    Tạo mới
+                    Sửa
                   </button>
                   <button
                     className="btn btn-secondary"
