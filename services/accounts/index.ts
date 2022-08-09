@@ -43,8 +43,14 @@ import { UpdateAccountDto, UpdateAccountResponse, UpdateImageAccountDto, UpdateI
   };
   export const getAccountsByEmail = async (filter?: Filter) => {
    const email = filter?.searchValues?.toString() || "";
+   const pageNumber = 0;
+    const pageSize = 9;
+    const query = new URLSearchParams({
+      pageNumber: filter?.pageNumber?.toString() || pageNumber.toString(),
+      pageSize: filter?.pageSize?.toString() || pageSize.toString(),
+    });
     const { data } = await API.get<GetAllAccountsDto>(
-      `/user/email?email=${email}`
+      `/user/email?email=${email}&${query.toString()}`
     );
     return data.data;
   };
