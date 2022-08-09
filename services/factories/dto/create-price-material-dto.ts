@@ -1,7 +1,7 @@
 import { ISuccessHttpResponse } from "@/models/success_http_response.interface";
 
 export interface CreatePriceMaterialDto {
-  price: string; 
+  price: number; 
   material: string;
 }
 
