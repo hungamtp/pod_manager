@@ -282,7 +282,6 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
                 {responseFactory && (
                   <TablePagination
                     rowsPerPageOptions={[5]}
-                    component="div"
                     count={responseFactory.data.productDtoList.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
