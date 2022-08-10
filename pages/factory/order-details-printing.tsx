@@ -53,7 +53,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
   const [sizeList, setSizeList] = React.useState<
     {
       size: string;
-      colorsData: { color: string; quantity: number }[];
+      colorsData: { color: string; quantity: number; colorImage: string }[];
     }[]
   >([]);
   const [completed, setCompleted] = React.useState<{
@@ -100,6 +100,8 @@ export default function OrderDetails(props: OrderDetailsProps) {
   const { data: productResponse, isLoading: isLoadingProductResponse } =
     useGetProductById(responseOrderDetails?.data.productId || "");
 
+  const [renderColor, setRenderColor] = React.useState("");
+
   React.useEffect(() => {
     if (responseOrderDetails) {
       const colorList = responseOrderDetails.data.orderDetailsSupportDtos.map(
@@ -137,12 +139,12 @@ export default function OrderDetails(props: OrderDetailsProps) {
 
       const sizeList: {
         size: string;
-        colorsData: { color: string; quantity: number }[];
+        colorsData: { color: string; quantity: number; colorImage: string }[];
       }[] = [];
       responseOrderDetails.data.orderDetailsSupportDtos.forEach((data) => {
         const tmpSizeData: {
           size: string;
-          colorsData: { color: string; quantity: number }[];
+          colorsData: { color: string; quantity: number; colorImage: string }[];
         } = { size: data.size, colorsData: [] };
 
         loopColorList.forEach((color) => {
@@ -150,11 +152,13 @@ export default function OrderDetails(props: OrderDetailsProps) {
             tmpSizeData.colorsData.push({
               color: color,
               quantity: data.quantity,
+              colorImage: data.colorImage,
             });
           } else {
             tmpSizeData.colorsData.push({
               color: color,
               quantity: 0,
+              colorImage: data.colorImage,
             });
           }
         });
@@ -308,6 +312,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
                       setIsViewOrder={setIsViewOrder}
                       responseOrderDetails={responseOrderDetails}
                       sizeProductResponse={sizeProductResponse}
+                      renderColor={renderColor}
                     />
                   </>
                 ) : (
@@ -412,6 +417,15 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                           {data.size}
                                         </div>
                                         {data.colorsData.map((dataColor) => {
+                                          if (
+                                            dataColor.quantity > 0 &&
+                                            !renderColor
+                                          ) {
+                                            setRenderColor(
+                                              dataColor.colorImage
+                                            );
+                                          }
+
                                           return (
                                             <div
                                               key={dataColor.color}

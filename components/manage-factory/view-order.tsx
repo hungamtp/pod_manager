@@ -4,13 +4,14 @@ import { getOrdersDetailResponse } from "@/services/factories/dto/get-orders-det
 import { ProductSizeDto } from "@/services/products/dto/product-size-dto";
 import { nanoid } from "@reduxjs/toolkit";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 /* eslint-disable @next/next/no-css-tags */
 export interface IViewOrderProps {
   setIsViewOrder: (isViewOrder: boolean) => void;
   responseOrderDetails: getOrdersDetailResponse;
   sizeProductResponse: ProductSizeDto[];
+  renderColor: string;
 }
 
 export interface RenderedData {
@@ -59,6 +60,7 @@ export default function ViewOrder({
   setIsViewOrder,
   responseOrderDetails,
   sizeProductResponse,
+  renderColor,
 }: IViewOrderProps) {
   const [measurementType, setMeasurementType] = useState<{
     name: string;
@@ -69,9 +71,10 @@ export default function ViewOrder({
     content: () => componentRef.current,
   });
 
+  console.log(renderColor, "renderColor");
+
   const data = responseOrderDetails.data;
 
-  console.log(sizeProductResponse, "sizeProductResponse");
   //nho can phai load het nha
   return (
     <div className="card ">
@@ -101,12 +104,11 @@ export default function ViewOrder({
           <div className="mb-3 col-lg-12">
             <div className="d-flex flex-wrap">
               {data.bluePrintDtos.map((blueprint, index) => {
-                let renderedImage = data.previewImages[0];
-                const renderedColor = data.previewImages[0].color;
+                let renderedImage = data.previewImages[index];
                 data.previewImages.forEach((image) => {
                   if (
                     image.position === blueprint.position &&
-                    image.color === renderedColor
+                    image.color === renderColor
                   ) {
                     renderedImage = image;
                   }
@@ -170,8 +172,8 @@ export default function ViewOrder({
                           <Image
                             src={renderedImage.image}
                             alt="Picture of the author"
-                            width={2000}
-                            height={2000}
+                            width={4000}
+                            height={4000}
                             objectFit="cover"
                           />
                         </div>

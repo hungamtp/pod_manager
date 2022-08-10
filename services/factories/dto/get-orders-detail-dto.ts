@@ -27,6 +27,7 @@ export interface OrdersDetailDtos {
   }[];
   orderDetailsSupportDtos: {
     orderDetailsId: string;
+    colorImage: string;
     color: string;
     size: string;
     quantity: number;
