@@ -460,9 +460,33 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                       key={label}
                                       completed={completed[index]}
                                     >
-                                      <StepButton color="inherit">
+                                      <StepButton color="inherit" disabled>
                                         {label}
+                                        {completed[index] && (
+                                          <Typography
+                                            sx={{
+                                              textAlign: "center",
+                                              color: "green",
+                                              fontSize: "13px",
+                                            }}
+                                          >
+                                            hoàn thành
+                                          </Typography>
+                                        )}
                                       </StepButton>
+                                      {activeStep === index && (
+                                        <Button
+                                          sx={{ textAlign: "center" }}
+                                          onClick={() => {
+                                            handleGetStatus();
+                                            handleClickOpenOrderDialog();
+                                          }}
+                                        >
+                                          {completedSteps() === totalSteps() - 1
+                                            ? "Hoàn thành đơn hàng"
+                                            : "Hoàn thành bước"}
+                                        </Button>
+                                      )}
                                     </Step>
                                   ))}
                                 {isCancel &&
@@ -507,13 +531,14 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                             pt: 2,
                                           }}
                                         >
-                                          {/* <Button
+                                          <Button
                                             onClick={handleCancel}
+                                            color="error"
                                             sx={{ mr: 1 }}
                                           >
-                                            Hủy
-                                          </Button> */}
-                                          {activeStep !== steps.length &&
+                                            Hủy đơn hàng
+                                          </Button>
+                                          {/* {activeStep !== steps.length &&
                                             (completed[activeStep] ? (
                                               <Typography
                                                 variant="caption"
@@ -534,7 +559,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                                   ? "Hoàn thành đơn hàng"
                                                   : "Hoàn thành bước"}
                                               </Button>
-                                            ))}
+                                            ))} */}
                                         </Box>
                                       </React.Fragment>
                                     )}
