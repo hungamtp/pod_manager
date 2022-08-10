@@ -21,6 +21,7 @@ type FormUpdateSize = {
 const schema = yup.object().shape({
   name: yup
     .string()
+    .trim()
     .min(1, "Kích thước cần ít nhất 1 kí tự")
     .max(26, "Kích thước tối đa 50 kí tự")
     .required("Kích thước không được để trống"),

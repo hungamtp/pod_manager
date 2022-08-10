@@ -22,6 +22,7 @@ export interface AccountSettingProps {}
 const schema = yup.object().shape({
   name: yup
     .string()
+    .trim()
     .min(1, " Tên cần ít nhất 1 kí tự")
     .max(26, " Tên tối đa 50 kí tự")
     .required(" Tên không được để trống"),

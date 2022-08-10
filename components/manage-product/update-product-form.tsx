@@ -33,6 +33,7 @@ export interface IUpdateProductFormProps {
 const schema = yup.object().shape({
   name: yup
     .string()
+    .trim()
     .min(1, "Tên sản phẩm cần ít nhất 1 kí tự")
     .max(26, "Tên sản phẩm tối đa 50 kí tự")
     .required("Tên sản phẩm không được để trống"),

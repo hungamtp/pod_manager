@@ -21,11 +21,13 @@ type FormCreateProductSize = {
 const schema = yup.object().shape({
   width: yup
     .string()
+    .trim()
     .min(1, "Chiều rộng cần phải lớn hơn 1")
     .max(26, "Chiều rộng tối đa 26")
     .required("Chiều rộng không được để trống"),
   height: yup
     .string()
+    .trim()
     .min(1, "Chiều dài cần phải lớn hơn 1")
     .max(26, "Chiều dài tối đa 26")
     .required("Chiều dài không được để trống"),

@@ -35,6 +35,7 @@ type FormCreateAccount = {
 const schema = yup.object().shape({
   name: yup
     .string()
+    .trim()
     .min(1, "Màu cần ít nhất 1 kí tự")
     .max(26, "Màu tối đa 50 kí tự")
     .required("Màu không được để trống"),

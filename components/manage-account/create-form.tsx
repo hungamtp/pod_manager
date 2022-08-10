@@ -27,27 +27,32 @@ type FormCreateAccount = {
 const schema = yup.object().shape({
   firstName: yup
     .string()
+    .trim()
     .min(1, "First Name cần ít nhất 1 kí tự")
     .max(26, "First Name tối đa 50 kí tự")
     .required("First Name không được để trống"),
   lastName: yup
     .string()
+    .trim()
     .min(1, "Last Name cần ít nhất 1 kí tự")
     .max(26, "Last Name tối đa 50 kí tự")
     .required("Last Name không được để trống"),
   password: yup
     .string()
+    .trim()
     .min(8, "Mật khẩu cần ít nhất 8 kí tự")
     .max(26, "Mật khẩu tối đa 50 kí tự")
     .required("Mật khẩu không được để trống"),
   email: yup
     .string()
+    .trim()
     .email()
     .min(8, "Tài khoản cần ít nhất 8 kí tự")
     .max(50, "Tài khoản tối đa 50 kí tự")
     .required("Tài khoản không được để trống"),
   phone: yup
     .string()
+    .trim()
     .matches(
       /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/,
       "Số điện thoại gồm 10 số và bắt đầu từ 0"
@@ -55,6 +60,7 @@ const schema = yup.object().shape({
     .required("Số điện thoại không được để trống"),
   address: yup
     .string()
+    .trim()
     .min(10, "Địa chỉ cần ít nhất 10 kí tự")
     .max(100, "Địa chỉ tối đa 100 kí tự")
     .required("Địa chỉ không được để trống"),

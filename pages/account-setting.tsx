@@ -20,22 +20,26 @@ export interface IAccountSettingProps {}
 const schema = yup.object().shape({
   userFirstName: yup
     .string()
+    .trim()
     .min(1, "Tên cần ít nhất 1 kí tự")
     .max(26, "Tên tối đa 26 kí tự")
     .required("Tên không được để trống"),
   userLastName: yup
     .string()
+    .trim()
     .min(1, "Họ cần ít nhất 1 kí tự")
     .max(26, "Họ tối đa 26 kí tự")
     .required("Họ không được để trống"),
   email: yup
     .string()
+    .trim()
     .email()
     .min(8, "Tài khoản cần ít nhất 8 kí tự")
     .max(50, "Tài khoản tối đa 50 kí tự")
     .required("Tài khoản không được để trống"),
   phone: yup
     .string()
+    .trim()
     .matches(
       /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/,
       "Số điện thoại gồm 10 số và bắt đầu từ 0"
@@ -43,6 +47,7 @@ const schema = yup.object().shape({
     .required("Số điện thoại không được để trống"),
   address: yup
     .string()
+    .trim()
     .min(10, "Địa chỉ cần ít nhất 10 kí tự")
     .max(300, "Địa chỉ tối đa 300 kí tự")
     .required("Địa chỉ không được để trống"),

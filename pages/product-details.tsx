@@ -115,11 +115,13 @@ const ITEM_PADDING_TOP = 8;
 const schema = yup.object().shape({
   name: yup
     .string()
+    .trim()
     .min(1, " Tên sản phẩm cần ít nhất 1 kí tự")
     .max(50, " Tên sản phẩm tối đa 50 kí tự")
     .required(" Tên sản phẩm không được để trống"),
   description: yup
     .string()
+    .trim()
     .min(1, " Mô tả sản phẩm cần ít nhất 1 kí tự")
     .max(400, " Mô tả sản phẩm tối đa 400 kí tự")
     .required(" Mô tả sản phẩm không được để trống"),
@@ -760,108 +762,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
 
         <div className="content-backdrop fade" />
       </div>
-      <div>
-        <div className="container-xxl flex-grow-1 container-p-y ">
-          <div className="row">
-            <div className="col-md-12">
-              <div className="card mb-4">
-                {/* Account */}
-                <div className="card">
-                  <h5 className="card-header">Bản thiết kế của Sản phẩm</h5>
-                  <div>
-                    <button
-                      className="btn btn-success ms-4 text-dark"
-                      onClick={handleCreateProductBlueprint}
-                    >
-                      <AddIcon sx={{ mr: 1 }} />
-                      Tạo mới bản thiết kế
-                    </button>
-                  </div>
-                  <br className="my-4" />
-                  <hr className="my-0" />
-                  <div className="table-responsive text-nowrap">
-                    {!isloadingPrBlueprint &&
-                    responseProductBlueprint &&
-                    responseProductBlueprint.data.length > 0 ? (
-                      <table className="table table-sm ">
-                        <thead>
-                          <tr>
-                            <th>
-                              <strong>Frame image</strong>
-                            </th>
-                            <th>
-                              <strong>placeholder</strong>
-                            </th>
-
-                            <th>
-                              <strong>Vị trí</strong>
-                            </th>
-                            <th>
-                              <strong>Hành động</strong>
-                            </th>
-                          </tr>
-                        </thead>
-                        {responseProductBlueprint.data.map(
-                          (productBlueprint) => (
-                            <tbody
-                              key={productBlueprint.id}
-                              className="table-border-bottom-0"
-                            >
-                              <tr>
-                                <td>
-                                  <img
-                                    src={productBlueprint.frameImage}
-                                    alt="user-avatar"
-                                    className="d-block rounded"
-                                    height={100}
-                                    width={100}
-                                    id="uploadedAvatar"
-                                  />
-                                </td>
-                                <td>
-                                  <strong> Top: </strong>
-                                  {productBlueprint.placeholder.top}%
-                                  <br />
-                                  <strong>Height: </strong>
-                                  {productBlueprint.placeholder.height} inch
-                                  <br />
-                                  <strong>Width: </strong>
-                                  {productBlueprint.placeholder.width} inch
-                                </td>
-                                <td>{productBlueprint.position}</td>
-                                <td>
-                                  <IconButton
-                                    onClick={() => {
-                                      handleUpdateProductBlueprint(
-                                        productBlueprint
-                                      );
-                                    }}
-                                  >
-                                    <EditIcon
-                                      fontSize="medium"
-                                      color="primary"
-                                    />
-                                  </IconButton>
-                                </td>
-                              </tr>
-                            </tbody>
-                          )
-                        )}
-                      </table>
-                    ) : (
-                      <div className="h3 text-center p-3">
-                        Sản phẩm này hiện chưa có bản thiết kế
-                      </div>
-                    )}
-                  </div>
-                </div>
-                {/* /Account */}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Content wrapper */}
+      {/* create size & color */}
       <div>
         <Dialog
           open={openCreateDialog}
@@ -1053,6 +954,109 @@ export default function ProductDetails(props: IProductDetailsProps) {
 
         <div className="content-backdrop fade" />
       </div>
+      {/* end create size & color*/}
+      <div>
+        <div className="container-xxl flex-grow-1 container-p-y ">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="card mb-4">
+                {/* Account */}
+                <div className="card">
+                  <h5 className="card-header">Bản thiết kế của Sản phẩm</h5>
+                  <div>
+                    <button
+                      className="btn btn-success ms-4 text-dark"
+                      onClick={handleCreateProductBlueprint}
+                    >
+                      <AddIcon sx={{ mr: 1 }} />
+                      Tạo mới bản thiết kế
+                    </button>
+                  </div>
+                  <br className="my-4" />
+                  <hr className="my-0" />
+                  <div className="table-responsive text-nowrap">
+                    {!isloadingPrBlueprint &&
+                    responseProductBlueprint &&
+                    responseProductBlueprint.data.length > 0 ? (
+                      <table className="table table-sm ">
+                        <thead>
+                          <tr>
+                            <th>
+                              <strong>Frame image</strong>
+                            </th>
+                            <th>
+                              <strong>placeholder</strong>
+                            </th>
+
+                            <th>
+                              <strong>Vị trí</strong>
+                            </th>
+                            <th>
+                              <strong>Hành động</strong>
+                            </th>
+                          </tr>
+                        </thead>
+                        {responseProductBlueprint.data.map(
+                          (productBlueprint) => (
+                            <tbody
+                              key={productBlueprint.id}
+                              className="table-border-bottom-0"
+                            >
+                              <tr>
+                                <td>
+                                  <img
+                                    src={productBlueprint.frameImage}
+                                    alt="user-avatar"
+                                    className="d-block rounded"
+                                    height={100}
+                                    width={100}
+                                    id="uploadedAvatar"
+                                  />
+                                </td>
+                                <td>
+                                  <strong> Top: </strong>
+                                  {productBlueprint.placeholder.top}%
+                                  <br />
+                                  <strong>Height: </strong>
+                                  {productBlueprint.placeholder.height} inch
+                                  <br />
+                                  <strong>Width: </strong>
+                                  {productBlueprint.placeholder.width} inch
+                                </td>
+                                <td>{productBlueprint.position}</td>
+                                <td>
+                                  <IconButton
+                                    onClick={() => {
+                                      handleUpdateProductBlueprint(
+                                        productBlueprint
+                                      );
+                                    }}
+                                  >
+                                    <EditIcon
+                                      fontSize="medium"
+                                      color="primary"
+                                    />
+                                  </IconButton>
+                                </td>
+                              </tr>
+                            </tbody>
+                          )
+                        )}
+                      </table>
+                    ) : (
+                      <div className="h3 text-center p-3">
+                        Sản phẩm này hiện chưa có bản thiết kế
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {/* /Account */}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Content wrapper */}
 
       {/* Content wrapper */}
       {/* / Layout page */}
