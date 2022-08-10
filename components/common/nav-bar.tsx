@@ -1,24 +1,21 @@
-import React from "react";
-import ColorLensIcon from "@mui/icons-material/ColorLens";
-import List from "@mui/material/List";
+import { logout } from "@/redux/slices/auth";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import BadgeIcon from "@mui/icons-material/Badge";
+import CategoryIcon from "@mui/icons-material/Category";
+import ColorLensIcon from "@mui/icons-material/ColorLens";
+import FactoryIcon from "@mui/icons-material/Factory";
+import HeightIcon from "@mui/icons-material/Height";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import Collapse from "@mui/material/Collapse";
-import FactoryIcon from "@mui/icons-material/Factory";
-import CategoryIcon from "@mui/icons-material/Category";
-import LogoutIcon from "@mui/icons-material/Logout";
-import HeightIcon from "@mui/icons-material/Height";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import TableViewIcon from "@mui/icons-material/TableView";
-import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
-import { Router, useRouter } from "next/router";
-import { useAppDispatch, useAppSelector } from "../hooks/reduxHook";
+import CheckroomIcon from "@mui/icons-material/Checkroom";
 import Link from "next/link";
-import { logout } from "@/redux/slices/auth";
+import { useRouter } from "next/router";
+import React from "react";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHook";
 type Props = {};
 
 export default function NavBar({}: Props) {
@@ -387,6 +384,23 @@ export default function NavBar({}: Props) {
                 <ColorLensIcon />
               </ListItemIcon>
               <ListItemText primary="Quản lý màu" />
+            </ListItemButton>
+          </List>
+
+          {/* Quản lý material */}
+
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+          >
+            <ListItemButton
+              onClick={() => {
+                router.push("manage-material");
+              }}
+            >
+              <ListItemIcon className="pl-2p">
+                <CheckroomIcon />
+              </ListItemIcon>
+              <ListItemText primary="Quản lý chất liệu áo" />
             </ListItemButton>
           </List>
           {/* {/Manage designed product} */}
