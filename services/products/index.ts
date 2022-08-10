@@ -42,16 +42,15 @@ export interface Filter {
 export const getProducts = async (filter?: Filter) => {
   const pageNumber = 0;
   const pageSize = 9;
-  const sort = "";
+  const sort = "createDate";
   const search = filter?.search || "";
   const searchValues = filter?.searchValues || "";
   const query = new URLSearchParams({
     pageNumber: filter?.pageNumber?.toString() || pageNumber.toString(),
     pageSize: filter?.pageSize?.toString() || pageSize.toString(),
-    sort: filter?.sort || sort.toString(),
   });
   const { data } = await API.get<GetAllProductsDto>(
-    `/product/admin?${query.toString()}&search=${searchValues}:${search}`
+    `/product/admin?${query.toString()}&search=${searchValues}:${search}&sort=${sort}`
   );
   return data.data;
 };

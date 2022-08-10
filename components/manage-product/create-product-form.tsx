@@ -30,11 +30,13 @@ type FormCreateProduct = {
 const schema = yup.object().shape({
   name: yup
     .string()
+    .trim()
     .min(1, "Tên sản phẩm cần ít nhất 1 kí tự")
     .max(26, "Tên sản phẩm tối đa 50 kí tự")
     .required("Tên sản phẩm không được để trống"),
   description: yup
     .string()
+    .trim()
     .min(10, "Mô tả sản phẩm cần ít nhất 10 kí tự")
     .max(500, "Mô tả sản phẩm tối đa 500 kí tự")
     .required("Mô tả sản phẩm không được để trống"),

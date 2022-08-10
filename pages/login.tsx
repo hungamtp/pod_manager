@@ -13,11 +13,13 @@ type FormLogin = {
 const schema = yup.object().shape({
   email: yup
     .string()
+    .trim()
     .min(8, "Tài khoản cần ít nhất 8 kí tự")
     .max(50, "Tài khoản tối đa 50 kí tự")
     .required("Tài khoản không được để trống"),
   password: yup
     .string()
+    .trim()
     .min(8, "Mật khẩu cần ít nhất 8 kí tự")
     .max(26, "Mật khẩu tối đa 50 kí tự")
     .required("Mật khẩu không được để trống"),

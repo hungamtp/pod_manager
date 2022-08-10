@@ -36,7 +36,7 @@ const schema = yup.object().shape({
     .number()
     .min(10000, "Giá sản phẩm phải lớn hơn 10.000 VND")
     .required("Giá sản phẩm không được để trống"),
-  material: yup.string().required("Chất liệu vải không được để trống"),
+  material: yup.string().trim().required("Chất liệu vải không được để trống"),
 });
 
 export default function CreateProductPriceForm(

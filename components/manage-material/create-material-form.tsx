@@ -18,6 +18,7 @@ type FormCreateMaterial = {
 const schema = yup.object().shape({
   name: yup
     .string()
+    .trim()
     .min(3, "Chất liệu cần ít nhất 1 kí tự")
     .max(50, "Chất liệu tối đa 50 kí tự")
     .required("Chất liệu không được để trống"),
