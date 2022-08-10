@@ -1,26 +1,15 @@
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
-import KeyIcon from "@mui/icons-material/Key";
-import * as React from "react";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { SubmitHandler, useForm } from "react-hook-form";
-import useCreateAccount from "hooks/accounts/use-create-account";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import useCreateCategory from "hooks/categories/use-create-categories";
-import ImageUploading, { ImageListType } from "react-images-uploading";
 import { storage } from "@/firebase/firebase";
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  listAll,
-  list,
-} from "firebase/storage";
-import { nanoid } from "@reduxjs/toolkit";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { SelectChangeEvent } from "@mui/material/Select";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import useCreateCategory from "hooks/categories/use-create-categories";
+import * as React from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import ImageUploading, { ImageListType } from "react-images-uploading";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import * as yup from "yup";
 
 export interface ICreateCategoryFormProps {
   handleCloseDialog: () => void;
@@ -132,12 +121,12 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-2 col-form-label"
+                  className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Hình ảnh
+                  Hình mô tả
                 </label>
-                <div className="col-sm-10">
+                <div className="col-sm-7">
                   <ImageUploading
                     value={images}
                     onChange={onChange}
@@ -168,9 +157,9 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
                           }}
                           {...dragProps}
                           type="button"
-                          className="btn btn-primary"
+                          className="btn btn-info"
                         >
-                          Tải lên
+                          <FileUploadIcon /> Tải ảnh lên
                         </button>
                       </div>
                     )}
@@ -183,7 +172,7 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
                 </div>
               </div>
               <div className="d-flex justify-content-center">
-                <div className="col-sm-10 d-flex justify-content-around">
+                <div className="col-sm-10 d-flex justify-content-around mt-3">
                   <button
                     className="btn btn-primary"
                     color="primary"

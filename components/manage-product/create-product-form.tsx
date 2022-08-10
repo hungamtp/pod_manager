@@ -14,6 +14,7 @@ import * as React from "react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import ImageUploading, { ImageListType } from "react-images-uploading";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 import * as yup from "yup";
 
 export interface ICreateProductFormProps {
@@ -130,150 +131,154 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
         <div className="card mb-4">
           <div className="card-body">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="row mb-3">
-                <label
-                  className="col-sm-3 col-form-label"
-                  htmlFor="basic-icon-default-fullname"
-                >
-                  Tên sản phẩm
-                </label>
-
-                <div className="col-sm-9">
-                  <div className="input-group input-group-merge">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="basic-icon-default-fullname"
-                      placeholder="Tên sản phẩm"
-                      aria-label="Tên sản phẩm"
-                      aria-describedby="basic-icon-default-fullname2"
-                      {...register("name")}
-                    />
-                  </div>
-                  {errors.name && (
-                    <span id="error-pwd-message" className="text-danger">
-                      {errors.name.message}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="row mb-3">
-                <label
-                  className="col-sm-3 col-form-label"
-                  htmlFor="basic-icon-default-fullname"
-                >
-                  Category
-                </label>
-                <div className="col-sm-9">
-                  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                    <InputLabel id="demo-select-small">Category</InputLabel>
-                    <Select
-                      labelId="demo-select-small"
-                      id="demo-select-small"
-                      value={categoryName}
-                      label="categoryName"
-                      onChange={handleChange}
-                    >
-                      {!isLoadingCategory &&
-                        response &&
-                        response.content.map((categoryN) => (
-                          <MenuItem
-                            className="d-flex flex-column"
-                            key={categoryN.name}
-                            value={categoryN.name}
-                          >
-                            {categoryN.name}
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </FormControl>
-                </div>
-              </div>
-              <div className="row mb-3">
-                <label
-                  className="col-sm-3 col-form-label"
-                  htmlFor="basic-icon-default-company"
-                >
-                  Mô tả
-                </label>
-                <div className="col-sm-9">
-                  <div className="input-group input-group-merge">
-                    <input
-                      type="text"
-                      id="basic-icon-default-company"
-                      className="form-control"
-                      placeholder="Mô tả...."
-                      aria-label="Mô tả...."
-                      aria-describedby="basic-icon-default-company2"
-                      {...register("description")}
-                    />
-                  </div>
-                  {errors.description && (
-                    <span id="error-pwd-message" className="text-danger">
-                      {errors.description.message}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="row mb-3">
-                <label
-                  className="col-sm-3 col-form-label"
-                  htmlFor="basic-icon-default-fullname"
-                >
-                  Hình ảnh
-                </label>
-                <div className="col-sm-9">
-                  <ImageUploading
-                    multiple
-                    value={images}
-                    onChange={onChange}
-                    maxNumber={maxNumber}
-                    dataURLKey="data_url"
+              <div className="card-body">
+                <div className="row mb-3">
+                  <label
+                    className="col-sm-3 col-form-label"
+                    htmlFor="basic-icon-default-fullname"
                   >
-                    {({
-                      imageList,
-                      onImageUpload,
-                      onImageRemoveAll,
-                      onImageUpdate,
-                      onImageRemove,
-                      isDragging,
-                      dragProps,
-                    }) => (
-                      // write your building UI
-                      <div className="upload__image-wrapper">
-                        {imageList.map((image, index) => (
-                          <div key={index} className="image-item">
-                            <img src={image["data_url"]} alt="" width="100" />
-                          </div>
-                        ))}
-                        <button
-                          style={isDragging ? { color: "red" } : undefined}
-                          onClick={() => {
-                            onImageUpload();
-                            setIsImageError(false);
-                          }}
-                          {...dragProps}
-                          className="btn btn-primary"
-                          type="button"
-                        >
-                          Tải lên
-                        </button>
-                        &nbsp;
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          onClick={onImageRemoveAll}
-                        >
-                          xóa
-                        </button>
-                      </div>
+                    Tên sản phẩm
+                  </label>
+
+                  <div className="col-sm-9">
+                    <div className="input-group input-group-merge">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="basic-icon-default-fullname"
+                        placeholder="Tên sản phẩm"
+                        aria-label="Tên sản phẩm"
+                        aria-describedby="basic-icon-default-fullname2"
+                        {...register("name")}
+                      />
+                    </div>
+                    {errors.name && (
+                      <span id="error-pwd-message" className="text-danger">
+                        {errors.name.message}
+                      </span>
                     )}
-                  </ImageUploading>
-                  {isImageError && (
-                    <span id="error-pwd-message" className="text-danger">
-                      {"Hình không được để trống"}
-                    </span>
-                  )}
+                  </div>
+                </div>
+                <div className="row mb-3">
+                  <label
+                    className="col-sm-3 col-form-label"
+                    htmlFor="basic-icon-default-fullname"
+                  >
+                    Category
+                  </label>
+                  <div className="col-sm-9">
+                    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                      <InputLabel id="demo-select-small">Category</InputLabel>
+                      <Select
+                        labelId="demo-select-small"
+                        id="demo-select-small"
+                        value={categoryName}
+                        label="categoryName"
+                        onChange={handleChange}
+                      >
+                        {!isLoadingCategory &&
+                          response &&
+                          response.content.map((categoryN) => (
+                            <MenuItem
+                              className="d-flex flex-column"
+                              key={categoryN.name}
+                              value={categoryN.name}
+                            >
+                              {categoryN.name}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                  </div>
+                </div>
+                <div className="row mb-3">
+                  <label
+                    className="col-sm-3 col-form-label"
+                    htmlFor="basic-icon-default-company"
+                  >
+                    Mô tả
+                  </label>
+                  <div className="col-sm-9">
+                    <div className="input-group input-group-merge">
+                      <textarea
+                        rows={3}
+                        id="basic-icon-default-company"
+                        className="form-control"
+                        placeholder="Mô tả...."
+                        aria-label="Mô tả...."
+                        aria-describedby="basic-icon-default-company2"
+                        {...register("description")}
+                      />
+                    </div>
+                    {errors.description && (
+                      <span id="error-pwd-message" className="text-danger">
+                        {errors.description.message}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="row mb-3">
+                  <label
+                    className="col-sm-3 col-form-label"
+                    htmlFor="basic-icon-default-fullname"
+                  >
+                    Hình xem trước
+                  </label>
+                  <div className="col-sm-9">
+                    <ImageUploading
+                      multiple
+                      value={images}
+                      onChange={onChange}
+                      maxNumber={maxNumber}
+                      dataURLKey="data_url"
+                    >
+                      {({
+                        imageList,
+                        onImageUpload,
+                        onImageRemoveAll,
+                        onImageUpdate,
+                        onImageRemove,
+                        isDragging,
+                        dragProps,
+                      }) => (
+                        // write your building UI
+                        <div className="upload__image-wrapper">
+                          {imageList.map((image, index) => (
+                            <div key={index} className="image-item">
+                              <img src={image["data_url"]} alt="" width="100" />
+                            </div>
+                          ))}
+                          <button
+                            style={isDragging ? { color: "red" } : undefined}
+                            onClick={() => {
+                              onImageUpload();
+                              setIsImageError(false);
+                            }}
+                            {...dragProps}
+                            className="btn btn-info"
+                            type="button"
+                          >
+                            <FileUploadIcon /> Tải ảnh lên
+                          </button>
+                          &nbsp;
+                          {images.length > 0 && (
+                            <button
+                              type="button"
+                              className="btn btn-secondary"
+                              onClick={onImageRemoveAll}
+                            >
+                              xóa
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </ImageUploading>
+                    {isImageError && (
+                      <span id="error-pwd-message" className="text-danger">
+                        {"Hình không được để trống"}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="d-flex justify-content-center">
