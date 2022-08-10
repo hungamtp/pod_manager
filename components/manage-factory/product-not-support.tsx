@@ -146,7 +146,6 @@ export default function ProductNotSupport(props: IProductNotSupportProps) {
             {responseProductForFactory && (
               <TablePagination
                 rowsPerPageOptions={[5]}
-                component="div"
                 count={responseProductForFactory.data.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
