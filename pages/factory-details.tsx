@@ -153,6 +153,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                     <ProductOfFactory
                       responseFactory={responseFactory}
                       factoryId={id}
+                      id={factoryId}
                     />
                   )}
                 </div>

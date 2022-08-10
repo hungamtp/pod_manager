@@ -27,6 +27,7 @@ import SizesColorsProduct from "./size-color-product";
 export interface IProductOfFactoryProps {
   responseFactory: getFactoryByIdDtos;
   factoryId: any;
+  id: any;
 }
 
 interface Column {
@@ -55,7 +56,7 @@ const columns: readonly Column[] = [
 ];
 
 export default function ProductOfFactory(props: IProductOfFactoryProps) {
-  const { responseFactory, factoryId } = props;
+  const { responseFactory, factoryId, id } = props;
   const defaultValues: UpdatePriceMaterialDto = {
     price: 0,
     material: "",
@@ -171,7 +172,7 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
         >
           <DialogContent>
             <UpdateProductPriceForm
-              factoryId={factoryId as string}
+              factoryId={id as string}
               productId={productId}
               priceMaterial={priceMaterial}
               handleCloseDialog={handleCloseUpdatePriceMaterialDialog}

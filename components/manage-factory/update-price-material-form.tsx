@@ -1,13 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
-import { CreatePriceMaterialDto } from "@/services/factories/dto/create-price-material-dto";
-import { CreateSizeColorProductDto } from "@/services/factories/dto/create-size-color-product-dto";
 import { UpdatePriceMaterialDto } from "@/services/factories/dto/update-price-material-dto";
+import { Filter } from "@/services/material";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useCreateSizeColorProduct from "hooks/factories/use-create-factory";
-import useCreateProductPrice from "hooks/factories/use-create-product-price";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import useUpdatePriceMaterialProduct from "hooks/factories/use-update-price-material";
+import useMaterial from "hooks/material/use-material";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -35,13 +37,18 @@ const schema = yup.object().shape({
     .number()
     .min(10, "Giá sản phẩm phải lớn hơn 10.000 VND")
     .required("Giá sản phẩm không được để trống"),
-  material: yup.string().trim().required("Chất liệu vải không được để trống"),
 });
 
 export default function UpdateProductPriceForm(
   props: IUpdateProductPriceFormProps
 ) {
   const { handleCloseDialog, factoryId, productId, priceMaterial } = props;
+  const [filter, setFilter] = useState<Filter>({
+    pageNumber: 0,
+    pageSize: 10,
+  });
+  const [material, setMaterial] = useState("");
+  const { data: response, isLoading: isLoadingMaterial } = useMaterial(filter);
 
   const defaultValues: UpdatePriceMaterialDto = {
     price: 0,
@@ -59,6 +66,7 @@ export default function UpdateProductPriceForm(
 
   useEffect(() => {
     reset(priceMaterial);
+    setMaterial(priceMaterial.material);
   }, [priceMaterial]);
 
   const onSubmit: SubmitHandler<UpdatePriceMaterialDto> = (data) => {
@@ -67,6 +75,11 @@ export default function UpdateProductPriceForm(
 
   const { mutate: updateProductPriceMaterial, error } =
     useUpdatePriceMaterialProduct(handleCloseDialog, factoryId, productId);
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setMaterial(event.target.value);
+  };
+
   return (
     <>
       <div className="col-xxl">
@@ -110,19 +123,27 @@ export default function UpdateProductPriceForm(
                   Chất liệu vải
                 </label>
                 <div className="col-sm-9">
-                  <div className="input-group input-group-merge">
-                    <span
-                      id="basic-icon-default-fullname2"
-                      className="input-group-text"
-                    ></span>
-                    <input
-                      step="any"
-                      className="form-control"
-                      id="basic-icon-default-fullname"
-                      aria-describedby="basic-icon-default-fullname2"
-                      {...register("material")}
-                    />
-                  </div>
+                  <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                    <InputLabel id="demo-select-small">Chất liệu</InputLabel>
+                    <Select
+                      labelId="demo-select-small"
+                      id="demo-select-small"
+                      value={material}
+                      onChange={handleChange}
+                    >
+                      {!isLoadingMaterial &&
+                        response &&
+                        response.content.map((material) => (
+                          <MenuItem
+                            className="d-flex flex-column"
+                            key={material.name}
+                            value={material.name}
+                          >
+                            {material.name}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
                   {errors.material && (
                     <span id="error-pwd-message" className="text-danger">
                       {errors.material.message}
