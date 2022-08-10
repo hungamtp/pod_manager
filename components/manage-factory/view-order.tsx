@@ -71,7 +71,21 @@ export default function ViewOrder({
     content: () => componentRef.current,
   });
 
-  console.log(renderColor, "renderColor");
+  const [sizeDataOfL, setSizeDataOfL] = useState<ProductSizeDto>(
+    sizeProductResponse[0]
+  );
+
+  useEffect(() => {
+    if (sizeProductResponse) {
+      let sizeL = sizeProductResponse[0];
+      sizeProductResponse.forEach((sizeData) => {
+        if (sizeData.size === "L" || sizeData.size === "l") {
+          sizeL = sizeData;
+        }
+      });
+      setSizeDataOfL(sizeL);
+    }
+  }, [sizeProductResponse]);
 
   const data = responseOrderDetails.data;
 
@@ -113,51 +127,6 @@ export default function ViewOrder({
                     renderedImage = image;
                   }
                 });
-                let renderData: RenderedData[] = [];
-                blueprint.designInfos.forEach((designInfos) => {
-                  const designInfosData: DesignInfoData[] = [];
-
-                  sizeProductResponse.forEach((sizeData) => {
-                    const width =
-                      (designInfos.width * sizeData.width) /
-                      blueprint.placeholder.width;
-                    const height =
-                      (designInfos.height * sizeData.height) /
-                      blueprint.placeholder.height;
-                    const top =
-                      ((((sizeData.width * 2) / 100) *
-                        blueprint.placeholder.heightRate) /
-                        100) *
-                        designInfos.topPosition +
-                      2;
-                    const left =
-                      ((((sizeData.width * 2) / 100) *
-                        blueprint.placeholder.widthRate) /
-                        100) *
-                        designInfos.leftPosition +
-                      sizeData.width / 4;
-                    const newRenderedData = {
-                      size: sizeData.size,
-                      width: to2Decimals(width * measurementType.value),
-                      height: to2Decimals(height * measurementType.value),
-                      left: to2Decimals(left * measurementType.value),
-                      top: to2Decimals(top * measurementType.value),
-                    };
-
-                    designInfosData.push(newRenderedData);
-                  });
-
-                  const newDesignInfo: RenderedData = {
-                    name: designInfos.name,
-                    rotate: designInfos.rotate,
-                    src: designInfos.src,
-                    type: designInfos.types,
-                    textColor: designInfos.textColor,
-                    font: designInfos.font,
-                    data: designInfosData,
-                  };
-                  renderData.push(newDesignInfo);
-                });
 
                 return (
                   <>
@@ -182,10 +151,21 @@ export default function ViewOrder({
                           <div>&nbsp;</div>
                         </div>
 
-                        {renderData.length > 0 &&
-                          renderData.map((designData, index) => (
+                        {blueprint.designInfos.map((designData, index) => {
+                          const leftPos = to2Decimals(
+                            sizeDataOfL.width / 4 +
+                              (sizeDataOfL.width / 100) *
+                                designData.leftPosition
+                          );
+                          const topPos = to2Decimals(
+                            sizeDataOfL.height / 4 +
+                              (sizeDataOfL.height / 100) *
+                                designData.topPosition +
+                              3
+                          );
+                          return (
                             <>
-                              {designData.type === "text" && index !== 0 && (
+                              {designData.types === "text" && index !== 0 && (
                                 <div>
                                   <div
                                     style={{
@@ -199,7 +179,7 @@ export default function ViewOrder({
                                 <p className="h3">Các mẫu thiết kế</p>
                               )}
                               <div key={designData.name} className="row mt-5">
-                                {designData.type !== "text" ? (
+                                {designData.types !== "text" ? (
                                   <div className={`col-lg-4`}>
                                     <div
                                       onClick={() =>
@@ -236,7 +216,7 @@ export default function ViewOrder({
 
                                 <div className="col-lg-8">
                                   <>
-                                    {designData.type !== "text" && (
+                                    {designData.types !== "text" && (
                                       <>
                                         <p className="h5">Thông tin mô tả</p>
                                         <div className="mb-5 d-flex">
@@ -292,49 +272,52 @@ export default function ViewOrder({
                                     </div>
 
                                     <div className="d-flex">
-                                      <div className="w-100">
+                                      <div className="w-50">
                                         <div className=" border p-2 ">
-                                          Kích thước
+                                          Cách cổ áo
                                         </div>
                                         <div className=" border p-2 ">
-                                          Cách cổ ({measurementType.name})
+                                          Chiều rộng
                                         </div>
                                         <div className=" border p-2 ">
-                                          Chiều rộng ({measurementType.name})
+                                          Chiều dài
                                         </div>
                                         <div className=" border p-2 ">
-                                          Chiều dài ({measurementType.name})
-                                        </div>
-                                        <div className=" border p-2 ">
-                                          Cách trái ({measurementType.name})
+                                          Cách thân trái
                                         </div>
                                       </div>
-                                      {designData.data.map((data) => (
-                                        <div key={data.size} className="w-50">
-                                          <div className=" border p-2">
-                                            {data.size}
-                                          </div>
-                                          <div className=" border p-2">
-                                            {data.top}
-                                          </div>
-                                          <div className=" border p-2">
-                                            {data.width}
-                                          </div>
-                                          <div className=" border p-2">
-                                            {data.height}
-                                          </div>
-
-                                          <div className=" border p-2">
-                                            {data.left}
-                                          </div>
+                                      <div
+                                        key={designData.name}
+                                        className="w-50"
+                                      >
+                                        <div className=" border p-2">
+                                          {topPos} {measurementType.name}
                                         </div>
-                                      ))}
+                                        <div className=" border p-2">
+                                          {to2Decimals(
+                                            designData.width *
+                                              measurementType.value
+                                          )}{" "}
+                                          {measurementType.name}
+                                        </div>
+                                        <div className=" border p-2">
+                                          {to2Decimals(
+                                            designData.height *
+                                              measurementType.value
+                                          )}{" "}
+                                          {measurementType.name}
+                                        </div>
+                                        <div className=" border p-2">
+                                          {leftPos} {measurementType.name}
+                                        </div>
+                                      </div>
                                     </div>
                                   </>
                                 </div>
                               </div>
                             </>
-                          ))}
+                          );
+                        })}
                         <br />
 
                         <hr />
