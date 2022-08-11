@@ -36,8 +36,8 @@ const to2Decimals = (num: number) => {
 };
 
 const measurementList = [
-  { name: "inch", value: 1 },
-  { name: "cm", value: 2.54 },
+  { name: "cm", value: 1 },
+  { name: "inch", value: 1 / 2.54 },
 ];
 
 function save(filename: string, data: string) {
@@ -65,7 +65,7 @@ export default function ViewOrder({
   const [measurementType, setMeasurementType] = useState<{
     name: string;
     value: number;
-  }>({ name: "inch", value: 1 });
+  }>({ name: "cm", value: 1 });
   const componentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -153,15 +153,20 @@ export default function ViewOrder({
 
                         {blueprint.designInfos.map((designData, index) => {
                           const leftPos = to2Decimals(
-                            sizeDataOfL.width / 4 +
-                              (sizeDataOfL.width / 100) *
-                                designData.leftPosition
+                            (sizeDataOfL.width - blueprint.placeholder.width) /
+                              2 +
+                              (blueprint.placeholder.width / 100) *
+                                (designData.leftPosition < 0
+                                  ? 0
+                                  : designData.leftPosition)
                           );
+
                           const topPos = to2Decimals(
-                            sizeDataOfL.height / 4 +
-                              (sizeDataOfL.height / 100) *
-                                designData.topPosition +
-                              3
+                            (sizeDataOfL.height / 100) *
+                              (designData.topPosition < 0
+                                ? 0
+                                : designData.topPosition) +
+                              7.6
                           );
                           return (
                             <>
@@ -291,7 +296,8 @@ export default function ViewOrder({
                                         className="w-50"
                                       >
                                         <div className=" border p-2">
-                                          {topPos} {measurementType.name}
+                                          {topPos * measurementType.value}{" "}
+                                          {measurementType.name}
                                         </div>
                                         <div className=" border p-2">
                                           {to2Decimals(
@@ -308,7 +314,8 @@ export default function ViewOrder({
                                           {measurementType.name}
                                         </div>
                                         <div className=" border p-2">
-                                          {leftPos} {measurementType.name}
+                                          {leftPos * measurementType.value}{" "}
+                                          {measurementType.name}
                                         </div>
                                       </div>
                                     </div>

@@ -9,6 +9,8 @@ import {
   setValue,
   updateImgSrc,
 } from "@/redux/slices/blueprints";
+import { CircularProgress } from "@mui/material";
+import Backdrop from "@mui/material/Backdrop";
 import { fabric } from "fabric";
 import _ from "lodash";
 import { nanoid } from "nanoid";
@@ -73,6 +75,13 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
   const dispatch = useAppDispatch();
 
   const [canvas, setCanvas] = React.useState<fabric.Canvas>();
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleToggle = () => {
+    setOpen(!open);
+  };
   const router = useRouter();
 
   React.useEffect(() => {
@@ -99,8 +108,6 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
     };
   }, []);
   const blueprint = useAppSelector((state) => state.blueprint);
-  console.log(blueprint);
-
   const [backGroundImage, setBackgroundImage] = React.useState<fabric.Image>();
 
   React.useEffect(() => {
@@ -234,7 +241,6 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
 
       rect.set("noScaleCache", true);
       rect.transparentCorners = true;
-      console.log(rect.top, "rect.top");
 
       rect.setControlsVisibility({
         mt: false,
@@ -252,8 +258,6 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
 
       const maxScaleX = maxScaleY;
 
-      console.log(height, "width");
-
       rect.on("scaling", function () {
         if (rect.scaleX && rect.scaleY) {
           if (rect.scaleX > maxScaleX) {
@@ -269,7 +273,6 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
 
       canvas.add(rect);
       canvas.centerObjectH(rect);
-      console.log(rect.top, "rect.top");
 
       const tmpDesignData = calculateRate(
         rect.top || 200,
@@ -284,6 +287,7 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
 
   const uploadBackgroundImage = React.useCallback(
     (imgUrl: string, tmpSrc: string) => {
+      handleToggle();
       if (canvas) {
         canvas.clear();
         if (canvas.width && canvas.height) {
@@ -291,6 +295,7 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
             outerWidth: canvas.width,
             outerHeight: canvas.height,
           };
+
           setBackgroundFromDataUrl(tmpSrc, outerSize);
         }
         dispatch(updateImgSrc({ src: imgUrl, tmpSrc: tmpSrc }));
@@ -325,6 +330,7 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
           image.set({ left: sizeObj.x });
           setBackgroundImage(image);
           canvas.setBackgroundImage(image, canvas.renderAll.bind(canvas));
+          handleClose();
         },
         { crossOrigin: "anonymous" }
       );
@@ -343,8 +349,10 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card">
-            <h5 className="card-header">{blueprint.productName}</h5>
-            <>
+            <h5 className="card-header">
+              Bản thiết kế cho áo: <u>{blueprint.productName}</u>
+            </h5>
+            <div className="card-body">
               <div className="row ">
                 <div className="col-lg-9 col-12 px-0 d-flex flex-column ">
                   <div className="outer position-relative" id="outer">
@@ -355,15 +363,26 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
                 <div className="col-lg-3 d-md-none d-lg-block  px-0 overflow-y-scroll h-full">
                   <div className=" d-flex flex-column">
                     <div className="p-3">
+                      <Backdrop
+                        sx={{
+                          color: "#fff",
+                          zIndex: (theme) => theme.zIndex.drawer + 1,
+                        }}
+                        open={open}
+                        onClick={handleClose}
+                      >
+                        <CircularProgress color="inherit" />
+                      </Backdrop>
                       <PlaceHolderInfoMemo
                         uploadBackgroundImage={uploadBackgroundImage}
                         changeWidth={changeWidth}
+                        handleToggle={handleToggle}
                       />
                     </div>
                   </div>
                 </div>
               </div>
-            </>
+            </div>
           </div>
         </div>
         <div className="content-backdrop fade" />

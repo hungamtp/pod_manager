@@ -9,6 +9,7 @@ import {
   setValue,
   updateImgSrc,
 } from "@/redux/slices/blueprints";
+import { Backdrop, CircularProgress } from "@mui/material";
 import { fabric } from "fabric";
 import _ from "lodash";
 import { nanoid } from "nanoid";
@@ -57,19 +58,6 @@ const resizer = (
   };
 };
 
-const getBase64FromUrl = async (url: string): Promise<string> => {
-  const data = await fetch(url);
-  const blob = await data.blob();
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    reader.onloadend = () => {
-      const base64data = reader.result + "" || url;
-      resolve(base64data);
-    };
-  });
-};
-
 const initCanvas = (
   defaultWidth: number,
   defaultHeight: number,
@@ -88,6 +76,14 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
   const [canvas, setCanvas] = React.useState<fabric.Canvas>();
 
   const router = useRouter();
+
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleToggle = () => {
+    setOpen(!open);
+  };
 
   React.useEffect(() => {
     const rerenderLoop = setInterval(() => {
@@ -138,11 +134,6 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
       canvas.on("object:moving", function (options) {
         const obj = options.target;
         if (obj) {
-          console.log(obj.getObjectScaling().scaleX, "scale");
-          console.log(
-            obj.getScaledWidth() / obj.getObjectScaling().scaleX,
-            "width"
-          );
           if (obj.top) {
             const top = obj.top;
             const bottom = top + obj.getScaledHeight();
@@ -289,7 +280,6 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
 
       canvas.add(rect);
       canvas.centerObjectH(rect);
-      console.log(rect.top, "rect.top");
 
       const tmpDesignData = calculateRate(
         rect.top || 200,
@@ -345,6 +335,7 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
           image.set({ left: sizeObj.x });
           setBackgroundImage(image);
           canvas.setBackgroundImage(image, canvas.renderAll.bind(canvas));
+          handleClose();
         },
         { crossOrigin: "anonymous" }
       );
@@ -363,7 +354,9 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card">
-            <h5 className="card-header">{blueprint.productName}</h5>
+            <h5 className="card-header">
+              Bản thiết kế cho áo: <u>{blueprint.productName}</u>
+            </h5>
             <>
               <div className="row ">
                 <div className="col-lg-9 col-12 px-0 d-flex flex-column ">
@@ -375,9 +368,20 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
                 <div className="col-lg-3 d-md-none d-lg-block  px-0 overflow-y-scroll h-full">
                   <div className=" d-flex flex-column">
                     <div className="p-3">
+                      <Backdrop
+                        sx={{
+                          color: "#fff",
+                          zIndex: (theme) => theme.zIndex.drawer + 1,
+                        }}
+                        open={open}
+                        onClick={handleClose}
+                      >
+                        <CircularProgress color="inherit" />
+                      </Backdrop>
                       <PlaceHolderInfoMemo
                         uploadBackgroundImage={uploadBackgroundImage}
                         changeWidth={changeWidth}
+                        handleToggle={handleToggle}
                       />
                     </div>
                   </div>

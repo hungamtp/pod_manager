@@ -7,17 +7,18 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 export interface ITableProps {
   uploadBackgroundImage: (imageSrc: string, tmpSrc: string) => void;
+  handleToggle: () => void;
 }
 
 export function UploadImage(props: ITableProps) {
-  const { uploadBackgroundImage } = props;
+  const { uploadBackgroundImage, handleToggle } = props;
   const dispatch = useAppDispatch();
 
   const maxNumber = 69;
   const [images, setImages] = React.useState<ImageListType>([]);
   const onChange = (imageList: ImageListType, addUpdateIndex: any) => {
     // data for submit
-
+    handleToggle();
     setImages(imageList);
     onUploadImage(imageList);
   };
@@ -56,7 +57,7 @@ export function UploadImage(props: ITableProps) {
           <div className="upload__image-wrapper">
             <li
               onClick={onImageUpload}
-              className="list-group-item px-4 py-5 mb-2  h6 btn btn-light d-flex-column justify-content-center align-items-center me-4"
+              className="list-group-item px-4 py-5 mb-2  h6 btn btn-light d-flex-column justify-content-center align-items-center "
             >
               <FileDownloadIcon />
               <p className="h5 text-center">Tải hình nền của khung</p>

@@ -828,10 +828,10 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                       <strong>{data.size}</strong>
                                     </td>
                                     <td>
-                                      <strong>{data.width}</strong>
+                                      <strong>{data.width} cm</strong>
                                     </td>
                                     <td>
-                                      <strong>{data.height}</strong>
+                                      <strong>{data.height} cm</strong>
                                     </td>
                                     <td>
                                       {data.id === "none" ? (
@@ -1018,10 +1018,10 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                   {productBlueprint.placeholder.top}%
                                   <br />
                                   <strong>Height: </strong>
-                                  {productBlueprint.placeholder.height} inch
+                                  {productBlueprint.placeholder.height} cm
                                   <br />
                                   <strong>Width: </strong>
-                                  {productBlueprint.placeholder.width} inch
+                                  {productBlueprint.placeholder.width} cm
                                 </td>
                                 <td>{productBlueprint.position}</td>
                                 <td>

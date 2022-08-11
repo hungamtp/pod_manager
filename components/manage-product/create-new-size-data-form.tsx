@@ -71,7 +71,7 @@ export default function CreateProductSizeForm(
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Chiều rộng
+                  Chiều rộng (cm)
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
@@ -95,7 +95,7 @@ export default function CreateProductSizeForm(
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Chiều dài
+                  Chiều dài (cm)
                 </label>
                 <div className="col-sm-9">
                   <div className="input-group input-group-merge">
