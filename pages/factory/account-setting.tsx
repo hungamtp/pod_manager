@@ -1,23 +1,48 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import { MainLayout } from "@/components/layouts";
-import { Filter } from "@/services/categories";
 import useGetFactoryById from "hooks/factories/use-get-factory-by-id";
-import { useRouter } from "next/router";
 import * as React from "react";
 import * as yup from "yup";
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
-import CreateProductPriceForm from "@/components/manage-factory/create-product-price-form";
-import CreateSizeColorProductForm from "@/components/manage-factory/create-size-color-product-form";
+import { useAppSelector } from "@/components/hooks/reduxHook";
+import SizesColorsProduct from "@/components/manage-factory/size-color-product";
+import { numberWithCommas } from "@/helpers/number-util";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import { nanoid } from "@reduxjs/toolkit";
-import useGetProductForFactory from "hooks/factories/use-get-product-for-factory";
-import useGetSizesColorsById from "hooks/products/use-get-sizes-colors-by-id";
-import SizesColorsProduct from "@/components/manage-factory/size-color-product";
-import { useAppSelector } from "@/components/hooks/reduxHook";
+/* eslint-disable @next/next/no-css-tags */
+/* eslint-disable @next/next/no-css-tags */
+/* eslint-disable @next/next/no-sync-scripts */
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { IconButton } from "@mui/material";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
 export interface AccountSettingProps {}
+
+interface Column {
+  id: "name" | "category" | "price" | "material" | "image" | "colorASize";
+  label: string;
+  minWidth?: number;
+  align?: "right";
+  format?: (value: number) => string;
+}
+
+const columns: readonly Column[] = [
+  { id: "name", label: "Tên", minWidth: 170 },
+  { id: "category", label: "Thể loại", minWidth: 170 },
+  { id: "price", label: "Giá", minWidth: 170 },
+  { id: "material", label: "Chất liệu", minWidth: 170 },
+  { id: "image", label: "Hình sản phẩm", minWidth: 170 },
+  { id: "colorASize", label: "Màu & Kích thước", minWidth: 170 },
+];
 
 const schema = yup.object().shape({
   name: yup
@@ -35,7 +60,14 @@ export default function AccountSetting(props: AccountSettingProps) {
 
   const { data: responseFactory, isLoading: isLoadingFactory } =
     useGetFactoryById(credentialId);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const handleOpenSizeColorDialog = (index: number, productId: string) => {
+    for (let i = 0; i < page + 1; i++) {
+      if (i > 0) {
+        index = index + 5;
+      }
+    }
     setIndex(index);
     setOpenDialog(true);
   };
@@ -45,6 +77,17 @@ export default function AccountSetting(props: AccountSettingProps) {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
   };
   return (
     <>
@@ -191,55 +234,94 @@ export default function AccountSetting(props: AccountSettingProps) {
                     {!isLoadingFactory &&
                     responseFactory &&
                     responseFactory.data.productDtoList.length > 0 ? (
-                      <table className="table table-sm">
-                        <thead>
-                          <tr>
-                            <th>
-                              <strong>Tên</strong>
-                            </th>
-                            <th>
-                              <strong>Category</strong>
-                            </th>
-                            <th>
-                              <strong>Hình ảnh</strong>
-                            </th>
-                            <th>
-                              <strong>Màu và Kích thước</strong>
-                            </th>
-                          </tr>
-                        </thead>
-                        {responseFactory?.data.productDtoList.map(
-                          (x, index) => (
-                            <tbody key={x.id} className="table-border-bottom-0">
-                              <tr>
-                                <td>
-                                  <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
-                                  <strong>{x.name}</strong>
-                                </td>
-                                <td>{x.categoryName}</td>
-                                <td>
-                                  <img
-                                    src={x.productImages[0].image}
-                                    width="100"
-                                    height="100"
-                                  />
-                                </td>
-                                <td>
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      handleOpenSizeColorDialog(index, x.id)
-                                    }
-                                    className="btn btn-primary me-2"
-                                  >
-                                    Xem
-                                  </button>
-                                </td>
-                              </tr>
-                            </tbody>
-                          )
-                        )}
-                      </table>
+                      <>
+                        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                          <TableContainer sx={{}}>
+                            <Table stickyHeader aria-label="sticky table">
+                              <TableHead>
+                                <TableRow>
+                                  {columns.map((column) => (
+                                    <TableCell
+                                      key={column.id}
+                                      align={column.align}
+                                      style={{ minWidth: column.minWidth }}
+                                    >
+                                      {column.label}
+                                    </TableCell>
+                                  ))}
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {responseFactory?.data.productDtoList
+                                  .slice(
+                                    page * rowsPerPage,
+                                    page * rowsPerPage + rowsPerPage
+                                  )
+                                  .map((row, index) => {
+                                    return (
+                                      <TableRow
+                                        hover
+                                        role="checkbox"
+                                        tabIndex={-1}
+                                        key={nanoid()}
+                                      >
+                                        <TableCell>
+                                          <strong>{row.name}</strong>
+                                        </TableCell>
+
+                                        <TableCell>
+                                          <strong>{row.categoryName}</strong>
+                                        </TableCell>
+
+                                        <TableCell>
+                                          <strong>
+                                            {numberWithCommas(row.price)} VND
+                                          </strong>
+                                        </TableCell>
+
+                                        <TableCell>
+                                          <strong>{row.material}</strong>
+                                        </TableCell>
+                                        <TableCell>
+                                          <img
+                                            src={row.productImages[0].image}
+                                            width="80"
+                                            height="80"
+                                          />
+                                        </TableCell>
+                                        <TableCell>
+                                          <IconButton
+                                            onClick={() =>
+                                              handleOpenSizeColorDialog(
+                                                index,
+                                                row.id
+                                              )
+                                            }
+                                          >
+                                            <VisibilityIcon
+                                              fontSize="medium"
+                                              color="info"
+                                            />
+                                          </IconButton>
+                                        </TableCell>
+                                      </TableRow>
+                                    );
+                                  })}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                          {responseFactory && (
+                            <TablePagination
+                              rowsPerPageOptions={[5]}
+                              count={responseFactory.data.productDtoList.length}
+                              rowsPerPage={rowsPerPage}
+                              page={page}
+                              onPageChange={handleChangePage}
+                              onRowsPerPageChange={handleChangeRowsPerPage}
+                            />
+                          )}
+                        </Paper>
+                      </>
                     ) : (
                       <div className="h3 text-center p-3">
                         Nhà máy này hiện chưa có sản phẩm nào

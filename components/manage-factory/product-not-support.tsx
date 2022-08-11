@@ -20,7 +20,7 @@ export interface IProductNotSupportProps {
 }
 
 interface Column {
-  id: "name" | "Hành động";
+  id: "name" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -29,7 +29,7 @@ interface Column {
 
 const columns: readonly Column[] = [
   { id: "name", label: "Tên", minWidth: 170 },
-  { id: "Hành động", label: "Hành động", minWidth: 100 },
+  { id: "action", label: "Thêm giá và chất liệu sản phẩm", minWidth: 100 },
 ];
 
 export default function ProductNotSupport(props: IProductNotSupportProps) {
