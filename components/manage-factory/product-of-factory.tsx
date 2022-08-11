@@ -23,6 +23,9 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import SizesColorsProduct from "./size-color-product";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { nanoid } from "@reduxjs/toolkit";
 
 export interface IProductOfFactoryProps {
   responseFactory: getFactoryByIdDtos;
@@ -52,7 +55,7 @@ const columns: readonly Column[] = [
   { id: "material", label: "Chất liệu", minWidth: 170 },
   { id: "image", label: "Hình sản phẩm", minWidth: 170 },
   { id: "colorASize", label: "Màu & Kích thước", minWidth: 170 },
-  { id: "action", label: "Hành động", minWidth: 100 },
+  { id: "action", label: "Cập nhật giá & chất liệu", minWidth: 100 },
 ];
 
 export default function ProductOfFactory(props: IProductOfFactoryProps) {
@@ -103,7 +106,14 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
     setProductId(productId);
     setOpenCreateDialog(true);
   };
+
   const handleOpenSizeColorDialog = (index: number, productId: string) => {
+    for (let i = 0; i < page + 1; i++) {
+      if (i > 0) {
+        index = index + 5;
+      }
+    }
+
     setProductId(productId);
     setIndex(index);
     setOpenDialog(true);
@@ -204,13 +214,13 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
                         )
-                        .map((row) => {
+                        .map((row, index) => {
                           return (
                             <TableRow
                               hover
                               role="checkbox"
                               tabIndex={-1}
-                              key={row.id}
+                              key={nanoid()}
                             >
                               <TableCell>
                                 <strong>{row.name}</strong>
@@ -237,27 +247,29 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
                                 />
                               </TableCell>
                               <TableCell>
-                                <button
-                                  type="button"
+                                <IconButton
                                   onClick={() =>
                                     handleOpenSizeColorDialog(index, row.id)
                                   }
-                                  className="btn btn-primary me-2"
                                 >
-                                  Xem
-                                </button>
-                                <button
-                                  type="button"
+                                  <VisibilityIcon
+                                    fontSize="medium"
+                                    color="info"
+                                  />
+                                </IconButton>
+                                <IconButton
                                   onClick={() =>
                                     handleOpenCreateSizeColorDialog(
                                       index,
                                       row.id
                                     )
                                   }
-                                  className="btn btn-success me-2"
                                 >
-                                  Tạo mới
-                                </button>
+                                  <AddCircleIcon
+                                    fontSize="medium"
+                                    color="success"
+                                  />
+                                </IconButton>
                               </TableCell>
 
                               <TableCell>
