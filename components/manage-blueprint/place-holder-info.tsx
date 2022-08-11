@@ -11,6 +11,7 @@ import { UploadImage } from "./upload-image";
 export interface IPlaceHolderInfoProps {
   uploadBackgroundImage: (tmpSrc: string, src: string) => void;
   changeWidth: (widthRate: number) => void;
+  handleToggle: () => void;
 }
 const get2Decimal = (num: number): number => {
   return Number(Number(num).toFixed(2));
@@ -19,6 +20,7 @@ const get2Decimal = (num: number): number => {
 const PlaceHolderInfo = ({
   uploadBackgroundImage,
   changeWidth,
+  handleToggle,
 }: IPlaceHolderInfoProps) => {
   const dispatch = useAppDispatch();
 
@@ -49,9 +51,6 @@ const PlaceHolderInfo = ({
 
   const executeRate = () => {
     const newWidthRate = ((blueprint.width / blueprint.maxWidth) * 100) / 2;
-    console.log(blueprint.width, "blueprint.width");
-    console.log(blueprint.maxWidth, "blueprint.maxWidth");
-    console.log(newWidthRate, "newWidthRate");
     changeWidth(newWidthRate);
   };
 
@@ -74,7 +73,6 @@ const PlaceHolderInfo = ({
       widthRate: blueprint.widthRate,
       heightRate: blueprint.heightRate,
     };
-    console.log(blueprint, "blueprint.isEdit");
     if (blueprint.isEdit) {
       updateProductBlueprint({ ...submitData, id: blueprint.blueprintId });
     } else {
@@ -87,75 +85,74 @@ const PlaceHolderInfo = ({
       key={blueprint.position}
       className="mb-6 bg-white border  cursor-pointer"
     >
-      <div className="py-3 ps-4 pe-2">
-        <table className="w-full p-5 text-gray-700">
-          <tbody>
-            <tr className="">
-              <td>Width</td>
-              <td>Height</td>
-            </tr>
-            <tr className="">
-              <td className=" pe-4">
+      <div className="p-3">
+        <p className="h5">Thông tin khu vực in</p>
+        <div className="p-2">
+          <div className="row">
+            <div className="d-flex w-100 p-0">
+              <div className="w-50 me-4">Chiều rộng</div>
+              <div className="w-50">Chiều dài</div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="d-flex w-100 p-0">
+              <div className="w-50 me-4">
                 <div className="d-flex ">
                   <SingleInputMemo
                     type="number"
                     handleChange={handleChangeWidth}
                     defaultVal={get2Decimal(blueprint.width) + ""}
                   />
-                  <span className="custom-input-tag">in</span>
+                  <span className="custom-input-tag">cm</span>
                 </div>
-              </td>
-              <td className=" pe-4">
+              </div>
+              <div className="w-50">
                 <div className="d-flex ">
                   <SingleInputMemo
                     type="number"
                     handleChange={handleChangeHeight}
                     defaultVal={get2Decimal(blueprint.height) + ""}
                   />
-                  <span className="custom-input-tag">in</span>
+                  <span className="custom-input-tag">cm</span>
                 </div>
-              </td>
-            </tr>
-            <tr className="">
-              <td>
-                <div className="mt-3"></div>
-              </td>
-            </tr>
-            <tr className="">
-              <td className=" pe-4">
-                <div className="d-flex ">
-                  <button
-                    onClick={() => {
-                      executeRate();
-                    }}
-                    className="btn btn-secondary"
-                  >
-                    Áp dụng
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <tr className="">
-              <td>
-                <div className="mt-3">Top</div>
-              </td>
-              <td>
-                <div className="mt-3">Mặt</div>
-              </td>
-            </tr>
-            <tr>
-              <td className=" pe-4">
+              </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="d-flex w-100 p-0 mt-2">
+              <button
+                onClick={() => {
+                  executeRate();
+                }}
+                className="btn btn-secondary w-50"
+              >
+                Áp dụng
+              </button>
+            </div>
+          </div>
+
+          <div className="row mt-4">
+            <div className="d-flex w-100 p-0">
+              <div className="w-50 me-4">Cách trên</div>
+              <div className="w-50">Mặt áo</div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="d-flex w-100 p-0">
+              <div className="w-50 me-4">
                 <div className="d-flex ">
                   <input
                     type="number"
                     className="custom-input"
                     aria-label="Inches (with dot and two decimal places)"
-                    value={blueprint.topRate}
+                    value={get2Decimal(blueprint.topRate)}
                   />
-                  <span className="custom-input-tag">%</span>
+                  <span className="custom-input-tag w-50">%</span>
                 </div>
-              </td>
-              <td className=" pe-4">
+              </div>
+              <div className="w-50">
                 <div className="d-flex ">
                   <select
                     className="form-select custom-input"
@@ -166,16 +163,16 @@ const PlaceHolderInfo = ({
                     <option value="front">Trước</option>
                   </select>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-          <tbody>
-            <tr></tr>
-          </tbody>
-        </table>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div className="mt-5 ">
-          <UploadImage uploadBackgroundImage={uploadBackgroundImage} />
+          <UploadImage
+            handleToggle={handleToggle}
+            uploadBackgroundImage={uploadBackgroundImage}
+          />
         </div>
         {blueprint.key && (
           <button

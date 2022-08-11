@@ -32,7 +32,7 @@ const useCreateProductBlueprint = (id: string) => {
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         if (error) {
-          enqueueSnackbar(error.response?.data.errorMessage, {
+          enqueueSnackbar("Mặt áo này đã được tạo", {
             autoHideDuration: 9000,
             variant: "error",
           });
