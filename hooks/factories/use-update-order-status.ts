@@ -28,8 +28,8 @@ const useUpdateOrderStatusFactory = (handleCloseDialog: () => void) => {
     {
       onSuccess: (data) => {
         //because data:any
-        handleCloseDialog();
         dispatch(setOrderStatus(orderStatus));
+        handleCloseDialog();
         queryClient.invalidateQueries("GetOrderDetails");
         enqueueSnackbar("Cập nhật trạng thái thành công!", {
           autoHideDuration: 3000,

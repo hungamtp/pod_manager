@@ -35,7 +35,6 @@ export default function ManageOrder(props: IManageOrder) {
 
   React.useEffect(() => {
     if (ordersFactoryresponse && ordersFactoryresponse.length > 0) {
-      console.log(ordersFactoryresponse, "vacildl");
       const newOrdersContent: UnitedData[] = ordersFactoryresponse.map(
         (orderData) => {
           return { ...orderData, orderDetailIdList: [orderData.id] };
@@ -80,7 +79,6 @@ export default function ManageOrder(props: IManageOrder) {
     //nho them else
   }, [ordersFactoryresponse]);
 
-  console.log(unitedOrderDetail, "asdasds");
   return (
     <>
       <div>
