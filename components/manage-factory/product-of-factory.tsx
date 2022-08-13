@@ -10,7 +10,9 @@ import * as React from "react";
 /* eslint-disable @next/next/no-sync-scripts */
 import CreateSizeColorProductForm from "@/components/manage-factory/create-size-color-product-form";
 import UpdateProductPriceForm from "@/components/manage-factory/update-price-material-form";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { IconButton } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -22,14 +24,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import SizesColorsProduct from "./size-color-product";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { nanoid } from "@reduxjs/toolkit";
+import SizesColorsProduct from "./size-color-product";
 
 export interface IProductOfFactoryProps {
   responseFactory: getFactoryByIdDtos;
-  factoryId: any;
   id: any;
 }
 
@@ -59,13 +58,15 @@ const columns: readonly Column[] = [
 ];
 
 export default function ProductOfFactory(props: IProductOfFactoryProps) {
-  const { responseFactory, factoryId, id } = props;
+  const { responseFactory, id } = props;
   const defaultValues: UpdatePriceMaterialDto = {
     price: 0,
     material: "",
   };
   const [productId, setProductId] = React.useState("");
   const [index, setIndex] = React.useState(0);
+  const [sizeColors, setSizeColors] =
+    React.useState<{ quantity: number; size: string; colorImage: string }[]>();
   const [priceMaterial, setPriceMaterial] =
     React.useState<UpdatePriceMaterialDto>(defaultValues);
   const [openPriceMaterialDialog, setOpenPriceMaterialDialog] =
@@ -107,15 +108,10 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
     setOpenCreateDialog(true);
   };
 
-  const handleOpenSizeColorDialog = (index: number, productId: string) => {
-    for (let i = 0; i < page + 1; i++) {
-      if (i > 0) {
-        index = index + 5;
-      }
-    }
-
-    setProductId(productId);
-    setIndex(index);
+  const handleOpenSizeColorDialog = async (
+    data: { quantity: number; size: string; colorImage: string }[]
+  ) => {
+    await setSizeColors(data);
     setOpenDialog(true);
   };
 
@@ -150,7 +146,7 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
           fullWidth={true}
         >
           <DialogContent>
-            <SizesColorsProduct factoryId={factoryId} index={index} />
+            <SizesColorsProduct data={sizeColors} />
           </DialogContent>
         </Dialog>
 
@@ -249,7 +245,8 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
                               <TableCell>
                                 <IconButton
                                   onClick={() =>
-                                    handleOpenSizeColorDialog(index, row.id)
+                                    // handleOpenSizeColorDialog(index, row.id)
+                                    handleOpenSizeColorDialog(row.sizeColors)
                                   }
                                 >
                                   <VisibilityIcon
@@ -305,7 +302,7 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
             </>
           ) : (
             <div className="h3 text-center p-3">
-              Nhà máy này hiện chưa có sản phẩm nào
+              Nhà in này hiện chưa có sản phẩm nào
             </div>
           )}
         </div>

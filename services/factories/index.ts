@@ -14,12 +14,23 @@ import {
 import { GetAllOrdersFactoriesResponse } from "./dto/get-all-orders-factory";
 import { getOrdersDetailResponse } from "./dto/get-orders-detail-dto";
 import { CreatePriceMaterialDto } from "./dto/create-price-material-dto";
-import { UpdatePriceMaterialDto, UpdatePriceMaterialResponse } from "./dto/update-price-material-dto";
-import { UpdateOrderStatusDto, UpdateOrderStatusResponse } from "./dto/update-order-status-dto";
+import {
+  UpdatePriceMaterialDto,
+  UpdatePriceMaterialResponse,
+} from "./dto/update-price-material-dto";
+import {
+  UpdateOrderStatusDto,
+  UpdateOrderStatusResponse,
+} from "./dto/update-order-status-dto";
+import {
+  CancelOrderStatusDto,
+  CancelOrderStatusResponse,
+} from "./dto/cancel-order-status-dto";
 
 export interface Filter {
   pageSize?: number;
   pageNumber?: number;
+  search?: string;
 }
 
 export const getFactories = async (filter?: Filter) => {
@@ -61,8 +72,11 @@ export const DeleteAccountFactory = async (id: string) => {
   await API.patch(`/factory/collaborating/${id}?collaborating=false`);
 };
 
-export const getFactoryById = async (id: string) => {
-  const { data } = await API.get<getFactoryByIdDtos>(`/factory/${id}`);
+export const getFactoryById = async (id: string, filter?: Filter) => {
+  const productName = filter?.search || "";
+  const { data } = await API.get<getFactoryByIdDtos>(
+    `/factory/${id}?productName=${productName}`
+  );
   return data;
 };
 export const getOrderDetails = async (
@@ -76,9 +90,10 @@ export const getOrderDetails = async (
   return data;
 };
 
-export const getProductForFactory = async (id: string) => {
+export const getProductForFactory = async (id: string, filter?: Filter) => {
+  const productName = filter?.search || "";
   const { data } = await API.get<getProductForFactoryDtos>(
-    `/product/product-for-factory?factoryId=${id}`
+    `/product/product-for-factory?factoryId=${id}&productName=${productName}`
   );
   return data;
 };
@@ -106,17 +121,32 @@ export const createProductPrice = async (
   return data;
 };
 
-export const updatePriceMaterialProduct = async (requestData: UpdatePriceMaterialDto, factoryId: string, productId: string) => {
+export const updatePriceMaterialProduct = async (
+  requestData: UpdatePriceMaterialDto,
+  factoryId: string,
+  productId: string
+) => {
   const { data } = await API.patch<UpdatePriceMaterialResponse>(
     `/factory/update-price?factoryId=${factoryId}&productId=${productId}`,
     requestData
   );
   return data;
 };
-export const updateOrderStatusFactory = async (requestData: UpdateOrderStatusDto) => {
+export const updateOrderStatusFactory = async (
+  requestData: UpdateOrderStatusDto
+) => {
   const { data } = await API.put<UpdateOrderStatusResponse>(
     `/order/update-order-status?orderStatus=${requestData.orderStatus}`,
     requestData.orderDetailId
+  );
+  return data;
+};
+export const cancelOrderStatusFactory = async (
+  requestData: CancelOrderStatusDto
+) => {
+  const { data } = await API.put<CancelOrderStatusResponse>(
+    `order/cancel`,
+    requestData
   );
   return data;
 };

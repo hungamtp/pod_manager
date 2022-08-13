@@ -175,6 +175,11 @@ export default function ManageOrder(props: IManageOrder) {
                                   HOÀN THÀNH
                                 </span>
                               )}
+                              {orders.status === "CANCEL" && (
+                                <span className="badge bg-label-danger me-1">
+                                  ĐÃ HỦY
+                                </span>
+                              )}
                             </td>
                           </tr>
                         ))}

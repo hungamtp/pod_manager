@@ -290,7 +290,7 @@ export default function NavBar({}: Props) {
               <ListItemIcon className="pl-2p">
                 <FactoryIcon />
               </ListItemIcon>
-              <ListItemText primary="Quản lý Nhà máy" />
+              <ListItemText primary="Quản lý Nhà in" />
             </ListItemButton>
           </List>
 

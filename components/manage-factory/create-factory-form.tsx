@@ -10,6 +10,8 @@ import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import * as yup from "yup";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+
 export interface ICreateFactoryFormProps {
   handleCloseDialog: () => void;
 }
@@ -26,9 +28,9 @@ const schema = yup.object().shape({
   name: yup
     .string()
     .trim()
-    .min(1, "Tên nhà máy cần ít nhất 1 kí tự")
-    .max(50, "Tên nhà máy tối đa 50 kí tự")
-    .required("Tên nhà máy không được để trống"),
+    .min(1, "Tên nhà in cần ít nhất 1 kí tự")
+    .max(50, "Tên nhà in tối đa 50 kí tự")
+    .required("Tên nhà in không được để trống"),
   password: yup
     .string()
     .trim()
@@ -128,7 +130,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                   className="col-sm-3 col-form-label"
                   htmlFor="basic-icon-default-fullname"
                 >
-                  Tên nhà máy
+                  Tên nhà in
                 </label>
 
                 <div className="col-sm-9">
@@ -307,13 +309,13 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                           </div>
                         ))}
                         <button
-                          className="btn btn-primary"
                           style={isDragging ? { color: "red" } : undefined}
                           onClick={onImageUpload}
                           {...dragProps}
                           type="button"
+                          className="btn btn-info"
                         >
-                          Tải lên
+                          <FileUploadIcon /> Tải ảnh lên
                         </button>
                       </div>
                     )}
@@ -325,7 +327,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                   )}
                 </div>
               </div>
-              <div className="d-flex justify-content-center">
+              <div className="d-flex justify-content-center mt-5">
                 <div className="col-sm-9 d-flex justify-content-around">
                   <button
                     className="btn btn-primary"
