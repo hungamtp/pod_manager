@@ -47,12 +47,12 @@ export default function CreateProductPriceForm(
   const { handleCloseDialog, factoryId, productId } = props;
   const [filter, setFilter] = useState<Filter>({
     pageNumber: 0,
-    pageSize: 10,
+    pageSize: 100,
   });
   const [material, setMaterial] = useState("");
   const { data: response, isLoading: isLoadingMaterial } = useMaterial(filter);
   const defaultValues: CreatePriceMaterialDto = {
-    price: 0,
+    price: 10000,
     material: "",
   };
   const {

@@ -45,7 +45,7 @@ export default function UpdateProductPriceForm(
   const { handleCloseDialog, factoryId, productId, priceMaterial } = props;
   const [filter, setFilter] = useState<Filter>({
     pageNumber: 0,
-    pageSize: 10,
+    pageSize: 100,
   });
   const [material, setMaterial] = useState("");
   const { data: response, isLoading: isLoadingMaterial } = useMaterial(filter);

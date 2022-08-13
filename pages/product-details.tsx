@@ -643,7 +643,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                               <div className="card mb-4">
                                 {/* Account */}
                                 <div className="card">
-                                  <h5 className="card-header">Nhà máy</h5>
+                                  <h5 className="card-header">Nhà In</h5>
                                   <div className="table-responsive text-nowrap">
                                     {responseProduct &&
                                     responseProduct.data.priceByFactories
@@ -652,7 +652,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                         <thead>
                                           <tr>
                                             <th>
-                                              <strong>Tên Nhà máy</strong>
+                                              <strong>Tên Nhà In</strong>
                                             </th>
                                             <th>
                                               <strong>Chất liệu vải</strong>
@@ -706,8 +706,8 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                       </table>
                                     ) : (
                                       <div className="h3 text-center p-3">
-                                        Sản phẩm này hiện chưa có nhà máy nào
-                                        sản xuất
+                                        Sản phẩm này hiện chưa có nhà in nào sản
+                                        xuất
                                       </div>
                                     )}
                                   </div>

@@ -77,7 +77,7 @@ export default function ManageFactory(props: IManageFactory) {
           fullWidth={true}
         >
           <DialogTitle id="alert-dialog-title">
-            {"Bạn có muốn ngừng hợp tác với nhà máy này không?"}
+            {"Bạn có muốn ngừng hợp tác với nhà in này không?"}
           </DialogTitle>
           <DialogContent>
             <div className="d-flex justify-content-center">
@@ -110,7 +110,7 @@ export default function ManageFactory(props: IManageFactory) {
           aria-describedby="alert-dialog-description"
           fullWidth={true}
         >
-          <DialogTitle id="alert-dialog-title">{"Tạo mới nhà máy"}</DialogTitle>
+          <DialogTitle id="alert-dialog-title">{"Tạo mới nhà in"}</DialogTitle>
           <DialogContent>
             <CreateFactoryForm handleCloseDialog={handleCloseCreateDialog} />
           </DialogContent>
@@ -124,7 +124,7 @@ export default function ManageFactory(props: IManageFactory) {
           fullWidth={true}
         >
           <DialogTitle id="alert-dialog-title">
-            {"Bạn có muốn ngừng hợp tác với nhà máy này không?"}
+            {"Bạn có muốn ngừng hợp tác với nhà in này không?"}
           </DialogTitle>
           <DialogContent>
             <div className="d-flex justify-content-center">
@@ -152,19 +152,19 @@ export default function ManageFactory(props: IManageFactory) {
         </Dialog>
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h3 className="fw-bold py-3 mb-4">Nhà Máy</h3>
+          <h3 className="fw-bold py-3 mb-4">Nhà In</h3>
           <button
             className="btn btn-success ms-4 text-dark"
             onClick={handleOpenCreateDialog}
           >
             <AddIcon sx={{ mr: 1 }} />
-            Tạo Mới Nhà Máy
+            Tạo Mới Nhà In
           </button>
           <hr className="my-4" />
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h5 className="card-header">Quản lý Nhà Máy</h5>
+            <h5 className="card-header">Quản lý Nhà In</h5>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>

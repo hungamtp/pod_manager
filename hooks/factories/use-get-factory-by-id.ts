@@ -1,11 +1,11 @@
-import { getFactoryById } from "@/services/factories";
+import { Filter, getFactoryById } from "@/services/factories";
 import { useQuery } from "react-query";
 
-const useGetFactoryById = (id: string) => {
+const useGetFactoryById = (id: string, filter: Filter) => {
   return useQuery(
-    ["GetFactoryById"],
+    ["GetFactoryById", filter],
     async () => {
-      return await getFactoryById(id);
+      return await getFactoryById(id, filter);
     },
     { enabled: !!id }
   );

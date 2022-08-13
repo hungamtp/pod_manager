@@ -9,15 +9,16 @@ import * as yup from "yup";
 /* eslint-disable @next/next/no-sync-scripts */
 import ProductNotSupport from "@/components/manage-factory/product-not-support";
 import ProductOfFactory from "@/components/manage-factory/product-of-factory";
+import { Filter } from "@/services/factories";
 export interface FactoryDetailsProps {}
 
 const schema = yup.object().shape({
   name: yup
     .string()
     .trim()
-    .min(1, " Tên nhà máy cần ít nhất 1 kí tự")
-    .max(26, " Tên nhà máy tối đa 50 kí tự")
-    .required(" Tên nhà máy không được để trống"),
+    .min(1, " Tên nhà in cần ít nhất 1 kí tự")
+    .max(26, " Tên nhà in tối đa 50 kí tự")
+    .required(" Tên nhà in không được để trống"),
 });
 
 export default function FactoryDetails(props: FactoryDetailsProps) {
@@ -25,12 +26,16 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
   const factoryId = router.asPath.split("id=")[2];
   // const id = router.asPath.split("factoryid=")[1];
   const { id } = router.query;
+  const [filter, setFilter] = React.useState<Filter>({
+    search: "",
+  });
   const { data: responseFactory, isLoading: isLoadingFactory } =
-    useGetFactoryById(id as string);
+    useGetFactoryById(id as string, filter);
 
   React.useEffect(() => {
     responseFactory?.data;
   }, [responseFactory]);
+
   return (
     <>
       <div>
@@ -145,14 +150,51 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
               <div className="card mb-4">
                 {/* Account */}
                 <h4 className="card-header">
-                  Sản phẩm của nhà máy đang sản xuất
+                  Sản phẩm của nhà in đang sản xuất
                 </h4>
                 <hr className="my-0" />
+                <nav
+                  className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                  id="layout-navbar"
+                >
+                  <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                    <a className="nav-item nav-link px-0 me-xl-4">
+                      <i className="bx bx-menu bx-sm" />
+                    </a>
+                  </div>
+                  <div
+                    className="navbar-nav-right d-flex align-items-center"
+                    id="navbar-collapse"
+                  >
+                    {/* Search */}
+                    <div className="nav-item d-flex align-items-center w-full">
+                      <i className="bx bx-search fs-4 lh-0" />
+                      <form
+                        onSubmit={(e: any) => {
+                          e.preventDefault();
+                          setFilter((state) => ({
+                            ...state,
+                            search: e.target[0].value,
+                          }));
+                        }}
+                        className="form-control border-0 shadow-none w-full"
+                      >
+                        <input
+                          type="text"
+                          className="form-control border-0  shadow-none w-full"
+                          placeholder="Search..."
+                          aria-label="Search..."
+                        />
+                      </form>
+                    </div>
+                    {/* /Search */}
+                  </div>
+                </nav>
+                <br />
                 <div className="card">
                   {responseFactory && (
                     <ProductOfFactory
                       responseFactory={responseFactory}
-                      factoryId={id}
                       id={factoryId}
                     />
                   )}
@@ -172,9 +214,10 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
               <div className="card mb-4">
                 {/* Account */}
                 <h5 className="card-header">
-                  Sản phẩm chưa được nhà máy sản xuất
+                  Sản phẩm chưa được nhà in sản xuất
                 </h5>
                 <hr className="my-0" />
+
                 <div className="card">
                   {responseFactory && (
                     <ProductNotSupport

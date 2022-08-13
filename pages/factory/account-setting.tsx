@@ -15,6 +15,7 @@ import { nanoid } from "@reduxjs/toolkit";
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
+import { Filter } from "@/services/factories";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { IconButton } from "@mui/material";
 import Paper from "@mui/material/Paper";
@@ -57,18 +58,19 @@ export default function AccountSetting(props: AccountSettingProps) {
   const credentialId = useAppSelector((state) => state.auth.userId);
   const [index, setIndex] = React.useState(0);
   const [openDialog, setOpenDialog] = React.useState(false);
-
+  const [filter, setFilter] = React.useState<Filter>({
+    search: "",
+  });
+  const [sizeColors, setSizeColors] =
+    React.useState<{ quantity: number; size: string; colorImage: string }[]>();
   const { data: responseFactory, isLoading: isLoadingFactory } =
-    useGetFactoryById(credentialId);
+    useGetFactoryById(credentialId, filter);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const handleOpenSizeColorDialog = (index: number, productId: string) => {
-    for (let i = 0; i < page + 1; i++) {
-      if (i > 0) {
-        index = index + 5;
-      }
-    }
-    setIndex(index);
+  const handleOpenSizeColorDialog = (
+    data: { quantity: number; size: string; colorImage: string }[]
+  ) => {
+    setSizeColors(data);
     setOpenDialog(true);
   };
   React.useEffect(() => {
@@ -99,10 +101,7 @@ export default function AccountSetting(props: AccountSettingProps) {
         fullWidth={true}
       >
         <DialogContent>
-          <SizesColorsProduct
-            factoryId={credentialId as string}
-            index={index}
-          />
+          <SizesColorsProduct data={sizeColors} />
         </DialogContent>
       </Dialog>
       <div>
@@ -226,7 +225,7 @@ export default function AccountSetting(props: AccountSettingProps) {
               <div className="card mb-4">
                 {/* Account */}
                 <h4 className="card-header">
-                  Sản phẩm của nhà máy đang sản xuất
+                  Sản phẩm của nhà in đang sản xuất
                 </h4>
                 <hr className="my-0" />
                 <div className="card">
@@ -293,8 +292,7 @@ export default function AccountSetting(props: AccountSettingProps) {
                                           <IconButton
                                             onClick={() =>
                                               handleOpenSizeColorDialog(
-                                                index,
-                                                row.id
+                                                row.sizeColors
                                               )
                                             }
                                           >
@@ -324,7 +322,7 @@ export default function AccountSetting(props: AccountSettingProps) {
                       </>
                     ) : (
                       <div className="h3 text-center p-3">
-                        Nhà máy này hiện chưa có sản phẩm nào
+                        Nhà in này hiện chưa có sản phẩm nào
                       </div>
                     )}
                   </div>

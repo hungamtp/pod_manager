@@ -38,8 +38,10 @@ export default function ConfirmOrderStatus(props: IConfirmOrderStatusProps) {
             alt="productImage"
           />
         </div>
-        <div>Bạn có muốn hoàn thành bước này không?</div>
-        <div className=" d-flex justify-content-center mt-2">
+        <div className="d-flex justify-content-center m-3">
+          Bạn có muốn hoàn thành bước này không?
+        </div>
+        <div className=" d-flex justify-content-center mt-4">
           <button
             className="btn btn-primary ps-4 pe-4 me-3"
             onClick={() => {

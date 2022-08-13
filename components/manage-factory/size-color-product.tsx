@@ -17,9 +17,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { Filter } from "@/services/factories";
 export interface ISizesColorsProductProps {
-  index: number;
-  factoryId: string;
+  data: { quantity: number; size: string; colorImage: string }[] | undefined;
 }
 
 interface Column {
@@ -37,9 +37,7 @@ const columns: readonly Column[] = [
 ];
 
 export default function SizesColorsProduct(props: ISizesColorsProductProps) {
-  const { index, factoryId } = props;
-  const { data: responseFactory, isLoading: isLoadingFactory } =
-    useGetFactoryById(factoryId);
+  const { data } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -59,9 +57,7 @@ export default function SizesColorsProduct(props: ISizesColorsProductProps) {
       <div className="card">
         <h5 className="card-header">Bảng Thông tin</h5>
         <div className="table-responsive text-nowrap">
-          {!isLoadingFactory &&
-          responseFactory &&
-          responseFactory.data.productDtoList[index].sizeColors.length > 0 ? (
+          {data && data.length > 0 ? (
             <>
               <Paper sx={{ width: "100%", overflow: "hidden" }}>
                 <TableContainer sx={{}}>
@@ -80,7 +76,7 @@ export default function SizesColorsProduct(props: ISizesColorsProductProps) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {responseFactory.data.productDtoList[index].sizeColors
+                      {data
                         .slice(
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
@@ -113,9 +109,7 @@ export default function SizesColorsProduct(props: ISizesColorsProductProps) {
 
                 <TablePagination
                   rowsPerPageOptions={[10]}
-                  count={
-                    responseFactory.data.productDtoList[index].sizeColors.length
-                  }
+                  count={data.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}

@@ -12,7 +12,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
-import { StepLabel } from "@mui/material";
+import { DialogTitle, StepLabel } from "@mui/material";
 import { useRouter } from "next/router";
 import useGetOrderDetails from "hooks/factories/use-get-order-details";
 import ViewOrder from "@/components/manage-factory/view-order";
@@ -23,6 +23,7 @@ import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import { clearData } from "@/redux/slices/unitedOrderData";
 import useUpdateOrderStatusFactory from "hooks/factories/use-update-order-status";
 import ConfirmOrderStatus from "@/components/manage-factory/confirm-order-status";
+import CancelOrderStatus from "@/components/manage-factory/cancel-order-status";
 
 export interface OrderDetailsProps {}
 
@@ -50,6 +51,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
   const [renderedColorList, setRenderedColorList] = React.useState<string[]>(
     []
   );
+  const [isUpdate, setIsUpdate] = React.useState(false);
   const [sizeList, setSizeList] = React.useState<
     {
       size: string;
@@ -99,7 +101,6 @@ export default function OrderDetails(props: OrderDetailsProps) {
 
   const { data: productResponse, isLoading: isLoadingProductResponse } =
     useGetProductById(responseOrderDetails?.data.productId || "");
-
   const [renderColor, setRenderColor] = React.useState("");
 
   React.useEffect(() => {
@@ -271,6 +272,10 @@ export default function OrderDetails(props: OrderDetailsProps) {
           newStatusList = { ...newStatusList, [index]: true };
           if (step === statusOfOrder) {
             stepIndex = index;
+            throw BreakError;
+          } else if (statusOfOrder === "CANCEL") {
+            setIsCancel(true);
+            setActiveStep(totalSteps() - 1);
             throw BreakError;
           }
         });
@@ -460,33 +465,37 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                       key={label}
                                       completed={completed[index]}
                                     >
-                                      <StepButton color="inherit" disabled>
-                                        {label}
-                                        {completed[index] && (
-                                          <Typography
-                                            sx={{
-                                              textAlign: "center",
-                                              color: "green",
-                                              fontSize: "13px",
+                                      <div>
+                                        <StepButton color="inherit" disabled>
+                                          {label}
+                                          {completed[index] && (
+                                            <Typography
+                                              sx={{
+                                                textAlign: "center",
+                                                color: "green",
+                                                fontSize: "13px",
+                                              }}
+                                            >
+                                              hoàn thành
+                                            </Typography>
+                                          )}
+                                        </StepButton>
+                                        {activeStep === index && (
+                                          <Button
+                                            className="ms-5"
+                                            onClick={() => {
+                                              handleGetStatus();
+                                              handleClickOpenOrderDialog();
+                                              setIsUpdate(true);
                                             }}
                                           >
-                                            hoàn thành
-                                          </Typography>
+                                            {completedSteps() ===
+                                            totalSteps() - 1
+                                              ? "Hoàn thành đơn hàng"
+                                              : "Hoàn thành"}
+                                          </Button>
                                         )}
-                                      </StepButton>
-                                      {activeStep === index && (
-                                        <Button
-                                          sx={{ textAlign: "center" }}
-                                          onClick={() => {
-                                            handleGetStatus();
-                                            handleClickOpenOrderDialog();
-                                          }}
-                                        >
-                                          {completedSteps() === totalSteps() - 1
-                                            ? "Hoàn thành đơn hàng"
-                                            : "Hoàn thành bước"}
-                                        </Button>
-                                      )}
+                                      </div>
                                     </Step>
                                   ))}
                                 {isCancel &&
@@ -495,7 +504,9 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                       optional?: React.ReactNode;
                                       error?: boolean;
                                     } = {};
-                                    labelProps.error = true;
+                                    if (activeStep === index) {
+                                      labelProps.error = true;
+                                    }
 
                                     return (
                                       <Step key={label}>
@@ -522,7 +533,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                   </React.Fragment>
                                 ) : (
                                   <>
-                                    {!isCancel && (
+                                    {!isCancel ? (
                                       <React.Fragment>
                                         <Box
                                           sx={{
@@ -532,7 +543,10 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                           }}
                                         >
                                           <Button
-                                            onClick={handleCancel}
+                                            onClick={() => {
+                                              handleClickOpenOrderDialog();
+                                              setIsUpdate(false);
+                                            }}
                                             color="error"
                                             sx={{ mr: 1 }}
                                           >
@@ -562,6 +576,19 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                             ))} */}
                                         </Box>
                                       </React.Fragment>
+                                    ) : (
+                                      <React.Fragment>
+                                        <Typography
+                                          sx={{
+                                            mt: 2,
+                                            mb: 1,
+                                            textAlign: "center",
+                                            color: "red",
+                                          }}
+                                        >
+                                          Đơn hàng đã hủy
+                                        </Typography>
+                                      </React.Fragment>
                                     )}
                                   </>
                                 )}
@@ -576,14 +603,24 @@ export default function OrderDetails(props: OrderDetailsProps) {
                       onClose={handleCloseOrderDialog}
                       aria-labelledby="alert-dialog-title"
                       aria-describedby="alert-dialog-description"
+                      fullWidth={true}
                     >
+                      <DialogTitle></DialogTitle>
                       <DialogContent>
-                        <ConfirmOrderStatus
-                          handleCloseDialog={handleCloseOrderDialog}
-                          orderDetailId={orderDetailIdList}
-                          orderStatus={orderStatus}
-                          handleComplete={handleComplete}
-                        />
+                        {isUpdate ? (
+                          <ConfirmOrderStatus
+                            handleCloseDialog={handleCloseOrderDialog}
+                            orderDetailId={orderDetailIdList}
+                            orderStatus={orderStatus}
+                            handleComplete={handleComplete}
+                          />
+                        ) : (
+                          <CancelOrderStatus
+                            handleCloseDialog={handleCloseOrderDialog}
+                            orderId={orderId}
+                            orderStatus={orderStatus}
+                          />
+                        )}
                       </DialogContent>
                     </Dialog>
                     {/* /Account */}

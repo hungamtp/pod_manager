@@ -14,6 +14,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { Filter } from "@/services/factories";
 export interface IProductNotSupportProps {
   responseFactory: getFactoryByIdDtos;
   factoryId: any;
@@ -34,6 +35,9 @@ const columns: readonly Column[] = [
 
 export default function ProductNotSupport(props: IProductNotSupportProps) {
   const { responseFactory, factoryId } = props;
+  const [filter, setFilter] = React.useState<Filter>({
+    search: "",
+  });
   const [index, setIndex] = React.useState(0);
   const [productId, setProductId] = React.useState("");
   const [productForFactoryId, setProductForFactoryId] = React.useState("");
@@ -42,7 +46,7 @@ export default function ProductNotSupport(props: IProductNotSupportProps) {
   const [openCreatePriceDialog, setOpenCreatePriceDialog] =
     React.useState(false);
   const { data: responseProductForFactory, isLoading: isLoadingProForFactory } =
-    useGetProductForFactory(factoryId as string);
+    useGetProductForFactory(factoryId as string, filter);
 
   const handleCloseCreatePriceDialog = () => {
     setOpenCreatePriceDialog(false);
@@ -90,6 +94,44 @@ export default function ProductNotSupport(props: IProductNotSupportProps) {
             {/* update price material  */}
           </>
         )}
+        <nav
+          className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+          id="layout-navbar"
+        >
+          <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a className="nav-item nav-link px-0 me-xl-4">
+              <i className="bx bx-menu bx-sm" />
+            </a>
+          </div>
+          <div
+            className="navbar-nav-right d-flex align-items-center"
+            id="navbar-collapse"
+          >
+            {/* Search */}
+            <div className="nav-item d-flex align-items-center w-full">
+              <i className="bx bx-search fs-4 lh-0" />
+              <form
+                onSubmit={(e: any) => {
+                  e.preventDefault();
+                  setFilter((state) => ({
+                    ...state,
+                    search: e.target[0].value,
+                  }));
+                }}
+                className="form-control border-0 shadow-none w-full"
+              >
+                <input
+                  type="text"
+                  className="form-control border-0  shadow-none w-full"
+                  placeholder="Search..."
+                  aria-label="Search..."
+                />
+              </form>
+            </div>
+            {/* /Search */}
+          </div>
+        </nav>
+        <br />
         <div className="table-responsive text-nowrap">
           <Paper sx={{ width: "100%", overflow: "hidden" }}>
             <TableContainer sx={{ maxHeight: 440 }}>
