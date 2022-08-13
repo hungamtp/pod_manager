@@ -24,6 +24,7 @@ import { clearData } from "@/redux/slices/unitedOrderData";
 import useUpdateOrderStatusFactory from "hooks/factories/use-update-order-status";
 import ConfirmOrderStatus from "@/components/manage-factory/confirm-order-status";
 import CancelOrderStatus from "@/components/manage-factory/cancel-order-status";
+import { async } from "@firebase/util";
 
 export interface OrderDetailsProps {}
 
@@ -98,7 +99,10 @@ export default function OrderDetails(props: OrderDetailsProps) {
   const [orderStatus, setOrderStatus] = React.useState("PENDING");
   const { data: sizeProductResponse, isLoading: isLoadingSizeProductResponse } =
     useGetSizeProductByProductId(responseOrderDetails?.data.productId || "");
-
+  const [cancelIndex, setCancelIndex] = React.useState(0);
+  const [cancelComplete, setCancelComplete] = React.useState<{
+    [k: number]: boolean;
+  }>({});
   const { data: productResponse, isLoading: isLoadingProductResponse } =
     useGetProductById(responseOrderDetails?.data.productId || "");
   const [renderColor, setRenderColor] = React.useState("");
@@ -260,32 +264,40 @@ export default function OrderDetails(props: OrderDetailsProps) {
     setCompleted(newCompleted);
     handleNext();
   };
+  const [stepIndex, setStepIndex] = React.useState(0);
 
   React.useEffect(() => {
     if (statusOfOrder) {
+      console.log(responseOrderDetails, "responseOrderDetails");
       let newStatusList = {};
-      let stepIndex = 0;
       const BreakError = {};
-
       try {
         englishSteps.forEach((step, index) => {
           newStatusList = { ...newStatusList, [index]: true };
           if (step === statusOfOrder) {
-            stepIndex = index;
+            setStepIndex(index);
             throw BreakError;
           } else if (statusOfOrder === "CANCEL") {
-            setIsCancel(true);
-            setActiveStep(totalSteps() - 1);
-            throw BreakError;
+            if (step === responseOrderDetails?.data.statuses[1]) {
+              setStepIndex(index);
+              setIsCancel(true);
+              throw BreakError;
+            }
           }
         });
       } catch (error) {
         if (error !== BreakError) throw error;
       }
-      setActiveStep(stepIndex + 1);
+      if (statusOfOrder !== "CANCEL") {
+        setActiveStep(stepIndex + 1);
+      } else {
+        setActiveStep(stepIndex);
+      }
       setCompleted(newStatusList);
     }
-  }, [statusOfOrder]);
+  }, [responseOrderDetails, statusOfOrder]);
+
+  console.log(completed);
 
   const handleReset = () => {
     setActiveStep(0);
@@ -504,12 +516,19 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                       optional?: React.ReactNode;
                                       error?: boolean;
                                     } = {};
-                                    if (activeStep === index) {
+                                    if (
+                                      index ===
+                                      responseOrderDetails.data.statuses
+                                        .length -
+                                        2
+                                    ) {
                                       labelProps.error = true;
                                     }
-
                                     return (
-                                      <Step key={label}>
+                                      <Step
+                                        key={label}
+                                        completed={completed[index]}
+                                      >
                                         <StepLabel {...labelProps}>
                                           {label}
                                         </StepLabel>

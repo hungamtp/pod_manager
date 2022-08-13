@@ -34,6 +34,7 @@ export interface OrdersDetailDtos {
   }[];
   productId: string;
   status: string;
+  statuses: string[];
 }
 
 export interface getOrdersDetailResponse extends ISuccessHttpResponse {
