@@ -50,6 +50,7 @@ const MenuProps = {
 const schema = yup.object().shape({
   quantity: yup
     .number()
+    .typeError("Vui lòng nhập số")
     .min(10, "quantity phải lớn hơn 10")
     .required("quantity không được để trống"),
 });

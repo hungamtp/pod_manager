@@ -4,7 +4,7 @@ import { MainLayout } from "@/components/layouts";
 import CreateFactoryForm from "@/components/manage-factory/create-factory-form";
 import { Filter } from "@/services/accounts";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
+import DoNotTouchIcon from "@mui/icons-material/DoNotTouch";
 import { Fab, IconButton, Pagination, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -199,12 +199,12 @@ export default function ManageFactory(props: IManageFactory) {
                         <td>
                           {x.collaborating == true && (
                             <span className="badge bg-label-info me-1">
-                              TRUE
+                              Hợp tác
                             </span>
                           )}
                           {x.collaborating == false && (
                             <span className="badge bg-label-danger me-1">
-                              FALSE
+                              Ngừng hợp tác
                             </span>
                           )}
                         </td>
@@ -219,7 +219,10 @@ export default function ManageFactory(props: IManageFactory) {
                                   }
                                 }}
                               >
-                                <DeleteIcon fontSize="medium" color="error" />
+                                <DoNotTouchIcon
+                                  fontSize="medium"
+                                  color="error"
+                                />
                               </IconButton>
                             </div>
                           )}

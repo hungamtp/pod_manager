@@ -26,6 +26,10 @@ import {
   CancelOrderStatusDto,
   CancelOrderStatusResponse,
 } from "./dto/cancel-order-status-dto";
+import {
+  UpdateFactoryDto,
+  UpdateFactoryResponse,
+} from "./dto/update-factory-dto";
 
 export interface Filter {
   pageSize?: number;
@@ -132,6 +136,7 @@ export const updatePriceMaterialProduct = async (
   );
   return data;
 };
+
 export const updateOrderStatusFactory = async (
   requestData: UpdateOrderStatusDto
 ) => {
@@ -141,11 +146,20 @@ export const updateOrderStatusFactory = async (
   );
   return data;
 };
+
 export const cancelOrderStatusFactory = async (
   requestData: CancelOrderStatusDto
 ) => {
   const { data } = await API.put<CancelOrderStatusResponse>(
     `order/cancel`,
+    requestData
+  );
+  return data;
+};
+
+export const updateFactory = async (requestData: UpdateFactoryDto) => {
+  const { data } = await API.put<UpdateFactoryResponse>(
+    `/factory/?credentialId=${requestData.id}`,
     requestData
   );
   return data;
