@@ -25,6 +25,8 @@ export interface OrdersDetailDtos {
     };
     designInfos: DesignState[];
   }[];
+  cancelReasonByFactory: string;
+  cancelReasonByUser: string;
   orderDetailsSupportDtos: {
     orderDetailsId: string;
     colorImage: string;
