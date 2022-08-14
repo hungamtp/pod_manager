@@ -74,6 +74,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
     useCreateFactoryAccount(handleCloseDialog);
   const [images, setImages] = React.useState<ImageListType>([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isImgNull, setIsImgNull] = React.useState(false);
 
   const handleChange = (event: SelectChangeEvent) => {
     setRole(event.target.value);
@@ -110,7 +111,8 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
   };
   const onUploadImage = (data: FormCreateFactoryAccount) => {
     setIsLoading(true);
-    if (images !== null) {
+    if (images !== null && images.length > 0) {
+      setIsImgNull(false);
       const file = images[0].file;
       const imageRef = ref(storage, `images/${file?.name}`);
       uploadBytes(imageRef, file || new Blob()).then((snapshot) => {
@@ -119,6 +121,9 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
           addFactoryAcount(submitData);
         });
       });
+    } else {
+      setIsLoading(false);
+      setIsImgNull(true);
     }
   };
 
@@ -351,7 +356,10 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                         ))}
                         <button
                           style={isDragging ? { color: "red" } : undefined}
-                          onClick={onImageUpload}
+                          onClick={() => {
+                            onImageUpload();
+                            setIsImgNull(false);
+                          }}
                           {...dragProps}
                           type="button"
                           className="btn btn-info"
@@ -361,9 +369,9 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                       </div>
                     )}
                   </ImageUploading>
-                  {errors.logo && (
+                  {isImgNull && (
                     <span id="error-pwd-message" className="text-danger">
-                      {errors.logo.message}
+                      {"Hình không được để trống"}
                     </span>
                   )}
                 </div>
