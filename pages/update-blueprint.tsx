@@ -59,7 +59,7 @@ const resizer = (
 };
 
 let options = {
-  distance: 86.5,
+  distance: 72.1,
   width: 0,
   height: 0,
   param: {
