@@ -2,6 +2,7 @@
 import { useAppSelector } from "@/components/hooks/reduxHook";
 import { MainLayout } from "@/components/layouts";
 import { numberWithCommas } from "@/helpers/number-util";
+import { Filter } from "@/services/factories";
 import useFactoryDashboard from "hooks/dashboard/use-factory-dashboard";
 import useGetFactoryById from "hooks/factories/use-get-factory-by-id";
 import * as React from "react";
@@ -10,9 +11,12 @@ export interface IDashBoardFactoryProps {}
 
 export default function DashBoardFactory(props: IDashBoardFactoryProps) {
   const { data: response } = useFactoryDashboard();
+  const [filter, setFilter] = React.useState<Filter>({
+    search: "",
+  });
   const credentialId = useAppSelector((state) => state.auth.userId);
   const { data: responseAccount, isLoading: isLoadingAccount } =
-    useGetFactoryById(credentialId);
+    useGetFactoryById(credentialId, filter);
   return (
     <>
       <div>
