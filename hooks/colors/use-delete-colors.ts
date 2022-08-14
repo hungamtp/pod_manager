@@ -1,24 +1,25 @@
-import { deleteAccount } from "@/services/accounts";
-import { deleteCategory } from "@/services/categories";
-import { useRouter } from "next/router";
-import { useMutation, useQueryClient } from "react-query";
-import { useSnackbar } from "notistack";
-import { AxiosError } from "axios";
 import { ErrorHttpResponse } from "@/models/error_http_response.interface";
-import { DeleteAccountFactory } from "@/services/factories";
+import { deleteColor, updateColor } from "@/services/colors";
+import {
+  deleteColorDto,
+  UpdateColorDto,
+} from "@/services/colors/dto/update-colors-dto";
+import { AxiosError } from "axios";
+import { useSnackbar } from "notistack";
+import { useMutation, useQueryClient } from "react-query";
 
-const useDeleteFactory = () => {
-  const router = useRouter();
+const useDeleteColor = (handleCloseDialog: () => void) => {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation(
     async (id: string) => {
-      return await DeleteAccountFactory(id);
+      return await deleteColor(id);
     },
     {
       onSuccess: (data) => {
-        queryClient.invalidateQueries("Factories");
-        enqueueSnackbar("Delete successfully!", {
+        handleCloseDialog();
+        queryClient.invalidateQueries("Colors");
+        enqueueSnackbar("Xóa màu thành công!", {
           autoHideDuration: 3000,
           variant: "success",
         });
@@ -26,13 +27,15 @@ const useDeleteFactory = () => {
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         if (error) {
           let tmpError = error.response?.data.errorMessage;
-          if (tmpError?.includes("Factory is having order in delivery")) {
-            tmpError = "Nhà in này còn đơn hàng đang sản xuất";
+          if (tmpError?.includes("This color is in contraints")) {
+            tmpError = "Màu này đang tồn tại ở một sản phẩm khác";
             enqueueSnackbar(tmpError, {
               autoHideDuration: 9000,
               variant: "error",
             });
+            handleCloseDialog();
           } else {
+            handleCloseDialog();
             enqueueSnackbar(error.response?.data.errorMessage, {
               autoHideDuration: 9000,
               variant: "error",
@@ -44,4 +47,4 @@ const useDeleteFactory = () => {
   );
 };
 
-export default useDeleteFactory;
+export default useDeleteColor;

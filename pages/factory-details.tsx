@@ -10,15 +10,42 @@ import * as yup from "yup";
 import ProductNotSupport from "@/components/manage-factory/product-not-support";
 import ProductOfFactory from "@/components/manage-factory/product-of-factory";
 import { Filter } from "@/services/factories";
+import { UpdateFactoryDto } from "@/services/factories/dto/update-factory-dto";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+/* eslint-disable @next/next/no-css-tags */
+import { SubmitHandler } from "react-hook-form";
+import useUpdateFactory from "hooks/factories/use-update-factory";
+/* eslint-disable @next/next/no-css-tags */
 export interface FactoryDetailsProps {}
 
 const schema = yup.object().shape({
   name: yup
     .string()
     .trim()
-    .min(1, " Tên nhà in cần ít nhất 1 kí tự")
-    .max(26, " Tên nhà in tối đa 50 kí tự")
+    .min(3, " Tên nhà in cần ít nhất 3 kí tự")
+    .max(50, " Tên nhà in tối đa 50 kí tự")
     .required(" Tên nhà in không được để trống"),
+  address: yup
+    .string()
+    .trim()
+    .min(10, "Địa chỉ cần ít nhất 10 kí tự")
+    .max(300, "Địa chỉ tối đa 300 kí tự")
+    .required("Địa chỉ không được để trống"),
+  phone: yup
+    .string()
+    .trim()
+    .matches(
+      /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/,
+      "Số điện thoại gồm 10 số và bắt đầu từ 0"
+    )
+    .required("Số điện thoại không được để trống"),
+  tradeDiscount: yup
+    .number()
+    .typeError("Vui lòng nhập số")
+    .min(1, "Chiết khấu cần ít nhất 1 %")
+    .max(300, "Chiết khấu tối đa 100 %")
+    .required("Chiết khấu không được để trống"),
 });
 
 export default function FactoryDetails(props: FactoryDetailsProps) {
@@ -31,10 +58,41 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
   });
   const { data: responseFactory, isLoading: isLoadingFactory } =
     useGetFactoryById(id as string, filter);
+  const { mutate: updateFactory, isSuccess } = useUpdateFactory();
+  const [isEditFactory, setIsEditFactory] = React.useState(false);
+  const [isDisabled, setIsDisabled] = React.useState(true);
+  const defaultValues: UpdateFactoryDto = {
+    id: "",
+    name: "",
+    tradeDiscount: 0,
+    phone: "",
+    address: "",
+  };
+  const form = useForm<UpdateFactoryDto>({
+    defaultValues,
+    resolver: yupResolver(schema),
+  });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = form;
 
   React.useEffect(() => {
-    responseFactory?.data;
+    reset(responseFactory?.data);
   }, [responseFactory]);
+
+  const handleEditFactory = () => {
+    setIsEditFactory(true);
+    setIsDisabled(false);
+  };
+
+  const onSubmit: SubmitHandler<UpdateFactoryDto> = (data) => {
+    updateFactory({ ...data, id: id as string });
+    setIsEditFactory(false);
+    setIsDisabled(true);
+  };
 
   return (
     <>
@@ -66,7 +124,10 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                   {/* Account */}
 
                   <div className="card-body">
-                    <form id="formAccountSettings">
+                    <form
+                      id="formAccountSettings"
+                      onSubmit={handleSubmit(onSubmit)}
+                    >
                       <div className="card-body">
                         <div className="d-flex align-items-start align-items-sm-center gap-4"></div>
                       </div>
@@ -79,7 +140,6 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                             className="form-control"
                             type="text"
                             id="ID"
-                            name="ID"
                             defaultValue={responseFactory.data.id}
                           />
                         </div>
@@ -89,10 +149,18 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                           <input
                             className="form-control"
                             type="text"
-                            disabled
-                            id="Name"
+                            disabled={isDisabled}
                             defaultValue={responseFactory.data.name}
+                            {...register("name")}
                           />
+                          {errors.name && (
+                            <span
+                              id="error-pwd-message"
+                              className="text-danger"
+                            >
+                              {errors.name.message}
+                            </span>
+                          )}
                         </div>
 
                         <div className="mb-3 col-md-6">
@@ -113,23 +181,95 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                           <textarea
                             className="form-control"
                             id="exampleFormControlTextarea1"
-                            disabled
+                            disabled={isDisabled}
                             rows={3}
                             defaultValue={responseFactory.data.location}
+                            {...register("address")}
                           />
+                          {errors.address && (
+                            <span
+                              id="error-pwd-message"
+                              className="text-danger"
+                            >
+                              {errors.address.message}
+                            </span>
+                          )}
                         </div>
                         <div className="mb-3 col-md-6">
                           <label htmlFor="organization" className="form-label">
                             Số điện thoại
                           </label>
                           <input
-                            disabled
+                            disabled={isDisabled}
                             className="form-control"
                             defaultValue={responseFactory.data.phone}
+                            {...register("phone")}
                           />
+                          {errors.phone && (
+                            <span
+                              id="error-pwd-message"
+                              className="text-danger"
+                            >
+                              {errors.phone.message}
+                            </span>
+                          )}
                         </div>
+                        <div className="mb-3 col-md-1">
+                          <label className="form-label ">Chiết khấu</label>
+                          <div className="position-relative mt-3">
+                            <input
+                              disabled={isDisabled}
+                              className="form-control position-absolute top-50 start-50 translate-middle "
+                              defaultValue={responseFactory.data.tradeDiscount}
+                              {...register("tradeDiscount")}
+                            />
+                            <p className="position-absolute top-50 end-0 translate-middle-y pe-3">
+                              %
+                            </p>
+                          </div>
+                          {errors.tradeDiscount && (
+                            <span
+                              id="error-pwd-message"
+                              className="text-danger mt-4 position-absolute col-md-7"
+                            >
+                              {errors.tradeDiscount.message}
+                            </span>
+                          )}
+                        </div>
+
                         {/* Small table */}
                         <hr className="my-5" />
+                      </div>
+                      <div className="mt-2">
+                        {isEditFactory === false && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              handleEditFactory();
+                            }}
+                            className="btn btn-primary me-2"
+                          >
+                            Edit
+                          </button>
+                        )}
+                        {isEditFactory && (
+                          <button
+                            type="submit"
+                            className="btn btn-primary me-2"
+                          >
+                            Lưu thay đổi
+                          </button>
+                        )}
+
+                        <button
+                          type="button"
+                          className="btn btn-outline-secondary"
+                          onClick={() => {
+                            router.push("manage-factory");
+                          }}
+                        >
+                          Trở về
+                        </button>
                       </div>
                     </form>
                   </div>

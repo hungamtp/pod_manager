@@ -23,6 +23,7 @@ type FormCreateFactoryAccount = {
   phone: string;
   address: string;
   logo: string;
+  tradeDiscount: number;
 };
 const schema = yup.object().shape({
   name: yup
@@ -58,6 +59,12 @@ const schema = yup.object().shape({
     .min(10, "Địa chỉ cần ít nhất 10 kí tự")
     .max(300, "Địa chỉ tối đa 300 kí tự")
     .required("Địa chỉ không được để trống"),
+  tradeDiscount: yup
+    .number()
+    .typeError("Vui lòng nhập số")
+    .min(1, "Chiết khấu cần ít nhất 1 %")
+    .max(100, "Chiết khấu tối đa 100 %")
+    .required("Chiết khấu không được để trống"),
 });
 
 export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
@@ -78,6 +85,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
     email: "",
     phone: "",
     address: "",
+    tradeDiscount: 0,
   };
   const {
     register,
@@ -277,6 +285,39 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                     </span>
                   )}
                 </div>
+              </div>
+              <div className="row mb-3">
+                <label
+                  className="col-sm-3 form-label"
+                  htmlFor="basic-icon-default-message"
+                >
+                  Chiết khấu ( % )
+                </label>
+                <div className="col-sm-3">
+                  <div className="input-group input-group-merge">
+                    <input
+                      type="text"
+                      id="basic-icon-default-message"
+                      className="form-control"
+                      aria-describedby="basic-icon-default-message2"
+                      {...register("tradeDiscount")}
+                    />
+                    <span
+                      id="basic-icon-default-message2"
+                      className="input-group-text"
+                    >
+                      %
+                    </span>
+                  </div>
+                </div>
+                {errors.tradeDiscount && (
+                  <span
+                    id="error-pwd-message"
+                    className="col-sm-5 text-danger "
+                  >
+                    {errors.tradeDiscount.message}
+                  </span>
+                )}
               </div>
               <div className="row mb-3">
                 <label

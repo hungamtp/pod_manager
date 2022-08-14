@@ -2,28 +2,17 @@
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
 import { MainLayout } from "@/components/layouts";
-import CreateForm from "@/components/manage-account/create-form";
-import UpdateForm from "@/components/manage-account/update-form";
 import CreateColorForm from "@/components/manage-color/create-color-form";
 import UpdateColorForm from "@/components/manage-color/update-color-form";
 import { Filter } from "@/services/accounts";
-import { AccountDto } from "@/services/accounts/dto/get-all-accounts-dto";
-import { UpdateAccountDto } from "@/services/accounts/dto/update-accounts-dto";
 import { UpdateColorDto } from "@/services/colors/dto/update-colors-dto";
-import { Fab } from "@material-ui/core";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import { IconButton, Pagination, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import useAccounts from "hooks/accounts/use-accounts";
-import useDeleteAccount from "hooks/accounts/use-delete-accounts";
 import useColors from "hooks/colors/use-colors";
-import useFactories from "hooks/factories/use-factories";
-import useSizes from "hooks/sizes/use-sizes";
+import DeleteIcon from "@mui/icons-material/Delete";
 import * as React from "react";
 import { useState } from "react";
 export interface IManageColor {}
@@ -40,7 +29,7 @@ export default function ManageColor(props: IManageColor) {
     name: "",
     imageColor: "",
   };
-  const [color, setColor] = useState<UpdateColorDto>(defaultValue);
+  const [color, setColor] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -59,8 +48,8 @@ export default function ManageColor(props: IManageColor) {
   const handleOpenCreate = () => {
     setOpenDialog(true);
   };
-  const handleEdit = (color: UpdateColorDto) => {
-    setColor(color);
+  const handleEdit = (id: string) => {
+    setColor(id);
   };
 
   /* {open Dialog} */
@@ -92,14 +81,16 @@ export default function ManageColor(props: IManageColor) {
             fullWidth={true}
           >
             <DialogTitle id="alert-dialog-title">
-              {isEdit === true ? "Chỉnh sửa màu" : "Tạo màu mới"}
+              {isEdit === true ? "" : "Tạo màu mới"}
             </DialogTitle>
             <DialogContent>
               {isEdit === true ? (
-                <UpdateColorForm
-                  handleCloseDialog={handleCloseDialog}
-                  color={color}
-                />
+                <>
+                  <UpdateColorForm
+                    handleCloseDialog={handleCloseDialog}
+                    id={color}
+                  />
+                </>
               ) : (
                 <CreateColorForm handleCloseDialog={handleCloseDialog} />
               )}
@@ -141,11 +132,11 @@ export default function ManageColor(props: IManageColor) {
                           <IconButton
                             onClick={() => {
                               handleOpenCreate();
-                              handleEdit(x);
+                              handleEdit(x.id);
                               setIsEdit(true);
                             }}
                           >
-                            <EditIcon fontSize="medium" color="primary" />
+                            <DeleteIcon fontSize="medium" color="error" />
                           </IconButton>
                         </td>
                       </tr>

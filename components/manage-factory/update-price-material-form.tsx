@@ -35,6 +35,7 @@ const MenuProps = {
 const schema = yup.object().shape({
   price: yup
     .number()
+    .typeError("Vui lòng nhập số")
     .min(10, "Giá sản phẩm phải lớn hơn 10.000 VND")
     .required("Giá sản phẩm không được để trống"),
 });

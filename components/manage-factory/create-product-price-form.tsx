@@ -37,6 +37,7 @@ const MenuProps = {
 const schema = yup.object().shape({
   price: yup
     .number()
+    .typeError("Vui lòng nhập số")
     .min(10000, "Giá sản phẩm phải lớn hơn 10.000 VND")
     .required("Giá sản phẩm không được để trống"),
 });
@@ -66,7 +67,10 @@ export default function CreateProductPriceForm(
   });
 
   useEffect(() => {
-    const tmpMaterial = response?.content[0].name || "";
+    let tmpMaterial = "";
+    if (response && response?.totalElements > 0) {
+      tmpMaterial = response.content[0].name || "";
+    }
     setMaterial(tmpMaterial);
   }, [response]);
 
@@ -148,11 +152,11 @@ export default function CreateProductPriceForm(
                         ))}
                     </Select>
                   </FormControl>
-                  {errors.material && (
+                  {/* {material === "" && (
                     <span id="error-pwd-message" className="text-danger">
-                      {errors.material.message}
+                      {"Hãy chọn chất liệu vãi"}
                     </span>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="d-flex justify-content-center">

@@ -6,7 +6,7 @@ export interface FactoryByIdDtos {
   email: string;
   location: string;
   address: string;
-  phone: number;
+  phone: string;
   image: string;
   productDtoList: {
     id: string;
@@ -22,6 +22,7 @@ export interface FactoryByIdDtos {
       colorImage: string;
     }[];
   }[];
+  tradeDiscount: number;
   public: Boolean;
   delete: Boolean;
 }
