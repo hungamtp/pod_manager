@@ -58,6 +58,18 @@ const resizer = (
   };
 };
 
+let options = {
+  distance: 86.5,
+  width: 0,
+  height: 0,
+  param: {
+    stroke: "#d4e6f7",
+    opacity: 0.3,
+    strokeWidth: 1,
+    selectable: false,
+  },
+};
+
 const initCanvas = (
   defaultWidth: number,
   defaultHeight: number,
@@ -175,6 +187,28 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
           dispatch(setValue({ ...tmpDesignData }));
         }
       });
+      if (canvas.width && canvas.height) {
+        options = {
+          ...options,
+          width: canvas.width,
+          height: canvas.height,
+        };
+        let gridLen = canvas.width / options.distance;
+
+        for (let i = 0; i < gridLen; i++) {
+          let distance = i * options.distance,
+            horizontal = new fabric.Line(
+              [distance, 0, distance, canvas.width],
+              options.param
+            ),
+            vertical = new fabric.Line(
+              [0, distance, canvas.width, distance],
+              options.param
+            );
+          canvas.add(horizontal);
+          canvas.add(vertical);
+        }
+      }
       addNewRect();
     }
   }, [backGroundImage]);
@@ -349,15 +383,22 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
 
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4"></h4>
           <hr className="my-4" />
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card">
-            <h5 className="card-header">
-              Bản thiết kế cho áo: <u>{blueprint.productName}</u>
-            </h5>
-            <>
+            <div className="d-flex card-header">
+              <button
+                className="btn btn-light me-2"
+                onClick={() => router.back()}
+              >
+                Trở về
+              </button>
+              <h5 className="my-auto text-start">
+                Bản thiết kế cho áo: <u>{blueprint.productName}</u>
+              </h5>
+            </div>
+            <div className="card-body">
               <div className="row ">
                 <div className="col-lg-9 col-12 px-0 d-flex flex-column ">
                   <div className="outer position-relative" id="outer">
@@ -367,7 +408,7 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
 
                 <div className="col-lg-3 d-md-none d-lg-block  px-0 overflow-y-scroll h-full">
                   <div className=" d-flex flex-column">
-                    <div className="p-3">
+                    <div className="">
                       <Backdrop
                         sx={{
                           color: "#fff",
@@ -387,7 +428,7 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
                   </div>
                 </div>
               </div>
-            </>
+            </div>
           </div>
         </div>
         <div className="content-backdrop fade" />

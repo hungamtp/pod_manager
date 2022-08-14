@@ -59,6 +59,18 @@ const resizer = (
   };
 };
 
+let options = {
+  distance: 86.5,
+  width: 0,
+  height: 0,
+  param: {
+    stroke: "#d4e6f7",
+    opacity: 0.3,
+    strokeWidth: 1,
+    selectable: false,
+  },
+};
+
 const initCanvas = (
   defaultWidth: number,
   defaultHeight: number,
@@ -107,6 +119,22 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
       router.events.off("routeChangeStart", handleRouteChange);
     };
   }, []);
+
+  React.useEffect(() => {
+    if (canvas)
+      if (canvas.width && canvas.height) {
+        const outerSize = {
+          outerWidth: canvas.width,
+          outerHeight: canvas.height,
+        };
+
+        setDefaultImage(
+          "/assets/img/backgrounds/imageselectionbackground.png",
+          outerSize
+        );
+      }
+  }, [canvas]);
+
   const blueprint = useAppSelector((state) => state.blueprint);
   const [backGroundImage, setBackgroundImage] = React.useState<fabric.Image>();
 
@@ -168,6 +196,29 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
           dispatch(setValue({ ...tmpDesignData }));
         }
       });
+      if (canvas.width && canvas.height) {
+        options = {
+          ...options,
+          width: canvas.width,
+          height: canvas.height,
+        };
+        let gridLen = canvas.width / options.distance;
+
+        for (let i = 0; i < gridLen; i++) {
+          let distance = i * options.distance,
+            horizontal = new fabric.Line(
+              [distance, 0, distance, canvas.width],
+              options.param
+            ),
+            vertical = new fabric.Line(
+              [0, distance, canvas.width, distance],
+              options.param
+            );
+          canvas.add(horizontal);
+          canvas.add(vertical);
+        }
+      }
+
       addNewRect();
     }
   }, [backGroundImage]);
@@ -325,12 +376,50 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
             { width: outerWidth, height: outerHeight },
             { width: image.width || 100, height: image.height || 150 }
           );
+          const colorFilter = new fabric.Image.filters.BlendColor({
+            color: "#f7fbff",
+            mode: "add",
+            alpha: 0.3,
+          });
           image.scaleToHeight(sizeObj.height);
           image.set("top", sizeObj.y);
           image.set({ left: sizeObj.x });
+          image.filters?.push(colorFilter);
+          // image.applyFilters();
           setBackgroundImage(image);
           canvas.setBackgroundImage(image, canvas.renderAll.bind(canvas));
           handleClose();
+        },
+        { crossOrigin: "anonymous" }
+      );
+    }
+  };
+
+  const setDefaultImage = (
+    dataUrl: string,
+    outerSize: { outerWidth: number; outerHeight: number }
+  ) => {
+    if (!dataUrl && !outerSize) {
+      return true;
+    }
+    const { outerWidth, outerHeight } = outerSize;
+
+    if (canvas) {
+      fabric.Image.fromURL(
+        dataUrl,
+        (image: fabric.Image) => {
+          canvas.setWidth(outerWidth);
+          canvas.setHeight(outerHeight);
+
+          canvas.renderAll();
+          const sizeObj = resizer(
+            { width: outerWidth, height: outerHeight },
+            { width: image.width || 100, height: image.height || 150 }
+          );
+          image.scaleToHeight(sizeObj.height);
+          image.set("top", sizeObj.y);
+          image.set({ left: sizeObj.x });
+          canvas.setBackgroundImage(image, canvas.renderAll.bind(canvas));
         },
         { crossOrigin: "anonymous" }
       );
@@ -344,14 +433,22 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
 
         {/* Content */}
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4"></h4>
           <hr className="my-4" />
           <br />
+
           {/* Basic Bootstrap Table */}
           <div className="card">
-            <h5 className="card-header">
-              Bản thiết kế cho áo: <u>{blueprint.productName}</u>
-            </h5>
+            <div className="d-flex card-header">
+              <button
+                className="btn btn-light me-2"
+                onClick={() => router.back()}
+              >
+                Trở về
+              </button>
+              <h5 className="my-auto text-start">
+                Bản thiết kế cho áo: <u>{blueprint.productName}</u>
+              </h5>
+            </div>
             <div className="card-body">
               <div className="row ">
                 <div className="col-lg-9 col-12 px-0 d-flex flex-column ">
@@ -362,7 +459,7 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
 
                 <div className="col-lg-3 d-md-none d-lg-block  px-0 overflow-y-scroll h-full">
                   <div className=" d-flex flex-column">
-                    <div className="p-3">
+                    <div className="">
                       <Backdrop
                         sx={{
                           color: "#fff",
