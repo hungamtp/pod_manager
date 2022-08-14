@@ -316,13 +316,23 @@ export default function ManageProduct(props: IManageProductProps) {
               {/* Search */}
               <div className="nav-item d-flex align-items-center w-full">
                 <i className="bx bx-search fs-4 lh-0" />
-                <input
-                  type="text"
-                  onChange={inputHandler}
-                  className="form-control border-0  shadow-none w-full"
-                  placeholder="Search..."
-                  aria-label="Search..."
-                />
+                <form
+                  onSubmit={(e: any) => {
+                    e.preventDefault();
+                    setFilter((state) => ({
+                      ...state,
+                      search: e.target[0].value,
+                    }));
+                  }}
+                  className="form-control border-0 shadow-none w-full"
+                >
+                  <input
+                    type="text"
+                    className="form-control border-0  shadow-none w-full"
+                    placeholder="Search..."
+                    aria-label="Search..."
+                  />
+                </form>
               </div>
               {/* /Search */}
             </div>

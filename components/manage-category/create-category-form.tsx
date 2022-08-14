@@ -60,7 +60,6 @@ export default function CreateCategoryForm(props: ICreateCategoryFormProps) {
   };
   const onUploadImage = (data: { name: string; image: string }) => {
     setIsLoading(true);
-    console.log(images, "asdasdas");
     if (images !== null && images.length > 0) {
       setIsImgNull(false);
       const file = images[0]?.file;
