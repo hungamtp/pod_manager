@@ -227,24 +227,20 @@ export default function ManageCategory(props: IManageCategoryProps) {
                         </td>
                         <td>
                           <div>
-                            <IconButton>
-                              <EditIcon
-                                fontSize="medium"
-                                color="primary"
-                                onClick={() => {
-                                  handleIsEditTrue(x);
-                                  handleClose();
-                                }}
-                              />
+                            <IconButton
+                              onClick={() => {
+                                handleIsEditTrue(x);
+                                handleClose();
+                              }}
+                            >
+                              <EditIcon fontSize="medium" color="primary" />
                             </IconButton>
-                            <IconButton>
-                              <DeleteIcon
-                                onClick={() => {
-                                  hanldeIsDelete(x.id);
-                                }}
-                                fontSize="medium"
-                                color="error"
-                              />
+                            <IconButton
+                              onClick={() => {
+                                hanldeIsDelete(x.id);
+                              }}
+                            >
+                              <DeleteIcon fontSize="medium" color="error" />
                             </IconButton>
                           </div>
                         </td>

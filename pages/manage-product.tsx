@@ -405,36 +405,33 @@ export default function ManageProduct(props: IManageProductProps) {
                                 <EditIcon fontSize="medium" color="primary" />
                               </IconButton> */}
 
-                              <IconButton>
-                                <DeleteIcon
-                                  onClick={() => {
-                                    hanldeIsDelete(x.id);
-                                  }}
-                                  fontSize="medium"
-                                  color="error"
-                                />
+                              <IconButton
+                                onClick={() => {
+                                  hanldeIsDelete(x.id);
+                                }}
+                              >
+                                <DeleteIcon fontSize="medium" color="error" />
                               </IconButton>
 
                               {x.public == true && (
-                                <IconButton>
+                                <IconButton
+                                  onClick={() => {
+                                    handleIsPublishTrue(x.id);
+                                  }}
+                                >
                                   <PublicOffIcon
-                                    onClick={() => {
-                                      handleIsPublishTrue(x.id);
-                                    }}
                                     fontSize="medium"
                                     color="warning"
                                   />
                                 </IconButton>
                               )}
                               {x.public == false && (
-                                <IconButton>
-                                  <PublicIcon
-                                    onClick={() => {
-                                      handleIsPublishFalse(x.id);
-                                    }}
-                                    fontSize="medium"
-                                    color="info"
-                                  />
+                                <IconButton
+                                  onClick={() => {
+                                    handleIsPublishFalse(x.id);
+                                  }}
+                                >
+                                  <PublicIcon fontSize="medium" color="info" />
                                 </IconButton>
                               )}
                             </div>

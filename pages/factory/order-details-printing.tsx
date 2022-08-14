@@ -297,8 +297,6 @@ export default function OrderDetails(props: OrderDetailsProps) {
     }
   }, [responseOrderDetails, statusOfOrder]);
 
-  console.log(completed);
-
   const handleReset = () => {
     setActiveStep(0);
     setCompleted({});
@@ -461,7 +459,39 @@ export default function OrderDetails(props: OrderDetailsProps) {
                           </div>
 
                           {/* Small table */}
-
+                          <span className="mt-3 ">
+                            {isCancel &&
+                              responseOrderDetails &&
+                              responseOrderDetails.data
+                                .cancelReasonByFactory && (
+                                <div>
+                                  <strong className="text-danger fs-5">
+                                    Lý do hủy đơn:{" "}
+                                  </strong>
+                                  <label className="text-danger fs-5">
+                                    {
+                                      responseOrderDetails.data
+                                        .cancelReasonByFactory
+                                    }
+                                  </label>
+                                </div>
+                              )}
+                            {isCancel &&
+                              responseOrderDetails &&
+                              responseOrderDetails.data.cancelReasonByUser && (
+                                <div>
+                                  <strong className="text-danger fs-5">
+                                    Lý do hủy đơn của khách hàng:{" "}
+                                  </strong>
+                                  <label className="text-danger fs-5">
+                                    {
+                                      responseOrderDetails.data
+                                        .cancelReasonByUser
+                                    }
+                                  </label>
+                                </div>
+                              )}
+                          </span>
                           <hr className="my-5" />
 
                           <div>
