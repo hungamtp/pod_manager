@@ -967,7 +967,6 @@ export default function ProductDetails(props: IProductDetailsProps) {
                 <div className="card">
                   <h5 className="card-header">Bản thiết kế của Sản phẩm</h5>
                   {responseProductBlueprint &&
-                    responseProductBlueprint.data.length > 0 &&
                     responseProductBlueprint.data.length < 2 && (
                       <div>
                         <button
