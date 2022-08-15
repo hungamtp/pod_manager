@@ -29,7 +29,8 @@ import UpdateProductSizeForm from "@/components/manage-product/update-size-data-
 import { numberWithCommas } from "@/helpers/number-util";
 import {
   loadBlueprint,
-  setMaxWidthAndHeight,
+  setMaxWidth,
+  setMaxHeight,
   setProductName,
   setRealHeight,
   setRealWidth,
@@ -261,7 +262,8 @@ export default function ProductDetails(props: IProductDetailsProps) {
       dispatch(setProductName(responseProduct?.data.name || ""));
       dispatch(setRealWidth(realSizeData.width / 2));
       dispatch(setRealHeight(realSizeData.width / 2));
-      dispatch(setMaxWidthAndHeight(realSizeData.width));
+      dispatch(setMaxWidth(realSizeData.width));
+      dispatch(setMaxHeight(realSizeData.height));
     }
 
     router.push(`/create-blueprint?productId=${id}`);
@@ -299,7 +301,8 @@ export default function ProductDetails(props: IProductDetailsProps) {
       tmpSrc: productBlueprint.frameImage,
     };
     dispatch(loadBlueprint(tmpData));
-    dispatch(setMaxWidthAndHeight(realSizeData.width));
+    dispatch(setMaxWidth(realSizeData.width));
+    dispatch(setMaxHeight(realSizeData.height));
 
     router.push(`/update-blueprint?productId=${id}`);
   };
@@ -963,15 +966,19 @@ export default function ProductDetails(props: IProductDetailsProps) {
                 {/* Account */}
                 <div className="card">
                   <h5 className="card-header">Bản thiết kế của Sản phẩm</h5>
-                  <div>
-                    <button
-                      className="btn btn-success ms-4 text-dark"
-                      onClick={handleCreateProductBlueprint}
-                    >
-                      <AddIcon sx={{ mr: 1 }} />
-                      Tạo mới bản thiết kế
-                    </button>
-                  </div>
+                  {responseProductBlueprint &&
+                    responseProductBlueprint.data.length > 0 &&
+                    responseProductBlueprint.data.length < 2 && (
+                      <div>
+                        <button
+                          className="btn btn-success ms-4 text-dark"
+                          onClick={handleCreateProductBlueprint}
+                        >
+                          <AddIcon sx={{ mr: 1 }} />
+                          Tạo mới bản thiết kế
+                        </button>
+                      </div>
+                    )}
                   <br className="my-4" />
                   <hr className="my-0" />
                   <div className="table-responsive text-nowrap">
@@ -982,10 +989,10 @@ export default function ProductDetails(props: IProductDetailsProps) {
                         <thead>
                           <tr>
                             <th>
-                              <strong>Frame image</strong>
+                              <strong>Hình nền khung</strong>
                             </th>
                             <th>
-                              <strong>placeholder</strong>
+                              <strong>Khu vực in</strong>
                             </th>
 
                             <th>
@@ -1014,16 +1021,20 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                   />
                                 </td>
                                 <td>
-                                  <strong> Top: </strong>
-                                  {productBlueprint.placeholder.top}%
+                                  <strong>Cách trên: </strong>
+                                  {productBlueprint.placeholder.top.toFixed(2)}%
                                   <br />
-                                  <strong>Height: </strong>
+                                  <strong>Chiều dài: </strong>
                                   {productBlueprint.placeholder.height} cm
                                   <br />
-                                  <strong>Width: </strong>
+                                  <strong>Chiều rộng: </strong>
                                   {productBlueprint.placeholder.width} cm
                                 </td>
-                                <td>{productBlueprint.position}</td>
+                                <td>
+                                  {productBlueprint.position === "front"
+                                    ? "Mặt trước"
+                                    : "Mặt sau"}
+                                </td>
                                 <td>
                                   <IconButton
                                     onClick={() => {

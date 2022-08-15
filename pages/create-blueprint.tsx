@@ -59,17 +59,9 @@ const resizer = (
   };
 };
 
-let options = {
-  distance: 72.1,
-  width: 0,
-  height: 0,
-  param: {
-    stroke: "#d4e6f7",
-    opacity: 0.3,
-    strokeWidth: 1,
-    selectable: false,
-  },
-};
+const span = 20;
+
+let outlineColor = "#2f3436";
 
 const initCanvas = (
   defaultWidth: number,
@@ -85,6 +77,8 @@ const initCanvas = (
 
 export default function CreateBlueprint(props: ICreateBlueprint) {
   const dispatch = useAppDispatch();
+  const blueprint = useAppSelector((state) => state.blueprint);
+  let sizeData = { width: 0, height: 0 };
 
   const [canvas, setCanvas] = React.useState<fabric.Canvas>();
   const [open, setOpen] = React.useState(false);
@@ -135,7 +129,6 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
       }
   }, [canvas]);
 
-  const blueprint = useAppSelector((state) => state.blueprint);
   const [backGroundImage, setBackgroundImage] = React.useState<fabric.Image>();
 
   React.useEffect(() => {
@@ -196,28 +189,6 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
           dispatch(setValue({ ...tmpDesignData }));
         }
       });
-      if (canvas.width && canvas.height) {
-        options = {
-          ...options,
-          width: canvas.width,
-          height: canvas.height,
-        };
-        let gridLen = canvas.width / options.distance;
-
-        for (let i = 0; i < gridLen; i++) {
-          let distance = i * options.distance,
-            horizontal = new fabric.Line(
-              [distance, 0, distance, canvas.width],
-              options.param
-            ),
-            vertical = new fabric.Line(
-              [0, distance, canvas.width, distance],
-              options.param
-            );
-          canvas.add(horizontal);
-          canvas.add(vertical);
-        }
-      }
 
       addNewRect();
     }
@@ -274,12 +245,12 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
         ? (blueprint.heightRate / 100) * backGroundImage.getScaledHeight()
         : 150;
       const rect = new fabric.Rect({
-        borderColor: "rgba(255,255,255,1.0)",
-        backgroundColor: "rgba(255,255,255,1.0)",
+        borderColor: "#e7e7e7",
+        backgroundColor: "#e7e7e7",
         centeredScaling: true,
         strokeDashArray: [5, 5],
         lockMovementX: true,
-        strokeWidth: 4,
+        strokeWidth: 5,
         opacity: 0.1,
         width: width,
         height: height,
@@ -355,6 +326,106 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
     [canvas]
   );
 
+  const drawGrid = (
+    canvasWidth: number,
+    canvasHeight: number,
+    canvas: fabric.Canvas,
+    image: fabric.Image
+  ) => {
+    const horizontalRealWidth = blueprint.maxWidth * 2;
+    const lengthOfunit = (image.getScaledWidth() / horizontalRealWidth) * span;
+
+    for (
+      let index = 0;
+      index < Math.floor(horizontalRealWidth / span);
+      index++
+    ) {
+      const xHorizontalLineStart =
+        (canvasWidth - image.getScaledWidth()) / 2 +
+        image.getScaledWidth() * 0.007;
+      const yHorizontalLineStart =
+        image.getScaledHeight() -
+        lengthOfunit * index -
+        image.getScaledHeight() * 0.08;
+
+      const xHorizontalLineEnd = canvasWidth - xHorizontalLineStart;
+      const yHorizontalLineEnd = yHorizontalLineStart;
+      let horizontalLine = new fabric.Line(
+        [
+          xHorizontalLineStart,
+          yHorizontalLineStart,
+          xHorizontalLineEnd,
+          yHorizontalLineEnd,
+        ],
+        {
+          strokeWidth: 1,
+          stroke: outlineColor,
+          selectable: false,
+        }
+      );
+      console.log(index, "index");
+      const horizontalContent = index * span + "";
+      const textHorizontalLeft = image.getScaledWidth() * 0.2;
+      const textHorizontalTop =
+        image.getScaledHeight() - lengthOfunit * index - 60;
+      const newHorizontialText = new fabric.Text(horizontalContent, {
+        fontFamily: "Roboto",
+        left: textHorizontalLeft,
+        top: textHorizontalTop,
+        centeredScaling: true,
+        transparentCorners: true,
+        fill: "black",
+        selectable: false,
+      }).scaleToHeight(30);
+
+      const xVerticalLineStart =
+        lengthOfunit * index +
+        (canvasWidth - image.getScaledWidth()) * 0.5 +
+        image.getScaledWidth() * 0.007;
+
+      const yVerticalLineStart = canvasHeight * 0.08;
+
+      const xVerticalLineEnd = xVerticalLineStart;
+
+      const yVerticalLineEnd = canvasHeight - yVerticalLineStart;
+
+      const verticalLine = new fabric.Line(
+        [
+          xVerticalLineStart,
+          yVerticalLineStart,
+          xVerticalLineEnd,
+          yVerticalLineEnd,
+        ],
+        {
+          strokeWidth: 1,
+          stroke: outlineColor,
+          selectable: false,
+        }
+      );
+      const widthContent = index === 0 ? "0 cm" : index * span + "";
+      const textLeft =
+        index === 0
+          ? (canvasWidth - image.getScaledWidth()) / 3.75
+          : lengthOfunit * index + (canvasWidth - image.getScaledWidth()) * 0.5;
+      const textTop = image.getScaledHeight() - image.getScaledHeight() * 0.05;
+
+      const newVerticalText = new fabric.Text(widthContent, {
+        fontFamily: "Roboto",
+        left: textLeft,
+        top: textTop,
+        centeredScaling: true,
+        transparentCorners: true,
+        fill: "black",
+      }).scaleToHeight(newHorizontialText.getScaledHeight());
+
+      canvas.add(horizontalLine);
+      if (index !== 0) canvas.add(newHorizontialText);
+      canvas.add(newVerticalText);
+      canvas.add(verticalLine);
+    }
+    canvas.renderAll();
+  };
+
   const setBackgroundFromDataUrl = (
     dataUrl: string,
     outerSize: { outerWidth: number; outerHeight: number }
@@ -388,6 +459,11 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
           // image.applyFilters();
           setBackgroundImage(image);
           canvas.setBackgroundImage(image, canvas.renderAll.bind(canvas));
+
+          if (canvas.width && canvas.height) {
+            drawGrid(canvas.width, canvas.height, canvas, image);
+          }
+
           handleClose();
         },
         { crossOrigin: "anonymous" }

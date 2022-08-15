@@ -44,7 +44,6 @@ export const designSlice = createSlice({
     },
 
     setRealWidth: (state, action) => {
-      console.log(action.payload, "payload");
       return {
         ...state,
         width: action.payload,
@@ -57,10 +56,15 @@ export const designSlice = createSlice({
         height: action.payload,
       };
     },
-    setMaxWidthAndHeight: (state, action) => {
+    setMaxWidth: (state, action) => {
       return {
         ...state,
         maxWidth: action.payload,
+      };
+    },
+    setMaxHeight: (state, action) => {
+      return {
+        ...state,
         maxHeight: action.payload,
       };
     },
@@ -103,7 +107,8 @@ export const {
   setRealWidth,
   setRealHeight,
   setProductName,
-  setMaxWidthAndHeight,
+  setMaxWidth,
+  setMaxHeight,
 } = designSlice.actions;
 
 export default designSlice.reducer;
