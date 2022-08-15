@@ -967,13 +967,10 @@ export default function ProductDetails(props: IProductDetailsProps) {
                 <div className="card">
                   <h5 className="card-header">Bản thiết kế của Sản phẩm</h5>
                   {responseProductBlueprint &&
-<<<<<<< HEAD
-=======
                     sizeProductResponse &&
                     sizeProductResponse.filter(
                       (size) => size.size === "L"
                     )[0] &&
->>>>>>> 2cd40f3 (fix create-blueprint err)
                     responseProductBlueprint.data.length < 2 && (
                       <div>
                         <button
