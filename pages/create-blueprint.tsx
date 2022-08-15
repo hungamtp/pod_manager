@@ -61,7 +61,7 @@ const resizer = (
 
 const span = 20;
 
-let outlineColor = "#2f3436";
+let outlineColor = "#252626";
 
 const initCanvas = (
   defaultWidth: number,
@@ -360,6 +360,7 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
         {
           strokeWidth: 1,
           stroke: outlineColor,
+          opacity: 0.3,
           selectable: false,
         }
       );
@@ -400,6 +401,7 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
           strokeWidth: 1,
           stroke: outlineColor,
           selectable: false,
+          opacity: 0.3,
         }
       );
       const widthContent = index === 0 ? "0 cm" : index * span + "";

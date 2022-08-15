@@ -59,7 +59,7 @@ const resizer = (
 };
 
 const span = 20;
-let outlineColor = "#2f3436";
+let outlineColor = "#252626";
 
 let options = {
   distance: 72.1,
@@ -358,6 +358,7 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
         {
           strokeWidth: 1,
           stroke: outlineColor,
+          opacity: 0.3,
           selectable: false,
         }
       );
@@ -398,6 +399,7 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
           strokeWidth: 1,
           stroke: outlineColor,
           selectable: false,
+          opacity: 0.3,
         }
       );
       const widthContent = index === 0 ? "0 cm" : index * span + "";

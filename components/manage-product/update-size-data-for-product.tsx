@@ -22,16 +22,16 @@ type FormUpdateProductSize = {
 
 const schema = yup.object().shape({
   width: yup
-    .string()
-    .trim()
-    .min(1, "Chiều rộng cần phải lớn hơn 1")
-    .max(26, "Chiều rộng tối đa 26")
+    .number()
+    .typeError("Chiều rộng không được để trống")
+    .min(20, "Chiều rộng cần phải lớn hơn 20 cm")
+    .max(80, "Chiều rộng tối đa 80 cm")
     .required("Chiều rộng không được để trống"),
   height: yup
-    .string()
-    .trim()
-    .min(1, "Chiều dài cần phải lớn hơn 1")
-    .max(26, "Chiều dài tối đa 26")
+    .number()
+    .typeError("Chiều dài không được để trống")
+    .min(20, "Chiều dài cần phải lớn hơn 20 cm")
+    .max(80, "Chiều dài tối đa 80 cm")
     .required("Chiều dài không được để trống"),
 });
 
@@ -41,8 +41,8 @@ export default function UpdateProductSizeForm(
   const { setOpenCreateProductSize, productSizeUpdateData } = props;
 
   const defaultValues: FormUpdateProductSize = {
-    width: 10,
-    height: 10,
+    width: 30,
+    height: 30,
   };
   const {
     register,
