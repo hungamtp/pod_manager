@@ -476,8 +476,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                   </label>
                                 </div>
                               )}
-                            {isCancel &&
-                              responseOrderDetails &&
+                            {responseOrderDetails &&
                               responseOrderDetails.data.cancelReasonByUser && (
                                 <div>
                                   <strong className="text-danger fs-5">
@@ -495,113 +494,114 @@ export default function OrderDetails(props: OrderDetailsProps) {
                           <hr className="my-5" />
 
                           <div>
-                            <Box sx={{ width: "100%" }}>
-                              <Stepper
-                                alternativeLabel
-                                nonLinear
-                                activeStep={activeStep}
-                              >
-                                {!isCancel &&
-                                  steps.map((label, index) => (
-                                    <Step
-                                      key={label}
-                                      completed={completed[index]}
-                                    >
-                                      <div>
-                                        <StepButton color="inherit" disabled>
-                                          {label}
-                                          {completed[index] && (
-                                            <Typography
-                                              sx={{
-                                                textAlign: "center",
-                                                color: "green",
-                                                fontSize: "13px",
-                                              }}
-                                            >
-                                              hoàn thành
-                                            </Typography>
-                                          )}
-                                        </StepButton>
-                                        {activeStep === index && (
-                                          <Button
-                                            className="ms-5"
-                                            onClick={() => {
-                                              handleGetStatus();
-                                              handleClickOpenOrderDialog();
-                                              setIsUpdate(true);
-                                            }}
-                                          >
-                                            {completedSteps() ===
-                                            totalSteps() - 1
-                                              ? "Hoàn thành đơn hàng"
-                                              : "Hoàn thành"}
-                                          </Button>
-                                        )}
-                                      </div>
-                                    </Step>
-                                  ))}
-                                {isCancel &&
-                                  steps.map((label, index) => {
-                                    const labelProps: {
-                                      optional?: React.ReactNode;
-                                      error?: boolean;
-                                    } = {};
-                                    if (
-                                      index ===
-                                      responseOrderDetails.data.statuses
-                                        .length -
-                                        2
-                                    ) {
-                                      labelProps.error = true;
-                                    }
-                                    return (
+                            {responseOrderDetails.data.canceled === false && (
+                              <Box sx={{ width: "100%" }}>
+                                <Stepper
+                                  alternativeLabel
+                                  nonLinear
+                                  activeStep={activeStep}
+                                >
+                                  {!isCancel &&
+                                    steps.map((label, index) => (
                                       <Step
                                         key={label}
                                         completed={completed[index]}
                                       >
-                                        <StepLabel {...labelProps}>
-                                          {label}
-                                        </StepLabel>
+                                        <div>
+                                          <StepButton color="inherit" disabled>
+                                            {label}
+                                            {completed[index] && (
+                                              <Typography
+                                                sx={{
+                                                  textAlign: "center",
+                                                  color: "green",
+                                                  fontSize: "13px",
+                                                }}
+                                              >
+                                                hoàn thành
+                                              </Typography>
+                                            )}
+                                          </StepButton>
+                                          {activeStep === index && (
+                                            <Button
+                                              className="ms-5"
+                                              onClick={() => {
+                                                handleGetStatus();
+                                                handleClickOpenOrderDialog();
+                                                setIsUpdate(true);
+                                              }}
+                                            >
+                                              {completedSteps() ===
+                                              totalSteps() - 1
+                                                ? "Hoàn thành đơn hàng"
+                                                : "Hoàn thành"}
+                                            </Button>
+                                          )}
+                                        </div>
                                       </Step>
-                                    );
-                                  })}
-                              </Stepper>
-                              <div>
-                                {allStepsCompleted() ? (
-                                  <React.Fragment>
-                                    <Typography
-                                      sx={{
-                                        mt: 2,
-                                        mb: 1,
-                                        textAlign: "center",
-                                        color: "green",
-                                      }}
-                                    >
-                                      Đơn hàng đã hoàn thành
-                                    </Typography>
-                                  </React.Fragment>
-                                ) : (
-                                  <>
-                                    {!isCancel ? (
-                                      <React.Fragment>
-                                        <Box
-                                          sx={{
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            pt: 2,
-                                          }}
+                                    ))}
+                                  {isCancel &&
+                                    steps.map((label, index) => {
+                                      const labelProps: {
+                                        optional?: React.ReactNode;
+                                        error?: boolean;
+                                      } = {};
+                                      if (
+                                        index ===
+                                        responseOrderDetails.data.statuses
+                                          .length -
+                                          2
+                                      ) {
+                                        labelProps.error = true;
+                                      }
+                                      return (
+                                        <Step
+                                          key={label}
+                                          completed={completed[index]}
                                         >
-                                          <Button
-                                            onClick={() => {
-                                              handleClickOpenOrderDialog();
-                                              setIsUpdate(false);
+                                          <StepLabel {...labelProps}>
+                                            {label}
+                                          </StepLabel>
+                                        </Step>
+                                      );
+                                    })}
+                                </Stepper>
+                                <div>
+                                  {allStepsCompleted() ? (
+                                    <React.Fragment>
+                                      <Typography
+                                        sx={{
+                                          mt: 2,
+                                          mb: 1,
+                                          textAlign: "center",
+                                          color: "green",
+                                        }}
+                                      >
+                                        Đơn hàng đã hoàn thành
+                                      </Typography>
+                                    </React.Fragment>
+                                  ) : (
+                                    <>
+                                      {!isCancel ? (
+                                        <React.Fragment>
+                                          <Box
+                                            sx={{
+                                              display: "flex",
+                                              flexDirection: "row",
+                                              pt: 2,
                                             }}
-                                            color="error"
-                                            sx={{ mr: 1 }}
                                           >
-                                            Hủy đơn hàng
-                                          </Button>
-                                          {/* {activeStep !== steps.length &&
+                                            <Button
+                                              onClick={() => {
+                                                handleClickOpenOrderDialog();
+                                                setIsUpdate(false);
+                                              }}
+                                              color="error"
+                                              sx={{ mr: 1 }}
+                                            >
+                                              Hủy đơn hàng
+                                            </Button>
+                                            {/* {activeStep !== steps.length &&
                                             (completed[activeStep] ? (
                                               <Typography
                                                 variant="caption"
@@ -623,26 +623,27 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                                   : "Hoàn thành bước"}
                                               </Button>
                                             ))} */}
-                                        </Box>
-                                      </React.Fragment>
-                                    ) : (
-                                      <React.Fragment>
-                                        <Typography
-                                          sx={{
-                                            mt: 2,
-                                            mb: 1,
-                                            textAlign: "center",
-                                            color: "red",
-                                          }}
-                                        >
-                                          Đơn hàng đã hủy
-                                        </Typography>
-                                      </React.Fragment>
-                                    )}
-                                  </>
-                                )}
-                              </div>
-                            </Box>
+                                          </Box>
+                                        </React.Fragment>
+                                      ) : (
+                                        <React.Fragment>
+                                          <Typography
+                                            sx={{
+                                              mt: 2,
+                                              mb: 1,
+                                              textAlign: "center",
+                                              color: "red",
+                                            }}
+                                          >
+                                            Đơn hàng đã hủy
+                                          </Typography>
+                                        </React.Fragment>
+                                      )}
+                                    </>
+                                  )}
+                                </div>
+                              </Box>
+                            )}
                           </div>
                         </div>
                       </form>

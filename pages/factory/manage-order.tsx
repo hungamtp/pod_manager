@@ -142,43 +142,51 @@ export default function ManageOrder(props: IManageOrder) {
                               </strong>
                             </td>
                             <td>{orders.quantity} sản phẩm</td>
-                            <td>
-                              {orders.status === "PENDING" && (
-                                <span className="badge bg-label-warning me-1">
-                                  CHỜ XÁC NHẬN
-                                </span>
-                              )}
-                              {orders.status === "PRINTING" && (
-                                <span className="badge bg-label-warning me-1">
-                                  CHỜ IN
-                                </span>
-                              )}
-                              {orders.status === "PACKAGING" && (
-                                <span className="badge bg-label-warning me-1">
-                                  ĐANG ĐÓNG GÓI
-                                </span>
-                              )}
-                              {orders.status === "DELIVERING" && (
-                                <span className="badge bg-label-warning me-1">
-                                  ĐANG GIAO HÀNG
-                                </span>
-                              )}
-                              {orders.status === "DELIVERED" && (
-                                <span className="badge bg-label-warning me-1">
-                                  ĐÃ GIAO
-                                </span>
-                              )}
-                              {orders.status === "DONE" && (
-                                <span className="badge bg-label-success me-1">
-                                  HOÀN THÀNH
-                                </span>
-                              )}
-                              {orders.status === "CANCEL" && (
+                            {orders.canceledOrder === false ? (
+                              <td>
+                                {orders.status === "PENDING" && (
+                                  <span className="badge bg-label-warning me-1">
+                                    CHỜ XÁC NHẬN
+                                  </span>
+                                )}
+                                {orders.status === "PRINTING" && (
+                                  <span className="badge bg-label-warning me-1">
+                                    CHỜ IN
+                                  </span>
+                                )}
+                                {orders.status === "PACKAGING" && (
+                                  <span className="badge bg-label-warning me-1">
+                                    ĐANG ĐÓNG GÓI
+                                  </span>
+                                )}
+                                {orders.status === "DELIVERING" && (
+                                  <span className="badge bg-label-warning me-1">
+                                    ĐANG GIAO HÀNG
+                                  </span>
+                                )}
+                                {orders.status === "DELIVERED" && (
+                                  <span className="badge bg-label-warning me-1">
+                                    ĐÃ GIAO
+                                  </span>
+                                )}
+                                {orders.status === "DONE" && (
+                                  <span className="badge bg-label-success me-1">
+                                    HOÀN THÀNH
+                                  </span>
+                                )}
+                                {orders.status === "CANCEL" && (
+                                  <span className="badge bg-label-danger me-1">
+                                    ĐÃ HỦY
+                                  </span>
+                                )}
+                              </td>
+                            ) : (
+                              <td>
                                 <span className="badge bg-label-danger me-1">
                                   ĐÃ HỦY
                                 </span>
-                              )}
-                            </td>
+                              </td>
+                            )}
                           </tr>
                         ))}
                     </tbody>

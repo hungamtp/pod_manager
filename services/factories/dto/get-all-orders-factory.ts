@@ -5,6 +5,7 @@ export interface GetAllOrdersFactoriesResponse extends ISuccessHttpResponse {
 }
 
 export interface OrderFactoryDto {
+  canceledOrder: boolean;
   id: string;
   orderId: string;
   designId: string;

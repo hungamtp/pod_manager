@@ -27,6 +27,7 @@ export interface OrdersDetailDtos {
   }[];
   cancelReasonByFactory: string;
   cancelReasonByUser: string;
+  canceled: boolean;
   orderDetailsSupportDtos: {
     orderDetailsId: string;
     colorImage: string;
