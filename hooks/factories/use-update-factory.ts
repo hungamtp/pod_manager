@@ -17,11 +17,6 @@ const useUpdateFactory = () => {
     {
       onSuccess: (data) => {
         //because data:any
-        queryClient.invalidateQueries("GetFactoryById");
-        enqueueSnackbar("Cập nhật nhà in thành công!", {
-          autoHideDuration: 3000,
-          variant: "success",
-        });
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         if (error) {

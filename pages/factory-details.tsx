@@ -16,6 +16,9 @@ import { useForm } from "react-hook-form";
 /* eslint-disable @next/next/no-css-tags */
 import { SubmitHandler } from "react-hook-form";
 import useUpdateFactory from "hooks/factories/use-update-factory";
+import { FactoryInfo } from "@/services/factories/dto/get-factory-by-id-dto";
+import { useSnackbar } from "notistack";
+import { useQueryClient } from "react-query";
 /* eslint-disable @next/next/no-css-tags */
 export interface FactoryDetailsProps {}
 
@@ -56,11 +59,31 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
   const [filter, setFilter] = React.useState<Filter>({
     search: "",
   });
+  const { enqueueSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
   const { data: responseFactory, isLoading: isLoadingFactory } =
     useGetFactoryById(id as string, filter);
   const { mutate: updateFactory, isSuccess } = useUpdateFactory();
   const [isEditFactory, setIsEditFactory] = React.useState(false);
   const [isDisabled, setIsDisabled] = React.useState(true);
+  const [factoryInfo, setFactoryInfo] = React.useState<FactoryInfo>();
+  const [isUpdateFactoryInfo, setIsUpdateFactoryInfo] = React.useState(true);
+  React.useEffect(() => {
+    if (responseFactory && isUpdateFactoryInfo) {
+      console.log(responseFactory, "responseFactory");
+      const factoryInfo: FactoryInfo = {
+        id: responseFactory.data.id,
+        name: responseFactory.data.name,
+        email: responseFactory.data.email,
+        location: responseFactory.data.location,
+        address: responseFactory.data.address,
+        phone: responseFactory.data.phone,
+        image: responseFactory.data.image,
+        tradeDiscount: responseFactory.data.tradeDiscount,
+      };
+      setFactoryInfo(factoryInfo);
+    }
+  }, [responseFactory]);
   const defaultValues: UpdateFactoryDto = {
     id: "",
     name: "",
@@ -80,8 +103,11 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
   } = form;
 
   React.useEffect(() => {
-    reset(responseFactory?.data);
-  }, [responseFactory]);
+    if (factoryInfo && isUpdateFactoryInfo) {
+      reset(factoryInfo);
+      setIsUpdateFactoryInfo(false);
+    }
+  }, [factoryInfo]);
 
   const handleEditFactory = () => {
     setIsEditFactory(true);
@@ -89,7 +115,19 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
   };
 
   const onSubmit: SubmitHandler<UpdateFactoryDto> = (data) => {
-    updateFactory({ ...data, id: id as string });
+    updateFactory(
+      { ...data, id: id as string },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries("GetFactoryById");
+          enqueueSnackbar("Cập nhật nhà in thành công!", {
+            autoHideDuration: 3000,
+            variant: "success",
+          });
+          setIsUpdateFactoryInfo(true);
+        },
+      }
+    );
     setIsEditFactory(false);
     setIsDisabled(true);
   };
@@ -102,7 +140,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
           <div className="card-body">
             <div className="d-flex align-items-start align-items-sm-center gap-4">
               <img
-                src={responseFactory?.data.image}
+                src={factoryInfo?.image}
                 alt="user-avatar"
                 className="d-block rounded"
                 height={100}
@@ -110,7 +148,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                 id="uploadedAvatar"
               />
               <div className="button-wrapper">
-                <h2>{responseFactory?.data.name}</h2>
+                <h2>{factoryInfo?.name}</h2>
                 <p className="text-muted mb-0"></p>
               </div>
             </div>
@@ -118,7 +156,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
           <hr className="my-0" />
           <div className="row">
             <div className="col-md-12">
-              {!isLoadingFactory && responseFactory && (
+              {factoryInfo && (
                 <div className="card mb-4">
                   <h4 className="card-header">Thông tin chi tiết</h4>
                   {/* Account */}
@@ -140,7 +178,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                             className="form-control"
                             type="text"
                             id="ID"
-                            defaultValue={responseFactory.data.id}
+                            defaultValue={factoryInfo.id}
                           />
                         </div>
                         <div className="mb-3 col-md-6">
@@ -150,7 +188,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                             className="form-control"
                             type="text"
                             disabled={isDisabled}
-                            defaultValue={responseFactory.data.name}
+                            defaultValue={factoryInfo.name}
                             {...register("name")}
                           />
                           {errors.name && (
@@ -170,7 +208,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                           <input
                             disabled
                             className="form-control"
-                            defaultValue={responseFactory.data.email}
+                            defaultValue={factoryInfo.email}
                           />
                         </div>
 
@@ -183,7 +221,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                             id="exampleFormControlTextarea1"
                             disabled={isDisabled}
                             rows={3}
-                            defaultValue={responseFactory.data.location}
+                            defaultValue={factoryInfo.location}
                             {...register("address")}
                           />
                           {errors.address && (
@@ -202,7 +240,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                           <input
                             disabled={isDisabled}
                             className="form-control"
-                            defaultValue={responseFactory.data.phone}
+                            defaultValue={factoryInfo.phone}
                             {...register("phone")}
                           />
                           {errors.phone && (
@@ -220,7 +258,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                             <input
                               disabled={isDisabled}
                               className="form-control position-absolute top-50 start-50 translate-middle "
-                              defaultValue={responseFactory.data.tradeDiscount}
+                              defaultValue={factoryInfo.tradeDiscount}
                               {...register("tradeDiscount")}
                             />
                             <p className="position-absolute top-50 end-0 translate-middle-y pe-3">
