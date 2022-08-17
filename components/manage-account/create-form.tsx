@@ -9,6 +9,7 @@ import useCreateAccount from "hooks/accounts/use-create-account";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 export interface ICreateFormProps {
@@ -47,9 +48,9 @@ const schema = yup.object().shape({
     .string()
     .trim()
     .email()
-    .min(8, "Tài khoản cần ít nhất 8 kí tự")
-    .max(50, "Tài khoản tối đa 50 kí tự")
-    .required("Tài khoản không được để trống"),
+    .min(8, "email cần ít nhất 8 kí tự")
+    .max(50, "email tối đa 50 kí tự")
+    .required("email không được để trống"),
   phone: yup
     .string()
     .trim()
@@ -69,6 +70,7 @@ const schema = yup.object().shape({
 export default function CreateForm(props: ICreateFormProps) {
   const { handleCloseDialog } = props;
   const [role, setRole] = React.useState("USER");
+  const [seePassword, setSeePassword] = React.useState("password");
 
   const handleChange = (event: SelectChangeEvent) => {
     setRole(event.target.value);
@@ -92,6 +94,14 @@ export default function CreateForm(props: ICreateFormProps) {
     resolver: yupResolver(schema),
   });
   const { mutate: addAcount, error } = useCreateAccount(handleCloseDialog);
+
+  const handleSeePassword = () => {
+    if (seePassword === "password") {
+      setSeePassword("text");
+    } else {
+      setSeePassword("password");
+    }
+  };
 
   const onSubmit: SubmitHandler<FormCreateAccount> = (data) => {
     data.roleName = role;
@@ -186,14 +196,26 @@ export default function CreateForm(props: ICreateFormProps) {
                       <KeyIcon fontSize="small" />
                     </span>
                     <input
-                      type="text"
+                      type={seePassword}
                       id="basic-icon-default-company"
                       className="form-control"
-                      placeholder="ACME Inc."
-                      aria-label="ACME Inc."
+                      placeholder="**********"
+                      aria-label="**********"
                       aria-describedby="basic-icon-default-company2"
                       {...register("password")}
                     />
+                    <button
+                      type="button"
+                      id="basic-icon-default-company2"
+                      className="input-group-text"
+                    >
+                      <VisibilityOffIcon
+                        onClick={() => {
+                          handleSeePassword();
+                        }}
+                        fontSize="small"
+                      />
+                    </button>
                   </div>
                   {errors.password && (
                     <span id="error-pwd-message" className="text-danger">
@@ -274,7 +296,7 @@ export default function CreateForm(props: ICreateFormProps) {
                       id="basic-icon-default-message2"
                       className="input-group-text"
                     >
-                      <i className="bx bx-comment" />
+                      <i className="bx bx-home" />
                     </span>
                     <textarea
                       id="basic-icon-default-message"

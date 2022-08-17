@@ -13,6 +13,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import useDeleteFactory from "hooks/factories/use-delete-factory-account";
 import useFactories from "hooks/factories/use-factories";
 import { useRouter } from "next/router";
+import HandshakeIcon from "@mui/icons-material/Handshake";
 import * as React from "react";
 import { useState } from "react";
 export interface IManageFactory {}
@@ -31,7 +32,7 @@ export default function ManageFactory(props: IManageFactory) {
   };
   const { data: response, isLoading: isLoadingAccount } = useFactories(filter);
   const { mutate: deleteFactory, error } = useDeleteFactory();
-
+  const [isCollaborating, setIsCollaborating] = useState("");
   // const { mutate: deleteAccount, error } = useDeleteAccount();
 
   // const onDelete = (id: string) => {
@@ -39,7 +40,11 @@ export default function ManageFactory(props: IManageFactory) {
   //   setOpenDeleteDialog(false);
   // };
   const onDelete = (id: string) => {
-    deleteFactory(id);
+    const deleteData = {
+      id: id,
+      isCollaborating: isCollaborating,
+    };
+    deleteFactory(deleteData);
     setOpenDeleteDialog(false);
   };
   const hanldeIsDelete = (x: string) => {
@@ -216,12 +221,30 @@ export default function ManageFactory(props: IManageFactory) {
                                 onClick={() => {
                                   {
                                     hanldeIsDelete(x.id);
+                                    setIsCollaborating("false");
                                   }
                                 }}
                               >
                                 <DoNotTouchIcon
                                   fontSize="medium"
                                   color="error"
+                                />
+                              </IconButton>
+                            </div>
+                          )}
+                          {x.collaborating == false && (
+                            <div>
+                              <IconButton
+                                onClick={() => {
+                                  {
+                                    hanldeIsDelete(x.id);
+                                    setIsCollaborating("true");
+                                  }
+                                }}
+                              >
+                                <HandshakeIcon
+                                  fontSize="medium"
+                                  color="success"
                                 />
                               </IconButton>
                             </div>

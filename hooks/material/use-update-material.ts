@@ -25,15 +25,13 @@ const useUpdateMaterial = (handleCloseDialog: () => void) => {
         if (error) {
           // This size is already existed
           let tmpError = error.response?.data.errorMessage;
-          if (tmpError?.includes("already existed")) {
+          if (tmpError?.includes("This material name has been existed")) {
             tmpError = "Chất liệu này đã tồn tại";
             enqueueSnackbar(tmpError, {
               autoHideDuration: 9000,
               variant: "error",
             });
-            handleCloseDialog();
           } else {
-            handleCloseDialog();
             enqueueSnackbar(error.response?.data.errorMessage, {
               autoHideDuration: 9000,
               variant: "error",
