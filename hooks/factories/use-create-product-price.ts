@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "react-query";
 
 import { createProductPrice } from "@/services/factories";
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from "notistack";
 import { AxiosError } from "axios";
 import { ErrorHttpResponse } from "@/models/error_http_response.interface";
 import { CreatePriceMaterialDto } from "@/services/factories/dto/create-price-material-dto";
@@ -9,9 +9,9 @@ import { CreatePriceMaterialDto } from "@/services/factories/dto/create-price-ma
 const useCreateProductPrice = (
   handleCloseDialog: () => void,
   factoryId: string,
-  productId: string,
+  productId: string
 ) => {
-	const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   return useMutation(
     async (data: CreatePriceMaterialDto) => {
@@ -23,21 +23,22 @@ const useCreateProductPrice = (
         handleCloseDialog();
         queryClient.invalidateQueries("GetProductForFactory");
         queryClient.invalidateQueries("GetFactoryById");
-        const message = "Create successfully!";
+        const message = "Tạo mới thành công!";
         enqueueSnackbar(message, {
           autoHideDuration: 3000,
           variant: "success",
         });
-      },onError: (error: AxiosError<ErrorHttpResponse>) => {
-				if (error) {
-        handleCloseDialog();
+      },
+      onError: (error: AxiosError<ErrorHttpResponse>) => {
+        if (error) {
+          handleCloseDialog();
 
-					enqueueSnackbar(error.response?.data.errorMessage, {
-					  autoHideDuration: 9000,
-					  variant: "error",
-					});
-				  }
-			},
+          enqueueSnackbar(error.response?.data.errorMessage, {
+            autoHideDuration: 9000,
+            variant: "error",
+          });
+        }
+      },
     }
   );
 };

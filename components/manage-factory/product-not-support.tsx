@@ -123,7 +123,7 @@ export default function ProductNotSupport(props: IProductNotSupportProps) {
                 <input
                   type="text"
                   className="form-control border-0  shadow-none w-full"
-                  placeholder="Search..."
+                  placeholder="Tên sản phẩm..."
                   aria-label="Search..."
                 />
               </form>

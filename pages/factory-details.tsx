@@ -322,7 +322,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                         <input
                           type="text"
                           className="form-control border-0  shadow-none w-full"
-                          placeholder="Search..."
+                          placeholder="Tên sản phẩm..."
                           aria-label="Search..."
                         />
                       </form>

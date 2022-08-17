@@ -6,7 +6,7 @@ import { createSizeColorProduct } from "@/services/factories";
 import { CreateSizeColorProductDto } from "@/services/factories/dto/create-size-color-product-dto";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from "notistack";
 
 const useCreateSizeColorProduct = (
   handleCloseDialog: () => void,
@@ -16,7 +16,7 @@ const useCreateSizeColorProduct = (
   const router = useRouter();
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
-	const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   return useMutation(
     async (data: CreateSizeColorProductDto[]) => {
@@ -27,23 +27,22 @@ const useCreateSizeColorProduct = (
         //because data:any
         handleCloseDialog();
         queryClient.invalidateQueries("GetFactoryById");
-        const message = "Create successfully!";
+        const message = "Tạo mới thành công!";
         enqueueSnackbar(message, {
           autoHideDuration: 3000,
           variant: "success",
         });
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
-				if (error) {
-        handleCloseDialog();
+        if (error) {
+          handleCloseDialog();
 
-					enqueueSnackbar(error.response?.data.errorMessage, {
-					  autoHideDuration: 9000,
-					  variant: "error",
-					});
-				  }
-			},
-
+          enqueueSnackbar(error.response?.data.errorMessage, {
+            autoHideDuration: 9000,
+            variant: "error",
+          });
+        }
+      },
     }
   );
 };

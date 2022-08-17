@@ -8,20 +8,7 @@ export interface FactoryByIdDtos {
   address: string;
   phone: string;
   image: string;
-  productDtoList: {
-    id: string;
-    name: string;
-    price: number;
-    material: string;
-    description: string;
-    productImages: { image: string }[];
-    categoryName: string;
-    sizeColors: {
-      quantity: number;
-      size: string;
-      colorImage: string;
-    }[];
-  }[];
+  productDtoList: ProductDto[];
   tradeDiscount: number;
   public: Boolean;
   delete: Boolean;
@@ -33,6 +20,21 @@ export interface sizeColorsDto {
   colorImage: string;
 }
 [];
+
+export interface ProductDto {
+  id: string;
+  name: string;
+  price: number;
+  material: string;
+  description: string;
+  productImages: { image: string }[];
+  categoryName: string;
+  sizeColors: {
+    quantity: number;
+    size: string;
+    colorImage: string;
+  }[];
+}
 
 export interface getFactoryByIdDtos extends ISuccessHttpResponse {
   data: FactoryByIdDtos;

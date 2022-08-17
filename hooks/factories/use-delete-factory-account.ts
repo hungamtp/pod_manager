@@ -18,7 +18,7 @@ const useDeleteFactory = () => {
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries("Factories");
-        enqueueSnackbar("Delete successfully!", {
+        enqueueSnackbar("Ngừng hợp tác với nhà in thành công", {
           autoHideDuration: 3000,
           variant: "success",
         });

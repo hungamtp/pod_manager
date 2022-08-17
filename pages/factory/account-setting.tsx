@@ -194,7 +194,19 @@ export default function AccountSetting(props: AccountSettingProps) {
                             defaultValue={responseFactory.data.phone}
                           />
                         </div>
-
+                        <div className="mb-3 col-md-1">
+                          <label className="form-label ">Chiết khấu</label>
+                          <div className="position-relative mt-3">
+                            <input
+                              disabled
+                              className="form-control position-absolute top-50 start-50 translate-middle "
+                              defaultValue={responseFactory.data.tradeDiscount}
+                            />
+                            <p className="position-absolute top-50 end-0 translate-middle-y pe-3">
+                              %
+                            </p>
+                          </div>
+                        </div>
                         {/* Small table */}
 
                         <hr className="my-5" />
@@ -228,6 +240,44 @@ export default function AccountSetting(props: AccountSettingProps) {
                   Sản phẩm của nhà in đang sản xuất
                 </h4>
                 <hr className="my-0" />
+                <nav
+                  className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                  id="layout-navbar"
+                >
+                  <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                    <a className="nav-item nav-link px-0 me-xl-4">
+                      <i className="bx bx-menu bx-sm" />
+                    </a>
+                  </div>
+                  <div
+                    className="navbar-nav-right d-flex align-items-center"
+                    id="navbar-collapse"
+                  >
+                    {/* Search */}
+                    <div className="nav-item d-flex align-items-center w-full">
+                      <i className="bx bx-search fs-4 lh-0" />
+                      <form
+                        onSubmit={(e: any) => {
+                          e.preventDefault();
+                          setFilter((state) => ({
+                            ...state,
+                            search: e.target[0].value,
+                          }));
+                        }}
+                        className="form-control border-0 shadow-none w-full"
+                      >
+                        <input
+                          type="text"
+                          className="form-control border-0  shadow-none w-full"
+                          placeholder="Tên sản phẩm..."
+                          aria-label="Search..."
+                        />
+                      </form>
+                    </div>
+                    {/* /Search */}
+                  </div>
+                </nav>
+                <br />
                 <div className="card">
                   <div className="table-responsive text-nowrap">
                     {!isLoadingFactory &&
