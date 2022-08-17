@@ -10,6 +10,7 @@ import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import * as yup from "yup";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 export interface ICreateFactoryFormProps {
@@ -75,7 +76,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
   const [images, setImages] = React.useState<ImageListType>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isImgNull, setIsImgNull] = React.useState(false);
-
+  const [seePassword, setSeePassword] = React.useState("password");
   const handleChange = (event: SelectChangeEvent) => {
     setRole(event.target.value);
   };
@@ -124,6 +125,14 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
     } else {
       setIsLoading(false);
       setIsImgNull(true);
+    }
+  };
+
+  const handleSeePassword = () => {
+    if (seePassword === "password") {
+      setSeePassword("text");
+    } else {
+      setSeePassword("password");
     }
   };
 
@@ -186,14 +195,26 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                       <KeyIcon fontSize="small" />
                     </span>
                     <input
-                      type="text"
+                      type={seePassword}
                       id="basic-icon-default-company"
                       className="form-control"
-                      placeholder="ACME Inc."
-                      aria-label="ACME Inc."
+                      placeholder="********"
+                      aria-label="********"
                       aria-describedby="basic-icon-default-company2"
                       {...register("password")}
                     />
+                    <button
+                      type="button"
+                      id="basic-icon-default-company2"
+                      className="input-group-text"
+                    >
+                      <VisibilityOffIcon
+                        onClick={() => {
+                          handleSeePassword();
+                        }}
+                        fontSize="small"
+                      />
+                    </button>
                   </div>
                   {errors.password && (
                     <span id="error-pwd-message" className="text-danger">

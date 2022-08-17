@@ -26,12 +26,16 @@ const useCreateMaterial = (handleCloseDialog: () => void) => {
           let tmpError = error.response?.data.errorMessage;
           if (tmpError?.includes("already existed")) {
             tmpError = "Chất liệu này đã tồn tại";
+            enqueueSnackbar(tmpError, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
+          } else {
+            enqueueSnackbar(error.response?.data.errorMessage, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
           }
-          handleCloseDialog();
-          enqueueSnackbar(tmpError, {
-            autoHideDuration: 9000,
-            variant: "error",
-          });
         }
       },
     }

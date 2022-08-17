@@ -10,15 +10,23 @@ import { DeleteAccountFactory } from "@/services/factories";
 const useDeleteFactory = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
+  let collab = "";
   const { enqueueSnackbar } = useSnackbar();
   return useMutation(
-    async (id: string) => {
-      return await DeleteAccountFactory(id);
+    async (data: { id: string; isCollaborating: string }) => {
+      collab = data.isCollaborating;
+      return await DeleteAccountFactory(data);
     },
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries("Factories");
-        enqueueSnackbar("Ngừng hợp tác với nhà in thành công", {
+        let message = "";
+        if (collab === "false") {
+          message = "Ngừng hợp tác với nhà in thành công";
+        } else {
+          message = "Hợp tác với nhà in thành công";
+        }
+        enqueueSnackbar(message, {
           autoHideDuration: 3000,
           variant: "success",
         });
