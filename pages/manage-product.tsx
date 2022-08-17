@@ -329,7 +329,7 @@ export default function ManageProduct(props: IManageProductProps) {
                   <input
                     type="text"
                     className="form-control border-0  shadow-none w-full"
-                    placeholder="Search..."
+                    placeholder="Tìm kiếm..."
                     aria-label="Search..."
                   />
                 </form>
