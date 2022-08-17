@@ -518,13 +518,14 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                                   fontSize: "13px",
                                                 }}
                                               >
-                                                hoàn thành
+                                                Hoàn thành
                                               </Typography>
                                             )}
                                           </StepButton>
+
                                           {activeStep === index && (
                                             <Button
-                                              className="ms-5"
+                                              className="ms-3 ps-3"
                                               onClick={() => {
                                                 handleGetStatus();
                                                 handleClickOpenOrderDialog();
