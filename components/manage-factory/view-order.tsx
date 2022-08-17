@@ -173,11 +173,6 @@ export default function ViewOrder({
                           );
                           const shoulderToPlaceHolder = topToPlaceHolder / rate;
 
-                          console.log(
-                            shoulderToPlaceHolder,
-                            "neckToPlaceHolder"
-                          );
-
                           const topPos = to2Decimals(
                             (blueprint.placeholder.height / 100) *
                               (designData.topPosition < 0
@@ -302,7 +297,7 @@ export default function ViewOrder({
                                           Chiều rộng
                                         </div>
                                         <div className=" border p-2 ">
-                                          Chiều dài
+                                          Chiều cao
                                         </div>
                                         <div className=" border p-2 ">
                                           Cách thân trái
