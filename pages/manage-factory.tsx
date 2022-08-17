@@ -129,7 +129,9 @@ export default function ManageFactory(props: IManageFactory) {
           fullWidth={true}
         >
           <DialogTitle id="alert-dialog-title">
-            {"Bạn có muốn ngừng hợp tác với nhà in này không?"}
+            {isCollaborating === "true"
+              ? "Bạn có muốn hợp tác với nhà in này không?"
+              : "Bạn có muốn ngừng hợp tác với nhà in này không?"}
           </DialogTitle>
           <DialogContent>
             <div className="d-flex justify-content-center">

@@ -24,7 +24,7 @@ const useCreateMaterial = (handleCloseDialog: () => void) => {
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         if (error) {
           let tmpError = error.response?.data.errorMessage;
-          if (tmpError?.includes("already existed")) {
+          if (tmpError?.includes("existed")) {
             tmpError = "Chất liệu này đã tồn tại";
             enqueueSnackbar(tmpError, {
               autoHideDuration: 9000,

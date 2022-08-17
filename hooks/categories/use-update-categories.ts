@@ -26,10 +26,19 @@ const useUpdateCategory = (handleCloseDialog: () => void) => {
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         if (error) {
-          enqueueSnackbar(error.response?.data.errorMessage, {
-            autoHideDuration: 9000,
-            variant: "error",
-          });
+          let tmpError = error.response?.data.errorMessage;
+          if (tmpError?.includes("This category has been existed")) {
+            tmpError = "Thể loại này đã tồn tại";
+            enqueueSnackbar(tmpError, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
+          } else {
+            enqueueSnackbar(error.response?.data.errorMessage, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
+          }
         }
       },
     }

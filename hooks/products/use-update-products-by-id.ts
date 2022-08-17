@@ -25,10 +25,21 @@ const useUpdateProductById = () => {
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         if (error) {
-          enqueueSnackbar(error.response?.data.errorMessage, {
-            autoHideDuration: 9000,
-            variant: "error",
-          });
+          //This product name has been existed
+
+          let tmpError = error.response?.data.errorMessage;
+          if (tmpError?.includes("This product name has been existed")) {
+            tmpError = "Tên sản phẩm này đã tồn tại";
+            enqueueSnackbar(tmpError, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
+          } else {
+            enqueueSnackbar(error.response?.data.errorMessage, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
+          }
         }
       },
     }
