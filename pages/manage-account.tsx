@@ -262,7 +262,7 @@ export default function ManageAccount(props: IManageAccountProps) {
                   <input
                     type="text"
                     className="form-control border-0 shadow-none w-full"
-                    placeholder="Search..."
+                    placeholder="Tìm kiếm..."
                     aria-label="Search..."
                   />
                 </form>
