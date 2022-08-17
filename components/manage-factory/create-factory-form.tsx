@@ -10,6 +10,8 @@ import * as React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import * as yup from "yup";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 
@@ -63,8 +65,8 @@ const schema = yup.object().shape({
   tradeDiscount: yup
     .number()
     .typeError("Vui lòng nhập số")
-    .min(1, "Chiết khấu cần ít nhất 1 %")
-    .max(100, "Chiết khấu tối đa 100 %")
+    .min(5, "Chiết khấu cần ít nhất 5 %")
+    .max(30, "Chiết khấu tối đa 30 %")
     .required("Chiết khấu không được để trống"),
 });
 
@@ -208,12 +210,21 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
                       id="basic-icon-default-company2"
                       className="input-group-text"
                     >
-                      <VisibilityOffIcon
-                        onClick={() => {
-                          handleSeePassword();
-                        }}
-                        fontSize="small"
-                      />
+                      {seePassword === "text" ? (
+                        <VisibilityOffIcon
+                          onClick={() => {
+                            handleSeePassword();
+                          }}
+                          fontSize="small"
+                        />
+                      ) : (
+                        <VisibilityIcon
+                          onClick={() => {
+                            handleSeePassword();
+                          }}
+                          fontSize="small"
+                        />
+                      )}
                     </button>
                   </div>
                   {errors.password && (
