@@ -141,8 +141,8 @@ export default function ViewOrder({
                           <Image
                             src={renderedImage.image}
                             alt="Picture of the author"
-                            width={4000}
-                            height={4000}
+                            width={8000}
+                            height={8000}
                             objectFit="cover"
                           />
                         </div>
@@ -161,12 +161,29 @@ export default function ViewOrder({
                                   : designData.leftPosition)
                           );
 
+                          const renderedImageWidth =
+                            (blueprint.placeholder.width /
+                              blueprint.placeholder.widthRate) *
+                            100;
+                          const topToPlaceHolder =
+                            (renderedImageWidth / 100) *
+                            blueprint.placeholder.top;
+                          const rate = Math.floor(
+                            blueprint.placeholder.top / 10
+                          );
+                          const shoulderToPlaceHolder = topToPlaceHolder / rate;
+
+                          console.log(
+                            shoulderToPlaceHolder,
+                            "neckToPlaceHolder"
+                          );
+
                           const topPos = to2Decimals(
-                            (sizeDataOfL.height / 100) *
+                            (blueprint.placeholder.height / 100) *
                               (designData.topPosition < 0
                                 ? 0
                                 : designData.topPosition) +
-                              7.6
+                              shoulderToPlaceHolder
                           );
                           return (
                             <>
