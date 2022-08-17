@@ -11,7 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-
+import VisibilityIcon from "@mui/icons-material/Visibility";
 export interface ICreateFormProps {
   handleCloseDialog: () => void;
 }
@@ -209,12 +209,21 @@ export default function CreateForm(props: ICreateFormProps) {
                       id="basic-icon-default-company2"
                       className="input-group-text"
                     >
-                      <VisibilityOffIcon
-                        onClick={() => {
-                          handleSeePassword();
-                        }}
-                        fontSize="small"
-                      />
+                      {seePassword === "text" ? (
+                        <VisibilityOffIcon
+                          onClick={() => {
+                            handleSeePassword();
+                          }}
+                          fontSize="small"
+                        />
+                      ) : (
+                        <VisibilityIcon
+                          onClick={() => {
+                            handleSeePassword();
+                          }}
+                          fontSize="small"
+                        />
+                      )}
                     </button>
                   </div>
                   {errors.password && (
