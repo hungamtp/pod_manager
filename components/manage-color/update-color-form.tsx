@@ -28,7 +28,7 @@ export default function UpdateColorForm(props: IUpdateColorFormProps) {
       <div className="col-xxl">
         <div className="card mb-4">
           <div className="card-body">
-            <p className="d-flex justify-content-center fs-2">
+            <p className="d-flex justify-content-center fs-3 mb-5">
               Bạn có muốn xóa màu này không?
             </p>
 

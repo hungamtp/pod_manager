@@ -299,8 +299,6 @@ export default function UpdateForm(props: IUpdateFormProps) {
                     >
                       <MenuItem value="USER">USER</MenuItem>
                       <br />
-                      <MenuItem value="FACTORY">FACTORY</MenuItem>
-                      <br />
                       <MenuItem value="ADMIN">ADMIN</MenuItem>
                     </Select>
                   </FormControl>

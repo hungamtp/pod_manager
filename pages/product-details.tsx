@@ -721,37 +721,39 @@ export default function ProductDetails(props: IProductDetailsProps) {
                           </div>
                         </div>
                       </div>
-                      <div className="mt-2">
-                        {isEditProduct === false && (
+                      {responseProduct.data.deleted === false && (
+                        <div className="mt-2">
+                          {isEditProduct === false && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                handleEditProduct();
+                              }}
+                              className="btn btn-primary me-2"
+                            >
+                              Chỉnh sửa
+                            </button>
+                          )}
+                          {isEditProduct && (
+                            <button
+                              type="submit"
+                              className="btn btn-primary me-2"
+                            >
+                              Lưu thay đổi
+                            </button>
+                          )}
+
                           <button
                             type="button"
+                            className="btn btn-outline-secondary"
                             onClick={() => {
-                              handleEditProduct();
+                              router.push("manage-product");
                             }}
-                            className="btn btn-primary me-2"
                           >
-                            Edit
+                            Trở về
                           </button>
-                        )}
-                        {isEditProduct && (
-                          <button
-                            type="submit"
-                            className="btn btn-primary me-2"
-                          >
-                            Lưu thay đổi
-                          </button>
-                        )}
-
-                        <button
-                          type="button"
-                          className="btn btn-outline-secondary"
-                          onClick={() => {
-                            router.push("manage-product");
-                          }}
-                        >
-                          Trở về
-                        </button>
-                      </div>
+                        </div>
+                      )}
                     </form>
                   </div>
                   {/* /Account */}
@@ -788,15 +790,18 @@ export default function ProductDetails(props: IProductDetailsProps) {
                 {/* Account */}
 
                 <h5 className="card-header">Màu & kích thước</h5>
-                <div>
-                  <button
-                    className="btn btn-success ms-4 text-dark"
-                    onClick={handleOpenCreateSizeColorDialog}
-                  >
-                    <AddIcon sx={{ mr: 1 }} />
-                    Tạo mới màu & kích thước
-                  </button>
-                </div>
+                {responseProduct?.data.deleted === false && (
+                  <div>
+                    <button
+                      className="btn btn-success ms-4 text-dark"
+                      onClick={handleOpenCreateSizeColorDialog}
+                    >
+                      <AddIcon sx={{ mr: 1 }} />
+                      Tạo mới màu & kích thước
+                    </button>
+                  </div>
+                )}
+
                 <br className="my-4" />
                 <hr className="my-0" />
                 <div className="card">
@@ -819,9 +824,11 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                   <th>
                                     <strong>Chiều dài</strong>
                                   </th>
-                                  <th>
-                                    <strong>Hành động</strong>
-                                  </th>
+                                  {responseProduct?.data.deleted === false && (
+                                    <th>
+                                      <strong>Hành động</strong>
+                                    </th>
+                                  )}
                                 </tr>
                               </thead>
                               <tbody className="table-border-bottom-0">
@@ -836,27 +843,30 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                     <td>
                                       <strong>{data.height} cm</strong>
                                     </td>
-                                    <td>
-                                      {data.id === "none" ? (
-                                        <button
-                                          className="btn btn-primary"
-                                          onClick={() =>
-                                            handleCreateProductSize(data.size)
-                                          }
-                                        >
-                                          Thêm số đo
-                                        </button>
-                                      ) : (
-                                        <button
-                                          className="btn btn-secondary"
-                                          onClick={() =>
-                                            handleUpdateProductSize(data)
-                                          }
-                                        >
-                                          Chỉnh sửa
-                                        </button>
-                                      )}
-                                    </td>
+                                    {responseProduct?.data.deleted ===
+                                      false && (
+                                      <td>
+                                        {data.id === "none" ? (
+                                          <button
+                                            className="btn btn-primary"
+                                            onClick={() =>
+                                              handleCreateProductSize(data.size)
+                                            }
+                                          >
+                                            Thêm số đo
+                                          </button>
+                                        ) : (
+                                          <button
+                                            className="btn btn-secondary"
+                                            onClick={() =>
+                                              handleUpdateProductSize(data)
+                                            }
+                                          >
+                                            Chỉnh sửa
+                                          </button>
+                                        )}
+                                      </td>
+                                    )}
                                   </tr>
                                 ))}
                               </tbody>
@@ -971,7 +981,8 @@ export default function ProductDetails(props: IProductDetailsProps) {
                     sizeProductResponse.filter(
                       (size) => size.size === "L"
                     )[0] &&
-                    responseProductBlueprint.data.length < 2 && (
+                    responseProductBlueprint.data.length < 2 &&
+                    responseProduct?.data.deleted === false && (
                       <div>
                         <button
                           className="btn btn-success ms-4 text-dark"
@@ -1038,20 +1049,22 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                     ? "Mặt trước"
                                     : "Mặt sau"}
                                 </td>
-                                <td>
-                                  <IconButton
-                                    onClick={() => {
-                                      handleUpdateProductBlueprint(
-                                        productBlueprint
-                                      );
-                                    }}
-                                  >
-                                    <EditIcon
-                                      fontSize="medium"
-                                      color="primary"
-                                    />
-                                  </IconButton>
-                                </td>
+                                {responseProduct?.data.deleted === false && (
+                                  <td>
+                                    <IconButton
+                                      onClick={() => {
+                                        handleUpdateProductBlueprint(
+                                          productBlueprint
+                                        );
+                                      }}
+                                    >
+                                      <EditIcon
+                                        fontSize="medium"
+                                        color="primary"
+                                      />
+                                    </IconButton>
+                                  </td>
+                                )}
                               </tr>
                             </tbody>
                           )

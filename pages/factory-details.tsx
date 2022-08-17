@@ -287,7 +287,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                             }}
                             className="btn btn-primary me-2"
                           >
-                            Edit
+                            Chỉnh sửa
                           </button>
                         )}
                         {isEditFactory && (

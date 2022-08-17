@@ -25,8 +25,6 @@ const useUnPublishProduct = (handleClosePublishDialog: () => void) => {
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         if (error) {
-          handleClosePublishDialog();
-
           enqueueSnackbar(error.response?.data.errorMessage, {
             autoHideDuration: 9000,
             variant: "error",

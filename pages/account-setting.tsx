@@ -351,7 +351,7 @@ export default function AccountSetting(props: IAccountSettingProps) {
                             type="submit"
                             className="btn btn-primary me-2"
                           >
-                            lưu thay đổi
+                            Lưu thay đổi
                           </button>
                         )}
                         {isEditAccount === false && (
@@ -362,7 +362,7 @@ export default function AccountSetting(props: IAccountSettingProps) {
                               handleEditAccount();
                             }}
                           >
-                            Edit
+                            Chỉnh sửa
                           </button>
                         )}
                       </div>
