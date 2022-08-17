@@ -3,6 +3,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useLogin from "hooks/auth/use-login";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 export interface ILoginProps {}
 type FormLogin = {
@@ -246,12 +248,21 @@ export default function Login(props: ILoginProps) {
                           aria-describedby="password"
                           {...register("password")}
                         />
-                        <span
-                          className="input-group-text cursor-pointer"
-                          onClick={handleSeePassword}
-                        >
-                          <i className="bx bx-hide" />
-                        </span>
+                        {seePassword === "text" ? (
+                          <span
+                            className="input-group-text cursor-pointer"
+                            onClick={handleSeePassword}
+                          >
+                            <VisibilityOffIcon fontSize="small" />
+                          </span>
+                        ) : (
+                          <span
+                            className="input-group-text cursor-pointer"
+                            onClick={handleSeePassword}
+                          >
+                            <VisibilityIcon fontSize="small" />
+                          </span>
+                        )}
                       </div>
                       {errors.password && (
                         <span id="error-pwd-message" className="text-danger">
