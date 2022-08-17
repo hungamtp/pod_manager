@@ -26,7 +26,6 @@ const useUpdateCategory = (handleCloseDialog: () => void) => {
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         if (error) {
-          handleCloseDialog();
           enqueueSnackbar(error.response?.data.errorMessage, {
             autoHideDuration: 9000,
             variant: "error",

@@ -36,9 +36,7 @@ const useCreateCategory = (handleCloseDialog: () => void) => {
               autoHideDuration: 9000,
               variant: "error",
             });
-            handleCloseDialog();
           } else {
-            handleCloseDialog();
             enqueueSnackbar(error.response?.data.errorMessage, {
               autoHideDuration: 9000,
               variant: "error",

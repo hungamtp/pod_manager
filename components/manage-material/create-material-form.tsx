@@ -1,9 +1,7 @@
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
 import { yupResolver } from "@hookform/resolvers/yup";
-import useCreateColor from "hooks/colors/use-create-colors";
-import useCreateMaterial from "hooks/material/use-create-sizes";
-import useCreateSize from "hooks/sizes/use-create-sizes";
+import useCreateMaterial from "hooks/material/use-create-material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 

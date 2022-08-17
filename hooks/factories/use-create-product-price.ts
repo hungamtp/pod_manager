@@ -33,7 +33,7 @@ const useCreateProductPrice = (
         if (error) {
           handleCloseDialog();
 
-          enqueueSnackbar(error.response?.data.errorMessage, {
+          enqueueSnackbar("Chất liệu sản phẩm không được để trống", {
             autoHideDuration: 9000,
             variant: "error",
           });

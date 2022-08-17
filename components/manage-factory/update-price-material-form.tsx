@@ -71,7 +71,11 @@ export default function UpdateProductPriceForm(
   }, [priceMaterial]);
 
   const onSubmit: SubmitHandler<UpdatePriceMaterialDto> = (data) => {
-    updateProductPriceMaterial(data);
+    const tmpData = {
+      price: data.price,
+      material: material,
+    };
+    updateProductPriceMaterial(tmpData);
   };
 
   const { mutate: updateProductPriceMaterial, error } =

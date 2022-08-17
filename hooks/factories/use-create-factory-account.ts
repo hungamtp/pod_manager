@@ -28,11 +28,21 @@ const useCreateFactoryAccount = (handleCloseDialog: () => void) => {
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         if (error) {
-          handleCloseDialog();
-          enqueueSnackbar(error.response?.data.errorMessage, {
-            autoHideDuration: 9000,
-            variant: "error",
-          });
+          //This email is already existed
+
+          let tmpError = error.response?.data.errorMessage;
+          if (tmpError?.includes("This email is already existed")) {
+            tmpError = "Email này đã tồn tại";
+            enqueueSnackbar(tmpError, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
+          } else {
+            enqueueSnackbar(error.response?.data.errorMessage, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
+          }
         }
       },
     }

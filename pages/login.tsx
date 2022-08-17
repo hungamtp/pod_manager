@@ -26,6 +26,7 @@ const schema = yup.object().shape({
 });
 export default function Login(props: ILoginProps) {
   const { mutate: login, isLoading, error } = useLogin();
+  const [seePassword, setSeePassword] = React.useState("password");
 
   const defaultValues: FormLogin = {
     email: "",
@@ -40,6 +41,14 @@ export default function Login(props: ILoginProps) {
     defaultValues,
     resolver: yupResolver(schema),
   });
+
+  const handleSeePassword = () => {
+    if (seePassword === "password") {
+      setSeePassword("text");
+    } else {
+      setSeePassword("password");
+    }
+  };
 
   const onSubmit: SubmitHandler<FormLogin> = (data) => {
     login({ email: data.email, password: data.password });
@@ -230,14 +239,17 @@ export default function Login(props: ILoginProps) {
                       </div>
                       <div className="input-group input-group-merge">
                         <input
-                          type="password"
+                          type={seePassword}
                           id="password"
                           className="form-control"
                           placeholder="************"
                           aria-describedby="password"
                           {...register("password")}
                         />
-                        <span className="input-group-text cursor-pointer">
+                        <span
+                          className="input-group-text cursor-pointer"
+                          onClick={handleSeePassword}
+                        >
                           <i className="bx bx-hide" />
                         </span>
                       </div>

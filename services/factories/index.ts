@@ -72,8 +72,13 @@ export const createAccountFactory = async (requestData: CreateFactoryDto) => {
   );
   return data;
 };
-export const DeleteAccountFactory = async (id: string) => {
-  await API.patch(`/factory/collaborating/${id}?collaborating=false`);
+export const DeleteAccountFactory = async (data: {
+  id: string;
+  isCollaborating: string;
+}) => {
+  await API.patch(
+    `/factory/collaborating/${data.id}?collaborating=${data.isCollaborating}`
+  );
 };
 
 export const getFactoryById = async (id: string, filter?: Filter) => {

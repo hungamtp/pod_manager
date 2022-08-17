@@ -108,6 +108,11 @@ export default function ManageAccount(props: IManageAccountProps) {
     setOpenDeleteDialog(false);
   };
   const handleSearchChange = (event: SelectChangeEvent) => {
+    if (event.target.value === "USER" || event.target.value === "ADMIN") {
+      setIsSearchDisable(true);
+    } else {
+      setIsSearchDisable(false);
+    }
     setSearchCriteria(event.target.value);
     setFilter((state) => ({ ...state, searchCriteria: event.target.value }));
   };
@@ -118,7 +123,9 @@ export default function ManageAccount(props: IManageAccountProps) {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [account, setAccount] = useState<UpdateAccountDto>(defaultValues);
   const [isDelete, setIsDelete] = useState("");
+  const [isSearchDisable, setIsSearchDisable] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+
   return (
     <>
       <div>
@@ -261,6 +268,7 @@ export default function ManageAccount(props: IManageAccountProps) {
                 >
                   <input
                     type="text"
+                    disabled={isSearchDisable}
                     className="form-control border-0 shadow-none w-full"
                     placeholder="Tìm kiếm..."
                     aria-label="Search..."
