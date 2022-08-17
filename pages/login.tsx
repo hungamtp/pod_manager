@@ -28,8 +28,8 @@ export default function Login(props: ILoginProps) {
   const { mutate: login, isLoading, error } = useLogin();
 
   const defaultValues: FormLogin = {
-    email: "duynkse@gmail.com",
-    password: "12345678",
+    email: "",
+    password: "",
   };
   const {
     register,
@@ -213,7 +213,7 @@ export default function Login(props: ILoginProps) {
                         type="text"
                         className="form-control"
                         id="email"
-                        placeholder="Enter your email"
+                        placeholder="Nhập email của bạn"
                         {...register("email")}
                       />
                       {errors.email && (
@@ -233,7 +233,7 @@ export default function Login(props: ILoginProps) {
                           type="password"
                           id="password"
                           className="form-control"
-                          placeholder="············"
+                          placeholder="************"
                           aria-describedby="password"
                           {...register("password")}
                         />
