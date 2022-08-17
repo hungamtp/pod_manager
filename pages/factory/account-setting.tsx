@@ -26,6 +26,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { FactoryInfo } from "@/services/factories/dto/get-factory-by-id-dto";
 export interface AccountSettingProps {}
 
 interface Column {
@@ -67,6 +68,24 @@ export default function AccountSetting(props: AccountSettingProps) {
     useGetFactoryById(credentialId, filter);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [factoryInfo, setFactoryInfo] = React.useState<FactoryInfo>();
+  const [isUpdateFactoryInfo, setIsUpdateFactoryInfo] = React.useState(true);
+  React.useEffect(() => {
+    if (responseFactory && isUpdateFactoryInfo) {
+      const factoryInfo: FactoryInfo = {
+        id: responseFactory.data.id,
+        name: responseFactory.data.name,
+        email: responseFactory.data.email,
+        location: responseFactory.data.location,
+        address: responseFactory.data.address,
+        phone: responseFactory.data.phone,
+        image: responseFactory.data.image,
+        tradeDiscount: responseFactory.data.tradeDiscount,
+      };
+      setFactoryInfo(factoryInfo);
+      setIsUpdateFactoryInfo(false);
+    }
+  }, [responseFactory]);
   const handleOpenSizeColorDialog = (
     data: { quantity: number; size: string; colorImage: string }[]
   ) => {
@@ -110,7 +129,7 @@ export default function AccountSetting(props: AccountSettingProps) {
           <div className="card-body">
             <div className="d-flex align-items-start align-items-sm-center gap-4">
               <img
-                src={responseFactory?.data.image}
+                src={factoryInfo?.image}
                 alt="user-avatar"
                 className="d-block rounded"
                 height={100}
@@ -118,7 +137,7 @@ export default function AccountSetting(props: AccountSettingProps) {
                 id="uploadedAvatar"
               />
               <div className="button-wrapper">
-                <h2>{responseFactory?.data.name}</h2>
+                <h2>{factoryInfo?.name}</h2>
                 <p className="text-muted mb-0"></p>
               </div>
             </div>
@@ -126,7 +145,7 @@ export default function AccountSetting(props: AccountSettingProps) {
           <hr className="my-0" />
           <div className="row">
             <div className="col-md-12">
-              {!isLoadingFactory && responseFactory && (
+              {factoryInfo && (
                 <div className="card mb-4">
                   <h4 className="card-header">Thông tin chi tiết</h4>
                   {/* Account */}
@@ -146,7 +165,7 @@ export default function AccountSetting(props: AccountSettingProps) {
                             type="text"
                             id="ID"
                             name="ID"
-                            defaultValue={responseFactory.data.id}
+                            defaultValue={factoryInfo.id}
                           />
                         </div>
                         <div className="mb-3 col-md-6">
@@ -157,7 +176,7 @@ export default function AccountSetting(props: AccountSettingProps) {
                             type="text"
                             disabled
                             id="Name"
-                            defaultValue={responseFactory.data.name}
+                            defaultValue={factoryInfo.name}
                           />
                         </div>
 
@@ -168,7 +187,7 @@ export default function AccountSetting(props: AccountSettingProps) {
                           <input
                             disabled
                             className="form-control"
-                            defaultValue={responseFactory.data.email}
+                            defaultValue={factoryInfo.email}
                           />
                         </div>
 
@@ -181,7 +200,7 @@ export default function AccountSetting(props: AccountSettingProps) {
                             id="exampleFormControlTextarea1"
                             disabled
                             rows={3}
-                            defaultValue={responseFactory.data.location}
+                            defaultValue={factoryInfo.location}
                           />
                         </div>
                         <div className="mb-3 col-md-6">
@@ -191,7 +210,7 @@ export default function AccountSetting(props: AccountSettingProps) {
                           <input
                             disabled
                             className="form-control"
-                            defaultValue={responseFactory.data.phone}
+                            defaultValue={factoryInfo.phone}
                           />
                         </div>
                         <div className="mb-3 col-md-1">
@@ -200,7 +219,7 @@ export default function AccountSetting(props: AccountSettingProps) {
                             <input
                               disabled
                               className="form-control position-absolute top-50 start-50 translate-middle "
-                              defaultValue={responseFactory.data.tradeDiscount}
+                              defaultValue={factoryInfo.tradeDiscount}
                             />
                             <p className="position-absolute top-50 end-0 translate-middle-y pe-3">
                               %
