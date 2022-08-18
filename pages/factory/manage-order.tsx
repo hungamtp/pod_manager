@@ -13,22 +13,62 @@ import useOrdersFactory from "hooks/factories/use-orders-factory";
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useState } from "react";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import { IconButton } from "@mui/material";
+
 export interface IManageOrder {}
 
 const ITEM_HEIGHT = 48;
 export interface UnitedData extends OrderFactoryDto {
   orderDetailIdList: string[];
 }
+
+interface Column {
+  id: "action" | "name" | "price" | "quantity" | "status" | "date";
+  label: string;
+  minWidth?: number;
+  align?: "right";
+  format?: (value: number) => string;
+}
+
+const columns: readonly Column[] = [
+  { id: "name", label: "Tên", minWidth: 170 },
+  { id: "price", label: "Giá", minWidth: 170 },
+  { id: "quantity", label: "Số lượng", minWidth: 170 },
+  { id: "date", label: "Ngày tạo", minWidth: 170 },
+  { id: "status", label: "Trạng thái", minWidth: 170 },
+  { id: "action", label: "", minWidth: 100 },
+];
 export default function ManageOrder(props: IManageOrder) {
   const credentialId = useAppSelector((state) => state.auth.userId);
   const [filter, setFilter] = useState<Filter>({
     pageNumber: 0,
     pageSize: 10,
   });
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const dispatch = useAppDispatch();
 
   const [unitedOrderDetail, setUnitedOrderDetail] = useState<UnitedData[]>();
   const router = useRouter();
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   const { data: ordersFactoryresponse, isLoading: isLoadingOrdersFactory } =
     useOrdersFactory(credentialId, filter);
@@ -89,108 +129,165 @@ export default function ManageOrder(props: IManageOrder) {
           <h3 className="fw-bold py-3 mb-4">Đơn Hàng</h3>
 
           <br />
+          <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
             {ordersFactoryresponse && unitedOrderDetail ? (
               <>
-                <h5 className="card-header">Quản lý đơn hàng</h5>
-                <div className="table-responsive text-nowrap ">
-                  <table className="table ">
-                    <thead>
-                      <tr>
-                        <th>Chi Tiết</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Giá đơn Hàng</th>
-                        <th>Số lượng</th>
-                        <th>Trạng thái</th>
-                      </tr>
-                    </thead>
-                    <tbody className="table-border-bottom-0">
-                      {unitedOrderDetail &&
-                        unitedOrderDetail.map((orders) => (
-                          <tr key={nanoid()}>
-                            <td>
-                              <button
-                                type="button"
-                                className="btn btn-primary btn-sm"
-                                onClick={() => {
-                                  dispatch(
-                                    addUnitedData({
-                                      orderId: orders.orderId,
-                                      designId: orders.designId,
-                                      productName: orders.productName,
-                                      designName: orders.designName,
-                                      credentialId: credentialId,
-                                      orderDetailIdList:
-                                        orders.orderDetailIdList,
-                                      orderStatus: orders.status,
-                                    })
-                                  );
-                                  router.push(
-                                    `/factory/order-details-printing`
-                                  );
-                                }}
-                              >
-                                Chi tiết
-                              </button>
-                            </td>
-                            <td>{orders.designName}</td>
+                <div className="table-responsive text-nowrap">
+                  {unitedOrderDetail.length > 0 ? (
+                    <>
+                      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                        <TableContainer sx={{}}>
+                          <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                              <TableRow>
+                                {columns.map((column) => (
+                                  <TableCell
+                                    key={column.id}
+                                    align={column.align}
+                                    style={{ minWidth: column.minWidth }}
+                                  >
+                                    {column.label}
+                                  </TableCell>
+                                ))}
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {unitedOrderDetail
+                                .slice(
+                                  page * rowsPerPage,
+                                  page * rowsPerPage + rowsPerPage
+                                )
+                                .map((row, index) => {
+                                  return (
+                                    <TableRow
+                                      hover
+                                      role="checkbox"
+                                      tabIndex={-1}
+                                      key={nanoid()}
+                                    >
+                                      <TableCell>
+                                        <strong>{row.designName}</strong>
+                                      </TableCell>
 
-                            <td>
-                              <strong>
-                                {numberWithCommas(orders.price)} VND
-                              </strong>
-                            </td>
-                            <td>{orders.quantity} sản phẩm</td>
-                            {orders.canceledOrder === false ? (
-                              <td>
-                                {orders.status === "PENDING" && (
-                                  <span className="badge bg-label-warning me-1">
-                                    CHỜ XÁC NHẬN
-                                  </span>
-                                )}
-                                {orders.status === "PRINTING" && (
-                                  <span className="badge bg-label-warning me-1">
-                                    CHỜ IN
-                                  </span>
-                                )}
-                                {orders.status === "PACKAGING" && (
-                                  <span className="badge bg-label-warning me-1">
-                                    ĐANG ĐÓNG GÓI
-                                  </span>
-                                )}
-                                {orders.status === "DELIVERING" && (
-                                  <span className="badge bg-label-warning me-1">
-                                    ĐANG GIAO HÀNG
-                                  </span>
-                                )}
-                                {orders.status === "DELIVERED" && (
-                                  <span className="badge bg-label-warning me-1">
-                                    ĐÃ GIAO
-                                  </span>
-                                )}
-                                {orders.status === "DONE" && (
-                                  <span className="badge bg-label-success me-1">
-                                    HOÀN THÀNH
-                                  </span>
-                                )}
-                                {orders.status === "CANCEL" && (
-                                  <span className="badge bg-label-danger me-1">
-                                    ĐÃ HỦY
-                                  </span>
-                                )}
-                              </td>
-                            ) : (
-                              <td>
-                                <span className="badge bg-label-danger me-1">
-                                  ĐÃ HỦY
-                                </span>
-                              </td>
-                            )}
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
+                                      <TableCell>
+                                        <strong>
+                                          {numberWithCommas(row.price)} VND
+                                        </strong>
+                                      </TableCell>
+
+                                      <TableCell>
+                                        <strong>{row.quantity} sản phẩm</strong>
+                                      </TableCell>
+
+                                      <TableCell>
+                                        <strong>
+                                          {`${new Date(
+                                            row.createDate
+                                          ).getDate()}-${new Date(
+                                            row.createDate
+                                          ).getMonth()}-${new Date(
+                                            row.createDate
+                                          ).getFullYear()}`}
+                                        </strong>
+                                      </TableCell>
+
+                                      <TableCell>
+                                        {row.canceledOrder === false ? (
+                                          <td>
+                                            {row.status === "PENDING" && (
+                                              <span className="badge bg-label-warning me-1">
+                                                CHỜ XÁC NHẬN
+                                              </span>
+                                            )}
+                                            {row.status === "PRINTING" && (
+                                              <span className="badge bg-label-warning me-1">
+                                                CHỜ IN
+                                              </span>
+                                            )}
+                                            {row.status === "PACKAGING" && (
+                                              <span className="badge bg-label-warning me-1">
+                                                ĐANG ĐÓNG GÓI
+                                              </span>
+                                            )}
+                                            {row.status === "DELIVERING" && (
+                                              <span className="badge bg-label-warning me-1">
+                                                ĐANG GIAO HÀNG
+                                              </span>
+                                            )}
+                                            {row.status === "DELIVERED" && (
+                                              <span className="badge bg-label-warning me-1">
+                                                ĐÃ GIAO
+                                              </span>
+                                            )}
+                                            {row.status === "DONE" && (
+                                              <span className="badge bg-label-success me-1">
+                                                HOÀN THÀNH
+                                              </span>
+                                            )}
+                                            {row.status === "CANCEL" && (
+                                              <span className="badge bg-label-danger me-1">
+                                                ĐÃ HỦY
+                                              </span>
+                                            )}
+                                          </td>
+                                        ) : (
+                                          <td>
+                                            <span className="badge bg-label-danger me-1">
+                                              ĐÃ HỦY
+                                            </span>
+                                          </td>
+                                        )}
+                                      </TableCell>
+                                      <TableCell>
+                                        <button
+                                          type="button"
+                                          className="btn btn-primary btn-sm"
+                                          onClick={() => {
+                                            dispatch(
+                                              addUnitedData({
+                                                orderId: row.orderId,
+                                                designId: row.designId,
+                                                productName: row.productName,
+                                                designName: row.designName,
+                                                credentialId: credentialId,
+                                                orderDetailIdList:
+                                                  row.orderDetailIdList,
+                                                orderStatus: row.status,
+                                              })
+                                            );
+                                            router.push(
+                                              `/factory/order-details-printing`
+                                            );
+                                          }}
+                                        >
+                                          Chi tiết
+                                        </button>
+                                      </TableCell>
+                                    </TableRow>
+                                  );
+                                })}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                        {unitedOrderDetail && (
+                          <TablePagination
+                            rowsPerPageOptions={[5]}
+                            count={unitedOrderDetail.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                          />
+                        )}
+                      </Paper>
+                    </>
+                  ) : (
+                    <div className="h3 text-center p-3">
+                      Nhà in này hiện chưa có sản phẩm nào
+                    </div>
+                  )}
                 </div>
               </>
             ) : (
