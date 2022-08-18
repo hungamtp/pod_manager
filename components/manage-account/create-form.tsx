@@ -29,15 +29,15 @@ const schema = yup.object().shape({
   firstName: yup
     .string()
     .trim()
-    .min(1, "First Name cần ít nhất 1 kí tự")
-    .max(26, "First Name tối đa 50 kí tự")
-    .required("First Name không được để trống"),
+    .min(1, "Tên cần ít nhất 1 kí tự")
+    .max(26, "Tên tối đa 50 kí tự")
+    .required("Tên không được để trống"),
   lastName: yup
     .string()
     .trim()
-    .min(1, "Last Name cần ít nhất 1 kí tự")
-    .max(26, "Last Name tối đa 50 kí tự")
-    .required("Last Name không được để trống"),
+    .min(1, "Họ cần ít nhất 1 kí tự")
+    .max(26, "Họ tối đa 50 kí tự")
+    .required("Họ không được để trống"),
   password: yup
     .string()
     .trim()

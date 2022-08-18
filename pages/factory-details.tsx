@@ -46,8 +46,8 @@ const schema = yup.object().shape({
   tradeDiscount: yup
     .number()
     .typeError("Vui lòng nhập số")
-    .min(1, "Chiết khấu cần ít nhất 1 %")
-    .max(300, "Chiết khấu tối đa 100 %")
+    .min(5, "Chiết khấu cần ít nhất 1 %")
+    .max(50, "Chiết khấu tối đa 50 %")
     .required("Chiết khấu không được để trống"),
 });
 
@@ -203,7 +203,7 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
 
                         <div className="mb-3 col-md-6">
                           <label htmlFor="organization" className="form-label">
-                            email
+                            Email
                           </label>
                           <input
                             disabled

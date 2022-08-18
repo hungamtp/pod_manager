@@ -51,8 +51,8 @@ const schema = yup.object().shape({
   quantity: yup
     .number()
     .typeError("Vui lòng nhập số")
-    .min(10, "quantity phải lớn hơn 10")
-    .required("quantity không được để trống"),
+    .min(10, "Số lượng sản phẩm phải lớn hơn 10")
+    .required("Số lượng sản phẩm không được để trống"),
 });
 
 export default function CreateSizeColorProductForm(

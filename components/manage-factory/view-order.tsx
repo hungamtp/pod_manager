@@ -140,9 +140,10 @@ export default function ViewOrder({
                           </div>
                           <Image
                             src={renderedImage.image}
+                            unoptimized={true}
                             alt="Picture of the author"
-                            width={8000}
-                            height={8000}
+                            width={4000}
+                            height={4000}
                             objectFit="cover"
                           />
                         </div>
@@ -308,7 +309,9 @@ export default function ViewOrder({
                                         className="w-50"
                                       >
                                         <div className=" border p-2">
-                                          {topPos * measurementType.value}{" "}
+                                          {to2Decimals(
+                                            topPos * measurementType.value
+                                          )}{" "}
                                           {measurementType.name}
                                         </div>
                                         <div className=" border p-2">
@@ -326,7 +329,9 @@ export default function ViewOrder({
                                           {measurementType.name}
                                         </div>
                                         <div className=" border p-2">
-                                          {leftPos * measurementType.value}{" "}
+                                          {to2Decimals(
+                                            leftPos * measurementType.value
+                                          )}{" "}
                                           {measurementType.name}
                                         </div>
                                       </div>
