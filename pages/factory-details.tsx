@@ -19,6 +19,8 @@ import useUpdateFactory from "hooks/factories/use-update-factory";
 import { FactoryInfo } from "@/services/factories/dto/get-factory-by-id-dto";
 import { useSnackbar } from "notistack";
 import { useQueryClient } from "react-query";
+import { Skeleton } from "@mui/material";
+
 /* eslint-disable @next/next/no-css-tags */
 export interface FactoryDetailsProps {}
 
@@ -135,188 +137,297 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
   return (
     <>
       <div>
-        <div className="container-xxl flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4"></h4>
-          <div className="card-body">
-            <div className="d-flex align-items-start align-items-sm-center gap-4">
-              <img
-                src={factoryInfo?.image}
-                alt="user-avatar"
-                className="d-block rounded"
-                height={100}
-                width={100}
-                id="uploadedAvatar"
-              />
-              <div className="button-wrapper">
-                <h2>{factoryInfo?.name}</h2>
-                <p className="text-muted mb-0"></p>
+        {isLoadingFactory && (
+          <div>
+            <div className="container-xxl flex-grow-1 container-p-y">
+              <h4 className="fw-bold py-3 mb-4"></h4>
+              <div className="card-body">
+                <div className="d-flex align-items-start align-items-sm-center gap-4">
+                  <Skeleton width={100} height={100} />
+                  <div className="button-wrapper">
+                    <h2>
+                      <Skeleton width={130} height={50} />{" "}
+                    </h2>
+                    <p className="text-muted mb-0"></p>
+                  </div>
+                </div>
+              </div>
+              <hr className="my-0" />
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="card mb-4">
+                    <h4 className="card-header">
+                      <Skeleton width="20%" height={40} />
+                    </h4>
+                    {/* Account */}
+
+                    <div className="card-body">
+                      <form id="formAccountSettings">
+                        <div className="card-body">
+                          <div className="d-flex align-items-start align-items-sm-center gap-4"></div>
+                        </div>
+                        <hr className="my-0" />
+                        <div className="row">
+                          <div className="mb-3 col-md-6">
+                            <label className="form-label">
+                              <Skeleton width={30} height={30} />
+                            </label>
+                            <Skeleton height={60} />
+                          </div>
+                          <div className="mb-3 col-md-6">
+                            <label className="form-label">
+                              <Skeleton width={30} height={30} />
+                            </label>
+
+                            <Skeleton height={60} />
+                          </div>
+
+                          <div className="mb-3 col-md-6">
+                            <label
+                              htmlFor="organization"
+                              className="form-label"
+                            >
+                              <Skeleton width={30} height={30} />
+                            </label>
+                            <Skeleton height={60} />
+                          </div>
+
+                          <div className="mb-3 col-md-6">
+                            <label
+                              htmlFor="organization"
+                              className="form-label"
+                            >
+                              <Skeleton width={30} height={30} />
+                            </label>
+                            <Skeleton height={60} />
+                          </div>
+                          <div className="mb-3 col-md-6">
+                            <label
+                              htmlFor="organization"
+                              className="form-label"
+                            >
+                              <Skeleton width={30} height={30} />
+                            </label>
+                            <Skeleton height={60} />
+                          </div>
+                          <div className="mb-3 col-md-1">
+                            <label className="form-label ">
+                              <Skeleton width={30} height={30} />
+                            </label>
+                            <div className="position-relative">
+                              <Skeleton height={60} />
+                            </div>
+                          </div>
+                          {/* Small table */}
+
+                          <hr className="my-5" />
+                        </div>
+                      </form>
+                    </div>
+                    {/* /Account */}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* / Content */}
+
+            <div className="content-backdrop fade" />
+          </div>
+        )}
+        {!isLoadingFactory && factoryInfo && (
+          <div className="container-xxl flex-grow-1 container-p-y">
+            <h4 className="fw-bold py-3 mb-4"></h4>
+            <div className="card-body">
+              <div className="d-flex align-items-start align-items-sm-center gap-4">
+                <img
+                  src={factoryInfo?.image}
+                  alt="user-avatar"
+                  className="d-block rounded"
+                  height={100}
+                  width={100}
+                  id="uploadedAvatar"
+                />
+                <div className="button-wrapper">
+                  <h2>{factoryInfo?.name}</h2>
+                  <p className="text-muted mb-0"></p>
+                </div>
+              </div>
+            </div>
+            <hr className="my-0" />
+            <div className="row">
+              <div className="col-md-12">
+                {factoryInfo && (
+                  <div className="card mb-4">
+                    <h4 className="card-header">Thông tin chi tiết</h4>
+                    {/* Account */}
+
+                    <div className="card-body">
+                      <form
+                        id="formAccountSettings"
+                        onSubmit={handleSubmit(onSubmit)}
+                      >
+                        <div className="card-body">
+                          <div className="d-flex align-items-start align-items-sm-center gap-4"></div>
+                        </div>
+                        <hr className="my-0" />
+                        <div className="row">
+                          <div className="mb-3 col-md-6">
+                            <label className="form-label">ID</label>
+                            <input
+                              disabled
+                              className="form-control"
+                              type="text"
+                              id="ID"
+                              defaultValue={factoryInfo.id}
+                            />
+                          </div>
+                          <div className="mb-3 col-md-6">
+                            <label className="form-label">Tên</label>
+
+                            <input
+                              className="form-control"
+                              type="text"
+                              disabled={isDisabled}
+                              defaultValue={factoryInfo.name}
+                              {...register("name")}
+                            />
+                            {errors.name && (
+                              <span
+                                id="error-pwd-message"
+                                className="text-danger"
+                              >
+                                {errors.name.message}
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="mb-3 col-md-6">
+                            <label
+                              htmlFor="organization"
+                              className="form-label"
+                            >
+                              Email
+                            </label>
+                            <input
+                              disabled
+                              className="form-control"
+                              defaultValue={factoryInfo.email}
+                            />
+                          </div>
+
+                          <div className="mb-3 col-md-6">
+                            <label
+                              htmlFor="organization"
+                              className="form-label"
+                            >
+                              Địa chỉ
+                            </label>
+                            <textarea
+                              className="form-control"
+                              id="exampleFormControlTextarea1"
+                              disabled={isDisabled}
+                              rows={3}
+                              defaultValue={factoryInfo.location}
+                              {...register("address")}
+                            />
+                            {errors.address && (
+                              <span
+                                id="error-pwd-message"
+                                className="text-danger"
+                              >
+                                {errors.address.message}
+                              </span>
+                            )}
+                          </div>
+                          <div className="mb-3 col-md-6">
+                            <label
+                              htmlFor="organization"
+                              className="form-label"
+                            >
+                              Số điện thoại
+                            </label>
+                            <input
+                              disabled={isDisabled}
+                              className="form-control"
+                              defaultValue={factoryInfo.phone}
+                              {...register("phone")}
+                            />
+                            {errors.phone && (
+                              <span
+                                id="error-pwd-message"
+                                className="text-danger"
+                              >
+                                {errors.phone.message}
+                              </span>
+                            )}
+                          </div>
+                          <div className="mb-3 col-md-1">
+                            <label className="form-label ">Chiết khấu</label>
+                            <div className="position-relative mt-3">
+                              <input
+                                disabled={isDisabled}
+                                className="form-control position-absolute top-50 start-50 translate-middle "
+                                defaultValue={factoryInfo.tradeDiscount}
+                                {...register("tradeDiscount")}
+                              />
+                              <p className="position-absolute top-50 end-0 translate-middle-y pe-3">
+                                %
+                              </p>
+                            </div>
+                            {errors.tradeDiscount && (
+                              <span
+                                id="error-pwd-message"
+                                className="text-danger mt-4 position-absolute col-md-7"
+                              >
+                                {errors.tradeDiscount.message}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Small table */}
+                          <hr className="my-5" />
+                        </div>
+                        <div className="mt-2">
+                          {isEditFactory === false && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                handleEditFactory();
+                              }}
+                              className="btn btn-primary me-2"
+                            >
+                              Chỉnh sửa
+                            </button>
+                          )}
+                          {isEditFactory && (
+                            <button
+                              type="submit"
+                              className="btn btn-primary me-2"
+                            >
+                              Lưu thay đổi
+                            </button>
+                          )}
+
+                          <button
+                            type="button"
+                            className="btn btn-outline-secondary"
+                            onClick={() => {
+                              router.push("manage-factory");
+                            }}
+                          >
+                            Trở về
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                    {/* /Account */}
+                  </div>
+                )}
               </div>
             </div>
           </div>
-          <hr className="my-0" />
-          <div className="row">
-            <div className="col-md-12">
-              {factoryInfo && (
-                <div className="card mb-4">
-                  <h4 className="card-header">Thông tin chi tiết</h4>
-                  {/* Account */}
-
-                  <div className="card-body">
-                    <form
-                      id="formAccountSettings"
-                      onSubmit={handleSubmit(onSubmit)}
-                    >
-                      <div className="card-body">
-                        <div className="d-flex align-items-start align-items-sm-center gap-4"></div>
-                      </div>
-                      <hr className="my-0" />
-                      <div className="row">
-                        <div className="mb-3 col-md-6">
-                          <label className="form-label">ID</label>
-                          <input
-                            disabled
-                            className="form-control"
-                            type="text"
-                            id="ID"
-                            defaultValue={factoryInfo.id}
-                          />
-                        </div>
-                        <div className="mb-3 col-md-6">
-                          <label className="form-label">Tên</label>
-
-                          <input
-                            className="form-control"
-                            type="text"
-                            disabled={isDisabled}
-                            defaultValue={factoryInfo.name}
-                            {...register("name")}
-                          />
-                          {errors.name && (
-                            <span
-                              id="error-pwd-message"
-                              className="text-danger"
-                            >
-                              {errors.name.message}
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="mb-3 col-md-6">
-                          <label htmlFor="organization" className="form-label">
-                            Email
-                          </label>
-                          <input
-                            disabled
-                            className="form-control"
-                            defaultValue={factoryInfo.email}
-                          />
-                        </div>
-
-                        <div className="mb-3 col-md-6">
-                          <label htmlFor="organization" className="form-label">
-                            Địa chỉ
-                          </label>
-                          <textarea
-                            className="form-control"
-                            id="exampleFormControlTextarea1"
-                            disabled={isDisabled}
-                            rows={3}
-                            defaultValue={factoryInfo.location}
-                            {...register("address")}
-                          />
-                          {errors.address && (
-                            <span
-                              id="error-pwd-message"
-                              className="text-danger"
-                            >
-                              {errors.address.message}
-                            </span>
-                          )}
-                        </div>
-                        <div className="mb-3 col-md-6">
-                          <label htmlFor="organization" className="form-label">
-                            Số điện thoại
-                          </label>
-                          <input
-                            disabled={isDisabled}
-                            className="form-control"
-                            defaultValue={factoryInfo.phone}
-                            {...register("phone")}
-                          />
-                          {errors.phone && (
-                            <span
-                              id="error-pwd-message"
-                              className="text-danger"
-                            >
-                              {errors.phone.message}
-                            </span>
-                          )}
-                        </div>
-                        <div className="mb-3 col-md-1">
-                          <label className="form-label ">Chiết khấu</label>
-                          <div className="position-relative mt-3">
-                            <input
-                              disabled={isDisabled}
-                              className="form-control position-absolute top-50 start-50 translate-middle "
-                              defaultValue={factoryInfo.tradeDiscount}
-                              {...register("tradeDiscount")}
-                            />
-                            <p className="position-absolute top-50 end-0 translate-middle-y pe-3">
-                              %
-                            </p>
-                          </div>
-                          {errors.tradeDiscount && (
-                            <span
-                              id="error-pwd-message"
-                              className="text-danger mt-4 position-absolute col-md-7"
-                            >
-                              {errors.tradeDiscount.message}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Small table */}
-                        <hr className="my-5" />
-                      </div>
-                      <div className="mt-2">
-                        {isEditFactory === false && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              handleEditFactory();
-                            }}
-                            className="btn btn-primary me-2"
-                          >
-                            Chỉnh sửa
-                          </button>
-                        )}
-                        {isEditFactory && (
-                          <button
-                            type="submit"
-                            className="btn btn-primary me-2"
-                          >
-                            Lưu thay đổi
-                          </button>
-                        )}
-
-                        <button
-                          type="button"
-                          className="btn btn-outline-secondary"
-                          onClick={() => {
-                            router.push("manage-factory");
-                          }}
-                        >
-                          Trở về
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                  {/* /Account */}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        )}
         {/* / Content */}
         <div className="content-backdrop fade" />
       </div>

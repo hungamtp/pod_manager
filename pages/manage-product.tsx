@@ -30,9 +30,13 @@ import useProducts from "hooks/products/use-products";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
+import { nanoid } from "@reduxjs/toolkit";
+import { Skeleton } from "@mui/material";
 import { useState } from "react";
 export interface IManageProductProps {}
 const ITEM_HEIGHT = 48;
+
+const arr = [1, 2, 3, 4];
 
 export default function ManageProduct(props: IManageProductProps) {
   const [filter, setFilter] = useState<Filter>({
@@ -151,262 +155,370 @@ export default function ManageProduct(props: IManageProductProps) {
     <>
       <div>
         {/* Layout wrapper */}
-
-        {/* Content */}
-        <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h3 className="fw-bold py-3 mb-4">Sản phẩm thô</h3>
-          <button
-            className="btn btn-success ms-4 text-dark"
-            onClick={handleIsEditFalse}
-          >
-            <AddIcon sx={{ mr: 1 }} />
-            Tạo mới sản phẩm thô
-          </button>
-
-          <hr className="my-4" />
-          {isEdit == false && (
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Tạo mới sản phẩm thô"}
-              </DialogTitle>
-              <DialogContent>
-                <CreateProductForm handleCloseDialog={handleCloseDialog} />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
-          {isEdit == true && (
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Chỉnh sửa sản phẩm"}
-              </DialogTitle>
-              <DialogContent>
-                <UpdateProductForm
-                  product={product}
-                  handleCloseDialog={handleCloseDialog}
-                />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
-
-          {isPublish == true && (
-            <Dialog
-              open={openPublishDialog}
-              onClose={handleClosePublishDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Bạn có muốn ngừng công bố sản phẩm thô này không?"}
-              </DialogTitle>
-              <DialogContent>
-                <UnPublishProduct
-                  idProduct={idProduct}
-                  handleClosePublishDialog={handleClosePublishDialog}
-                />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
-
-          {isPublish == false && (
-            <Dialog
-              open={openPublishDialog}
-              onClose={handleClosePublishDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Bạn có muốn công bố sản phẩm thô này không?"}
-              </DialogTitle>
-              <DialogContent>
-                <PublishProduct
-                  idProduct={idProduct}
-                  handleClosePublishDialog={handleClosePublishDialog}
-                />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
-
-          <Dialog
-            open={openDeleteDialog}
-            onClose={handleCloseDeleteDialog}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            fullWidth={true}
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"Bạn có muốn xóa sản phẩm thô này không?"}
-            </DialogTitle>
-            <DialogContent>
-              <div className="d-flex justify-content-center">
-                <div className="col-sm-10 d-flex justify-content-around">
-                  <button
-                    className="btn btn-danger"
-                    color="danger"
-                    onClick={() => {
-                      onDelete(isDelete);
-                    }}
-                  >
-                    Xóa
-                  </button>
-                  <button
-                    className="btn btn-secondary"
-                    onClick={handleCloseDeleteDialog}
-                    autoFocus
-                  >
-                    không
-                  </button>
+        {isLoadingProduct && (
+          <>
+            <div className="container-xxl w-80p flex-grow-1 container-p-y">
+              <h3 className="fw-bold py-3 mb-1">
+                <Skeleton width={150} height={50} />
+              </h3>
+              <Skeleton width={170} height={60} className="ms-5" />
+              <br />
+              {/* Basic Bootstrap Table */}
+              <nav
+                className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                id="layout-navbar"
+              >
+                <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                  <a className="nav-item nav-link px-0 me-xl-4">
+                    <i className="bx bx-menu bx-sm" />
+                  </a>
+                </div>
+                <div
+                  className="navbar-nav-right d-flex align-items-center"
+                  id="navbar-collapse"
+                >
+                  <Skeleton width={150} height={60} />
+                  {/* Search */}
+                  <div className="nav-item d-flex align-items-center w-full">
+                    <Skeleton width={40} height={60} className="ms-2" />
+                    <Skeleton width="100%" height={60} className="ms-2" />
+                  </div>
+                  {/* /Search */}
+                </div>
+              </nav>
+              <br />
+              <div className="card ">
+                <h5 className="card-header">
+                  <Skeleton width={160} height={40} />
+                </h5>
+                <div className="table-responsive text-nowrap ">
+                  <table className="table ">
+                    <thead>
+                      <tr>
+                        <th>
+                          <Skeleton width={50} height={35} />
+                        </th>
+                        <th>
+                          <Skeleton width={50} height={35} />
+                        </th>
+                        <th>
+                          <Skeleton width={50} height={35} />
+                        </th>
+                        <th>
+                          <Skeleton width={70} height={35} />
+                        </th>
+                        <th>
+                          <Skeleton width={50} height={35} />
+                        </th>
+                        <th>
+                          <Skeleton width={70} height={35} />
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="table-border-bottom-0">
+                      {arr.map((arr) => (
+                        <tr key={nanoid()}>
+                          <td>
+                            <strong>
+                              <Skeleton width={80} height={35} />
+                            </strong>
+                          </td>
+                          <td>
+                            <strong>
+                              <Skeleton width={80} height={35} />
+                            </strong>
+                          </td>
+                          <td>
+                            <strong>
+                              <Skeleton width={80} height={35} />
+                            </strong>
+                          </td>
+                          <td>
+                            <Skeleton width={100} height={100} />
+                          </td>
+                          <td>
+                            <Skeleton width={50} height={30} />
+                          </td>
+                          <td>
+                            <div>
+                              <Skeleton width={70} height={50} />
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
-            </DialogContent>
-            <DialogActions></DialogActions>
-          </Dialog>
+              <br />
+              {/*/ Table within card */}
 
-          {/* Dialog */}
-          <nav
-            className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-            id="layout-navbar"
-          >
-            <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-              <a className="nav-item nav-link px-0 me-xl-4">
-                <i className="bx bx-menu bx-sm" />
-              </a>
+              <hr className="my-5" />
+              {/* Responsive Table */}
+
+              {/*/ Responsive Table */}
             </div>
-            <div
-              className="navbar-nav-right d-flex align-items-center"
-              id="navbar-collapse"
+          </>
+        )}
+        {/* Content */}
+        {!isLoadingProduct && (
+          <div className="container-xxl w-80p flex-grow-1 container-p-y">
+            <h3 className="fw-bold py-3 mb-4">Sản phẩm thô</h3>
+            <button
+              className="btn btn-success ms-4 text-dark"
+              onClick={handleIsEditFalse}
             >
-              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                <Select
-                  labelId="demo-select-small"
-                  id="demo-select-small"
-                  value={searchValue}
-                  label="Role"
-                  onChange={handleSearchClick}
-                  inputProps={{
-                    disableUnderline: true,
-                  }}
-                  variant="standard"
-                >
-                  <MenuItem className="d-flex flex-column" value="name">
-                    Tên
-                  </MenuItem>
-                  <MenuItem className="d-flex flex-column" value="categoryName">
-                    Thể loại
-                  </MenuItem>
-                </Select>
-              </FormControl>
-              {/* Search */}
-              <div className="nav-item d-flex align-items-center w-full">
-                <i className="bx bx-search fs-4 lh-0" />
-                <form
-                  onSubmit={(e: any) => {
-                    e.preventDefault();
-                    setFilter((state) => ({
-                      ...state,
-                      search: e.target[0].value,
-                    }));
-                  }}
-                  className="form-control border-0 shadow-none w-full"
-                >
-                  <input
-                    type="text"
-                    className="form-control border-0  shadow-none w-full"
-                    placeholder="Tìm kiếm..."
-                    aria-label="Search..."
+              <AddIcon sx={{ mr: 1 }} />
+              Tạo mới sản phẩm thô
+            </button>
+
+            <hr className="my-4" />
+            {isEdit == false && (
+              <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth={true}
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Tạo mới sản phẩm thô"}
+                </DialogTitle>
+                <DialogContent>
+                  <CreateProductForm handleCloseDialog={handleCloseDialog} />
+                </DialogContent>
+                <DialogActions></DialogActions>
+              </Dialog>
+            )}
+            {isEdit == true && (
+              <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth={true}
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Chỉnh sửa sản phẩm"}
+                </DialogTitle>
+                <DialogContent>
+                  <UpdateProductForm
+                    product={product}
+                    handleCloseDialog={handleCloseDialog}
                   />
-                </form>
+                </DialogContent>
+                <DialogActions></DialogActions>
+              </Dialog>
+            )}
+
+            {isPublish == true && (
+              <Dialog
+                open={openPublishDialog}
+                onClose={handleClosePublishDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth={true}
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Bạn có muốn ngừng công bố sản phẩm thô này không?"}
+                </DialogTitle>
+                <DialogContent>
+                  <UnPublishProduct
+                    idProduct={idProduct}
+                    handleClosePublishDialog={handleClosePublishDialog}
+                  />
+                </DialogContent>
+                <DialogActions></DialogActions>
+              </Dialog>
+            )}
+
+            {isPublish == false && (
+              <Dialog
+                open={openPublishDialog}
+                onClose={handleClosePublishDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth={true}
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Bạn có muốn công bố sản phẩm thô này không?"}
+                </DialogTitle>
+                <DialogContent>
+                  <PublishProduct
+                    idProduct={idProduct}
+                    handleClosePublishDialog={handleClosePublishDialog}
+                  />
+                </DialogContent>
+                <DialogActions></DialogActions>
+              </Dialog>
+            )}
+
+            <Dialog
+              open={openDeleteDialog}
+              onClose={handleCloseDeleteDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              fullWidth={true}
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Bạn có muốn xóa sản phẩm thô này không?"}
+              </DialogTitle>
+              <DialogContent>
+                <div className="d-flex justify-content-center">
+                  <div className="col-sm-10 d-flex justify-content-around">
+                    <button
+                      className="btn btn-danger"
+                      color="danger"
+                      onClick={() => {
+                        onDelete(isDelete);
+                      }}
+                    >
+                      Xóa
+                    </button>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={handleCloseDeleteDialog}
+                      autoFocus
+                    >
+                      không
+                    </button>
+                  </div>
+                </div>
+              </DialogContent>
+              <DialogActions></DialogActions>
+            </Dialog>
+
+            {/* Dialog */}
+            <nav
+              className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+              id="layout-navbar"
+            >
+              <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                <a className="nav-item nav-link px-0 me-xl-4">
+                  <i className="bx bx-menu bx-sm" />
+                </a>
               </div>
-              {/* /Search */}
-            </div>
-          </nav>
-          <br />
-          {/* Basic Bootstrap Table */}
-          <div className="card ">
-            <h4 className="card-header">Quản lý sản phẩm thô</h4>
-            <div className="table-responsive text-nowrap ">
-              <table className="table ">
-                <thead>
-                  <tr>
-                    <th>Tên sản phẩm</th>
-                    <th>Thể loại</th>
-                    <th>Publish</th>
-                    <th>Mô tả sản phẩm</th>
-                    <th>Delete</th>
-                    <th>hành động</th>
-                    <th>Chi tiết</th>
-                  </tr>
-                </thead>
-                <tbody className="table-border-bottom-0">
-                  {!isLoadingProduct &&
-                    response &&
-                    response.content.map((x) => (
-                      <tr key={x.id}>
-                        <td>
-                          <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
-                          <strong>
-                            <Link href={`/product-details?id=${x.id}`}>
-                              {x.name}
-                            </Link>
-                          </strong>
-                        </td>
-                        <td>{x.categoryName}</td>
-                        <td>
-                          {x.public == true && (
-                            <span className="badge bg-label-info me-1">
-                              TRUE
-                            </span>
-                          )}
-                          {x.public == false && (
-                            <span className="badge bg-label-danger me-1">
-                              FALSE
-                            </span>
-                          )}
-                        </td>
-                        <td
-                          style={{
-                            whiteSpace: "pre-wrap",
-                            wordWrap: "break-word",
-                          }}
-                        >
-                          {x.description}{" "}
-                        </td>
+              <div
+                className="navbar-nav-right d-flex align-items-center"
+                id="navbar-collapse"
+              >
+                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                  <Select
+                    labelId="demo-select-small"
+                    id="demo-select-small"
+                    value={searchValue}
+                    label="Role"
+                    onChange={handleSearchClick}
+                    inputProps={{
+                      disableUnderline: true,
+                    }}
+                    variant="standard"
+                  >
+                    <MenuItem className="d-flex flex-column" value="name">
+                      Tên
+                    </MenuItem>
+                    <MenuItem
+                      className="d-flex flex-column"
+                      value="categoryName"
+                    >
+                      Thể loại
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+                {/* Search */}
+                <div className="nav-item d-flex align-items-center w-full">
+                  <i className="bx bx-search fs-4 lh-0" />
+                  <form
+                    onSubmit={(e: any) => {
+                      e.preventDefault();
+                      setFilter((state) => ({
+                        ...state,
+                        search: e.target[0].value,
+                      }));
+                    }}
+                    className="form-control border-0 shadow-none w-full"
+                  >
+                    <input
+                      type="text"
+                      className="form-control border-0  shadow-none w-full"
+                      placeholder="Tìm kiếm..."
+                      aria-label="Search..."
+                    />
+                  </form>
+                </div>
+                {/* /Search */}
+              </div>
+            </nav>
+            <br />
+            {/* Basic Bootstrap Table */}
+            <div className="card ">
+              <h4 className="card-header">Quản lý sản phẩm thô</h4>
+              <div className="table-responsive text-nowrap ">
+                <table className="table ">
+                  <thead>
+                    <tr>
+                      <th>Tên sản phẩm</th>
+                      <th>Thể loại</th>
+                      <th>Publish</th>
+                      <th>Mô tả sản phẩm</th>
+                      <th>Delete</th>
+                      <th>hành động</th>
+                      <th>Chi tiết</th>
+                    </tr>
+                  </thead>
+                  <tbody className="table-border-bottom-0">
+                    {!isLoadingProduct &&
+                      response &&
+                      response.content.map((x) => (
+                        <tr key={x.id}>
+                          <td>
+                            <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
+                            <strong>
+                              <Link href={`/product-details?id=${x.id}`}>
+                                {x.name}
+                              </Link>
+                            </strong>
+                          </td>
+                          <td>{x.categoryName}</td>
+                          <td>
+                            {x.public == true && (
+                              <span className="badge bg-label-info me-1">
+                                TRUE
+                              </span>
+                            )}
+                            {x.public == false && (
+                              <span className="badge bg-label-danger me-1">
+                                FALSE
+                              </span>
+                            )}
+                          </td>
+                          <td
+                            style={{
+                              whiteSpace: "pre-wrap",
+                              wordWrap: "break-word",
+                            }}
+                          >
+                            {x.description}{" "}
+                          </td>
 
-                        {/* <td>{x.productTags[0].tag.name}</td> */}
-                        <td>
-                          {x.deleted == true && (
-                            <span className="badge bg-label-danger me-1">
-                              TRUE
-                            </span>
-                          )}
-                          {x.deleted == false && (
-                            <span className="badge bg-label-primary me-1">
-                              FALSE
-                            </span>
-                          )}
-                        </td>
+                          {/* <td>{x.productTags[0].tag.name}</td> */}
+                          <td>
+                            {x.deleted == true && (
+                              <span className="badge bg-label-danger me-1">
+                                TRUE
+                              </span>
+                            )}
+                            {x.deleted == false && (
+                              <span className="badge bg-label-primary me-1">
+                                FALSE
+                              </span>
+                            )}
+                          </td>
 
-                        <td>
-                          {x.deleted == false && (
-                            <div>
-                              {/* <IconButton
+                          <td>
+                            {x.deleted == false && (
+                              <div>
+                                {/* <IconButton
                                 onClick={() => {
                                   handleIsEditTrue(x);
                                   handleClose();
@@ -415,74 +527,78 @@ export default function ManageProduct(props: IManageProductProps) {
                                 <EditIcon fontSize="medium" color="primary" />
                               </IconButton> */}
 
-                              <IconButton
+                                <IconButton
+                                  onClick={() => {
+                                    hanldeIsDelete(x.id);
+                                  }}
+                                >
+                                  <DeleteIcon fontSize="medium" color="error" />
+                                </IconButton>
+
+                                {x.public == true && (
+                                  <IconButton
+                                    onClick={() => {
+                                      handleIsPublishTrue(x.id);
+                                    }}
+                                  >
+                                    <PublicOffIcon
+                                      fontSize="medium"
+                                      color="warning"
+                                    />
+                                  </IconButton>
+                                )}
+                                {x.public == false && (
+                                  <IconButton
+                                    onClick={() => {
+                                      handleIsPublishFalse(x.id);
+                                    }}
+                                  >
+                                    <PublicIcon
+                                      fontSize="medium"
+                                      color="info"
+                                    />
+                                  </IconButton>
+                                )}
+                              </div>
+                            )}
+                          </td>
+                          <td>
+                            <div>
+                              <button
+                                type="button"
+                                className="btn btn-primary btn-sm"
                                 onClick={() => {
-                                  hanldeIsDelete(x.id);
+                                  router.push(`/product-details?id=${x.id}`);
                                 }}
                               >
-                                <DeleteIcon fontSize="medium" color="error" />
-                              </IconButton>
-
-                              {x.public == true && (
-                                <IconButton
-                                  onClick={() => {
-                                    handleIsPublishTrue(x.id);
-                                  }}
-                                >
-                                  <PublicOffIcon
-                                    fontSize="medium"
-                                    color="warning"
-                                  />
-                                </IconButton>
-                              )}
-                              {x.public == false && (
-                                <IconButton
-                                  onClick={() => {
-                                    handleIsPublishFalse(x.id);
-                                  }}
-                                >
-                                  <PublicIcon fontSize="medium" color="info" />
-                                </IconButton>
-                              )}
+                                Chi tiết
+                              </button>
                             </div>
-                          )}
-                        </td>
-                        <td>
-                          <div>
-                            <button
-                              type="button"
-                              className="btn btn-primary btn-sm"
-                              onClick={() => {
-                                router.push(`/product-details?id=${x.id}`);
-                              }}
-                            >
-                              Chi tiết
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-          <br />
-          {/*/ Table within card */}
-          <Stack spacing={2}>
-            <Pagination
-              shape="circular"
-              size="large"
-              page={filter.pageNumber + 1}
-              count={response?.totalPages}
-              onChange={handlePageChange}
-              color="secondary"
-            />
-          </Stack>
-          <hr className="my-5" />
-          {/* Responsive Table */}
+            <br />
+            {/*/ Table within card */}
+            <Stack spacing={2}>
+              <Pagination
+                shape="circular"
+                size="large"
+                page={filter.pageNumber + 1}
+                count={response?.totalPages}
+                onChange={handlePageChange}
+                color="secondary"
+              />
+            </Stack>
+            <hr className="my-5" />
+            {/* Responsive Table */}
 
-          {/*/ Responsive Table */}
-        </div>
+            {/*/ Responsive Table */}
+          </div>
+        )}
         {/* / Content */}
         {/* Footer */}
 
