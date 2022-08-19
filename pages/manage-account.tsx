@@ -27,10 +27,14 @@ import useDeleteAccount from "hooks/accounts/use-delete-accounts";
 import * as React from "react";
 import { useState } from "react";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { nanoid } from "@reduxjs/toolkit";
+import { Skeleton } from "@mui/material";
 
 export interface IManageAccountProps {}
 
 const ITEM_HEIGHT = 48;
+
+const arr = [1, 2, 3, 4];
 
 export default function ManageAccount(props: IManageAccountProps) {
   const [filter, setFilter] = useState<Filter>({
@@ -132,268 +136,375 @@ export default function ManageAccount(props: IManageAccountProps) {
         {/* Layout wrapper */}
 
         {/* Content */}
-        <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h3 className="fw-bold py-3 mb-4">Tài Khoản</h3>
-          <button
-            className="btn btn-success ms-4 text-dark"
-            onClick={handleIsEditFalse}
-          >
-            <AddIcon sx={{ mr: 1 }} />
-            Tạo mới tài khoản
-          </button>
-
-          <hr className="my-4" />
-          {isEdit == false && (
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Tạo mới tài khoản"}
-              </DialogTitle>
-              <DialogContent>
-                <CreateForm handleCloseDialog={handleCloseDialog} />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
-          {isEdit == true && (
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Update Account"}
-              </DialogTitle>
-              <DialogContent>
-                <UpdateForm
-                  account={account}
-                  handleCloseDialog={handleCloseDialog}
-                />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
-          <Dialog
-            open={openDeleteDialog}
-            onClose={handleCloseDeleteDialog}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            fullWidth={true}
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"Bạn có muốn xóa tài khoản này không?"}
-            </DialogTitle>
-            <DialogContent>
-              <div className="d-flex justify-content-center">
-                <div className="col-sm-10 d-flex justify-content-around">
-                  <button
-                    className="btn btn-danger"
-                    color="danger"
-                    onClick={() => {
-                      onDelete(isDelete);
-                    }}
-                  >
-                    Xóa
-                  </button>
-                  <button
-                    className="btn btn-secondary"
-                    onClick={handleCloseDeleteDialog}
-                    autoFocus
-                  >
-                    Hủy
-                  </button>
+        {isLoadingAccount && (
+          <>
+            <div className="container-xxl w-80p flex-grow-1 container-p-y">
+              <h3 className="fw-bold py-3 mb-1">
+                <Skeleton width={150} height={50} />
+              </h3>
+              <Skeleton width={170} height={60} className="ms-5" />
+              <br />
+              {/* Basic Bootstrap Table */}
+              <nav
+                className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                id="layout-navbar"
+              >
+                <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                  <a className="nav-item nav-link px-0 me-xl-4">
+                    <i className="bx bx-menu bx-sm" />
+                  </a>
+                </div>
+                <div
+                  className="navbar-nav-right d-flex align-items-center"
+                  id="navbar-collapse"
+                >
+                  <Skeleton width={150} height={60} />
+                  {/* Search */}
+                  <div className="nav-item d-flex align-items-center w-full">
+                    <Skeleton width={40} height={60} className="ms-2" />
+                    <Skeleton width="100%" height={60} className="ms-2" />
+                  </div>
+                  {/* /Search */}
+                </div>
+              </nav>
+              <br />
+              <div className="card ">
+                <h5 className="card-header">
+                  <Skeleton width={160} height={40} />
+                </h5>
+                <div className="table-responsive text-nowrap ">
+                  <table className="table ">
+                    <thead>
+                      <tr>
+                        <th>
+                          <Skeleton width={50} height={35} />
+                        </th>
+                        <th>
+                          <Skeleton width={50} height={35} />
+                        </th>
+                        <th>
+                          <Skeleton width={50} height={35} />
+                        </th>
+                        <th>
+                          <Skeleton width={70} height={35} />
+                        </th>
+                        <th>
+                          <Skeleton width={50} height={35} />
+                        </th>
+                        <th>
+                          <Skeleton width={70} height={35} />
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="table-border-bottom-0">
+                      {arr.map((arr) => (
+                        <tr key={nanoid()}>
+                          <td>
+                            <strong>
+                              <Skeleton width={80} height={35} />
+                            </strong>
+                          </td>
+                          <td>
+                            <strong>
+                              <Skeleton width={80} height={35} />
+                            </strong>
+                          </td>
+                          <td>
+                            <strong>
+                              <Skeleton width={80} height={35} />
+                            </strong>
+                          </td>
+                          <td>
+                            <Skeleton width={100} height={100} />
+                          </td>
+                          <td>
+                            <Skeleton width={50} height={30} />
+                          </td>
+                          <td>
+                            <div>
+                              <Skeleton width={70} height={50} />
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
-            </DialogContent>
-            <DialogActions></DialogActions>
-          </Dialog>
-          <nav
-            className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-            id="layout-navbar"
-          >
-            <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-              <a className="nav-item nav-link px-0 me-xl-4">
-                <i className="bx bx-menu bx-sm" />
-              </a>
+              <br />
+              {/*/ Table within card */}
+
+              <hr className="my-5" />
+              {/* Responsive Table */}
+
+              {/*/ Responsive Table */}
             </div>
-            <div
-              className="navbar-nav-right d-flex align-items-center"
-              id="navbar-collapse"
+          </>
+        )}
+        {!isLoadingAccount && (
+          <div className="container-xxl w-80p flex-grow-1 container-p-y">
+            <h3 className="fw-bold py-3 mb-4">Tài Khoản</h3>
+            <button
+              className="btn btn-success ms-4 text-dark"
+              onClick={handleIsEditFalse}
             >
-              <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                <Select
-                  labelId="demo-select-small"
-                  id="demo-select-small"
-                  value={searchCriteria}
-                  label="Role"
-                  onChange={handleSearchChange}
-                  inputProps={{
-                    disableUnderline: true,
-                  }}
-                  variant="standard"
-                >
-                  <MenuItem className="d-flex flex-column" value="NAME">
-                    Tên
-                  </MenuItem>
-                  <MenuItem className="d-flex flex-column" value="EMAIL">
-                    Email
-                  </MenuItem>
-                  <MenuItem className="d-flex flex-column" value="USER">
-                    USER
-                  </MenuItem>
-                  <MenuItem className="d-flex flex-column" value="ADMIN">
-                    ADMIN
-                  </MenuItem>
-                </Select>
-              </FormControl>
-              {/* Search */}
-              <div className="nav-item d-flex align-items-center w-full">
-                <i className="bx bx-search fs-4 lh-0" />
-                <form
-                  onSubmit={(e: any) => {
-                    e.preventDefault();
-                    setFilter((state) => ({
-                      ...state,
-                      searchValues: e.target[0].value,
-                    }));
-                  }}
-                  className="form-control border-0 shadow-none w-full"
-                >
-                  <input
-                    type="text"
-                    disabled={isSearchDisable}
-                    className="form-control border-0 shadow-none w-full"
-                    placeholder="Tìm kiếm..."
-                    aria-label="Search..."
+              <AddIcon sx={{ mr: 1 }} />
+              Tạo mới tài khoản
+            </button>
+
+            <hr className="my-4" />
+            {isEdit == false && (
+              <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth={true}
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Tạo mới tài khoản"}
+                </DialogTitle>
+                <DialogContent>
+                  <CreateForm handleCloseDialog={handleCloseDialog} />
+                </DialogContent>
+                <DialogActions></DialogActions>
+              </Dialog>
+            )}
+            {isEdit == true && (
+              <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth={true}
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Update Account"}
+                </DialogTitle>
+                <DialogContent>
+                  <UpdateForm
+                    account={account}
+                    handleCloseDialog={handleCloseDialog}
                   />
-                </form>
+                </DialogContent>
+                <DialogActions></DialogActions>
+              </Dialog>
+            )}
+            <Dialog
+              open={openDeleteDialog}
+              onClose={handleCloseDeleteDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              fullWidth={true}
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Bạn có muốn xóa tài khoản này không?"}
+              </DialogTitle>
+              <DialogContent>
+                <div className="d-flex justify-content-center">
+                  <div className="col-sm-10 d-flex justify-content-around">
+                    <button
+                      className="btn btn-danger"
+                      color="danger"
+                      onClick={() => {
+                        onDelete(isDelete);
+                      }}
+                    >
+                      Xóa
+                    </button>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={handleCloseDeleteDialog}
+                      autoFocus
+                    >
+                      Hủy
+                    </button>
+                  </div>
+                </div>
+              </DialogContent>
+              <DialogActions></DialogActions>
+            </Dialog>
+            <nav
+              className="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+              id="layout-navbar"
+            >
+              <div className="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                <a className="nav-item nav-link px-0 me-xl-4">
+                  <i className="bx bx-menu bx-sm" />
+                </a>
               </div>
-              {/* /Search */}
-            </div>
-          </nav>
-          <br />
-          {/* Basic Bootstrap Table */}
-          <div className="card ">
-            <h5 className="card-header">Quản lý tài khoản</h5>
-            <div className="table-responsive text-nowrap ">
-              <table className="table ">
-                <thead>
-                  <tr>
-                    <th>Họ</th>
-                    <th>Tên</th>
-                    <th>Email</th>
-                    <th>Số điện thoại</th>
-                    <th>Địa chỉ</th>
-                    <th>Vị trí</th>
-                    <th>Trạng thái</th>
-                    <th>hành động</th>
-                  </tr>
-                </thead>
-                <tbody className="table-border-bottom-0">
-                  {!isLoadingAccount &&
-                    response &&
-                    response.content?.map((x) => (
-                      <tr key={x.id}>
-                        <td>
-                          <strong>{x.userLastName}</strong>
-                        </td>
-                        <td>
-                          <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
-                          <strong>{x.userFirstName}</strong>
-                        </td>
+              <div
+                className="navbar-nav-right d-flex align-items-center"
+                id="navbar-collapse"
+              >
+                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                  <Select
+                    labelId="demo-select-small"
+                    id="demo-select-small"
+                    value={searchCriteria}
+                    label="Role"
+                    onChange={handleSearchChange}
+                    inputProps={{
+                      disableUnderline: true,
+                    }}
+                    variant="standard"
+                  >
+                    <MenuItem className="d-flex flex-column" value="NAME">
+                      Tên
+                    </MenuItem>
+                    <MenuItem className="d-flex flex-column" value="EMAIL">
+                      Email
+                    </MenuItem>
+                    <MenuItem className="d-flex flex-column" value="USER">
+                      USER
+                    </MenuItem>
+                    <MenuItem className="d-flex flex-column" value="ADMIN">
+                      ADMIN
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+                {/* Search */}
+                <div className="nav-item d-flex align-items-center w-full">
+                  <i className="bx bx-search fs-4 lh-0" />
+                  <form
+                    onSubmit={(e: any) => {
+                      e.preventDefault();
+                      setFilter((state) => ({
+                        ...state,
+                        searchValues: e.target[0].value,
+                      }));
+                    }}
+                    className="form-control border-0 shadow-none w-full"
+                  >
+                    <input
+                      type="text"
+                      disabled={isSearchDisable}
+                      className="form-control border-0 shadow-none w-full"
+                      placeholder="Tìm kiếm..."
+                      aria-label="Search..."
+                    />
+                  </form>
+                </div>
+                {/* /Search */}
+              </div>
+            </nav>
+            <br />
+            {/* Basic Bootstrap Table */}
+            <div className="card ">
+              <h5 className="card-header">Quản lý tài khoản</h5>
+              <div className="table-responsive text-nowrap ">
+                <table className="table ">
+                  <thead>
+                    <tr>
+                      <th>Họ</th>
+                      <th>Tên</th>
+                      <th>Email</th>
+                      <th>Số điện thoại</th>
+                      <th>Địa chỉ</th>
+                      <th>Vị trí</th>
+                      <th>Trạng thái</th>
+                      <th>hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody className="table-border-bottom-0">
+                    {!isLoadingAccount &&
+                      response &&
+                      response.content?.map((x) => (
+                        <tr key={x.id}>
+                          <td>
+                            <strong>{x.userLastName}</strong>
+                          </td>
+                          <td>
+                            <i className="fab fa-angular fa-lg text-danger me-3" />{" "}
+                            <strong>{x.userFirstName}</strong>
+                          </td>
 
-                        <td>{x.email}</td>
-                        <td>{x.phone}</td>
-                        <td
-                          style={{
-                            whiteSpace: "pre-wrap",
-                            wordWrap: "break-word",
-                          }}
-                        >
-                          {x.address}
-                        </td>
-                        <td>
-                          {x.roleName == "ADMIN" && (
-                            <span className="w-full badge bg-primary me-1">
-                              {x.roleName}
-                            </span>
-                          )}
-                          {x.roleName == "USER" && (
-                            <span className="w-full badge bg-info me-1">
-                              {x.roleName}
-                            </span>
-                          )}
-                          {x.roleName == "FACTORY" && (
-                            <span className="w-full badge bg-warning me-1">
-                              {x.roleName}
-                            </span>
-                          )}
-                        </td>
-                        <td>
-                          {x.userStatus == "ACTIVE" && (
-                            <span className="badge bg-label-primary me-1">
-                              {x.userStatus}
-                            </span>
-                          )}
-                          {x.userStatus == "INACTIVE" && (
-                            <span className="badge bg-label-danger me-1">
-                              {x.userStatus}
-                            </span>
-                          )}
-                        </td>
-                        <td>
-                          {x.userStatus == "ACTIVE" && (
-                            <div>
-                              <IconButton
-                                onClick={() => {
-                                  handleIsEditTrue(x);
-                                  handleClose();
-                                }}
-                              >
-                                <EditIcon fontSize="medium" color="primary" />
-                              </IconButton>
-                              <IconButton
-                                onClick={() => {
-                                  hanldeIsDelete(x.id);
-                                }}
-                              >
-                                <DeleteIcon fontSize="medium" color="error" />
-                              </IconButton>
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+                          <td>{x.email}</td>
+                          <td>{x.phone}</td>
+                          <td
+                            style={{
+                              whiteSpace: "pre-wrap",
+                              wordWrap: "break-word",
+                            }}
+                          >
+                            {x.address}
+                          </td>
+                          <td>
+                            {x.roleName == "ADMIN" && (
+                              <span className="w-full badge bg-primary me-1">
+                                {x.roleName}
+                              </span>
+                            )}
+                            {x.roleName == "USER" && (
+                              <span className="w-full badge bg-info me-1">
+                                {x.roleName}
+                              </span>
+                            )}
+                            {x.roleName == "FACTORY" && (
+                              <span className="w-full badge bg-warning me-1">
+                                {x.roleName}
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            {x.userStatus == "ACTIVE" && (
+                              <span className="badge bg-label-primary me-1">
+                                {x.userStatus}
+                              </span>
+                            )}
+                            {x.userStatus == "INACTIVE" && (
+                              <span className="badge bg-label-danger me-1">
+                                {x.userStatus}
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            {x.userStatus == "ACTIVE" && (
+                              <div>
+                                <IconButton
+                                  onClick={() => {
+                                    handleIsEditTrue(x);
+                                    handleClose();
+                                  }}
+                                >
+                                  <EditIcon fontSize="medium" color="primary" />
+                                </IconButton>
+                                <IconButton
+                                  onClick={() => {
+                                    hanldeIsDelete(x.id);
+                                  }}
+                                >
+                                  <DeleteIcon fontSize="medium" color="error" />
+                                </IconButton>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
+            <br />
+            {/*/ Table within card */}
+            {response && response.totalPages > 1 && (
+              <Stack spacing={2}>
+                <Pagination
+                  shape="circular"
+                  size="large"
+                  page={filter.pageNumber + 1}
+                  count={response?.totalPages}
+                  onChange={handlePageChange}
+                  color="secondary"
+                />
+              </Stack>
+            )}
+            <hr className="my-5" />
+            {/* Responsive Table */}
+
+            {/*/ Responsive Table */}
           </div>
-          <br />
-          {/*/ Table within card */}
-          {response && response.totalPages > 1 && (
-            <Stack spacing={2}>
-              <Pagination
-                shape="circular"
-                size="large"
-                page={filter.pageNumber + 1}
-                count={response?.totalPages}
-                onChange={handlePageChange}
-                color="secondary"
-              />
-            </Stack>
-          )}
-          <hr className="my-5" />
-          {/* Responsive Table */}
-
-          {/*/ Responsive Table */}
-        </div>
+        )}
         {/* / Content */}
         {/* Footer */}
 

@@ -27,6 +27,8 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { FactoryInfo } from "@/services/factories/dto/get-factory-by-id-dto";
+import { Skeleton } from "@mui/material";
+
 export interface AccountSettingProps {}
 
 interface Column {
@@ -123,31 +125,28 @@ export default function AccountSetting(props: AccountSettingProps) {
           <SizesColorsProduct data={sizeColors} />
         </DialogContent>
       </Dialog>
-      <div>
-        <div className="container-xxl flex-grow-1 container-p-y">
-          <h4 className="fw-bold py-3 mb-4"></h4>
-          <div className="card-body">
-            <div className="d-flex align-items-start align-items-sm-center gap-4">
-              <img
-                src={factoryInfo?.image}
-                alt="user-avatar"
-                className="d-block rounded"
-                height={100}
-                width={100}
-                id="uploadedAvatar"
-              />
-              <div className="button-wrapper">
-                <h2>{factoryInfo?.name}</h2>
-                <p className="text-muted mb-0"></p>
+      {isLoadingFactory && (
+        <div>
+          <div className="container-xxl flex-grow-1 container-p-y">
+            <h4 className="fw-bold py-3 mb-4"></h4>
+            <div className="card-body">
+              <div className="d-flex align-items-start align-items-sm-center gap-4">
+                <Skeleton width={100} height={100} />
+                <div className="button-wrapper">
+                  <h2>
+                    <Skeleton width={130} height={50} />{" "}
+                  </h2>
+                  <p className="text-muted mb-0"></p>
+                </div>
               </div>
             </div>
-          </div>
-          <hr className="my-0" />
-          <div className="row">
-            <div className="col-md-12">
-              {factoryInfo && (
+            <hr className="my-0" />
+            <div className="row">
+              <div className="col-md-12">
                 <div className="card mb-4">
-                  <h4 className="card-header">Thông tin chi tiết</h4>
+                  <h4 className="card-header">
+                    <Skeleton width="20%" height={40} />
+                  </h4>
                   {/* Account */}
 
                   <div className="card-body">
@@ -158,72 +157,44 @@ export default function AccountSetting(props: AccountSettingProps) {
                       <hr className="my-0" />
                       <div className="row">
                         <div className="mb-3 col-md-6">
-                          <label className="form-label">ID</label>
-                          <input
-                            disabled
-                            className="form-control"
-                            type="text"
-                            id="ID"
-                            name="ID"
-                            defaultValue={factoryInfo.id}
-                          />
+                          <label className="form-label">
+                            <Skeleton width={30} height={30} />
+                          </label>
+                          <Skeleton height={60} />
                         </div>
                         <div className="mb-3 col-md-6">
-                          <label className="form-label">Tên</label>
+                          <label className="form-label">
+                            <Skeleton width={30} height={30} />
+                          </label>
 
-                          <input
-                            className="form-control"
-                            type="text"
-                            disabled
-                            id="Name"
-                            defaultValue={factoryInfo.name}
-                          />
+                          <Skeleton height={60} />
                         </div>
 
                         <div className="mb-3 col-md-6">
                           <label htmlFor="organization" className="form-label">
-                            email
+                            <Skeleton width={30} height={30} />
                           </label>
-                          <input
-                            disabled
-                            className="form-control"
-                            defaultValue={factoryInfo.email}
-                          />
+                          <Skeleton height={60} />
                         </div>
 
                         <div className="mb-3 col-md-6">
                           <label htmlFor="organization" className="form-label">
-                            Địa chỉ
+                            <Skeleton width={30} height={30} />
                           </label>
-                          <textarea
-                            className="form-control"
-                            id="exampleFormControlTextarea1"
-                            disabled
-                            rows={3}
-                            defaultValue={factoryInfo.location}
-                          />
+                          <Skeleton height={60} />
                         </div>
                         <div className="mb-3 col-md-6">
                           <label htmlFor="organization" className="form-label">
-                            Số điện thoại
+                            <Skeleton width={30} height={30} />
                           </label>
-                          <input
-                            disabled
-                            className="form-control"
-                            defaultValue={factoryInfo.phone}
-                          />
+                          <Skeleton height={60} />
                         </div>
                         <div className="mb-3 col-md-1">
-                          <label className="form-label ">Chiết khấu</label>
-                          <div className="position-relative mt-3">
-                            <input
-                              disabled
-                              className="form-control position-absolute top-50 start-50 translate-middle "
-                              defaultValue={factoryInfo.tradeDiscount}
-                            />
-                            <p className="position-absolute top-50 end-0 translate-middle-y pe-3">
-                              %
-                            </p>
+                          <label className="form-label ">
+                            <Skeleton width={30} height={30} />
+                          </label>
+                          <div className="position-relative">
+                            <Skeleton height={60} />
                           </div>
                         </div>
                         {/* Small table */}
@@ -234,15 +205,146 @@ export default function AccountSetting(props: AccountSettingProps) {
                   </div>
                   {/* /Account */}
                 </div>
-              )}
+              </div>
             </div>
           </div>
+
+          {/* / Content */}
+
+          <div className="content-backdrop fade" />
         </div>
+      )}
+      {!isLoadingFactory && (
+        <div>
+          <div className="container-xxl flex-grow-1 container-p-y">
+            <h4 className="fw-bold py-3 mb-4"></h4>
+            <div className="card-body">
+              <div className="d-flex align-items-start align-items-sm-center gap-4">
+                <img
+                  src={factoryInfo?.image}
+                  alt="user-avatar"
+                  className="d-block rounded"
+                  height={100}
+                  width={100}
+                  id="uploadedAvatar"
+                />
+                <div className="button-wrapper">
+                  <h2>{factoryInfo?.name}</h2>
+                  <p className="text-muted mb-0"></p>
+                </div>
+              </div>
+            </div>
+            <hr className="my-0" />
+            <div className="row">
+              <div className="col-md-12">
+                {factoryInfo && (
+                  <div className="card mb-4">
+                    <h4 className="card-header">Thông tin chi tiết</h4>
+                    {/* Account */}
 
-        {/* / Content */}
+                    <div className="card-body">
+                      <form id="formAccountSettings">
+                        <div className="card-body">
+                          <div className="d-flex align-items-start align-items-sm-center gap-4"></div>
+                        </div>
+                        <hr className="my-0" />
+                        <div className="row">
+                          <div className="mb-3 col-md-6">
+                            <label className="form-label">ID</label>
+                            <input
+                              disabled
+                              className="form-control"
+                              type="text"
+                              id="ID"
+                              name="ID"
+                              defaultValue={factoryInfo.id}
+                            />
+                          </div>
+                          <div className="mb-3 col-md-6">
+                            <label className="form-label">Tên</label>
 
-        <div className="content-backdrop fade" />
-      </div>
+                            <input
+                              className="form-control"
+                              type="text"
+                              disabled
+                              id="Name"
+                              defaultValue={factoryInfo.name}
+                            />
+                          </div>
+
+                          <div className="mb-3 col-md-6">
+                            <label
+                              htmlFor="organization"
+                              className="form-label"
+                            >
+                              email
+                            </label>
+                            <input
+                              disabled
+                              className="form-control"
+                              defaultValue={factoryInfo.email}
+                            />
+                          </div>
+
+                          <div className="mb-3 col-md-6">
+                            <label
+                              htmlFor="organization"
+                              className="form-label"
+                            >
+                              Địa chỉ
+                            </label>
+                            <textarea
+                              className="form-control"
+                              id="exampleFormControlTextarea1"
+                              disabled
+                              rows={3}
+                              defaultValue={factoryInfo.location}
+                            />
+                          </div>
+                          <div className="mb-3 col-md-6">
+                            <label
+                              htmlFor="organization"
+                              className="form-label"
+                            >
+                              Số điện thoại
+                            </label>
+                            <input
+                              disabled
+                              className="form-control"
+                              defaultValue={factoryInfo.phone}
+                            />
+                          </div>
+                          <div className="mb-3 col-md-1">
+                            <label className="form-label ">Chiết khấu</label>
+                            <div className="position-relative mt-3">
+                              <input
+                                disabled
+                                className="form-control position-absolute top-50 start-50 translate-middle "
+                                defaultValue={factoryInfo.tradeDiscount}
+                              />
+                              <p className="position-absolute top-50 end-0 translate-middle-y pe-3">
+                                %
+                              </p>
+                            </div>
+                          </div>
+                          {/* Small table */}
+
+                          <hr className="my-5" />
+                        </div>
+                      </form>
+                    </div>
+                    {/* /Account */}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* / Content */}
+
+          <div className="content-backdrop fade" />
+        </div>
+      )}
       {/* Content wrapper */}
 
       {/* Content wrapper */}

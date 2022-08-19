@@ -19,10 +19,15 @@ import DialogTitle from "@mui/material/DialogTitle";
 import useCategories from "hooks/categories/use-categories";
 import useDeleteCategory from "hooks/categories/use-delete-categories";
 import * as React from "react";
+import { Skeleton } from "@mui/material";
+
 import { useState } from "react";
+import { nanoid } from "@reduxjs/toolkit";
 export interface IManageCategoryProps {}
 
 const ITEM_HEIGHT = 48;
+
+const arr = [1, 2, 3, 4];
 
 export default function ManageCategory(props: IManageCategoryProps) {
   const [filter, setFilter] = useState<Filter>({
@@ -98,177 +103,242 @@ export default function ManageCategory(props: IManageCategoryProps) {
     <>
       <div>
         {/* Layout wrapper */}
-
-        {/* Content */}
-        <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h3 className="fw-bold py-3 mb-4">Category</h3>
-          <button
-            className="btn btn-success ms-4 mb-4 text-dark"
-            onClick={handleIsEditFalse}
-          >
-            <AddIcon sx={{ mr: 1 }} />
-            Tạo mới Category
-          </button>
-
-          {isEdit == false && (
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Tạo mới Category"}
-              </DialogTitle>
-              <DialogContent>
-                <CreateCategoryForm handleCloseDialog={handleCloseDialog} />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
-          {isEdit == true && (
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              fullWidth={true}
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Chỉnh sửa Category"}
-              </DialogTitle>
-              <DialogContent>
-                <UpdateCategoryForm
-                  category={category}
-                  handleCloseDialog={handleCloseDialog}
-                />
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          )}
-
-          <Dialog
-            open={openDeleteDialog}
-            onClose={handleCloseDeleteDialog}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-            fullWidth={true}
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"Bạn có muốn xóa Category này không?"}
-            </DialogTitle>
-            <DialogContent>
-              <div className="d-flex justify-content-center">
-                <div className="col-sm-10 d-flex justify-content-around">
-                  <button
-                    className="btn btn-danger"
-                    color="danger"
-                    onClick={() => {
-                      onDelete(isDelete);
-                    }}
-                  >
-                    xóa
-                  </button>
-                  <button
-                    className="btn btn-secondary"
-                    onClick={handleCloseDeleteDialog}
-                    autoFocus
-                  >
-                    Không
-                  </button>
-                </div>
-              </div>
-            </DialogContent>
-            <DialogActions></DialogActions>
-          </Dialog>
-
-          <br />
-          {/* Basic Bootstrap Table */}
-          <div className="card ">
-            <h5 className="card-header">Quản lý Categories</h5>
-            <div className="table-responsive text-nowrap ">
-              <table className="table ">
-                <thead>
-                  <tr>
-                    <th>Tên</th>
-                    <th>Hình ảnh</th>
-                    <th>isDelete</th>
-                    <th>Hành động</th>
-                  </tr>
-                </thead>
-                <tbody className="table-border-bottom-0">
-                  {!isLoadingCategory &&
-                    response &&
-                    response.content.map((x) => (
-                      <tr key={x.id}>
+        {isLoadingCategory && (
+          <div className="container-xxl w-80p flex-grow-1 container-p-y">
+            <h3 className="fw-bold py-3 mb-1">
+              <Skeleton width={150} height={50} />
+            </h3>
+            <Skeleton width={170} height={60} className="ms-5" />
+            <br />
+            {/* Basic Bootstrap Table */}
+            <div className="card ">
+              <h5 className="card-header">
+                <Skeleton width={160} height={40} />
+              </h5>
+              <div className="table-responsive text-nowrap ">
+                <table className="table ">
+                  <thead>
+                    <tr>
+                      <th>
+                        <Skeleton width={50} height={35} />
+                      </th>
+                      <th>
+                        <Skeleton width={70} height={35} />
+                      </th>
+                      <th>
+                        <Skeleton width={50} height={35} />
+                      </th>
+                      <th>
+                        <Skeleton width={70} height={35} />
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="table-border-bottom-0">
+                    {arr.map((arr) => (
+                      <tr key={nanoid()}>
                         <td>
-                          <strong>{x.name}</strong>
+                          <strong>
+                            <Skeleton width={80} height={35} />
+                          </strong>
                         </td>
                         <td>
-                          <img
-                            src={x.image}
-                            className="d-block rounded"
-                            height={100}
-                            width={100}
-                          />
+                          <Skeleton width={100} height={100} />
                         </td>
                         <td>
-                          {x.deleted == true && (
-                            <span className="badge bg-label-danger me-1">
-                              TRUE
-                            </span>
-                          )}
-                          {x.deleted == false && (
-                            <span className="badge bg-label-primary me-1">
-                              FALSE
-                            </span>
-                          )}
+                          <Skeleton width={50} height={30} />
                         </td>
                         <td>
                           <div>
-                            <IconButton
-                              onClick={() => {
-                                handleIsEditTrue(x);
-                                handleClose();
-                              }}
-                            >
-                              <EditIcon fontSize="medium" color="primary" />
-                            </IconButton>
-                            <IconButton
-                              onClick={() => {
-                                hanldeIsDelete(x.id);
-                              }}
-                            >
-                              <DeleteIcon fontSize="medium" color="error" />
-                            </IconButton>
+                            <Skeleton width={70} height={50} />
                           </div>
                         </td>
                       </tr>
                     ))}
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-          <br />
-          {/*/ Table within card */}
-          {response && response.totalPages > 1 && (
-            <Stack spacing={2}>
-              <Pagination
-                shape="circular"
-                size="large"
-                page={filter.pageNumber + 1}
-                count={response?.totalPages}
-                onChange={handlePageChange}
-                color="secondary"
-              />
-            </Stack>
-          )}
-          <hr className="my-5" />
-          {/* Responsive Table */}
+            <br />
+            {/*/ Table within card */}
 
-          {/*/ Responsive Table */}
-        </div>
+            <hr className="my-5" />
+            {/* Responsive Table */}
+
+            {/*/ Responsive Table */}
+          </div>
+        )}
+        {/* Content */}
+        {!isLoadingCategory && (
+          <div className="container-xxl w-80p flex-grow-1 container-p-y">
+            <h3 className="fw-bold py-3 mb-4">Category</h3>
+            <button
+              className="btn btn-success ms-4 mb-4 text-dark"
+              onClick={handleIsEditFalse}
+            >
+              <AddIcon sx={{ mr: 1 }} />
+              Tạo mới Category
+            </button>
+
+            {isEdit == false && (
+              <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth={true}
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Tạo mới Category"}
+                </DialogTitle>
+                <DialogContent>
+                  <CreateCategoryForm handleCloseDialog={handleCloseDialog} />
+                </DialogContent>
+                <DialogActions></DialogActions>
+              </Dialog>
+            )}
+            {isEdit == true && (
+              <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth={true}
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Chỉnh sửa Category"}
+                </DialogTitle>
+                <DialogContent>
+                  <UpdateCategoryForm
+                    category={category}
+                    handleCloseDialog={handleCloseDialog}
+                  />
+                </DialogContent>
+                <DialogActions></DialogActions>
+              </Dialog>
+            )}
+
+            <Dialog
+              open={openDeleteDialog}
+              onClose={handleCloseDeleteDialog}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              fullWidth={true}
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Bạn có muốn xóa Category này không?"}
+              </DialogTitle>
+              <DialogContent>
+                <div className="d-flex justify-content-center">
+                  <div className="col-sm-10 d-flex justify-content-around">
+                    <button
+                      className="btn btn-danger"
+                      color="danger"
+                      onClick={() => {
+                        onDelete(isDelete);
+                      }}
+                    >
+                      xóa
+                    </button>
+                    <button
+                      className="btn btn-secondary"
+                      onClick={handleCloseDeleteDialog}
+                      autoFocus
+                    >
+                      Không
+                    </button>
+                  </div>
+                </div>
+              </DialogContent>
+              <DialogActions></DialogActions>
+            </Dialog>
+
+            <br />
+            {/* Basic Bootstrap Table */}
+            <div className="card ">
+              <h5 className="card-header">Quản lý Categories</h5>
+              <div className="table-responsive text-nowrap ">
+                <table className="table ">
+                  <thead>
+                    <tr>
+                      <th>Tên</th>
+                      <th>Hình ảnh</th>
+                      <th>isDelete</th>
+                      <th>Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody className="table-border-bottom-0">
+                    {!isLoadingCategory &&
+                      response &&
+                      response.content.map((x) => (
+                        <tr key={x.id}>
+                          <td>
+                            <strong>{x.name}</strong>
+                          </td>
+                          <td>
+                            <img
+                              src={x.image}
+                              className="d-block rounded"
+                              height={100}
+                              width={100}
+                            />
+                          </td>
+                          <td>
+                            {x.deleted == true && (
+                              <span className="badge bg-label-danger me-1">
+                                TRUE
+                              </span>
+                            )}
+                            {x.deleted == false && (
+                              <span className="badge bg-label-primary me-1">
+                                FALSE
+                              </span>
+                            )}
+                          </td>
+                          <td>
+                            <div>
+                              <IconButton
+                                onClick={() => {
+                                  handleIsEditTrue(x);
+                                  handleClose();
+                                }}
+                              >
+                                <EditIcon fontSize="medium" color="primary" />
+                              </IconButton>
+                              <IconButton
+                                onClick={() => {
+                                  hanldeIsDelete(x.id);
+                                }}
+                              >
+                                <DeleteIcon fontSize="medium" color="error" />
+                              </IconButton>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <br />
+            {/*/ Table within card */}
+            {response && response.totalPages > 1 && (
+              <Stack spacing={2}>
+                <Pagination
+                  shape="circular"
+                  size="large"
+                  page={filter.pageNumber + 1}
+                  count={response?.totalPages}
+                  onChange={handlePageChange}
+                  color="secondary"
+                />
+              </Stack>
+            )}
+            <hr className="my-5" />
+            {/* Responsive Table */}
+
+            {/*/ Responsive Table */}
+          </div>
+        )}
         {/* / Content */}
         {/* Footer */}
 

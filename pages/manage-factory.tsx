@@ -16,7 +16,11 @@ import { useRouter } from "next/router";
 import HandshakeIcon from "@mui/icons-material/Handshake";
 import * as React from "react";
 import { useState } from "react";
+import { nanoid } from "@reduxjs/toolkit";
+import { Skeleton } from "@mui/material";
 export interface IManageFactory {}
+
+const arr = [1, 2, 3, 4];
 
 export default function ManageFactory(props: IManageFactory) {
   const [filter, setFilter] = useState<Filter>({
@@ -158,142 +162,225 @@ export default function ManageFactory(props: IManageFactory) {
           <DialogActions></DialogActions>
         </Dialog>
         {/* Content */}
-        <div className="container-xxl w-80p flex-grow-1 container-p-y">
-          <h3 className="fw-bold py-3 mb-4">Nhà In</h3>
-          <button
-            className="btn btn-success ms-4 text-dark"
-            onClick={handleOpenCreateDialog}
-          >
-            <AddIcon sx={{ mr: 1 }} />
-            Tạo Mới Nhà In
-          </button>
-          <hr className="my-4" />
-          <br />
-          {/* Basic Bootstrap Table */}
-          <div className="card ">
-            <h5 className="card-header">Quản lý Nhà In</h5>
-            <div className="table-responsive text-nowrap ">
-              <table className="table ">
-                <thead>
-                  <tr>
-                    <th>Tên</th>
-                    <th>Email</th>
-                    <th>Số điện thoại</th>
-                    <th>Địa chỉ</th>
-                    <th>Trạng thái</th>
-                    <th>Hành Động</th>
-                    <th>Chi tiết</th>
-                  </tr>
-                </thead>
-                <tbody className="table-border-bottom-0">
-                  {!isLoadingAccount &&
-                    response &&
-                    response.content.map((x) => (
-                      <tr key={x.id}>
+        {isLoadingAccount && (
+          <div className="container-xxl w-80p flex-grow-1 container-p-y">
+            <h3 className="fw-bold py-3 mb-1">
+              <Skeleton width={150} height={50} />
+            </h3>
+            <Skeleton width={170} height={60} className="ms-5" />
+            <br />
+            {/* Basic Bootstrap Table */}
+            <div className="card ">
+              <h5 className="card-header">
+                <Skeleton width={160} height={40} />
+              </h5>
+              <div className="table-responsive text-nowrap ">
+                <table className="table ">
+                  <thead>
+                    <tr>
+                      <th>
+                        <Skeleton width={50} height={35} />
+                      </th>
+                      <th>
+                        <Skeleton width={50} height={35} />
+                      </th>
+                      <th>
+                        <Skeleton width={50} height={35} />
+                      </th>
+                      <th>
+                        <Skeleton width={70} height={35} />
+                      </th>
+                      <th>
+                        <Skeleton width={50} height={35} />
+                      </th>
+                      <th>
+                        <Skeleton width={70} height={35} />
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="table-border-bottom-0">
+                    {arr.map((arr) => (
+                      <tr key={nanoid()}>
                         <td>
-                          <strong>{x.name}</strong>
-                        </td>
-                        <td>{x.email}</td>
-                        <td>{x.phone}</td>
-                        <td
-                          style={{
-                            whiteSpace: "pre-wrap",
-                            wordWrap: "break-word",
-                          }}
-                        >
-                          {x.address}
-                        </td>
-                        <td>
-                          {x.collaborating == true && (
-                            <span className="badge bg-label-info me-1">
-                              Hợp tác
-                            </span>
-                          )}
-                          {x.collaborating == false && (
-                            <span className="badge bg-label-danger me-1">
-                              Ngừng hợp tác
-                            </span>
-                          )}
-                        </td>
-
-                        <td>
-                          {x.collaborating == true && (
-                            <div>
-                              <IconButton
-                                onClick={() => {
-                                  {
-                                    hanldeIsDelete(x.id);
-                                    setIsCollaborating("false");
-                                  }
-                                }}
-                              >
-                                <DoNotTouchIcon
-                                  fontSize="medium"
-                                  color="error"
-                                />
-                              </IconButton>
-                            </div>
-                          )}
-                          {x.collaborating == false && (
-                            <div>
-                              <IconButton
-                                onClick={() => {
-                                  {
-                                    hanldeIsDelete(x.id);
-                                    setIsCollaborating("true");
-                                  }
-                                }}
-                              >
-                                <HandshakeIcon
-                                  fontSize="medium"
-                                  color="success"
-                                />
-                              </IconButton>
-                            </div>
-                          )}
+                          <strong>
+                            <Skeleton width={80} height={35} />
+                          </strong>
                         </td>
                         <td>
-                          {x.collaborating == true && (
-                            <div>
-                              <button
-                                type="button"
-                                className="btn btn-primary btn-sm"
-                                onClick={() => {
-                                  router.push(
-                                    `/factory-details?id=${x.credentialId}&factoryid=${x.id}`
-                                  );
-                                }}
-                              >
-                                Chi tiết
-                              </button>
-                            </div>
-                          )}
+                          <strong>
+                            <Skeleton width={80} height={35} />
+                          </strong>
+                        </td>
+                        <td>
+                          <strong>
+                            <Skeleton width={80} height={35} />
+                          </strong>
+                        </td>
+                        <td>
+                          <Skeleton width={100} height={100} />
+                        </td>
+                        <td>
+                          <Skeleton width={50} height={30} />
+                        </td>
+                        <td>
+                          <div>
+                            <Skeleton width={70} height={50} />
+                          </div>
                         </td>
                       </tr>
                     ))}
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-          <br />
-          {/*/ Table within card */}
-          {response && response.totalPages > 1 && (
-            <Stack spacing={2}>
-              <Pagination
-                shape="circular"
-                size="large"
-                page={filter.pageNumber + 1}
-                count={response?.totalPages}
-                onChange={handlePageChange}
-                color="secondary"
-              />
-            </Stack>
-          )}
-          <hr className="my-5" />
-          {/* Responsive Table */}
+            <br />
+            {/*/ Table within card */}
 
-          {/*/ Responsive Table */}
-        </div>
+            <hr className="my-5" />
+            {/* Responsive Table */}
+
+            {/*/ Responsive Table */}
+          </div>
+        )}
+
+        {!isLoadingAccount && (
+          <div className="container-xxl w-80p flex-grow-1 container-p-y">
+            <h3 className="fw-bold py-3 mb-4">Nhà In</h3>
+            <button
+              className="btn btn-success ms-4 text-dark"
+              onClick={handleOpenCreateDialog}
+            >
+              <AddIcon sx={{ mr: 1 }} />
+              Tạo Mới Nhà In
+            </button>
+            <hr className="my-4" />
+            <br />
+            {/* Basic Bootstrap Table */}
+            <div className="card ">
+              <h5 className="card-header">Quản lý Nhà In</h5>
+              <div className="table-responsive text-nowrap ">
+                <table className="table ">
+                  <thead>
+                    <tr>
+                      <th>Tên</th>
+                      <th>Email</th>
+                      <th>Số điện thoại</th>
+                      <th>Địa chỉ</th>
+                      <th>Trạng thái</th>
+                      <th>Hành Động</th>
+                      <th>Chi tiết</th>
+                    </tr>
+                  </thead>
+                  <tbody className="table-border-bottom-0">
+                    {!isLoadingAccount &&
+                      response &&
+                      response.content.map((x) => (
+                        <tr key={x.id}>
+                          <td>
+                            <strong>{x.name}</strong>
+                          </td>
+                          <td>{x.email}</td>
+                          <td>{x.phone}</td>
+                          <td
+                            style={{
+                              whiteSpace: "pre-wrap",
+                              wordWrap: "break-word",
+                            }}
+                          >
+                            {x.address}
+                          </td>
+                          <td>
+                            {x.collaborating == true && (
+                              <span className="badge bg-label-info me-1">
+                                Hợp tác
+                              </span>
+                            )}
+                            {x.collaborating == false && (
+                              <span className="badge bg-label-danger me-1">
+                                Ngừng hợp tác
+                              </span>
+                            )}
+                          </td>
+
+                          <td>
+                            {x.collaborating == true && (
+                              <div>
+                                <IconButton
+                                  onClick={() => {
+                                    {
+                                      hanldeIsDelete(x.id);
+                                      setIsCollaborating("false");
+                                    }
+                                  }}
+                                >
+                                  <DoNotTouchIcon
+                                    fontSize="medium"
+                                    color="error"
+                                  />
+                                </IconButton>
+                              </div>
+                            )}
+                            {x.collaborating == false && (
+                              <div>
+                                <IconButton
+                                  onClick={() => {
+                                    {
+                                      hanldeIsDelete(x.id);
+                                      setIsCollaborating("true");
+                                    }
+                                  }}
+                                >
+                                  <HandshakeIcon
+                                    fontSize="medium"
+                                    color="success"
+                                  />
+                                </IconButton>
+                              </div>
+                            )}
+                          </td>
+                          <td>
+                            {x.collaborating == true && (
+                              <div>
+                                <button
+                                  type="button"
+                                  className="btn btn-primary btn-sm"
+                                  onClick={() => {
+                                    router.push(
+                                      `/factory-details?id=${x.credentialId}&factoryid=${x.id}`
+                                    );
+                                  }}
+                                >
+                                  Chi tiết
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <br />
+            {/*/ Table within card */}
+            {response && response.totalPages > 1 && (
+              <Stack spacing={2}>
+                <Pagination
+                  shape="circular"
+                  size="large"
+                  page={filter.pageNumber + 1}
+                  count={response?.totalPages}
+                  onChange={handlePageChange}
+                  color="secondary"
+                />
+              </Stack>
+            )}
+            <hr className="my-5" />
+            {/* Responsive Table */}
+
+            {/*/ Responsive Table */}
+          </div>
+        )}
         {/* / Content */}
         {/* Footer */}
 
