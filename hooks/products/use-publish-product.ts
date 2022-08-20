@@ -25,11 +25,32 @@ const usePublishProduct = (handleClosePublishDialog: () => void) => {
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         if (error) {
-          handleClosePublishDialog();
-          enqueueSnackbar(error.response?.data.errorMessage, {
-            autoHideDuration: 9000,
-            variant: "error",
-          });
+          //This product don't have price by factory
+          //Product does not have enough blueprint
+          let tmpError = error.response?.data.errorMessage;
+          if (tmpError?.includes("This product don't have price by factory")) {
+            tmpError = "Sản phẩm chưa có nhà in sản xuất";
+            enqueueSnackbar(tmpError, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
+            handleClosePublishDialog();
+          } else if (
+            tmpError?.includes("Product does not have enough blueprint")
+          ) {
+            tmpError = "Sản phẩm không đủ bản thiết kế để công bố";
+            enqueueSnackbar(tmpError, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
+            handleClosePublishDialog();
+          } else {
+            enqueueSnackbar(error.response?.data.errorMessage, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
+            handleClosePublishDialog();
+          }
         }
       },
     }
