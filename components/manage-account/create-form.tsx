@@ -117,13 +117,13 @@ export default function CreateForm(props: ICreateFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Tên
                 </label>
 
-                <div className="col-sm-9">
+                <div className="col-sm-8">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-fullname2"
@@ -150,12 +150,12 @@ export default function CreateForm(props: ICreateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Họ
                 </label>
-                <div className="col-sm-9">
+                <div className="col-sm-8">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-fullname2"
@@ -182,12 +182,12 @@ export default function CreateForm(props: ICreateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-company"
                 >
                   Mật khẩu
                 </label>
-                <div className="col-sm-9">
+                <div className="col-sm-8">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-company2"
@@ -235,12 +235,12 @@ export default function CreateForm(props: ICreateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-email"
                 >
                   Email
                 </label>
-                <div className="col-sm-9">
+                <div className="col-sm-8">
                   <div className="input-group input-group-merge">
                     <span className="input-group-text">
                       <i className="bx bx-envelope" />
@@ -263,12 +263,12 @@ export default function CreateForm(props: ICreateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 form-label"
+                  className="col-sm-3 form-label  text-capitalize fs-6"
                   htmlFor="basic-icon-default-phone"
                 >
                   Số điện thoại
                 </label>
-                <div className="col-sm-9">
+                <div className="col-sm-8">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-phone2"
@@ -294,12 +294,12 @@ export default function CreateForm(props: ICreateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 form-label"
+                  className="col-sm-3 form-label  text-capitalize fs-6"
                   htmlFor="basic-icon-default-message"
                 >
                   Địa chỉ
                 </label>
-                <div className="col-sm-9">
+                <div className="col-sm-8">
                   <div className="input-group input-group-merge">
                     <span
                       id="basic-icon-default-message2"
@@ -324,12 +324,12 @@ export default function CreateForm(props: ICreateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-company"
                 >
                   Vị trí
                 </label>
-                <div className="col-sm-9">
+                <div className="col-sm-8">
                   <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                     <InputLabel id="demo-select-small">Role</InputLabel>
                     <Select

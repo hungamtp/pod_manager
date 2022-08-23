@@ -49,7 +49,7 @@ const schema = yup.object().shape({
     .string()
     .trim()
     .min(10, "Địa chỉ cần ít nhất 10 kí tự")
-    .max(300, "Địa chỉ tối đa 300 kí tự")
+    .max(255, "Địa chỉ tối đa 255 kí tự")
     .required("Địa chỉ không được để trống"),
 });
 
@@ -211,7 +211,10 @@ export default function AccountSetting(props: IAccountSettingProps) {
                       <hr className="my-0 mt-3 mb-3" />
                       <div className="row">
                         <div className="mb-3 col-md-6">
-                          <label htmlFor="firstName" className="form-label">
+                          <label
+                            htmlFor="firstName"
+                            className="form-label text-capitalize fs-6"
+                          >
                             Id
                           </label>
                           <input
@@ -224,7 +227,10 @@ export default function AccountSetting(props: IAccountSettingProps) {
                           />
                         </div>
                         <div className="mb-3 col-md-6">
-                          <label htmlFor="firstName" className="form-label">
+                          <label
+                            htmlFor="firstName"
+                            className="form-label text-capitalize fs-6"
+                          >
                             Tên
                           </label>
                           <input
@@ -246,7 +252,10 @@ export default function AccountSetting(props: IAccountSettingProps) {
                         </div>
 
                         <div className="mb-3 col-md-6">
-                          <label htmlFor="lastName" className="form-label">
+                          <label
+                            htmlFor="lastName"
+                            className="form-label text-capitalize fs-6"
+                          >
                             Họ
                           </label>
                           <input
@@ -267,7 +276,10 @@ export default function AccountSetting(props: IAccountSettingProps) {
                           )}
                         </div>
                         <div className="mb-3 col-md-6">
-                          <label htmlFor="email" className="form-label">
+                          <label
+                            htmlFor="email"
+                            className="form-label text-capitalize fs-6"
+                          >
                             E-mail
                           </label>
                           <input
@@ -289,7 +301,10 @@ export default function AccountSetting(props: IAccountSettingProps) {
                         </div>
 
                         <div className="mb-3 col-md-6">
-                          <label className="form-label" htmlFor="phoneNumber">
+                          <label
+                            className="form-label text-capitalize fs-6"
+                            htmlFor="phoneNumber"
+                          >
                             Số điện thoại
                           </label>
                           <div className="input-group input-group-merge">
@@ -312,7 +327,10 @@ export default function AccountSetting(props: IAccountSettingProps) {
                           </div>
                         </div>
                         <div className="mb-3 col-md-6">
-                          <label htmlFor="address" className="form-label">
+                          <label
+                            htmlFor="address"
+                            className="form-label text-capitalize fs-6"
+                          >
                             Địa chỉ
                           </label>
                           <textarea
@@ -333,7 +351,10 @@ export default function AccountSetting(props: IAccountSettingProps) {
                           )}
                         </div>
                         <div className="mb-3 col-md-6">
-                          <label htmlFor="state" className="form-label">
+                          <label
+                            htmlFor="state"
+                            className="form-label text-capitalize fs-6"
+                          >
                             Vị trí
                           </label>
                           <input

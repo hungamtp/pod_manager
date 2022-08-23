@@ -152,7 +152,7 @@ export default function ManageMaterial(props: IManageMaterial) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h4 className="card-header">Quản lý Chất liệu áo</h4>
+            <h5 className="card-header">Quản lý Chất liệu áo</h5>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>

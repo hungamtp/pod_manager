@@ -257,7 +257,7 @@ export default function ManageFactory(props: IManageFactory) {
             <br />
             {/* Basic Bootstrap Table */}
             <div className="card ">
-              <h5 className="card-header">Quản lý Nhà In</h5>
+              <h5 className="card-header">Quản lý nhà in</h5>
               <div className="table-responsive text-nowrap ">
                 <table className="table ">
                   <thead>
