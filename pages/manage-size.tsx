@@ -100,7 +100,7 @@ export default function ManageSize(props: IManageSize) {
           <br />
           {/* Basic Bootstrap Table */}
           <div className="card ">
-            <h4 className="card-header">Quản lý Kích thước</h4>
+            <h5 className="card-header">Quản lý Kích thước</h5>
             <div className="table-responsive text-nowrap ">
               <table className="table ">
                 <thead>

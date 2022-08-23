@@ -157,13 +157,13 @@ export default function AccountSetting(props: AccountSettingProps) {
                       <hr className="my-0" />
                       <div className="row">
                         <div className="mb-3 col-md-6">
-                          <label className="form-label">
+                          <label className="form-label text-capitalize fs-6">
                             <Skeleton width={30} height={30} />
                           </label>
                           <Skeleton height={60} />
                         </div>
                         <div className="mb-3 col-md-6">
-                          <label className="form-label">
+                          <label className="form-label text-capitalize fs-6">
                             <Skeleton width={30} height={30} />
                           </label>
 
@@ -171,26 +171,35 @@ export default function AccountSetting(props: AccountSettingProps) {
                         </div>
 
                         <div className="mb-3 col-md-6">
-                          <label htmlFor="organization" className="form-label">
+                          <label
+                            htmlFor="organization"
+                            className="form-label text-capitalize fs-6"
+                          >
                             <Skeleton width={30} height={30} />
                           </label>
                           <Skeleton height={60} />
                         </div>
 
                         <div className="mb-3 col-md-6">
-                          <label htmlFor="organization" className="form-label">
+                          <label
+                            htmlFor="organization"
+                            className="form-label text-capitalize fs-6"
+                          >
                             <Skeleton width={30} height={30} />
                           </label>
                           <Skeleton height={60} />
                         </div>
                         <div className="mb-3 col-md-6">
-                          <label htmlFor="organization" className="form-label">
+                          <label
+                            htmlFor="organization"
+                            className="form-label text-capitalize fs-6"
+                          >
                             <Skeleton width={30} height={30} />
                           </label>
                           <Skeleton height={60} />
                         </div>
                         <div className="mb-3 col-md-1">
-                          <label className="form-label ">
+                          <label className="form-label text-capitalize fs-6 ">
                             <Skeleton width={30} height={30} />
                           </label>
                           <div className="position-relative">
@@ -247,10 +256,12 @@ export default function AccountSetting(props: AccountSettingProps) {
                         <div className="card-body">
                           <div className="d-flex align-items-start align-items-sm-center gap-4"></div>
                         </div>
-                        <hr className="my-0" />
+                        <hr className="my-0 mb-2" />
                         <div className="row">
                           <div className="mb-3 col-md-6">
-                            <label className="form-label">ID</label>
+                            <label className="form-label text-capitalize fs-6">
+                              ID
+                            </label>
                             <input
                               disabled
                               className="form-control"
@@ -261,7 +272,9 @@ export default function AccountSetting(props: AccountSettingProps) {
                             />
                           </div>
                           <div className="mb-3 col-md-6">
-                            <label className="form-label">Tên</label>
+                            <label className="form-label text-capitalize fs-6">
+                              Tên
+                            </label>
 
                             <input
                               className="form-control"
@@ -275,7 +288,7 @@ export default function AccountSetting(props: AccountSettingProps) {
                           <div className="mb-3 col-md-6">
                             <label
                               htmlFor="organization"
-                              className="form-label"
+                              className="form-label text-capitalize fs-6"
                             >
                               email
                             </label>
@@ -289,7 +302,7 @@ export default function AccountSetting(props: AccountSettingProps) {
                           <div className="mb-3 col-md-6">
                             <label
                               htmlFor="organization"
-                              className="form-label"
+                              className="form-label text-capitalize fs-6"
                             >
                               Địa chỉ
                             </label>
@@ -304,7 +317,7 @@ export default function AccountSetting(props: AccountSettingProps) {
                           <div className="mb-3 col-md-6">
                             <label
                               htmlFor="organization"
-                              className="form-label"
+                              className="form-label text-capitalize fs-6"
                             >
                               Số điện thoại
                             </label>
@@ -315,7 +328,9 @@ export default function AccountSetting(props: AccountSettingProps) {
                             />
                           </div>
                           <div className="mb-3 col-md-1">
-                            <label className="form-label ">Chiết khấu</label>
+                            <label className="form-label text-capitalize fs-6 ">
+                              Chiết khấu
+                            </label>
                             <div className="position-relative mt-3">
                               <input
                                 disabled

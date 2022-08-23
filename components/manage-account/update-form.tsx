@@ -101,7 +101,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Id
@@ -127,7 +127,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Tên
@@ -160,7 +160,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Họ
@@ -193,7 +193,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
 
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-email"
                 >
                   Email
@@ -220,7 +220,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 form-label"
+                  className="col-sm-3 form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-phone"
                 >
                   Số điện thoại
@@ -252,7 +252,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 form-label"
+                  className="col-sm-3 form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-message"
                 >
                   Địa chỉ
@@ -282,7 +282,7 @@ export default function UpdateForm(props: IUpdateFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-company"
                 >
                   Vị trí

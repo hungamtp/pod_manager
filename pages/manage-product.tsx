@@ -265,7 +265,7 @@ export default function ManageProduct(props: IManageProductProps) {
           <div className="container-xxl w-80p flex-grow-1 container-p-y">
             <h3 className="fw-bold py-3 mb-4">Sản phẩm thô</h3>
             <button
-              className="btn btn-success ms-4 text-dark"
+              className="btn btn-success ms-4 text-dark fw-bold"
               onClick={handleIsEditFalse}
             >
               <AddIcon sx={{ mr: 1 }} />
@@ -452,7 +452,7 @@ export default function ManageProduct(props: IManageProductProps) {
             <br />
             {/* Basic Bootstrap Table */}
             <div className="card ">
-              <h4 className="card-header">Quản lý sản phẩm thô</h4>
+              <h5 className="card-header">Quản lý sản phẩm thô</h5>
               <div className="table-responsive text-nowrap ">
                 <table className="table ">
                   <thead>

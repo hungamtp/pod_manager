@@ -135,14 +135,11 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="card-body">
                 <div className="row mb-3">
-                  <label
-                    className="col-sm-3 col-form-label"
-                    htmlFor="basic-icon-default-fullname"
-                  >
+                  <label className="col-sm-4 col-form-label text-capitalize fs-6">
                     Tên sản phẩm
                   </label>
 
-                  <div className="col-sm-9">
+                  <div className="col-sm-8">
                     <div className="input-group input-group-merge">
                       <input
                         type="text"
@@ -163,12 +160,12 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                 </div>
                 <div className="row mb-3">
                   <label
-                    className="col-sm-3 col-form-label"
+                    className="col-sm-4 col-form-label text-capitalize fs-6"
                     htmlFor="basic-icon-default-fullname"
                   >
                     Category
                   </label>
-                  <div className="col-sm-9">
+                  <div className="col-sm-8">
                     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                       <InputLabel id="demo-select-small">Category</InputLabel>
                       <Select
@@ -195,12 +192,12 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                 </div>
                 <div className="row mb-3">
                   <label
-                    className="col-sm-3 col-form-label"
+                    className="col-sm-4 col-form-label text-capitalize fs-6"
                     htmlFor="basic-icon-default-company"
                   >
                     Mô tả
                   </label>
-                  <div className="col-sm-9">
+                  <div className="col-sm-8">
                     <div className="input-group input-group-merge">
                       <textarea
                         rows={3}
@@ -221,12 +218,12 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                 </div>
                 <div className="row mb-3">
                   <label
-                    className="col-sm-3 col-form-label"
+                    className="col-sm-4 col-form-label text-capitalize fs-6"
                     htmlFor="basic-icon-default-fullname"
                   >
                     Hình xem trước
                   </label>
-                  <div className="col-sm-9">
+                  <div className="col-sm-8">
                     <ImageUploading
                       multiple
                       value={images}
@@ -246,8 +243,12 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
                         // write your building UI
                         <div className="upload__image-wrapper">
                           {imageList.map((image, index) => (
-                            <div key={index} className="image-item">
-                              <img src={image["data_url"]} alt="" width="100" />
+                            <div key={index} className="image-item mb-1">
+                              <img
+                                src={image["data_url"]}
+                                className="rounded"
+                                width="100"
+                              />
                             </div>
                           ))}
                           <button
@@ -286,13 +287,13 @@ export default function CreateProductForm(props: ICreateProductFormProps) {
               <div className="d-flex justify-content-center">
                 <div className="col-sm-10 d-flex justify-content-around">
                   <button
-                    className="btn btn-primary"
+                    className="btn btn-primary "
                     color="primary"
                     type="submit"
                   >
                     {isLoading === true && (
                       <span
-                        className="spinner-border spinner-border-sm"
+                        className="spinner-border spinner-border-sm "
                         role="status"
                         aria-hidden="true"
                       ></span>

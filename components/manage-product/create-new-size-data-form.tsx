@@ -68,7 +68,7 @@ export default function CreateProductSizeForm(
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Chiều rộng (cm)
@@ -92,7 +92,7 @@ export default function CreateProductSizeForm(
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Chiều dài (cm)

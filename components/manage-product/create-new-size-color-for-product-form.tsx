@@ -88,7 +88,7 @@ export default function CreateNewSizeColorForProductForm(
           <div className="card-body">
             <div className="row mb-3">
               <label
-                className="col-sm-2 col-form-label"
+                className="col-sm-2 col-form-label text-capitalize fs-6"
                 htmlFor="basic-icon-default-fullname"
               >
                 Màu
@@ -157,7 +157,7 @@ export default function CreateNewSizeColorForProductForm(
             </div>
             <div className="row mb-3">
               <label
-                className="col-sm-2 col-form-label"
+                className="col-sm-2 col-form-label text-capitalize fs-6"
                 htmlFor="basic-icon-default-fullname"
               >
                 Kích thước

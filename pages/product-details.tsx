@@ -467,13 +467,13 @@ export default function ProductDetails(props: IProductDetailsProps) {
                         <hr className="my-0" />
                         <div className="row">
                           <div className="mb-3 col-md-6">
-                            <label className="form-label">
+                            <label className="form-label text-capitalize fs-6">
                               <Skeleton width={30} height={30} />
                             </label>
                             <Skeleton height={60} />
                           </div>
                           <div className="mb-3 col-md-6">
-                            <label className="form-label">
+                            <label className="form-label text-capitalize fs-6">
                               <Skeleton width={30} height={30} />
                             </label>
 
@@ -483,7 +483,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                           <div className="mb-3 col-md-6">
                             <label
                               htmlFor="organization"
-                              className="form-label"
+                              className="form-label text-capitalize fs-6"
                             >
                               <Skeleton width={30} height={30} />
                             </label>
@@ -493,7 +493,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                           <div className="mb-3 col-md-6">
                             <label
                               htmlFor="organization"
-                              className="form-label"
+                              className="form-label text-capitalize fs-6"
                             >
                               <Skeleton width={30} height={30} />
                             </label>
@@ -689,10 +689,12 @@ export default function ProductDetails(props: IProductDetailsProps) {
                             )}
                           </div>
                         </div>
-                        <hr className="my-0" />
+                        <hr className="my-0 mb-2" />
                         <div className="row">
-                          <div className="mb-3 col-md-6">
-                            <label className="form-label">ID</label>
+                          <div className=" mb-3 col-md-6">
+                            <label className="form-label text-capitalize fs-6">
+                              ID
+                            </label>
                             <input
                               disabled
                               className="form-control"
@@ -703,7 +705,9 @@ export default function ProductDetails(props: IProductDetailsProps) {
                             />
                           </div>
                           <div className="mb-3 col-md-6">
-                            <label className="form-label">Tên sản phẩm</label>
+                            <label className="form-label text-capitalize fs-6">
+                              Tên sản phẩm
+                            </label>
 
                             <input
                               disabled={isDisabled}
@@ -726,7 +730,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                           <div className="mb-3 col-md-6">
                             <label
                               htmlFor="organization"
-                              className="form-label"
+                              className="form-label text-capitalize fs-6"
                             >
                               Mô tả
                             </label>
@@ -749,7 +753,9 @@ export default function ProductDetails(props: IProductDetailsProps) {
                           </div>
 
                           <div className="mb-3 col-md-6">
-                            <label className="form-label">Thể loại</label>
+                            <label className="form-label text-capitalize fs-6">
+                              Thể loại
+                            </label>
                             <div className="mb-3 col-md-6">
                               {categoryName && (
                                 <FormControl
@@ -786,7 +792,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                           </div>
 
                           {/* <div className="mb-3 col-md-6 ">
-                          <label className="form-label me-3">tag</label>
+                          <label className="form-label text-capitalize fs-6 me-3">tag</label>
                           {responseProduct.data.productTags.map((tag) => (
                             <Chip
                               className=" me-2"

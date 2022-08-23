@@ -101,7 +101,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Tên Category
@@ -128,7 +128,7 @@ export default function UpdateCategoryForm(props: IUpdateCategoryFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Hình mô tả

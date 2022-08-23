@@ -20,7 +20,7 @@ const schema = yup.object().shape({
     .string()
     .trim()
     .min(10, "Lý do cần ít nhất 10 kí tự")
-    .max(300, "Lý do tối đa 300 kí tự")
+    .max(255, "Lý do tối đa 255 kí tự")
     .required("không được để trống lý do"),
 });
 
@@ -71,7 +71,7 @@ export default function CancelOrderStatus(props: ICancelOrderStatusProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-5 col-form-label"
+                  className="col-sm-5 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Lý do hủy đơn

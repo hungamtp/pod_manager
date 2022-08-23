@@ -60,7 +60,7 @@ const schema = yup.object().shape({
     .string()
     .trim()
     .min(10, "Địa chỉ cần ít nhất 10 kí tự")
-    .max(300, "Địa chỉ tối đa 300 kí tự")
+    .max(255, "Địa chỉ tối đa 255 kí tự")
     .required("Địa chỉ không được để trống"),
   tradeDiscount: yup
     .number()
@@ -151,7 +151,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Tên nhà in
@@ -183,7 +183,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-company"
                 >
                   Mật khẩu
@@ -236,7 +236,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-email"
                 >
                   Email
@@ -264,7 +264,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 form-label"
+                  className="col-sm-3 form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-phone"
                 >
                   Số điện thoại
@@ -295,7 +295,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 form-label"
+                  className="col-sm-3 form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-message"
                 >
                   Địa chỉ
@@ -325,10 +325,10 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 form-label"
+                  className="col-sm-3 form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-message"
                 >
-                  Chiết khấu ( % )
+                  Chiết khấu (%)
                 </label>
                 <div className="col-sm-3">
                   <div className="input-group input-group-merge">
@@ -358,7 +358,7 @@ export default function CreateFactoryForm(props: ICreateFactoryFormProps) {
               </div>
               <div className="row mb-3">
                 <label
-                  className="col-sm-3 col-form-label"
+                  className="col-sm-3 col-form-label text-capitalize fs-6"
                   htmlFor="basic-icon-default-fullname"
                 >
                   Logo
