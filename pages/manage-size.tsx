@@ -6,10 +6,9 @@ import UpdateSizeForm from "@/components/manage-size/update-size-form";
 import { Filter } from "@/services/accounts";
 import { UpdateSizeDto } from "@/services/sizes/dto/update-sizes-dto";
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Pagination, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import useSizes from "hooks/sizes/use-sizes";
@@ -65,7 +64,7 @@ export default function ManageSize(props: IManageSize) {
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
           <h3 className="fw-bold py-3 mb-4">Kích thước</h3>
           <button
-            className="btn btn-success ms-4 mb-4 text-dark"
+            className="btn btn-success ms-4 mb-4 text-dark fw-bold"
             onClick={() => {
               handleOpenCreate();
               setIsEdit(false);
@@ -83,7 +82,9 @@ export default function ManageSize(props: IManageSize) {
             fullWidth={true}
           >
             <DialogTitle id="alert-dialog-title">
-              {isEdit === true ? "Chỉnh sửa kích thước" : "Tạo mới kích thước"}
+              {isEdit === true
+                ? "Bạn có muốn xóa kích thước này không"
+                : "Tạo mới kích thước"}
             </DialogTitle>
             <DialogContent>
               {isEdit === true ? (
@@ -123,7 +124,7 @@ export default function ManageSize(props: IManageSize) {
                               setIsEdit(true);
                             }}
                           >
-                            <EditIcon fontSize="medium" color="primary" />
+                            <DeleteIcon fontSize="medium" color="error" />
                           </IconButton>
                         </td>
                       </tr>

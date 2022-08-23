@@ -958,7 +958,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                 {responseProduct?.data.deleted === false && (
                   <div>
                     <button
-                      className="btn btn-success ms-4 text-dark"
+                      className="btn btn-success ms-4 text-dark fw-bold"
                       onClick={handleOpenCreateSizeColorDialog}
                     >
                       <AddIcon sx={{ mr: 1 }} />
@@ -1150,7 +1150,7 @@ export default function ProductDetails(props: IProductDetailsProps) {
                     responseProduct?.data.deleted === false && (
                       <div>
                         <button
-                          className="btn btn-success ms-4 text-dark"
+                          className="btn btn-success ms-4 text-dark fw-bold"
                           onClick={handleCreateProductBlueprint}
                         >
                           <AddIcon sx={{ mr: 1 }} />

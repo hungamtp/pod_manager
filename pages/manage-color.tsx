@@ -63,7 +63,7 @@ export default function ManageColor(props: IManageColor) {
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
           <h3 className="fw-bold py-3 mb-4">Màu</h3>
           <button
-            className="btn btn-success ms-4 mb-4 text-dark"
+            className="btn btn-success ms-4 mb-4 text-dark fw-bold"
             onClick={() => {
               handleOpenCreate();
               setIsEdit(false);
@@ -81,7 +81,9 @@ export default function ManageColor(props: IManageColor) {
             fullWidth={true}
           >
             <DialogTitle id="alert-dialog-title">
-              {isEdit === true ? "" : "Tạo màu mới"}
+              {isEdit === true
+                ? "Bạn có muốn xóa màu này không"
+                : "Tạo màu mới"}
             </DialogTitle>
             <DialogContent>
               {isEdit === true ? (

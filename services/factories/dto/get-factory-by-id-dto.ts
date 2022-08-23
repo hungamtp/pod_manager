@@ -9,7 +9,6 @@ export interface FactoryByIdDtos {
   phone: string;
   image: string;
   tradeDiscount: number;
-
   productDtoList: ProductDto[];
   public: Boolean;
   delete: Boolean;

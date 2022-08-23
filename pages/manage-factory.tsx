@@ -245,13 +245,13 @@ export default function ManageFactory(props: IManageFactory) {
 
         {!isLoadingAccount && (
           <div className="container-xxl w-80p flex-grow-1 container-p-y">
-            <h3 className="fw-bold py-3 mb-4">Nhà In</h3>
+            <h3 className="fw-bold py-3 mb-4">Nhà in</h3>
             <button
-              className="btn btn-success ms-4 text-dark"
+              className="btn btn-success ms-4 text-dark fw-bold"
               onClick={handleOpenCreateDialog}
             >
               <AddIcon sx={{ mr: 1 }} />
-              Tạo Mới Nhà In
+              Tạo mới nhà in
             </button>
             <hr className="my-4" />
             <br />
