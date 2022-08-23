@@ -79,7 +79,7 @@ export default function ManageMaterial(props: IManageMaterial) {
         <div className="container-xxl w-80p flex-grow-1 container-p-y">
           <h3 className="fw-bold py-3 mb-4">Chất liệu áo</h3>
           <button
-            className="btn btn-success ms-4 mb-4 text-dark"
+            className="btn btn-success ms-4 mb-4 text-dark fw-bold"
             onClick={() => {
               handleOpenCreate();
               setIsEdit(false);

@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
+import { numberWithCommas } from "@/helpers/number-util";
 import { CreateSizeColorProductDto } from "@/services/factories/dto/create-size-color-product-dto";
+import { ProductDto } from "@/services/factories/dto/get-factory-by-id-dto";
 import {
   ColorDto,
   ColorOfProductDto,
@@ -28,6 +30,7 @@ export interface ICreateSizeColorProductFormProps {
   factoryId: string;
   productId: string;
   colors: ColorOfProductDto[];
+  productInfo: ProductDto | any;
 }
 
 type FormCreateSizeColorProduct = {
@@ -58,12 +61,18 @@ const schema = yup.object().shape({
 export default function CreateSizeColorProductForm(
   props: ICreateSizeColorProductFormProps
 ) {
-  const { handleCloseDialog, factoryId, productId, colors } = props;
+  const { handleCloseDialog, factoryId, productId, colors, productInfo } =
+    props;
 
   const { data: responseColorSize, isLoading: isloadingColorSize } =
     useColorSize(productId);
+  const [getProduct, setGetProduct] = useState<ProductDto>();
 
   const [selectedColor, setSelectedColor] = useState<string>("");
+
+  useEffect(() => {
+    setGetProduct(productInfo);
+  }, [productInfo]);
 
   useEffect(() => {
     if (responseColorSize) {
@@ -146,8 +155,43 @@ export default function CreateSizeColorProductForm(
   return (
     <>
       <div className="col-xxl">
+        <h4>Tạo Kích thước, màu và số lượng cho sản phẩm</h4>
         <div className="card mb-4">
           <div className="card-body">
+            {getProduct && (
+              <div>
+                <div className="row mb-3">
+                  <div className="col-sm-3">
+                    <img
+                      className="rounded border border-secondary"
+                      src={getProduct.productImages[0].image}
+                      width="100"
+                    />
+                  </div>
+                  <div className="col-sm-9">
+                    <div>
+                      <label className="col-form-label text-capitalize fs-6 me-2">
+                        Tên sản phẩm:
+                      </label>
+                      {getProduct.name}
+                    </div>
+                    <div>
+                      <label className="col-form-label text-capitalize fs-6 me-2">
+                        Chất liệu:
+                      </label>
+                      {getProduct.material}
+                    </div>
+                    <div>
+                      <label className="col-form-label text-capitalize fs-6 me-2">
+                        Giá:
+                      </label>
+                      {numberWithCommas(getProduct.price)} VNĐ
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label

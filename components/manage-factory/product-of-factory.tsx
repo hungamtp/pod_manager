@@ -1,7 +1,10 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import { numberWithCommas } from "@/helpers/number-util";
-import { getFactoryByIdDtos } from "@/services/factories/dto/get-factory-by-id-dto";
+import {
+  getFactoryByIdDtos,
+  ProductDto,
+} from "@/services/factories/dto/get-factory-by-id-dto";
 import { UpdatePriceMaterialDto } from "@/services/factories/dto/update-price-material-dto";
 import useGetSizesColorsById from "hooks/products/use-get-sizes-colors-by-id";
 import * as React from "react";
@@ -26,6 +29,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { nanoid } from "@reduxjs/toolkit";
 import SizesColorsProduct from "./size-color-product";
+import { DialogTitle } from "@material-ui/core";
 
 export interface IProductOfFactoryProps {
   responseFactory: getFactoryByIdDtos;
@@ -74,6 +78,7 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [page, setPage] = React.useState(0);
+  const [productInfo, setProdutInfo] = React.useState<ProductDto>();
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const { data: responseSizesColorById, isLoading: isLoadingSizeColorById } =
     useGetSizesColorsById(productId);
@@ -101,13 +106,14 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
 
   const handleOpenCreateSizeColorDialog = (
     index: number,
-    productId: string
+    productId: string,
+    getProduct: ProductDto
   ) => {
+    setProdutInfo(getProduct);
     setIndex(index);
     setProductId(productId);
     setOpenCreateDialog(true);
   };
-
   const handleOpenSizeColorDialog = async (
     data: { quantity: number; size: string; colorImage: string }[]
   ) => {
@@ -164,6 +170,7 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
                 factoryId={responseFactory.data.id}
                 productId={productId}
                 colors={responseSizesColorById.data.colors}
+                productInfo={productInfo}
               />
             </DialogContent>
           </Dialog>
@@ -258,7 +265,8 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
                                   onClick={() =>
                                     handleOpenCreateSizeColorDialog(
                                       index,
-                                      row.id
+                                      row.id,
+                                      row
                                     )
                                   }
                                 >
