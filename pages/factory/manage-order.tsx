@@ -22,12 +22,13 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { IconButton } from "@mui/material";
+import { boolean } from "yup";
 
 export interface IManageOrder {}
 
 const ITEM_HEIGHT = 48;
 export interface UnitedData extends OrderFactoryDto {
-  orderDetailIdList: string[];
+  orderDetailsList: OrderFactoryDto[];
 }
 
 interface Column {
@@ -52,6 +53,7 @@ export default function ManageOrder(props: IManageOrder) {
     pageNumber: 0,
     pageSize: 10,
   });
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const dispatch = useAppDispatch();
@@ -77,7 +79,7 @@ export default function ManageOrder(props: IManageOrder) {
     if (ordersFactoryresponse && ordersFactoryresponse.length > 0) {
       const newOrdersContent: UnitedData[] = ordersFactoryresponse.map(
         (orderData) => {
-          return { ...orderData, orderDetailIdList: [orderData.id] };
+          return { ...orderData, orderDetailsList: [orderData] };
         }
       );
       let newLength = 1;
@@ -96,9 +98,7 @@ export default function ManageOrder(props: IManageOrder) {
                 newOrdersContent[j].quantity + newOrdersContent[i].quantity;
               newOrdersContent[j].price =
                 newOrdersContent[j].price + newOrdersContent[i].price;
-              newOrdersContent[j].orderDetailIdList.push(
-                newOrdersContent[i].id
-              );
+              newOrdersContent[j].orderDetailsList.push(newOrdersContent[i]);
               count++;
               break;
             }
@@ -252,11 +252,12 @@ export default function ManageOrder(props: IManageOrder) {
                                                 productName: row.productName,
                                                 designName: row.designName,
                                                 credentialId: credentialId,
-                                                orderDetailIdList:
-                                                  row.orderDetailIdList,
+                                                orderDetailsList:
+                                                  row.orderDetailsList,
                                                 orderStatus: row.status,
                                               })
                                             );
+
                                             router.push(
                                               `/factory/order-details-printing`
                                             );
