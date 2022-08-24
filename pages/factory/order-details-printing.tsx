@@ -4,28 +4,27 @@ import { MainLayout } from "@/components/layouts";
 import * as React from "react";
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
+import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
+import CancelOrderStatus from "@/components/manage-factory/cancel-order-status";
+import ConfirmOrderStatus from "@/components/manage-factory/confirm-order-status";
+import ViewOrder from "@/components/manage-factory/view-order";
+import { clearData } from "@/redux/slices/unitedOrderData";
+import { DialogTitle, StepLabel } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Step from "@mui/material/Step";
-import StepButton from "@mui/material/StepButton";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
+import Step from "@mui/material/Step";
+import StepButton from "@mui/material/StepButton";
 import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
-import { DialogTitle, StepLabel } from "@mui/material";
-import { useRouter } from "next/router";
-import useGetOrderDetails from "hooks/factories/use-get-order-details";
-import ViewOrder from "@/components/manage-factory/view-order";
-import useGetSizeProductByProductId from "hooks/products/use-get-product-size-by-productId";
 import { nanoid } from "@reduxjs/toolkit";
+import useGetOrderDetails from "hooks/factories/use-get-order-details";
+import useGetSizeProductByProductId from "hooks/products/use-get-product-size-by-productId";
 import useGetProductById from "hooks/products/use-get-products-by-id";
-import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
-import { clearData } from "@/redux/slices/unitedOrderData";
-import useUpdateOrderStatusFactory from "hooks/factories/use-update-order-status";
-import ConfirmOrderStatus from "@/components/manage-factory/confirm-order-status";
-import CancelOrderStatus from "@/components/manage-factory/cancel-order-status";
-import { async } from "@firebase/util";
-
+import { useRouter } from "next/router";
+import EastIcon from "@mui/icons-material/East";
+import CheckIcon from "@mui/icons-material/Check";
 export interface OrderDetailsProps {}
 
 const steps = [
@@ -524,8 +523,9 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                           </StepButton>
 
                                           {activeStep === index && (
-                                            <Button
-                                              className="ms-3 ps-3"
+                                            <button
+                                              type="button"
+                                              className="btn btn-primary ms-4 ps-3 p-1 pe-2"
                                               onClick={() => {
                                                 handleGetStatus();
                                                 handleClickOpenOrderDialog();
@@ -533,10 +533,16 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                               }}
                                             >
                                               {completedSteps() ===
-                                              totalSteps() - 1
-                                                ? "Hoàn thành đơn hàng"
-                                                : "Hoàn thành"}
-                                            </Button>
+                                              totalSteps() - 1 ? (
+                                                <div>
+                                                  Hoàn thành <CheckIcon />
+                                                </div>
+                                              ) : (
+                                                <div>
+                                                  Hoàn thành <EastIcon />
+                                                </div>
+                                              )}
+                                            </button>
                                           )}
                                         </div>
                                       </Step>
