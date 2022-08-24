@@ -25,6 +25,15 @@ import useGetProductById from "hooks/products/use-get-products-by-id";
 import { useRouter } from "next/router";
 import EastIcon from "@mui/icons-material/East";
 import CheckIcon from "@mui/icons-material/Check";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import { OrderFactoryDto } from "@/services/factories/dto/get-all-orders-factory";
 export interface OrderDetailsProps {}
 
 const steps = [
@@ -42,6 +51,23 @@ const englishSteps = [
   "DELIVERING",
   "DELIVERED",
   "DONE",
+];
+
+interface Column {
+  id: "size" | "name" | "color" | "quantity" | "status" | "date" | "action";
+  label: string;
+  minWidth?: number;
+  align?: "right";
+  format?: (value: number) => string;
+}
+
+const columns: readonly Column[] = [
+  { id: "name", label: "Tên thiết kế", minWidth: 170 },
+  { id: "size", label: "Size", minWidth: 170 },
+  { id: "color", label: "Màu", minWidth: 170 },
+  { id: "quantity", label: "Số lượng", minWidth: 170 },
+  { id: "date", label: "Ngày tạo", minWidth: 170 },
+  { id: "status", label: "Trạng thái", minWidth: 170 },
 ];
 
 export default function OrderDetails(props: OrderDetailsProps) {
@@ -84,7 +110,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
     designId,
     credentialId,
     designName,
-    orderDetailIdList,
+    orderDetailsList,
     orderStatus: statusOfOrder,
   } = useAppSelector((state) => state.unitedData);
 
@@ -106,105 +132,128 @@ export default function OrderDetails(props: OrderDetailsProps) {
     useGetProductById(responseOrderDetails?.data.productId || "");
   const [renderColor, setRenderColor] = React.useState("");
 
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  // React.useEffect(() => {
+  //   if (responseOrderDetails) {
+  //     const colorList = responseOrderDetails.data.orderDetailsSupportDtos.map(
+  //       (data) => data.color
+  //     );
+  //     let loopColorList: string[] = [];
+
+  //     if (colorList.length > 1) {
+  //       let newLength = 1;
+  //       let i;
+  //       let j;
+  //       let count = 0;
+  //       for (i = 1; i < colorList.length; i++) {
+  //         for (j = 0; j < newLength; j++) {
+  //           if (colorList[i] === colorList[j]) {
+  //             count++;
+  //             break;
+  //           }
+  //         }
+  //         if (newLength === j) {
+  //           colorList[newLength++] = colorList[i];
+  //         }
+  //       }
+  //       if (count === colorList.length - 1) {
+  //         loopColorList = [colorList[0]];
+  //         setRenderedColorList([colorList[0]]);
+  //       } else {
+  //         loopColorList = colorList.slice(0, newLength);
+  //         setRenderedColorList(colorList.slice(0, newLength));
+  //       }
+  //     } else {
+  //       loopColorList = colorList;
+  //       setRenderedColorList(colorList);
+  //     }
+
+  //     const sizeList: {
+  //       size: string;
+  //       colorsData: { color: string; quantity: number; colorImage: string }[];
+  //     }[] = [];
+  //     responseOrderDetails.data.orderDetailsSupportDtos.forEach((data) => {
+  //       const tmpSizeData: {
+  //         size: string;
+  //         colorsData: { color: string; quantity: number; colorImage: string }[];
+  //       } = { size: data.size, colorsData: [] };
+
+  //       loopColorList.forEach((color) => {
+  //         if (color === data.color) {
+  //           tmpSizeData.colorsData.push({
+  //             color: color,
+  //             quantity: data.quantity,
+  //             colorImage: data.colorImage,
+  //           });
+  //         } else {
+  //           tmpSizeData.colorsData.push({
+  //             color: color,
+  //             quantity: 0,
+  //             colorImage: data.colorImage,
+  //           });
+  //         }
+  //       });
+  //       sizeList.push(tmpSizeData);
+  //     });
+
+  //     if (sizeList.length > 1) {
+  //       let newLength = 1;
+  //       let i: number;
+  //       let j: number;
+  //       let count = 0;
+  //       for (i = 1; i < sizeList.length; i++) {
+  //         for (j = 0; j < newLength; j++) {
+  //           if (sizeList[i].size === sizeList[j].size) {
+  //             sizeList[j].colorsData.forEach((colorData) => {
+  //               sizeList[i].colorsData.forEach((element) => {
+  //                 if (
+  //                   element.quantity !== 0 &&
+  //                   colorData.color === element.color
+  //                 ) {
+  //                   colorData.quantity = element.quantity;
+  //                 }
+  //               });
+  //             });
+  //             count++;
+  //             break;
+  //           }
+  //         }
+  //         if (newLength === j) {
+  //           sizeList[newLength++] = sizeList[i];
+  //         }
+  //       }
+  //       if (count === sizeList.length - 1) {
+  //         setSizeList([sizeList[0]]);
+  //       } else {
+  //         setSizeList(sizeList.slice(0, newLength));
+  //       }
+  //     } else {
+  //       setSizeList(sizeList);
+  //     }
+  //   }
+  // }, [responseOrderDetails]);
+
+  const [renderOrderDetailList, setRenderOrderDetailList] = React.useState<
+    OrderFactoryDto[]
+  >([]);
+
   React.useEffect(() => {
-    if (responseOrderDetails) {
-      const colorList = responseOrderDetails.data.orderDetailsSupportDtos.map(
-        (data) => data.color
-      );
-      let loopColorList: string[] = [];
-
-      if (colorList.length > 1) {
-        let newLength = 1;
-        let i;
-        let j;
-        let count = 0;
-        for (i = 1; i < colorList.length; i++) {
-          for (j = 0; j < newLength; j++) {
-            if (colorList[i] === colorList[j]) {
-              count++;
-              break;
-            }
-          }
-          if (newLength === j) {
-            colorList[newLength++] = colorList[i];
-          }
-        }
-        if (count === colorList.length - 1) {
-          loopColorList = [colorList[0]];
-          setRenderedColorList([colorList[0]]);
-        } else {
-          loopColorList = colorList.slice(0, newLength);
-          setRenderedColorList(colorList.slice(0, newLength));
-        }
-      } else {
-        loopColorList = colorList;
-        setRenderedColorList(colorList);
-      }
-
-      const sizeList: {
-        size: string;
-        colorsData: { color: string; quantity: number; colorImage: string }[];
-      }[] = [];
-      responseOrderDetails.data.orderDetailsSupportDtos.forEach((data) => {
-        const tmpSizeData: {
-          size: string;
-          colorsData: { color: string; quantity: number; colorImage: string }[];
-        } = { size: data.size, colorsData: [] };
-
-        loopColorList.forEach((color) => {
-          if (color === data.color) {
-            tmpSizeData.colorsData.push({
-              color: color,
-              quantity: data.quantity,
-              colorImage: data.colorImage,
-            });
-          } else {
-            tmpSizeData.colorsData.push({
-              color: color,
-              quantity: 0,
-              colorImage: data.colorImage,
-            });
-          }
-        });
-        sizeList.push(tmpSizeData);
-      });
-
-      if (sizeList.length > 1) {
-        let newLength = 1;
-        let i: number;
-        let j: number;
-        let count = 0;
-        for (i = 1; i < sizeList.length; i++) {
-          for (j = 0; j < newLength; j++) {
-            if (sizeList[i].size === sizeList[j].size) {
-              sizeList[j].colorsData.forEach((colorData) => {
-                sizeList[i].colorsData.forEach((element) => {
-                  if (
-                    element.quantity !== 0 &&
-                    colorData.color === element.color
-                  ) {
-                    colorData.quantity = element.quantity;
-                  }
-                });
-              });
-              count++;
-              break;
-            }
-          }
-          if (newLength === j) {
-            sizeList[newLength++] = sizeList[i];
-          }
-        }
-        if (count === sizeList.length - 1) {
-          setSizeList([sizeList[0]]);
-        } else {
-          setSizeList(sizeList.slice(0, newLength));
-        }
-      } else {
-        setSizeList(sizeList);
-      }
+    if (orderDetailsList) {
+      setRenderOrderDetailList(orderDetailsList);
     }
-  }, [responseOrderDetails]);
+  }, [orderDetailsList]);
 
   const [isViewOrder, setIsViewOrder] = React.useState(false);
 
@@ -413,46 +462,163 @@ export default function OrderDetails(props: OrderDetailsProps) {
 
                           <div className="mb-3">
                             <p className="h4 mt-4">Thông tin đặt hàng</p>
-                            <div className="w-75 ms-3">
-                              <div className="row ">
-                                <div className="col-md-2 p-0">
-                                  <div className="border p-2">Màu/Size</div>
-                                  {renderedColorList.map((color) => (
-                                    <div key={color} className="border p-2">
-                                      {color}
-                                    </div>
-                                  ))}
-                                </div>
-                                <div className="col-md-10 p-0">
-                                  <div className="d-flex flex-col">
-                                    {sizeList.map((data) => (
-                                      <div key={nanoid()}>
-                                        <div className="border py-2 px-4">
-                                          {data.size}
-                                        </div>
-                                        {data.colorsData.map((dataColor) => {
-                                          if (
-                                            dataColor.quantity > 0 &&
-                                            !renderColor
-                                          ) {
-                                            setRenderColor(
-                                              dataColor.colorImage
-                                            );
-                                          }
+                            <div className="card">
+                              <div className="table-responsive text-nowrap">
+                                {renderOrderDetailList &&
+                                renderOrderDetailList.length > 0 ? (
+                                  <>
+                                    <Paper
+                                      sx={{ width: "100%", overflow: "hidden" }}
+                                    >
+                                      <TableContainer sx={{}}>
+                                        <Table
+                                          stickyHeader
+                                          aria-label="sticky table"
+                                        >
+                                          <TableHead>
+                                            <TableRow>
+                                              {columns.map((column) => (
+                                                <TableCell
+                                                  key={column.id}
+                                                  align={column.align}
+                                                  style={{
+                                                    minWidth: column.minWidth,
+                                                  }}
+                                                >
+                                                  {column.label}
+                                                </TableCell>
+                                              ))}
+                                            </TableRow>
+                                          </TableHead>
+                                          <TableBody>
+                                            {renderOrderDetailList
+                                              .slice(
+                                                page * rowsPerPage,
+                                                page * rowsPerPage + rowsPerPage
+                                              )
+                                              .map((row, index) => {
+                                                return (
+                                                  <TableRow
+                                                    hover
+                                                    role="checkbox"
+                                                    tabIndex={-1}
+                                                    key={nanoid()}
+                                                  >
+                                                    <TableCell>
+                                                      <strong>
+                                                        {row.designName}
+                                                      </strong>
+                                                    </TableCell>
 
-                                          return (
-                                            <div
-                                              key={dataColor.color}
-                                              className="border py-2 px-4"
-                                            >
-                                              {dataColor.quantity}
-                                            </div>
-                                          );
-                                        })}
-                                      </div>
-                                    ))}
+                                                    <TableCell>
+                                                      <strong>
+                                                        {row.size}
+                                                      </strong>
+                                                    </TableCell>
+
+                                                    <TableCell>
+                                                      <strong>
+                                                        {row.color}
+                                                      </strong>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                      <strong>
+                                                        {row.quantity} sản phẩm
+                                                      </strong>
+                                                    </TableCell>
+
+                                                    <TableCell>
+                                                      <strong>
+                                                        {`${new Date(
+                                                          row.createDate
+                                                        ).getDate()}-${new Date(
+                                                          row.createDate
+                                                        ).getMonth()}-${new Date(
+                                                          row.createDate
+                                                        ).getFullYear()}`}
+                                                      </strong>
+                                                    </TableCell>
+
+                                                    <TableCell>
+                                                      {row.canceledOrder ===
+                                                      false ? (
+                                                        <td>
+                                                          {row.status ===
+                                                            "PENDING" && (
+                                                            <span className="badge bg-label-warning me-1">
+                                                              CHỜ XÁC NHẬN
+                                                            </span>
+                                                          )}
+                                                          {row.status ===
+                                                            "PRINTING" && (
+                                                            <span className="badge bg-label-warning me-1">
+                                                              CHỜ IN
+                                                            </span>
+                                                          )}
+                                                          {row.status ===
+                                                            "PACKAGING" && (
+                                                            <span className="badge bg-label-warning me-1">
+                                                              ĐANG ĐÓNG GÓI
+                                                            </span>
+                                                          )}
+                                                          {row.status ===
+                                                            "DELIVERING" && (
+                                                            <span className="badge bg-label-warning me-1">
+                                                              ĐANG GIAO HÀNG
+                                                            </span>
+                                                          )}
+                                                          {row.status ===
+                                                            "DELIVERED" && (
+                                                            <span className="badge bg-label-warning me-1">
+                                                              ĐÃ GIAO
+                                                            </span>
+                                                          )}
+                                                          {row.status ===
+                                                            "DONE" && (
+                                                            <span className="badge bg-label-success me-1">
+                                                              HOÀN THÀNH
+                                                            </span>
+                                                          )}
+                                                          {row.status ===
+                                                            "CANCEL" && (
+                                                            <span className="badge bg-label-danger me-1">
+                                                              ĐÃ HỦY
+                                                            </span>
+                                                          )}
+                                                        </td>
+                                                      ) : (
+                                                        <td>
+                                                          <span className="badge bg-label-danger me-1">
+                                                            ĐÃ HỦY
+                                                          </span>
+                                                        </td>
+                                                      )}
+                                                    </TableCell>
+                                                  </TableRow>
+                                                );
+                                              })}
+                                          </TableBody>
+                                        </Table>
+                                      </TableContainer>
+                                      {renderOrderDetailList && (
+                                        <TablePagination
+                                          rowsPerPageOptions={[5]}
+                                          count={renderOrderDetailList.length}
+                                          rowsPerPage={rowsPerPage}
+                                          page={page}
+                                          onPageChange={handleChangePage}
+                                          onRowsPerPageChange={
+                                            handleChangeRowsPerPage
+                                          }
+                                        />
+                                      )}
+                                    </Paper>
+                                  </>
+                                ) : (
+                                  <div className="h3 text-center p-3">
+                                    Nhà in này hiện chưa có sản phẩm nào
                                   </div>
-                                </div>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -667,7 +833,9 @@ export default function OrderDetails(props: OrderDetailsProps) {
                         {isUpdate ? (
                           <ConfirmOrderStatus
                             handleCloseDialog={handleCloseOrderDialog}
-                            orderDetailId={orderDetailIdList}
+                            orderDetailId={renderOrderDetailList.map(
+                              (data) => data.id
+                            )}
                             orderStatus={orderStatus}
                             handleComplete={handleComplete}
                           />
