@@ -10,6 +10,7 @@ const initialState: {
   designId: string;
   productName: string;
   designName: string;
+  designPrice: number;
   credentialId: string;
   orderDetailsList: OrderFactoryDto[];
   orderStatus: string;
@@ -18,6 +19,7 @@ const initialState: {
   designId: "",
   productName: "",
   designName: "",
+  designPrice: 0,
   credentialId: "",
   orderDetailsList: [],
   orderStatus: "",
@@ -33,6 +35,9 @@ export const unitedData = createSlice({
     setOrderStatus: (state, action) => {
       return { ...state, orderStatus: action.payload };
     },
+    setOrderDetailsList: (state, action) => {
+      return { ...state, orderDetailsList: action.payload };
+    },
     clearData: () => {
       return initialState;
     },
@@ -40,6 +45,7 @@ export const unitedData = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { addUnitedData, clearData, setOrderStatus } = unitedData.actions;
+export const { addUnitedData, clearData, setOrderStatus, setOrderDetailsList } =
+  unitedData.actions;
 
 export default unitedData.reducer;

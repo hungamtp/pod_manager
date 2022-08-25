@@ -1,6 +1,17 @@
 import { DesignState } from "@/models/designState";
 import { ISuccessHttpResponse } from "@/models/success_http_response.interface";
 
+export interface SupportOrderDetail {
+  orderDetailsId: string;
+  color: string;
+  colorImage: string;
+  size: string;
+  quantity: string;
+  status: string;
+  createdDate: string;
+  reasonByFactory: string;
+  reasonByUser: string;
+}
 export interface OrdersDetailDtos {
   orderId: string;
   customerName: string;
@@ -28,13 +39,7 @@ export interface OrdersDetailDtos {
   cancelReasonByFactory: string;
   cancelReasonByUser: string;
   canceled: boolean;
-  orderDetailsSupportDtos: {
-    orderDetailsId: string;
-    colorImage: string;
-    color: string;
-    size: string;
-    quantity: number;
-  }[];
+  orderDetailsSupportDtos: SupportOrderDetail[];
   productId: string;
   status: string;
   statuses: string[];

@@ -6,20 +6,20 @@ import Image from "next/image";
 import * as React from "react";
 export interface IConfirmOrderStatusProps {
   handleCloseDialog: () => void;
-  orderDetailId: string[];
+  orderDetailIdList: string[];
   orderStatus: string;
   handleComplete: () => void;
 }
 
 export default function ConfirmOrderStatus(props: IConfirmOrderStatusProps) {
-  const { handleCloseDialog, orderDetailId, orderStatus, handleComplete } =
+  const { handleCloseDialog, orderDetailIdList, orderStatus, handleComplete } =
     props;
   const { mutate: updateOrderStatus, isSuccess } =
     useUpdateOrderStatusFactory(handleCloseDialog);
 
   const handleUpdateStatus = () => {
     const tmpData: UpdateOrderStatusDto = {
-      orderDetailId: orderDetailId,
+      orderDetailId: orderDetailIdList,
       orderStatus: orderStatus,
     };
     updateOrderStatus(tmpData);
