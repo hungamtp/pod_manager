@@ -23,6 +23,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { IconButton } from "@mui/material";
 import { boolean } from "yup";
+import { dateFormat } from "@/helpers/date-utils";
 
 export interface IManageOrder {}
 
@@ -182,13 +183,7 @@ export default function ManageOrder(props: IManageOrder) {
 
                                       <TableCell>
                                         <strong>
-                                          {`${new Date(
-                                            row.createDate
-                                          ).getDate()}-${new Date(
-                                            row.createDate
-                                          ).getMonth()}-${new Date(
-                                            row.createDate
-                                          ).getFullYear()}`}
+                                          {dateFormat(row.createDate)}
                                         </strong>
                                       </TableCell>
 
@@ -211,6 +206,7 @@ export default function ManageOrder(props: IManageOrder) {
                                                 }
                                               }
                                             );
+                                            //set Status cho view detail
                                             dispatch(
                                               addUnitedData({
                                                 orderId: row.orderId,

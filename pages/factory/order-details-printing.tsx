@@ -39,6 +39,8 @@ import TableRow from "@mui/material/TableRow";
 import { useState } from "react";
 import { SupportOrderDetail } from "@/services/factories/dto/get-orders-detail-dto";
 import { numberWithCommas } from "@/helpers/number-util";
+import Image from "next/image";
+import { dateFormat } from "@/helpers/date-utils";
 export interface OrderDetailsProps {}
 
 const steps = [
@@ -126,8 +128,12 @@ export default function OrderDetails(props: OrderDetailsProps) {
   const [orderDetailsList, setOrderDetailsList] =
     useState<SupportOrderDetail[]>();
   React.useEffect(() => {
-    if (responseOrderDetails)
+    if (responseOrderDetails) {
       setOrderDetailsList(responseOrderDetails.data.orderDetailsSupportDtos);
+      setRenderColor(
+        responseOrderDetails.data.orderDetailsSupportDtos[0].colorImage
+      );
+    }
   }, [responseOrderDetails]);
   // console.log(orderDetailIdList, "orderDetailIdList");
 
@@ -152,11 +158,12 @@ export default function OrderDetails(props: OrderDetailsProps) {
     setPage(0);
   };
 
-  const [selectedOrderDetail, setSelectedOrderDetail] =
+  const [selectedOrderDetailId, setSelectedOrderDetailId] =
     React.useState<string>("");
   const [isShowCancelReason, setIsShowCancelReason] = React.useState(false);
 
   const [isCancelByFactory, setIsCancelByFactory] = useState(false);
+  const [cancelReasonByFactory, setCancelReasonByFactory] = useState("");
 
   // React.useEffect(() => {
   //   if (responseOrderDetails) {
@@ -275,6 +282,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
           canceledList.push(orderDetail);
           if (orderDetail.reasonByFactory) {
             setIsCancelByFactory(true);
+            setCancelReasonByFactory(orderDetail.reasonByFactory);
           }
         } else pendingList.push(orderDetail);
       });
@@ -341,7 +349,6 @@ export default function OrderDetails(props: OrderDetailsProps) {
 
   React.useEffect(() => {
     if (statusOfOrder) {
-      console.log(responseOrderDetails, "responseOrderDetails");
       let newStatusList = {};
       const BreakError = {};
       try {
@@ -419,7 +426,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
                     <div className="card-body">
                       <form id="formAccountSettings">
                         <div className="row">
-                          <div className="mb-3 mx-5 col-md-5 card">
+                          <div className="mb-3 mx-5 col-md-5 card text-dark">
                             <div className="d-flex card-header bg-light px-1">
                               <h5 className="my-auto text-start">
                                 Thông tin khách hàng
@@ -459,7 +466,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
                             </div>
                           </div>
 
-                          <div className="mb-3 ms-5 col-md-5 card">
+                          <div className="mb-3 ms-5 col-md-5 card text-dark">
                             {productResponse && (
                               <div className="">
                                 <div className="d-flex card-header bg-light px-1">
@@ -578,13 +585,9 @@ export default function OrderDetails(props: OrderDetailsProps) {
 
                                                       <TableCell>
                                                         <strong>
-                                                          {`${new Date(
+                                                          {dateFormat(
                                                             row.createdDate
-                                                          ).getDate()}-${new Date(
-                                                            row.createdDate
-                                                          ).getMonth()}-${new Date(
-                                                            row.createdDate
-                                                          ).getFullYear()}`}
+                                                          )}
                                                         </strong>
                                                       </TableCell>
 
@@ -632,19 +635,21 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                                               <div className="badge bg-label-danger h-75 mt-1">
                                                                 ĐÃ HỦY
                                                               </div>
-                                                              <div
-                                                                className="text-secondary btn p-0 text-start"
-                                                                onClick={() => {
-                                                                  setSelectedOrderDetail(
-                                                                    row.orderDetailsId
-                                                                  );
-                                                                  setIsShowCancelReason(
-                                                                    true
-                                                                  );
-                                                                }}
-                                                              >
-                                                                xem lý do{" "}
-                                                              </div>
+                                                              {row.reasonByUser && (
+                                                                <div
+                                                                  className="text-secondary btn p-0 text-start"
+                                                                  onClick={() => {
+                                                                    setSelectedOrderDetailId(
+                                                                      row.orderDetailsId
+                                                                    );
+                                                                    setIsShowCancelReason(
+                                                                      true
+                                                                    );
+                                                                  }}
+                                                                >
+                                                                  xem lý do{" "}
+                                                                </div>
+                                                              )}
                                                             </div>
                                                           )}
                                                         </td>
@@ -679,37 +684,13 @@ export default function OrderDetails(props: OrderDetailsProps) {
 
                                   <div>
                                     {isCancelByFactory && (
-                                      <Box sx={{ width: "100%", marginTop: 8 }}>
-                                        <Stepper
-                                          alternativeLabel
-                                          nonLinear
-                                          activeStep={activeStep}
-                                        >
-                                          {steps.map((label, index) => {
-                                            const labelProps: {
-                                              optional?: React.ReactNode;
-                                              error?: boolean;
-                                            } = {};
-                                            if (
-                                              index ===
-                                              responseOrderDetails.data.statuses
-                                                .length -
-                                                2
-                                            ) {
-                                              labelProps.error = true;
-                                            }
-                                            return (
-                                              <Step
-                                                key={label}
-                                                completed={completed[index]}
-                                              >
-                                                <StepLabel {...labelProps}>
-                                                  {label}
-                                                </StepLabel>
-                                              </Step>
-                                            );
-                                          })}
-                                        </Stepper>
+                                      <Box
+                                        sx={{
+                                          width: "100%",
+                                          marginTop: 8,
+                                          marginBottom: 5,
+                                        }}
+                                      >
                                         <div>
                                           {
                                             <React.Fragment>
@@ -803,13 +784,9 @@ export default function OrderDetails(props: OrderDetailsProps) {
 
                                                       <TableCell>
                                                         <strong>
-                                                          {`${new Date(
-                                                            row.createdDate
-                                                          ).getDate()}-${new Date(
-                                                            row.createdDate
-                                                          ).getMonth()}-${new Date(
-                                                            row.createdDate
-                                                          ).getFullYear()}`}
+                                                          {dateFormat(
+                                                            row.createdDate as Date
+                                                          )}
                                                         </strong>
                                                       </TableCell>
 
@@ -891,7 +868,13 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                   </div>
                                   <div>
                                     {
-                                      <Box sx={{ width: "100%", marginTop: 6 }}>
+                                      <Box
+                                        sx={{
+                                          width: "100%",
+                                          marginTop: 6,
+                                          marginBottom: 5,
+                                        }}
+                                      >
                                         <Stepper
                                           alternativeLabel
                                           nonLinear
@@ -997,22 +980,16 @@ export default function OrderDetails(props: OrderDetailsProps) {
 
                           {/* Small table */}
                           <span className="mt-3 ">
-                            {isCancel &&
-                              responseOrderDetails &&
-                              responseOrderDetails.data
-                                .cancelReasonByFactory && (
-                                <div>
-                                  <strong className="text-danger fs-5">
-                                    Lý do hủy đơn:{" "}
-                                  </strong>
-                                  <label className="text-danger fs-5">
-                                    {
-                                      responseOrderDetails.data
-                                        .cancelReasonByFactory
-                                    }
-                                  </label>
-                                </div>
-                              )}
+                            {isCancelByFactory && cancelReasonByFactory && (
+                              <div>
+                                <strong className="text-danger fs-5">
+                                  Lý do hủy đơn:{" "}
+                                </strong>
+                                <label className="text-danger fs-5">
+                                  {cancelReasonByFactory}
+                                </label>
+                              </div>
+                            )}
                           </span>
                           <hr className="my-5" />
                         </div>
@@ -1045,6 +1022,66 @@ export default function OrderDetails(props: OrderDetailsProps) {
                             orderStatus={orderStatus}
                           />
                         )}
+                      </DialogContent>
+                    </Dialog>
+                    <Dialog
+                      open={isShowCancelReason}
+                      onClose={() => setIsShowCancelReason(false)}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                      fullWidth={true}
+                    >
+                      <DialogContent>
+                        {selectedOrderDetailId &&
+                          orderDetailsList &&
+                          orderDetailsList.filter(
+                            (orderDetail) =>
+                              orderDetail.orderDetailsId ===
+                              selectedOrderDetailId
+                          )[0] && (
+                            <div className="">
+                              <div className=" d-flex justify-content-center">
+                                <Image
+                                  src="/assets/img/avatars/logo_man.png"
+                                  className="avatar avatar rounded-circle "
+                                  width={150}
+                                  height={150}
+                                  objectFit="cover"
+                                  alt="productImage"
+                                />
+                              </div>
+
+                              {orderDetailsList.filter(
+                                (orderDetail) =>
+                                  orderDetail.orderDetailsId ===
+                                  selectedOrderDetailId
+                              )[0].reasonByUser && (
+                                <>
+                                  <div className="h5 d-flex justify-content-center text-dark">
+                                    Khách hàng đã hủy đơn với lý do:
+                                  </div>
+                                  <div className="d-flex justify-content-center">
+                                    {
+                                      orderDetailsList.filter(
+                                        (orderDetail) =>
+                                          orderDetail.orderDetailsId ===
+                                          selectedOrderDetailId
+                                      )[0].reasonByUser
+                                    }
+                                  </div>
+                                </>
+                              )}
+
+                              <div className=" d-flex justify-content-center mt-4">
+                                <button
+                                  className="btn btn-primary ps-4 pe-4"
+                                  onClick={() => setIsShowCancelReason(false)}
+                                >
+                                  Đóng
+                                </button>
+                              </div>
+                            </div>
+                          )}
                       </DialogContent>
                     </Dialog>
                     {/* /Account */}
