@@ -366,11 +366,11 @@ export default function FactoryDetails(props: FactoryDetailsProps) {
                               </span>
                             )}
                           </div>
-                          <div className="mb-3 col-md-1">
+                          <div className="mb-3 col-md-2">
                             <label className="form-label text-capitalize fs-6 ">
                               Chiết khấu
                             </label>
-                            <div className="position-relative mt-3">
+                            <div className="position-relative mt-3 col-md-6">
                               <input
                                 disabled={isDisabled}
                                 className="form-control position-absolute top-50 start-50 translate-middle "

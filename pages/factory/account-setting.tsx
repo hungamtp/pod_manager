@@ -327,14 +327,14 @@ export default function AccountSetting(props: AccountSettingProps) {
                               defaultValue={factoryInfo.phone}
                             />
                           </div>
-                          <div className="mb-3 col-md-1">
-                            <label className="form-label text-capitalize fs-6 ">
+                          <div className="mb-3 col-md-2">
+                            <label className="form-label  text-capitalize fs-6 ">
                               Chiết khấu
                             </label>
-                            <div className="position-relative mt-3">
+                            <div className="position-relative col-md-6 mt-3">
                               <input
                                 disabled
-                                className="form-control position-absolute top-50 start-50 translate-middle "
+                                className="form-control position-absolute top-50 start-50 translate-middle  "
                                 defaultValue={factoryInfo.tradeDiscount}
                               />
                               <p className="position-absolute top-50 end-0 translate-middle-y pe-3">
