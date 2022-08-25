@@ -596,44 +596,44 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                                           {row.status ===
                                                             "PENDING" && (
                                                             <span className="badge bg-label-warning me-1">
-                                                              CHỜ XÁC NHẬN
+                                                              Chờ xác nhận
                                                             </span>
                                                           )}
                                                           {row.status ===
                                                             "PRINTING" && (
                                                             <span className="badge bg-label-warning me-1">
-                                                              CHỜ IN
+                                                              Đang xử lí
                                                             </span>
                                                           )}
                                                           {row.status ===
                                                             "PACKAGING" && (
                                                             <span className="badge bg-label-warning me-1">
-                                                              ĐANG ĐÓNG GÓI
+                                                              Đang đóng gói
                                                             </span>
                                                           )}
                                                           {row.status ===
                                                             "DELIVERING" && (
                                                             <span className="badge bg-label-warning me-1">
-                                                              ĐANG GIAO HÀNG
+                                                              Đang giao hàng
                                                             </span>
                                                           )}
                                                           {row.status ===
                                                             "DELIVERED" && (
                                                             <span className="badge bg-label-warning me-1">
-                                                              ĐÃ GIAO
+                                                              Đã giao
                                                             </span>
                                                           )}
                                                           {row.status ===
                                                             "DONE" && (
                                                             <span className="badge bg-label-success me-1">
-                                                              HOÀN THÀNH
+                                                              Hoàn thành
                                                             </span>
                                                           )}
                                                           {row.status ===
                                                             "CANCEL" && (
                                                             <div className="d-flex flex-wrap w-50">
                                                               <div className="badge bg-label-danger h-75 mt-1">
-                                                                ĐÃ HỦY
+                                                                Đã hủy
                                                               </div>
                                                               {row.reasonByUser && (
                                                                 <div
@@ -797,43 +797,43 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                                             {row.status ===
                                                               "PENDING" && (
                                                               <span className="badge bg-label-warning me-1">
-                                                                CHỜ XÁC NHẬN
+                                                                Chờ xác nhận
                                                               </span>
                                                             )}
                                                             {row.status ===
                                                               "PRINTING" && (
                                                               <span className="badge bg-label-warning me-1">
-                                                                CHỜ IN
+                                                                Đang xử lí
                                                               </span>
                                                             )}
                                                             {row.status ===
                                                               "PACKAGING" && (
-                                                              <span className="badge bg-label-warning me-1">
-                                                                ĐANG ĐÓNG GÓI
+                                                              <span className="badge  bg-label-warning me-1">
+                                                                Đang đóng gói
                                                               </span>
                                                             )}
                                                             {row.status ===
                                                               "DELIVERING" && (
                                                               <span className="badge bg-label-warning me-1">
-                                                                ĐANG GIAO HÀNG
+                                                                Đang giao hàng
                                                               </span>
                                                             )}
                                                             {row.status ===
                                                               "DELIVERED" && (
                                                               <span className="badge bg-label-warning me-1">
-                                                                ĐÃ GIAO
+                                                                Đã giao
                                                               </span>
                                                             )}
                                                             {row.status ===
                                                               "DONE" && (
                                                               <span className="badge bg-label-success me-1">
-                                                                HOÀN THÀNH
+                                                                Hoàn thành
                                                               </span>
                                                             )}
                                                             {row.status ===
                                                               "CANCEL" && (
                                                               <span className="badge bg-label-danger me-1">
-                                                                ĐÃ HỦY
+                                                                Đã hủy
                                                               </span>
                                                             )}
                                                           </td>
@@ -956,16 +956,17 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                                       pt: 2,
                                                     }}
                                                   >
-                                                    <Button
+                                                    <button
+                                                      type="button"
                                                       onClick={() => {
                                                         handleClickOpenOrderDialog();
                                                         setIsUpdate(false);
                                                       }}
                                                       color="error"
-                                                      sx={{ mr: 1 }}
+                                                      className="btn btn-danger ms-3"
                                                     >
                                                       Hủy đơn hàng
-                                                    </Button>
+                                                    </button>
                                                   </Box>
                                                 </React.Fragment>
                                               }
