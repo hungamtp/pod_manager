@@ -81,11 +81,17 @@ export default function ManageSize(props: IManageSize) {
             aria-describedby="alert-dialog-description"
             fullWidth={true}
           >
-            <DialogTitle id="alert-dialog-title">
-              {isEdit === true
-                ? "Bạn có muốn xóa kích thước này không"
-                : "Tạo mới kích thước"}
-            </DialogTitle>
+            {isEdit === true && (
+              <DialogTitle className="fs-3 text-center" id="alert-dialog-title">
+                Bạn có muốn xóa kích thước này không
+              </DialogTitle>
+            )}
+            {isEdit !== true && (
+              <DialogTitle className="fs-3 text-center" id="alert-dialog-title">
+                Tạo mới kích thước
+              </DialogTitle>
+            )}
+
             <DialogContent>
               {isEdit === true ? (
                 <UpdateSizeForm

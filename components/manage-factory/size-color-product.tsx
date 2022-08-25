@@ -55,7 +55,7 @@ export default function SizesColorsProduct(props: ISizesColorsProductProps) {
   return (
     <>
       <div className="card">
-        <h5 className="card-header">Bảng Thông tin</h5>
+        <h4 className="card-header">Bảng Thông tin</h4>
         <div className="table-responsive text-nowrap">
           {data && data.length > 0 ? (
             <>

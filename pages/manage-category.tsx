@@ -187,7 +187,10 @@ export default function ManageCategory(props: IManageCategoryProps) {
                 aria-describedby="alert-dialog-description"
                 fullWidth={true}
               >
-                <DialogTitle id="alert-dialog-title">
+                <DialogTitle
+                  className="fs-2 text-center"
+                  id="alert-dialog-title"
+                >
                   {"Tạo mới Category"}
                 </DialogTitle>
                 <DialogContent>
@@ -204,7 +207,10 @@ export default function ManageCategory(props: IManageCategoryProps) {
                 aria-describedby="alert-dialog-description"
                 fullWidth={true}
               >
-                <DialogTitle id="alert-dialog-title">
+                <DialogTitle
+                  className="fs-2 text-center"
+                  id="alert-dialog-title"
+                >
                   {"Chỉnh sửa Category"}
                 </DialogTitle>
                 <DialogContent>
@@ -224,7 +230,7 @@ export default function ManageCategory(props: IManageCategoryProps) {
               aria-describedby="alert-dialog-description"
               fullWidth={true}
             >
-              <DialogTitle id="alert-dialog-title">
+              <DialogTitle className="fs-3 text-center" id="alert-dialog-title">
                 {"Bạn có muốn xóa Category này không?"}
               </DialogTitle>
               <DialogContent>

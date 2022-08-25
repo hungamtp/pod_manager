@@ -84,119 +84,131 @@ export default function CreateNewSizeColorForProductForm(
   return (
     <>
       <div className="col-xxl">
+        <h4 className="text-center">Tạo Kích thước và màu cho sản phẩm thô</h4>
         <div className="card mb-4">
           <div className="card-body">
             <div className="row mb-3">
               <label
-                className="col-sm-2 col-form-label text-capitalize fs-6"
+                className="col-sm-3 col-form-label text-capitalize fs-6"
                 htmlFor="basic-icon-default-fullname"
               >
                 Màu
               </label>
-
-              <FormControl sx={{ mb: 1, width: 400 }}>
-                <Select
-                  multiple
-                  disableUnderline
-                  displayEmpty
-                  value={colorsList}
-                  onChange={handleChange}
-                  variant="standard"
-                  renderValue={(selected) => {
-                    if (selected.length === 0) {
-                      return selected;
-                    }
-
-                    return selected.map((color) => (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        key={color.split("-")[1]}
-                        width={30}
-                        height={30}
-                        className="rounded-circle border"
-                        src={
-                          "https://images.printify.com/5853fec7ce46f30f8328200a"
+              <div className="col-sm-8 ">
+                <div className="input-group input-group-merge ">
+                  <FormControl sx={{ mb: 1, width: 400 }}>
+                    <Select
+                      className="border rounded"
+                      multiple
+                      disableUnderline
+                      displayEmpty
+                      value={colorsList}
+                      onChange={handleChange}
+                      variant="standard"
+                      renderValue={(selected) => {
+                        if (selected.length === 0) {
+                          return selected;
                         }
-                        style={{
-                          backgroundColor: color.split("-")[1],
-                          marginRight: "0.5rem",
-                          opacity: "0.8",
-                        }}
-                        alt={color}
-                      />
-                    ));
-                  }}
-                  MenuProps={MenuProps}
-                  inputProps={{ "aria-label": "Without label" }}
-                >
-                  {colors?.content.map((color) => (
-                    <MenuItem
-                      key={color.name}
-                      value={`${color.name}-${color.imageColor}`}
-                      className="d-flex justify-content-between"
+
+                        return selected.map((color) => (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            key={color.split("-")[1]}
+                            width={30}
+                            height={30}
+                            className="rounded-circle border"
+                            src={
+                              "https://images.printify.com/5853fec7ce46f30f8328200a"
+                            }
+                            style={{
+                              backgroundColor: color.split("-")[1],
+                              marginRight: "0.5rem",
+                              opacity: "0.8",
+                            }}
+                            alt={color}
+                          />
+                        ));
+                      }}
+                      MenuProps={MenuProps}
+                      inputProps={{ "aria-label": "Without label" }}
                     >
-                      <p className="m-0">{color.name}</p>
-                      <img
-                        key={color.name}
-                        width={30}
-                        height={30}
-                        className="rounded-circle border"
-                        src={
-                          "https://images.printify.com/5853fec7ce46f30f8328200a"
-                        }
-                        style={{
-                          backgroundColor: color.imageColor,
-                          opacity: "0.8",
-                        }}
-                        alt={color.name}
-                      />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                      {colors?.content.map((color) => (
+                        <MenuItem
+                          key={color.name}
+                          value={`${color.name}-${color.imageColor}`}
+                          className="d-flex justify-content-between"
+                        >
+                          <p className="m-0">{color.name}</p>
+                          <img
+                            key={color.name}
+                            width={30}
+                            height={30}
+                            className="rounded-circle border"
+                            src={
+                              "https://images.printify.com/5853fec7ce46f30f8328200a"
+                            }
+                            style={{
+                              backgroundColor: color.imageColor,
+                              opacity: "0.8",
+                            }}
+                            alt={color.name}
+                          />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
+              </div>
             </div>
             <div className="row mb-3">
               <label
-                className="col-sm-2 col-form-label text-capitalize fs-6"
+                className="col-sm-3 col-form-label text-capitalize fs-6"
                 htmlFor="basic-icon-default-fullname"
               >
                 Kích thước
               </label>
-              <FormControl sx={{ mb: 1, width: 400 }}>
-                <Select
-                  multiple
-                  disableUnderline
-                  displayEmpty
-                  value={sizesList}
-                  onChange={handleChangeSize}
-                  variant="standard"
-                  renderValue={(selected) => {
-                    if (selected.length === 0) {
-                      return selected;
-                    }
+              <div className="col-sm-8 ">
+                <div className="input-group input-group-merge ">
+                  <FormControl sx={{ mb: 1, width: 400 }}>
+                    <Select
+                      className="border rounded"
+                      multiple
+                      disableUnderline
+                      displayEmpty
+                      value={sizesList}
+                      onChange={handleChangeSize}
+                      variant="standard"
+                      renderValue={(selected) => {
+                        if (selected.length === 0) {
+                          return selected;
+                        }
 
-                    return (
-                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                        {selected.map((value) => (
-                          <Chip key={value} label={value} />
-                        ))}
-                      </Box>
-                    );
-                  }}
-                  MenuProps={MenuProps}
-                  inputProps={{ "aria-label": "Without label" }}
-                >
-                  {sizes?.content.map((size) => (
-                    <MenuItem
-                      key={size.id}
-                      value={size.name}
-                      className="d-flex justify-content-between"
+                        return (
+                          <Box
+                            sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                          >
+                            {selected.map((value) => (
+                              <Chip key={value} label={value} />
+                            ))}
+                          </Box>
+                        );
+                      }}
+                      MenuProps={MenuProps}
+                      inputProps={{ "aria-label": "Without label" }}
                     >
-                      {size.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                      {sizes?.content.map((size) => (
+                        <MenuItem
+                          key={size.id}
+                          value={size.name}
+                          className="d-flex justify-content-between"
+                        >
+                          {size.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
+              </div>
             </div>
 
             <div className="d-flex justify-content-center">

@@ -281,7 +281,10 @@ export default function ManageProduct(props: IManageProductProps) {
                 aria-describedby="alert-dialog-description"
                 fullWidth={true}
               >
-                <DialogTitle id="alert-dialog-title">
+                <DialogTitle
+                  className="fs-2 text-center"
+                  id="alert-dialog-title"
+                >
                   {"Tạo mới sản phẩm thô"}
                 </DialogTitle>
                 <DialogContent>
@@ -298,7 +301,10 @@ export default function ManageProduct(props: IManageProductProps) {
                 aria-describedby="alert-dialog-description"
                 fullWidth={true}
               >
-                <DialogTitle id="alert-dialog-title">
+                <DialogTitle
+                  className="fs-2 text-center"
+                  id="alert-dialog-title"
+                >
                   {"Chỉnh sửa sản phẩm"}
                 </DialogTitle>
                 <DialogContent>
@@ -319,7 +325,10 @@ export default function ManageProduct(props: IManageProductProps) {
                 aria-describedby="alert-dialog-description"
                 fullWidth={true}
               >
-                <DialogTitle id="alert-dialog-title">
+                <DialogTitle
+                  className="fs-3 text-center"
+                  id="alert-dialog-title"
+                >
                   {"Bạn có muốn ngừng công bố sản phẩm thô này không?"}
                 </DialogTitle>
                 <DialogContent>
@@ -340,7 +349,10 @@ export default function ManageProduct(props: IManageProductProps) {
                 aria-describedby="alert-dialog-description"
                 fullWidth={true}
               >
-                <DialogTitle id="alert-dialog-title">
+                <DialogTitle
+                  className="fs-3 text-center"
+                  id="alert-dialog-title"
+                >
                   {"Bạn có muốn công bố sản phẩm thô này không?"}
                 </DialogTitle>
                 <DialogContent>
@@ -360,7 +372,7 @@ export default function ManageProduct(props: IManageProductProps) {
               aria-describedby="alert-dialog-description"
               fullWidth={true}
             >
-              <DialogTitle id="alert-dialog-title">
+              <DialogTitle className="fs-3 text-center" id="alert-dialog-title">
                 {"Bạn có muốn xóa sản phẩm thô này không?"}
               </DialogTitle>
               <DialogContent>
