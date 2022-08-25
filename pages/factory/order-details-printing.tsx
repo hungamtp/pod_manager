@@ -687,24 +687,25 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                       <Box
                                         sx={{
                                           width: "100%",
-                                          marginTop: 8,
+                                          marginTop: 6,
                                           marginBottom: 5,
                                         }}
                                       >
                                         <div>
                                           {
-                                            <React.Fragment>
-                                              <Typography
-                                                sx={{
-                                                  mt: 2,
-                                                  mb: 1,
-                                                  textAlign: "center",
-                                                  color: "red",
-                                                }}
-                                              >
-                                                Đơn hàng đã hủy
-                                              </Typography>
-                                            </React.Fragment>
+                                            <div className="ms-3">
+                                              {isCancelByFactory &&
+                                                cancelReasonByFactory && (
+                                                  <div>
+                                                    <strong className="text-danger fs-5">
+                                                      Lý do hủy đơn:{" "}
+                                                    </strong>
+                                                    <label className="text-danger fs-5">
+                                                      {cancelReasonByFactory}
+                                                    </label>
+                                                  </div>
+                                                )}
+                                            </div>
                                           }
                                         </div>
                                       </Box>
@@ -979,18 +980,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
                           </div>
 
                           {/* Small table */}
-                          <span className="mt-3 ">
-                            {isCancelByFactory && cancelReasonByFactory && (
-                              <div>
-                                <strong className="text-danger fs-5">
-                                  Lý do hủy đơn:{" "}
-                                </strong>
-                                <label className="text-danger fs-5">
-                                  {cancelReasonByFactory}
-                                </label>
-                              </div>
-                            )}
-                          </span>
+
                           <hr className="my-5" />
                         </div>
                       </form>
