@@ -1,14 +1,8 @@
 import { useAppDispatch } from "@/components/hooks/reduxHook";
 import { ErrorHttpResponse } from "@/models/error_http_response.interface";
 import { setOrderStatus } from "@/redux/slices/unitedOrderData";
-import {
-  updateOrderStatusFactory,
-  updatePriceMaterialProduct,
-} from "@/services/factories";
+import { updateOrderStatusFactory } from "@/services/factories";
 import { UpdateOrderStatusDto } from "@/services/factories/dto/update-order-status-dto";
-import { UpdatePriceMaterialDto } from "@/services/factories/dto/update-price-material-dto";
-import { updateProduct } from "@/services/products";
-import { UpdateProductDto } from "@/services/products/dto/update-product-dto";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
@@ -28,6 +22,7 @@ const useUpdateOrderStatusFactory = (handleCloseDialog: () => void) => {
     {
       onSuccess: (data) => {
         //because data:any
+        dispatch(setOrderStatus(orderStatus));
         dispatch(setOrderStatus(orderStatus));
         handleCloseDialog();
         queryClient.invalidateQueries("GetOrderDetails");

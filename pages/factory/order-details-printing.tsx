@@ -8,7 +8,10 @@ import { useAppDispatch, useAppSelector } from "@/components/hooks/reduxHook";
 import CancelOrderStatus from "@/components/manage-factory/cancel-order-status";
 import ConfirmOrderStatus from "@/components/manage-factory/confirm-order-status";
 import ViewOrder from "@/components/manage-factory/view-order";
-import { clearData } from "@/redux/slices/unitedOrderData";
+import {
+  clearData,
+  setOrderStatus as setOrderStatusRedux,
+} from "@/redux/slices/unitedOrderData";
 import { DialogTitle, StepLabel } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -33,7 +36,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { OrderFactoryDto } from "@/services/factories/dto/get-all-orders-factory";
+import { useState } from "react";
+import { SupportOrderDetail } from "@/services/factories/dto/get-orders-detail-dto";
+import { numberWithCommas } from "@/helpers/number-util";
 export interface OrderDetailsProps {}
 
 const steps = [
@@ -62,7 +67,6 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-  { id: "name", label: "Tên thiết kế", minWidth: 170 },
   { id: "size", label: "Size", minWidth: 170 },
   { id: "color", label: "Màu", minWidth: 170 },
   { id: "quantity", label: "Số lượng", minWidth: 170 },
@@ -110,7 +114,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
     designId,
     credentialId,
     designName,
-    orderDetailsList,
+    designPrice,
     orderStatus: statusOfOrder,
   } = useAppSelector((state) => state.unitedData);
 
@@ -119,15 +123,18 @@ export default function OrderDetails(props: OrderDetailsProps) {
     designId as string,
     credentialId as string
   );
+  const [orderDetailsList, setOrderDetailsList] =
+    useState<SupportOrderDetail[]>();
+  React.useEffect(() => {
+    if (responseOrderDetails)
+      setOrderDetailsList(responseOrderDetails.data.orderDetailsSupportDtos);
+  }, [responseOrderDetails]);
   // console.log(orderDetailIdList, "orderDetailIdList");
 
   const [orderStatus, setOrderStatus] = React.useState("PENDING");
   const { data: sizeProductResponse, isLoading: isLoadingSizeProductResponse } =
     useGetSizeProductByProductId(responseOrderDetails?.data.productId || "");
-  const [cancelIndex, setCancelIndex] = React.useState(0);
-  const [cancelComplete, setCancelComplete] = React.useState<{
-    [k: number]: boolean;
-  }>({});
+
   const { data: productResponse, isLoading: isLoadingProductResponse } =
     useGetProductById(responseOrderDetails?.data.productId || "");
   const [renderColor, setRenderColor] = React.useState("");
@@ -144,6 +151,12 @@ export default function OrderDetails(props: OrderDetailsProps) {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const [selectedOrderDetail, setSelectedOrderDetail] =
+    React.useState<string>("");
+  const [isShowCancelReason, setIsShowCancelReason] = React.useState(false);
+
+  const [isCancelByFactory, setIsCancelByFactory] = useState(false);
 
   // React.useEffect(() => {
   //   if (responseOrderDetails) {
@@ -245,13 +258,29 @@ export default function OrderDetails(props: OrderDetailsProps) {
   //   }
   // }, [responseOrderDetails]);
 
-  const [renderOrderDetailList, setRenderOrderDetailList] = React.useState<
-    OrderFactoryDto[]
-  >([]);
+  const [renderPedingOrderDetailList, setRenderPendingOrderDetailList] =
+    React.useState<SupportOrderDetail[]>([]);
+  const [renderCanceledOrderDetailList, setRenderCanceledOrderDetailList] =
+    React.useState<SupportOrderDetail[]>([]);
 
   React.useEffect(() => {
     if (orderDetailsList) {
-      setRenderOrderDetailList(orderDetailsList);
+      const pendingList: SupportOrderDetail[] = [];
+      const canceledList: SupportOrderDetail[] = [];
+      orderDetailsList.forEach((orderDetail) => {
+        if (
+          orderDetail.status === "CANCEL" ||
+          orderDetail.status === "IS_CANCEL"
+        ) {
+          canceledList.push(orderDetail);
+          if (orderDetail.reasonByFactory) {
+            setIsCancelByFactory(true);
+          }
+        } else pendingList.push(orderDetail);
+      });
+      setRenderPendingOrderDetailList(pendingList);
+
+      setRenderCanceledOrderDetailList(canceledList);
     }
   }, [orderDetailsList]);
 
@@ -283,10 +312,6 @@ export default function OrderDetails(props: OrderDetailsProps) {
     setActiveStep(newActiveStep);
   };
 
-  const handleCancel = () => {
-    setIsCancel(true);
-    setActiveStep(totalSteps() - 1);
-  };
   let tmpOrderStatusData = "";
 
   const handleGetStatus = () => {
@@ -394,154 +419,176 @@ export default function OrderDetails(props: OrderDetailsProps) {
                     <div className="card-body">
                       <form id="formAccountSettings">
                         <div className="row">
-                          <div className="mb-3 col-md-6">
-                            <p className="h4">Thông tin khách hàng</p>
-                            <div className="row ms-2">
-                              <div className=" border p-2 col-md-4">
+                          <div className="mb-3 mx-5 col-md-5 card">
+                            <div className="d-flex card-header bg-light px-1">
+                              <h5 className="my-auto text-start">
+                                Thông tin khách hàng
+                              </h5>
+                            </div>
+                            <div className="row">
+                              <div className=" border-top px-3 py-2 w-50">
                                 Tên khách hàng
                               </div>
-                              <div className=" border p-2 col-md-4">
+                              <div className=" border-top border-start px-3 py-2 w-50">
                                 {responseOrderDetails.data.customerName}
                               </div>
                             </div>
-                            <div className="row ms-2">
-                              <div className=" border p-2 col-md-4">Email</div>
-                              <div className=" border p-2 col-md-4">
+                            <div className="row">
+                              <div className=" border-top px-3 py-2 w-50">
+                                Email
+                              </div>
+                              <div className=" border-top border-start px-3 py-2 w-50">
                                 {responseOrderDetails.data.email}
                               </div>
                             </div>
-                            <div className="row ms-2">
-                              <div className=" border p-2 col-md-4">
+                            <div className="row">
+                              <div className=" border-top px-3 py-2 w-50">
                                 Số điện thoại
                               </div>
-                              <div className=" border p-2 col-md-4">
+                              <div className=" border-top border-start px-3 py-2 w-50">
                                 {responseOrderDetails.data.phoneNumber}
                               </div>
                             </div>
-                            <div className="row ms-2">
-                              <div className=" border p-2 col-md-4">
+                            <div className="row">
+                              <div className=" border-top px-3 py-2 w-50">
                                 Địa chỉ nhận hàng
                               </div>
-                              <div className=" border p-2 col-md-4">
+                              <div className=" border-top border-start px-3 py-2 w-50">
                                 175 Trần Thị Cờ, Quận 9, TP. Hồ Chí Minh
                               </div>
                             </div>
                           </div>
 
-                          <div className="mb-3 col-md-6">
+                          <div className="mb-3 ms-5 col-md-5 card">
                             {productResponse && (
-                              <>
-                                <p className="h4">Thông tin sản phẩm</p>
-                                <div className="row ms-2">
-                                  <div className=" border p-2 col-md-4">
+                              <div className="">
+                                <div className="d-flex card-header bg-light px-1">
+                                  <h5 className="my-auto text-start">
+                                    Thông tin sản phẩm
+                                  </h5>
+                                </div>
+                                <div className="row ">
+                                  <div className=" border-top px-3 py-2 w-50">
                                     Mã sản phẩm
                                   </div>
-                                  <div className=" border p-2 col-md-4">
+                                  <div className=" border-top border-start px-3 py-2 w-50">
                                     {productResponse.data.id}
                                   </div>
                                 </div>
-                                <div className="row ms-2">
-                                  <div className=" border p-2 col-md-4">
+                                <div className="row ">
+                                  <div className=" border-top px-3 py-2 w-50">
                                     Tên sản phẩm
                                   </div>
-                                  <div className=" border p-2 col-md-4">
+                                  <div className=" border-top border-start px-3 py-2 w-50">
                                     {productResponse.data.name}
                                   </div>
                                 </div>
-                                <div className="row ms-2">
-                                  <div className=" border p-2 col-md-4">
+                                <div className="row ">
+                                  <div className=" border-top px-3 py-2 w-50">
                                     Tên thiết kế
                                   </div>
-                                  <div className=" border p-2 col-md-4">
+                                  <div className=" border-top border-start px-3 py-2 w-50">
                                     {designName}
                                   </div>
                                 </div>
-                              </>
+                                <div className="row ">
+                                  <div className=" border-top px-3 py-2 w-50">
+                                    Giá sản phẩm
+                                  </div>
+                                  <div className=" border-top border-start px-3 py-2 w-50">
+                                    {numberWithCommas(designPrice)} VND
+                                  </div>
+                                </div>
+                              </div>
                             )}
                           </div>
+                          <br />
 
-                          <div className="mb-3">
-                            <p className="h4 mt-4">Thông tin đặt hàng</p>
-                            <div className="card">
-                              <div className="table-responsive text-nowrap">
-                                {renderOrderDetailList &&
-                                renderOrderDetailList.length > 0 ? (
-                                  <>
-                                    <Paper
-                                      sx={{ width: "100%", overflow: "hidden" }}
-                                    >
-                                      <TableContainer sx={{}}>
-                                        <Table
-                                          stickyHeader
-                                          aria-label="sticky table"
-                                        >
-                                          <TableHead>
-                                            <TableRow>
-                                              {columns.map((column) => (
-                                                <TableCell
-                                                  key={column.id}
-                                                  align={column.align}
-                                                  style={{
-                                                    minWidth: column.minWidth,
-                                                  }}
-                                                >
-                                                  {column.label}
-                                                </TableCell>
-                                              ))}
-                                            </TableRow>
-                                          </TableHead>
-                                          <TableBody>
-                                            {renderOrderDetailList
-                                              .slice(
-                                                page * rowsPerPage,
-                                                page * rowsPerPage + rowsPerPage
-                                              )
-                                              .map((row, index) => {
-                                                return (
-                                                  <TableRow
-                                                    hover
-                                                    role="checkbox"
-                                                    tabIndex={-1}
-                                                    key={nanoid()}
+                          <div className="my-5">
+                            {/* <p className="h4 mt-4">Thông tin đặt hàng</p> */}
+
+                            {renderCanceledOrderDetailList &&
+                              renderCanceledOrderDetailList.length > 0 && (
+                                <div className="card mx-4">
+                                  <div className="d-flex card-header border-bottom px-3">
+                                    <h5 className="my-auto text-start bg-light">
+                                      Đơn hàng bị hủy
+                                    </h5>
+                                  </div>
+                                  <div className="table-responsive text-nowrap">
+                                    <>
+                                      <Paper
+                                        sx={{
+                                          width: "100%",
+                                          overflow: "hidden",
+                                        }}
+                                      >
+                                        <TableContainer sx={{}}>
+                                          <Table
+                                            stickyHeader
+                                            aria-label="sticky table"
+                                          >
+                                            <TableHead>
+                                              <TableRow>
+                                                {columns.map((column) => (
+                                                  <TableCell
+                                                    key={column.id}
+                                                    align={column.align}
+                                                    style={{
+                                                      minWidth: column.minWidth,
+                                                    }}
                                                   >
-                                                    <TableCell>
-                                                      <strong>
-                                                        {row.designName}
-                                                      </strong>
-                                                    </TableCell>
+                                                    {column.label}
+                                                  </TableCell>
+                                                ))}
+                                              </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                              {renderCanceledOrderDetailList
+                                                .slice(
+                                                  page * rowsPerPage,
+                                                  page * rowsPerPage +
+                                                    rowsPerPage
+                                                )
+                                                .map((row, index) => {
+                                                  return (
+                                                    <TableRow
+                                                      hover
+                                                      role="checkbox"
+                                                      tabIndex={-1}
+                                                      key={nanoid()}
+                                                    >
+                                                      <TableCell>
+                                                        <strong>
+                                                          {row.size}
+                                                        </strong>
+                                                      </TableCell>
 
-                                                    <TableCell>
-                                                      <strong>
-                                                        {row.size}
-                                                      </strong>
-                                                    </TableCell>
+                                                      <TableCell>
+                                                        <strong>
+                                                          {row.color}
+                                                        </strong>
+                                                      </TableCell>
+                                                      <TableCell>
+                                                        <strong>
+                                                          {row.quantity} sản
+                                                          phẩm
+                                                        </strong>
+                                                      </TableCell>
 
-                                                    <TableCell>
-                                                      <strong>
-                                                        {row.color}
-                                                      </strong>
-                                                    </TableCell>
-                                                    <TableCell>
-                                                      <strong>
-                                                        {row.quantity} sản phẩm
-                                                      </strong>
-                                                    </TableCell>
+                                                      <TableCell>
+                                                        <strong>
+                                                          {`${new Date(
+                                                            row.createdDate
+                                                          ).getDate()}-${new Date(
+                                                            row.createdDate
+                                                          ).getMonth()}-${new Date(
+                                                            row.createdDate
+                                                          ).getFullYear()}`}
+                                                        </strong>
+                                                      </TableCell>
 
-                                                    <TableCell>
-                                                      <strong>
-                                                        {`${new Date(
-                                                          row.createDate
-                                                        ).getDate()}-${new Date(
-                                                          row.createDate
-                                                        ).getMonth()}-${new Date(
-                                                          row.createDate
-                                                        ).getFullYear()}`}
-                                                      </strong>
-                                                    </TableCell>
-
-                                                    <TableCell>
-                                                      {row.canceledOrder ===
-                                                      false ? (
+                                                      <TableCell>
                                                         <td>
                                                           {row.status ===
                                                             "PENDING" && (
@@ -581,46 +628,371 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                                           )}
                                                           {row.status ===
                                                             "CANCEL" && (
-                                                            <span className="badge bg-label-danger me-1">
-                                                              ĐÃ HỦY
-                                                            </span>
+                                                            <div className="d-flex flex-wrap w-50">
+                                                              <div className="badge bg-label-danger h-75 mt-1">
+                                                                ĐÃ HỦY
+                                                              </div>
+                                                              <div
+                                                                className="text-secondary btn p-0 text-start"
+                                                                onClick={() => {
+                                                                  setSelectedOrderDetail(
+                                                                    row.orderDetailsId
+                                                                  );
+                                                                  setIsShowCancelReason(
+                                                                    true
+                                                                  );
+                                                                }}
+                                                              >
+                                                                xem lý do{" "}
+                                                              </div>
+                                                            </div>
                                                           )}
                                                         </td>
-                                                      ) : (
-                                                        <td>
-                                                          <span className="badge bg-label-danger me-1">
-                                                            ĐÃ HỦY
-                                                          </span>
-                                                        </td>
-                                                      )}
-                                                    </TableCell>
-                                                  </TableRow>
-                                                );
-                                              })}
-                                          </TableBody>
-                                        </Table>
-                                      </TableContainer>
-                                      {renderOrderDetailList && (
-                                        <TablePagination
-                                          rowsPerPageOptions={[5]}
-                                          count={renderOrderDetailList.length}
-                                          rowsPerPage={rowsPerPage}
-                                          page={page}
-                                          onPageChange={handleChangePage}
-                                          onRowsPerPageChange={
-                                            handleChangeRowsPerPage
-                                          }
-                                        />
-                                      )}
-                                    </Paper>
-                                  </>
-                                ) : (
-                                  <div className="h3 text-center p-3">
-                                    Nhà in này hiện chưa có sản phẩm nào
+                                                      </TableCell>
+                                                    </TableRow>
+                                                  );
+                                                })}
+                                            </TableBody>
+                                          </Table>
+                                        </TableContainer>
+                                        {renderCanceledOrderDetailList &&
+                                          Math.ceil(
+                                            renderPedingOrderDetailList.length /
+                                              rowsPerPage
+                                          ) > 1 && (
+                                            <TablePagination
+                                              rowsPerPageOptions={[5]}
+                                              count={
+                                                renderCanceledOrderDetailList.length
+                                              }
+                                              rowsPerPage={rowsPerPage}
+                                              page={page}
+                                              onPageChange={handleChangePage}
+                                              onRowsPerPageChange={
+                                                handleChangeRowsPerPage
+                                              }
+                                            />
+                                          )}
+                                      </Paper>
+                                    </>
                                   </div>
-                                )}
-                              </div>
-                            </div>
+
+                                  <div>
+                                    {isCancelByFactory && (
+                                      <Box sx={{ width: "100%", marginTop: 8 }}>
+                                        <Stepper
+                                          alternativeLabel
+                                          nonLinear
+                                          activeStep={activeStep}
+                                        >
+                                          {steps.map((label, index) => {
+                                            const labelProps: {
+                                              optional?: React.ReactNode;
+                                              error?: boolean;
+                                            } = {};
+                                            if (
+                                              index ===
+                                              responseOrderDetails.data.statuses
+                                                .length -
+                                                2
+                                            ) {
+                                              labelProps.error = true;
+                                            }
+                                            return (
+                                              <Step
+                                                key={label}
+                                                completed={completed[index]}
+                                              >
+                                                <StepLabel {...labelProps}>
+                                                  {label}
+                                                </StepLabel>
+                                              </Step>
+                                            );
+                                          })}
+                                        </Stepper>
+                                        <div>
+                                          {
+                                            <React.Fragment>
+                                              <Typography
+                                                sx={{
+                                                  mt: 2,
+                                                  mb: 1,
+                                                  textAlign: "center",
+                                                  color: "red",
+                                                }}
+                                              >
+                                                Đơn hàng đã hủy
+                                              </Typography>
+                                            </React.Fragment>
+                                          }
+                                        </div>
+                                      </Box>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+
+                            {renderPedingOrderDetailList &&
+                              renderPedingOrderDetailList.length > 0 && (
+                                <div className="card mt-5 mx-4">
+                                  <div className="d-flex card-header bg-light border-bottom px-3">
+                                    <h5 className="my-auto text-start ">
+                                      Danh sách đơn hàng
+                                    </h5>
+                                  </div>
+                                  <div className="table-responsive text-nowrap">
+                                    <>
+                                      <Paper
+                                        sx={{
+                                          width: "100%",
+                                          overflow: "hidden",
+                                        }}
+                                      >
+                                        <TableContainer sx={{}}>
+                                          <Table
+                                            stickyHeader
+                                            aria-label="sticky table"
+                                          >
+                                            <TableHead>
+                                              <TableRow>
+                                                {columns.map((column) => (
+                                                  <TableCell
+                                                    key={column.id}
+                                                    align={column.align}
+                                                    style={{
+                                                      minWidth: column.minWidth,
+                                                    }}
+                                                  >
+                                                    {column.label}
+                                                  </TableCell>
+                                                ))}
+                                              </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                              {renderPedingOrderDetailList
+                                                .slice(
+                                                  page * rowsPerPage,
+                                                  page * rowsPerPage +
+                                                    rowsPerPage
+                                                )
+                                                .map((row, index) => {
+                                                  return (
+                                                    <TableRow
+                                                      hover
+                                                      role="checkbox"
+                                                      tabIndex={-1}
+                                                      key={nanoid()}
+                                                    >
+                                                      <TableCell>
+                                                        <strong>
+                                                          {row.size}
+                                                        </strong>
+                                                      </TableCell>
+
+                                                      <TableCell>
+                                                        <strong>
+                                                          {row.color}
+                                                        </strong>
+                                                      </TableCell>
+                                                      <TableCell>
+                                                        <strong>
+                                                          {row.quantity} sản
+                                                          phẩm
+                                                        </strong>
+                                                      </TableCell>
+
+                                                      <TableCell>
+                                                        <strong>
+                                                          {`${new Date(
+                                                            row.createdDate
+                                                          ).getDate()}-${new Date(
+                                                            row.createdDate
+                                                          ).getMonth()}-${new Date(
+                                                            row.createdDate
+                                                          ).getFullYear()}`}
+                                                        </strong>
+                                                      </TableCell>
+
+                                                      <TableCell>
+                                                        {
+                                                          <td>
+                                                            {row.status ===
+                                                              "PENDING" && (
+                                                              <span className="badge bg-label-warning me-1">
+                                                                CHỜ XÁC NHẬN
+                                                              </span>
+                                                            )}
+                                                            {row.status ===
+                                                              "PRINTING" && (
+                                                              <span className="badge bg-label-warning me-1">
+                                                                CHỜ IN
+                                                              </span>
+                                                            )}
+                                                            {row.status ===
+                                                              "PACKAGING" && (
+                                                              <span className="badge bg-label-warning me-1">
+                                                                ĐANG ĐÓNG GÓI
+                                                              </span>
+                                                            )}
+                                                            {row.status ===
+                                                              "DELIVERING" && (
+                                                              <span className="badge bg-label-warning me-1">
+                                                                ĐANG GIAO HÀNG
+                                                              </span>
+                                                            )}
+                                                            {row.status ===
+                                                              "DELIVERED" && (
+                                                              <span className="badge bg-label-warning me-1">
+                                                                ĐÃ GIAO
+                                                              </span>
+                                                            )}
+                                                            {row.status ===
+                                                              "DONE" && (
+                                                              <span className="badge bg-label-success me-1">
+                                                                HOÀN THÀNH
+                                                              </span>
+                                                            )}
+                                                            {row.status ===
+                                                              "CANCEL" && (
+                                                              <span className="badge bg-label-danger me-1">
+                                                                ĐÃ HỦY
+                                                              </span>
+                                                            )}
+                                                          </td>
+                                                        }
+                                                      </TableCell>
+                                                    </TableRow>
+                                                  );
+                                                })}
+                                            </TableBody>
+                                          </Table>
+                                        </TableContainer>
+                                        {renderPedingOrderDetailList &&
+                                          Math.ceil(
+                                            renderPedingOrderDetailList.length /
+                                              rowsPerPage
+                                          ) > 1 && (
+                                            <TablePagination
+                                              sx={{ border: "none" }}
+                                              rowsPerPageOptions={[5]}
+                                              count={
+                                                renderPedingOrderDetailList.length
+                                              }
+                                              rowsPerPage={rowsPerPage}
+                                              page={page}
+                                              onPageChange={handleChangePage}
+                                              onRowsPerPageChange={
+                                                handleChangeRowsPerPage
+                                              }
+                                            />
+                                          )}
+                                      </Paper>
+                                    </>
+                                  </div>
+                                  <div>
+                                    {
+                                      <Box sx={{ width: "100%", marginTop: 6 }}>
+                                        <Stepper
+                                          alternativeLabel
+                                          nonLinear
+                                          activeStep={activeStep}
+                                        >
+                                          {steps.map((label, index) => (
+                                            <Step
+                                              key={label}
+                                              completed={completed[index]}
+                                            >
+                                              <div>
+                                                <StepButton
+                                                  color="inherit"
+                                                  disabled
+                                                >
+                                                  {label}
+                                                  {completed[index] && (
+                                                    <Typography
+                                                      sx={{
+                                                        textAlign: "center",
+                                                        color: "green",
+                                                        fontSize: "13px",
+                                                      }}
+                                                    >
+                                                      Hoàn thành
+                                                    </Typography>
+                                                  )}
+                                                </StepButton>
+
+                                                {activeStep === index && (
+                                                  <button
+                                                    type="button"
+                                                    className="btn btn-primary ms-4 ps-3 p-1 pe-2"
+                                                    onClick={() => {
+                                                      handleGetStatus();
+                                                      handleClickOpenOrderDialog();
+                                                      setIsUpdate(true);
+                                                    }}
+                                                  >
+                                                    {completedSteps() ===
+                                                    totalSteps() - 1 ? (
+                                                      <div>
+                                                        Hoàn thành <CheckIcon />
+                                                      </div>
+                                                    ) : (
+                                                      <div>
+                                                        Hoàn thành <EastIcon />
+                                                      </div>
+                                                    )}
+                                                  </button>
+                                                )}
+                                              </div>
+                                            </Step>
+                                          ))}
+                                        </Stepper>
+                                        <div>
+                                          {allStepsCompleted() ? (
+                                            <React.Fragment>
+                                              <Typography
+                                                sx={{
+                                                  mt: 2,
+                                                  mb: 1,
+                                                  textAlign: "center",
+                                                  color: "green",
+                                                }}
+                                              >
+                                                Đơn hàng đã hoàn thành
+                                              </Typography>
+                                            </React.Fragment>
+                                          ) : (
+                                            <>
+                                              {
+                                                <React.Fragment>
+                                                  <Box
+                                                    sx={{
+                                                      display: "flex",
+                                                      flexDirection: "row",
+                                                      pt: 2,
+                                                    }}
+                                                  >
+                                                    <Button
+                                                      onClick={() => {
+                                                        handleClickOpenOrderDialog();
+                                                        setIsUpdate(false);
+                                                      }}
+                                                      color="error"
+                                                      sx={{ mr: 1 }}
+                                                    >
+                                                      Hủy đơn hàng
+                                                    </Button>
+                                                  </Box>
+                                                </React.Fragment>
+                                              }
+                                            </>
+                                          )}
+                                        </div>
+                                      </Box>
+                                    }
+                                  </div>
+                                </div>
+                              )}
                           </div>
 
                           {/* Small table */}
@@ -641,183 +1013,8 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                   </label>
                                 </div>
                               )}
-                            {responseOrderDetails &&
-                              responseOrderDetails.data.cancelReasonByUser && (
-                                <div>
-                                  <strong className="text-danger fs-5">
-                                    Lý do hủy đơn của khách hàng:{" "}
-                                  </strong>
-                                  <label className="text-danger fs-5">
-                                    {
-                                      responseOrderDetails.data
-                                        .cancelReasonByUser
-                                    }
-                                  </label>
-                                </div>
-                              )}
                           </span>
                           <hr className="my-5" />
-
-                          <div>
-                            {responseOrderDetails.data.canceled === false && (
-                              <Box sx={{ width: "100%" }}>
-                                <Stepper
-                                  alternativeLabel
-                                  nonLinear
-                                  activeStep={activeStep}
-                                >
-                                  {!isCancel &&
-                                    steps.map((label, index) => (
-                                      <Step
-                                        key={label}
-                                        completed={completed[index]}
-                                      >
-                                        <div>
-                                          <StepButton color="inherit" disabled>
-                                            {label}
-                                            {completed[index] && (
-                                              <Typography
-                                                sx={{
-                                                  textAlign: "center",
-                                                  color: "green",
-                                                  fontSize: "13px",
-                                                }}
-                                              >
-                                                Hoàn thành
-                                              </Typography>
-                                            )}
-                                          </StepButton>
-
-                                          {activeStep === index && (
-                                            <button
-                                              type="button"
-                                              className="btn btn-primary ms-4 ps-3 p-1 pe-2"
-                                              onClick={() => {
-                                                handleGetStatus();
-                                                handleClickOpenOrderDialog();
-                                                setIsUpdate(true);
-                                              }}
-                                            >
-                                              {completedSteps() ===
-                                              totalSteps() - 1 ? (
-                                                <div>
-                                                  Hoàn thành <CheckIcon />
-                                                </div>
-                                              ) : (
-                                                <div>
-                                                  Hoàn thành <EastIcon />
-                                                </div>
-                                              )}
-                                            </button>
-                                          )}
-                                        </div>
-                                      </Step>
-                                    ))}
-                                  {isCancel &&
-                                    steps.map((label, index) => {
-                                      const labelProps: {
-                                        optional?: React.ReactNode;
-                                        error?: boolean;
-                                      } = {};
-                                      if (
-                                        index ===
-                                        responseOrderDetails.data.statuses
-                                          .length -
-                                          2
-                                      ) {
-                                        labelProps.error = true;
-                                      }
-                                      return (
-                                        <Step
-                                          key={label}
-                                          completed={completed[index]}
-                                        >
-                                          <StepLabel {...labelProps}>
-                                            {label}
-                                          </StepLabel>
-                                        </Step>
-                                      );
-                                    })}
-                                </Stepper>
-                                <div>
-                                  {allStepsCompleted() ? (
-                                    <React.Fragment>
-                                      <Typography
-                                        sx={{
-                                          mt: 2,
-                                          mb: 1,
-                                          textAlign: "center",
-                                          color: "green",
-                                        }}
-                                      >
-                                        Đơn hàng đã hoàn thành
-                                      </Typography>
-                                    </React.Fragment>
-                                  ) : (
-                                    <>
-                                      {!isCancel ? (
-                                        <React.Fragment>
-                                          <Box
-                                            sx={{
-                                              display: "flex",
-                                              flexDirection: "row",
-                                              pt: 2,
-                                            }}
-                                          >
-                                            <Button
-                                              onClick={() => {
-                                                handleClickOpenOrderDialog();
-                                                setIsUpdate(false);
-                                              }}
-                                              color="error"
-                                              sx={{ mr: 1 }}
-                                            >
-                                              Hủy đơn hàng
-                                            </Button>
-                                            {/* {activeStep !== steps.length &&
-                                            (completed[activeStep] ? (
-                                              <Typography
-                                                variant="caption"
-                                                sx={{ display: "inline-block" }}
-                                              >
-                                                Step {activeStep + 1} already
-                                                completed
-                                              </Typography>
-                                            ) : (
-                                              <Button
-                                                onClick={() => {
-                                                  handleGetStatus();
-                                                  handleClickOpenOrderDialog();
-                                                }}
-                                              >
-                                                {completedSteps() ===
-                                                totalSteps() - 1
-                                                  ? "Hoàn thành đơn hàng"
-                                                  : "Hoàn thành bước"}
-                                              </Button>
-                                            ))} */}
-                                          </Box>
-                                        </React.Fragment>
-                                      ) : (
-                                        <React.Fragment>
-                                          <Typography
-                                            sx={{
-                                              mt: 2,
-                                              mb: 1,
-                                              textAlign: "center",
-                                              color: "red",
-                                            }}
-                                          >
-                                            Đơn hàng đã hủy
-                                          </Typography>
-                                        </React.Fragment>
-                                      )}
-                                    </>
-                                  )}
-                                </div>
-                              </Box>
-                            )}
-                          </div>
                         </div>
                       </form>
                     </div>
@@ -833,8 +1030,8 @@ export default function OrderDetails(props: OrderDetailsProps) {
                         {isUpdate ? (
                           <ConfirmOrderStatus
                             handleCloseDialog={handleCloseOrderDialog}
-                            orderDetailId={renderOrderDetailList.map(
-                              (data) => data.id
+                            orderDetailIdList={renderPedingOrderDetailList.map(
+                              (data) => data.orderDetailsId
                             )}
                             orderStatus={orderStatus}
                             handleComplete={handleComplete}
@@ -842,7 +1039,9 @@ export default function OrderDetails(props: OrderDetailsProps) {
                         ) : (
                           <CancelOrderStatus
                             handleCloseDialog={handleCloseOrderDialog}
-                            orderId={orderId}
+                            orderDetailsIdList={renderPedingOrderDetailList.map(
+                              (data) => data.orderDetailsId
+                            )}
                             orderStatus={orderStatus}
                           />
                         )}

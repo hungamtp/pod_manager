@@ -40,11 +40,10 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-  { id: "name", label: "Tên", minWidth: 170 },
+  { id: "name", label: "Tên sản phẩm", minWidth: 170 },
   { id: "price", label: "Giá", minWidth: 170 },
   { id: "quantity", label: "Số lượng", minWidth: 170 },
   { id: "date", label: "Ngày tạo", minWidth: 170 },
-  { id: "status", label: "Trạng thái", minWidth: 170 },
   { id: "action", label: "", minWidth: 100 },
 ];
 export default function ManageOrder(props: IManageOrder) {
@@ -168,7 +167,7 @@ export default function ManageOrder(props: IManageOrder) {
                                       key={nanoid()}
                                     >
                                       <TableCell>
-                                        <strong>{row.designName}</strong>
+                                        <strong>{row.productName}</strong>
                                       </TableCell>
 
                                       <TableCell>
@@ -194,67 +193,36 @@ export default function ManageOrder(props: IManageOrder) {
                                       </TableCell>
 
                                       <TableCell>
-                                        {row.canceledOrder === false ? (
-                                          <td>
-                                            {row.status === "PENDING" && (
-                                              <span className="badge bg-label-warning me-1">
-                                                CHỜ XÁC NHẬN
-                                              </span>
-                                            )}
-                                            {row.status === "PRINTING" && (
-                                              <span className="badge bg-label-warning me-1">
-                                                CHỜ IN
-                                              </span>
-                                            )}
-                                            {row.status === "PACKAGING" && (
-                                              <span className="badge bg-label-warning me-1">
-                                                ĐANG ĐÓNG GÓI
-                                              </span>
-                                            )}
-                                            {row.status === "DELIVERING" && (
-                                              <span className="badge bg-label-warning me-1">
-                                                ĐANG GIAO HÀNG
-                                              </span>
-                                            )}
-                                            {row.status === "DELIVERED" && (
-                                              <span className="badge bg-label-warning me-1">
-                                                ĐÃ GIAO
-                                              </span>
-                                            )}
-                                            {row.status === "DONE" && (
-                                              <span className="badge bg-label-success me-1">
-                                                HOÀN THÀNH
-                                              </span>
-                                            )}
-                                            {row.status === "CANCEL" && (
-                                              <span className="badge bg-label-danger me-1">
-                                                ĐÃ HỦY
-                                              </span>
-                                            )}
-                                          </td>
-                                        ) : (
-                                          <td>
-                                            <span className="badge bg-label-danger me-1">
-                                              ĐÃ HỦY
-                                            </span>
-                                          </td>
-                                        )}
-                                      </TableCell>
-                                      <TableCell>
                                         <button
                                           type="button"
                                           className="btn btn-primary btn-sm"
                                           onClick={() => {
+                                            let orderDetailListStatus =
+                                              "CANCEL";
+                                            row.orderDetailsList.forEach(
+                                              (detail) => {
+                                                if (
+                                                  detail.status !==
+                                                    "IS_CANCEL" &&
+                                                  detail.status !== "CANCEL"
+                                                ) {
+                                                  orderDetailListStatus =
+                                                    detail.status;
+                                                }
+                                              }
+                                            );
                                             dispatch(
                                               addUnitedData({
                                                 orderId: row.orderId,
                                                 designId: row.designId,
                                                 productName: row.productName,
+                                                designPrice: row.price,
                                                 designName: row.designName,
                                                 credentialId: credentialId,
                                                 orderDetailsList:
                                                   row.orderDetailsList,
-                                                orderStatus: row.status,
+                                                orderStatus:
+                                                  orderDetailListStatus,
                                               })
                                             );
 

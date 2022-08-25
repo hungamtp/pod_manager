@@ -7,7 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { setOrderStatus } from "@/redux/slices/unitedOrderData";
 export interface ICancelOrderStatusProps {
   handleCloseDialog: () => void;
-  orderId: string;
+  orderDetailsIdList: string[];
   orderStatus: string;
 }
 
@@ -25,7 +25,7 @@ const schema = yup.object().shape({
 });
 
 export default function CancelOrderStatus(props: ICancelOrderStatusProps) {
-  const { handleCloseDialog, orderId, orderStatus } = props;
+  const { handleCloseDialog, orderDetailsIdList, orderStatus } = props;
   const { mutate: cancelOrderStatus, isSuccess } =
     useCancelOrderStatusFactory(handleCloseDialog);
   const defaultValues: FormCancelOrderStatus = {
@@ -43,7 +43,7 @@ export default function CancelOrderStatus(props: ICancelOrderStatusProps) {
   });
   const onSubmit: SubmitHandler<FormCancelOrderStatus> = (data) => {
     const tmpData: CancelOrderStatusDto = {
-      orderId: orderId,
+      orderDetailIds: orderDetailsIdList,
       cancelReason: data.cancelReason,
       orderStatus: "CANCEL",
     };
