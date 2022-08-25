@@ -155,7 +155,9 @@ export default function CreateSizeColorProductForm(
   return (
     <>
       <div className="col-xxl">
-        <h4>Tạo Kích thước, màu và số lượng cho sản phẩm</h4>
+        <h4 className="text-center">
+          Tạo Kích thước, màu và số lượng cho sản phẩm
+        </h4>
         <div className="card mb-4">
           <div className="card-body">
             {getProduct && (

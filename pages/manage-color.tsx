@@ -80,11 +80,17 @@ export default function ManageColor(props: IManageColor) {
             aria-describedby="alert-dialog-description"
             fullWidth={true}
           >
-            <DialogTitle id="alert-dialog-title">
-              {isEdit === true
-                ? "Bạn có muốn xóa màu này không"
-                : "Tạo màu mới"}
-            </DialogTitle>
+            {isEdit === true && (
+              <DialogTitle className="fs-3 text-center" id="alert-dialog-title">
+                Bạn có muốn xóa màu này không
+              </DialogTitle>
+            )}
+            {isEdit !== true && (
+              <DialogTitle className="fs-3 text-center" id="alert-dialog-title">
+                Tạo màu mới
+              </DialogTitle>
+            )}
+
             <DialogContent>
               {isEdit === true ? (
                 <>

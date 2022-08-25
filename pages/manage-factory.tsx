@@ -85,7 +85,7 @@ export default function ManageFactory(props: IManageFactory) {
           aria-describedby="alert-dialog-description"
           fullWidth={true}
         >
-          <DialogTitle id="alert-dialog-title">
+          <DialogTitle className="fs-3 text-center" id="alert-dialog-title">
             {"Bạn có muốn ngừng hợp tác với nhà in này không?"}
           </DialogTitle>
           <DialogContent>
@@ -119,7 +119,9 @@ export default function ManageFactory(props: IManageFactory) {
           aria-describedby="alert-dialog-description"
           fullWidth={true}
         >
-          <DialogTitle id="alert-dialog-title">{"Tạo mới nhà in"}</DialogTitle>
+          <DialogTitle className="fs-2 text-center" id="alert-dialog-title">
+            {"Tạo mới nhà in"}
+          </DialogTitle>
           <DialogContent>
             <CreateFactoryForm handleCloseDialog={handleCloseCreateDialog} />
           </DialogContent>
@@ -132,7 +134,7 @@ export default function ManageFactory(props: IManageFactory) {
           aria-describedby="alert-dialog-description"
           fullWidth={true}
         >
-          <DialogTitle id="alert-dialog-title">
+          <DialogTitle className="fs-3 text-center" id="alert-dialog-title">
             {isCollaborating === "true"
               ? "Bạn có muốn hợp tác với nhà in này không?"
               : "Bạn có muốn ngừng hợp tác với nhà in này không?"}

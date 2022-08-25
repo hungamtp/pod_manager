@@ -96,7 +96,7 @@ export default function ManageMaterial(props: IManageMaterial) {
             aria-describedby="alert-dialog-description"
             fullWidth={true}
           >
-            <DialogTitle id="alert-dialog-title">
+            <DialogTitle className="fs-2 text-center" id="alert-dialog-title">
               {isEdit === true
                 ? "Chỉnh sửa chất liệu áo"
                 : "Tạo mới chất liệu áo"}
@@ -120,7 +120,7 @@ export default function ManageMaterial(props: IManageMaterial) {
             aria-describedby="alert-dialog-description"
             fullWidth={true}
           >
-            <DialogTitle id="alert-dialog-title">
+            <DialogTitle className="fs-3 text-center" id="alert-dialog-title">
               Bạn có muốn xóa chất liệu này không
             </DialogTitle>
             <DialogContent>

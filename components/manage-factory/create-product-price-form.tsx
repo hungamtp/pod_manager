@@ -17,6 +17,7 @@ export interface ICreateProductPriceFormProps {
   handleCloseDialog: () => void;
   factoryId: string;
   productId: string;
+  proName: string;
 }
 
 type FormCreateProductPrice = {
@@ -45,7 +46,7 @@ const schema = yup.object().shape({
 export default function CreateProductPriceForm(
   props: ICreateProductPriceFormProps
 ) {
-  const { handleCloseDialog, factoryId, productId } = props;
+  const { handleCloseDialog, factoryId, productId, proName } = props;
   const [filter, setFilter] = useState<Filter>({
     pageNumber: 0,
     pageSize: 100,
@@ -91,9 +92,25 @@ export default function CreateProductPriceForm(
   return (
     <>
       <div className="col-xxl">
+        <h4 className="text-center">Thêm giá và chất liệu sản phẩm</h4>
         <div className="card mb-4">
           <div className="card-body">
             <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="row mb-3">
+                <label
+                  className="col-sm-4 col-form-label text-capitalize fs-5"
+                  htmlFor="basic-icon-default-fullname"
+                >
+                  Tên sản phẩm:
+                </label>
+                <div className="col-sm-8">
+                  <div className="input-group input-group-merge">
+                    <div className="col-form-label text-capitalize fs-5 fw-normal">
+                      {proName}
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="row mb-3">
                 <label
                   className="col-sm-3 col-form-label text-capitalize fs-6"

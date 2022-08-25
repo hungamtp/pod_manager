@@ -40,8 +40,10 @@ export default function ProductNotSupport(props: IProductNotSupportProps) {
   });
   const [index, setIndex] = React.useState(0);
   const [productId, setProductId] = React.useState("");
+  const [proName, setProName] = React.useState("");
   const [productForFactoryId, setProductForFactoryId] = React.useState("");
   const [page, setPage] = React.useState(0);
+
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [openCreatePriceDialog, setOpenCreatePriceDialog] =
     React.useState(false);
@@ -52,8 +54,13 @@ export default function ProductNotSupport(props: IProductNotSupportProps) {
     setOpenCreatePriceDialog(false);
   };
 
-  const handleOpenCreatePriceDialog = (index: number, productId: string) => {
+  const handleOpenCreatePriceDialog = (
+    index: number,
+    productId: string,
+    proName: string
+  ) => {
     setIndex(index);
+    setProName(proName);
     setProductForFactoryId(productId);
     setProductId(productId);
     setOpenCreatePriceDialog(true);
@@ -88,6 +95,7 @@ export default function ProductNotSupport(props: IProductNotSupportProps) {
                   handleCloseDialog={handleCloseCreatePriceDialog}
                   factoryId={responseFactory?.data.id}
                   productId={productForFactoryId}
+                  proName={proName}
                 />
               </DialogContent>
             </Dialog>
@@ -172,7 +180,11 @@ export default function ProductNotSupport(props: IProductNotSupportProps) {
                               <button
                                 type="button"
                                 onClick={() =>
-                                  handleOpenCreatePriceDialog(index, row.id)
+                                  handleOpenCreatePriceDialog(
+                                    index,
+                                    row.id,
+                                    row.name
+                                  )
                                 }
                                 className="btn btn-primary me-2"
                               >

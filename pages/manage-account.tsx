@@ -263,7 +263,10 @@ export default function ManageAccount(props: IManageAccountProps) {
                 aria-describedby="alert-dialog-description"
                 fullWidth={true}
               >
-                <DialogTitle id="alert-dialog-title">
+                <DialogTitle
+                  className="fs-2 text-center"
+                  id="alert-dialog-title"
+                >
                   {"Tạo mới tài khoản"}
                 </DialogTitle>
                 <DialogContent>
@@ -280,8 +283,11 @@ export default function ManageAccount(props: IManageAccountProps) {
                 aria-describedby="alert-dialog-description"
                 fullWidth={true}
               >
-                <DialogTitle id="alert-dialog-title">
-                  {"Update Account"}
+                <DialogTitle
+                  className="fs-2 text-center"
+                  id="alert-dialog-title"
+                >
+                  {"Cập nhật tài khoản"}
                 </DialogTitle>
                 <DialogContent>
                   <UpdateForm
@@ -299,7 +305,7 @@ export default function ManageAccount(props: IManageAccountProps) {
               aria-describedby="alert-dialog-description"
               fullWidth={true}
             >
-              <DialogTitle id="alert-dialog-title">
+              <DialogTitle className="fs-3 text-center" id="alert-dialog-title">
                 {"Bạn có muốn xóa tài khoản này không?"}
               </DialogTitle>
               <DialogContent>
