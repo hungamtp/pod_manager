@@ -8,7 +8,7 @@ export interface SupportOrderDetail {
   size: string;
   quantity: string;
   status: string;
-  createdDate: string;
+  createdDate: Date;
   reasonByFactory: string;
   reasonByUser: string;
 }
@@ -23,7 +23,7 @@ export interface OrdersDetailDtos {
     position: string;
     color: string;
   }[];
-  createDate: string;
+  createDate: Date;
   bluePrintDtos: {
     frameImage: string;
     position: string;

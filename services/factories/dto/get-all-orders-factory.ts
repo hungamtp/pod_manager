@@ -17,5 +17,5 @@ export interface OrderFactoryDto {
   price: number;
   quantity: string;
   status: string;
-  createDate: string;
+  createDate: Date;
 }
