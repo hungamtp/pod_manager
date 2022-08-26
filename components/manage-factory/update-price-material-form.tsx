@@ -1,6 +1,9 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @next/next/no-css-tags */
 /* eslint-disable @next/next/no-sync-scripts */
+import { numberWithCommas } from "@/helpers/number-util";
+import { ProductDto } from "@/services/factories/dto/get-factory-by-id-dto";
 import { UpdatePriceMaterialDto } from "@/services/factories/dto/update-price-material-dto";
 import { Filter } from "@/services/material";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,6 +22,7 @@ export interface IUpdateProductPriceFormProps {
   factoryId: string;
   productId: string;
   priceMaterial: UpdatePriceMaterialDto;
+  productInfo: ProductDto | any;
 }
 
 const ITEM_HEIGHT = 48;
@@ -43,11 +47,24 @@ const schema = yup.object().shape({
 export default function UpdateProductPriceForm(
   props: IUpdateProductPriceFormProps
 ) {
-  const { handleCloseDialog, factoryId, productId, priceMaterial } = props;
+  const {
+    handleCloseDialog,
+    factoryId,
+    productId,
+    priceMaterial,
+    productInfo,
+  } = props;
+
   const [filter, setFilter] = useState<Filter>({
     pageNumber: 0,
     pageSize: 100,
   });
+
+  const [getProduct, setGetProduct] = useState<ProductDto>();
+  useEffect(() => {
+    setGetProduct(productInfo);
+  }, [productInfo]);
+
   const [material, setMaterial] = useState("");
   const { data: response, isLoading: isLoadingMaterial } = useMaterial(filter);
 
@@ -88,8 +105,42 @@ export default function UpdateProductPriceForm(
   return (
     <>
       <div className="col-xxl">
+        <h4 className="text-center">Cập nhật giá và chất liệu cho sản phẩm</h4>
         <div className="card mb-4">
           <div className="card-body">
+            {getProduct && (
+              <div>
+                <div className="row mb-3">
+                  <div className="col-sm-3">
+                    <img
+                      className="rounded border border-secondary"
+                      src={getProduct.productImages[0].image}
+                      width="100"
+                    />
+                  </div>
+                  <div className="col-sm-9">
+                    <div>
+                      <label className="col-form-label text-capitalize fs-6 me-2">
+                        Tên sản phẩm:
+                      </label>
+                      {getProduct.name}
+                    </div>
+                    <div>
+                      <label className="col-form-label text-capitalize fs-6 me-2">
+                        Chất liệu:
+                      </label>
+                      {getProduct.material}
+                    </div>
+                    <div>
+                      <label className="col-form-label text-capitalize fs-6 me-2">
+                        Giá:
+                      </label>
+                      {numberWithCommas(getProduct.price)} VNĐ
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-3">
                 <label

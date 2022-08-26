@@ -20,6 +20,7 @@ import TableRow from "@mui/material/TableRow";
 import { Filter } from "@/services/factories";
 export interface ISizesColorsProductProps {
   data: { quantity: number; size: string; colorImage: string }[] | undefined;
+  productName: string;
 }
 
 interface Column {
@@ -37,7 +38,7 @@ const columns: readonly Column[] = [
 ];
 
 export default function SizesColorsProduct(props: ISizesColorsProductProps) {
-  const { data } = props;
+  const { data, productName } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -55,7 +56,7 @@ export default function SizesColorsProduct(props: ISizesColorsProductProps) {
   return (
     <>
       <div className="card">
-        <h4 className="card-header">Bảng Thông tin</h4>
+        <h4 className="card-header">Bảng Thông tin của {productName}</h4>
         <div className="table-responsive text-nowrap">
           {data && data.length > 0 ? (
             <>
