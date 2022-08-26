@@ -68,6 +68,7 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
     material: "",
   };
   const [productId, setProductId] = React.useState("");
+  const [productName, setProductName] = React.useState("");
   const [index, setIndex] = React.useState(0);
   const [sizeColors, setSizeColors] =
     React.useState<{ quantity: number; size: string; colorImage: string }[]>();
@@ -93,12 +94,14 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
   const handleOpenPriceMaterialDialog = (
     productId: string,
     price: number,
-    material: string
+    material: string,
+    getProduct: ProductDto
   ) => {
     const tmpData = {
       price: price,
       material: material,
     };
+    setProdutInfo(getProduct);
     setPriceMaterial(tmpData);
     setProductId(productId);
     setOpenPriceMaterialDialog(true);
@@ -115,10 +118,12 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
     setOpenCreateDialog(true);
   };
   const handleOpenSizeColorDialog = async (
-    data: { quantity: number; size: string; colorImage: string }[]
+    data: { quantity: number; size: string; colorImage: string }[],
+    productName: string
   ) => {
     await setSizeColors(data);
     setOpenDialog(true);
+    setProductName(productName);
   };
 
   const handleCloseCreateDialog = () => {
@@ -152,7 +157,7 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
           fullWidth={true}
         >
           <DialogContent>
-            <SizesColorsProduct data={sizeColors} />
+            <SizesColorsProduct data={sizeColors} productName={productName} />
           </DialogContent>
         </Dialog>
 
@@ -188,6 +193,7 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
               factoryId={id as string}
               productId={productId}
               priceMaterial={priceMaterial}
+              productInfo={productInfo}
               handleCloseDialog={handleCloseUpdatePriceMaterialDialog}
             />
           </DialogContent>
@@ -253,7 +259,10 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
                                 <IconButton
                                   onClick={() =>
                                     // handleOpenSizeColorDialog(index, row.id)
-                                    handleOpenSizeColorDialog(row.sizeColors)
+                                    handleOpenSizeColorDialog(
+                                      row.sizeColors,
+                                      row.name
+                                    )
                                   }
                                 >
                                   <VisibilityIcon
@@ -283,7 +292,8 @@ export default function ProductOfFactory(props: IProductOfFactoryProps) {
                                     handleOpenPriceMaterialDialog(
                                       row.id,
                                       row.price,
-                                      row.material
+                                      row.material,
+                                      row
                                     );
                                   }}
                                 >

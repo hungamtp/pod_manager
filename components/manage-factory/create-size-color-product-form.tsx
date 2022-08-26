@@ -66,10 +66,10 @@ export default function CreateSizeColorProductForm(
 
   const { data: responseColorSize, isLoading: isloadingColorSize } =
     useColorSize(productId);
-  const [getProduct, setGetProduct] = useState<ProductDto>();
 
   const [selectedColor, setSelectedColor] = useState<string>("");
 
+  const [getProduct, setGetProduct] = useState<ProductDto>();
   useEffect(() => {
     setGetProduct(productInfo);
   }, [productInfo]);
