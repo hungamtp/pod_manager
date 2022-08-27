@@ -61,15 +61,7 @@ const englishSteps = [
 ];
 
 interface Column {
-  id:
-    | "size"
-    | "name"
-    | "color"
-    | "quantity"
-    | "status"
-    | "date"
-    | "action"
-    | "isDelete";
+  id: "size" | "name" | "color" | "quantity" | "status" | "date" | "action";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -81,7 +73,6 @@ const columns: readonly Column[] = [
   { id: "color", label: "Màu", minWidth: 170 },
   { id: "quantity", label: "Số lượng", minWidth: 170 },
   { id: "date", label: "Ngày tạo", minWidth: 170 },
-  { id: "isDelete", label: "Bị hủy bởi", minWidth: 170 },
   { id: "status", label: "Trạng thái", minWidth: 170 },
 ];
 
@@ -476,7 +467,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                 Địa chỉ nhận hàng
                               </div>
                               <div className=" border-top border-start px-3 py-2 w-50">
-                                175 Trần Thị Cờ, Quận 9, TP. Hồ Chí Minh
+                                {responseOrderDetails.data.address}
                               </div>
                             </div>
                           </div>
@@ -552,17 +543,16 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                           >
                                             <TableHead>
                                               <TableRow>
-                                                {columns.map((column) => (
-                                                  <TableCell
-                                                    key={column.id}
-                                                    align={column.align}
-                                                    style={{
-                                                      minWidth: column.minWidth,
-                                                    }}
-                                                  >
-                                                    {column.label}
-                                                  </TableCell>
-                                                ))}
+                                                <TableCell>Size</TableCell>
+                                                <TableCell>Màu</TableCell>
+                                                <TableCell>Số lượng</TableCell>
+                                                <TableCell>Ngày tạo</TableCell>
+                                                <TableCell>
+                                                  Bị hủy bởi
+                                                </TableCell>
+                                                <TableCell>
+                                                  Trạng thái
+                                                </TableCell>
                                               </TableRow>
                                             </TableHead>
                                             <TableBody>
