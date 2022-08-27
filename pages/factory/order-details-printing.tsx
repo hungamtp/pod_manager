@@ -61,7 +61,15 @@ const englishSteps = [
 ];
 
 interface Column {
-  id: "size" | "name" | "color" | "quantity" | "status" | "date" | "action";
+  id:
+    | "size"
+    | "name"
+    | "color"
+    | "quantity"
+    | "status"
+    | "date"
+    | "action"
+    | "isDelete";
   label: string;
   minWidth?: number;
   align?: "right";
@@ -73,6 +81,7 @@ const columns: readonly Column[] = [
   { id: "color", label: "Màu", minWidth: 170 },
   { id: "quantity", label: "Số lượng", minWidth: 170 },
   { id: "date", label: "Ngày tạo", minWidth: 170 },
+  { id: "isDelete", label: "Bị hủy bởi", minWidth: 170 },
   { id: "status", label: "Trạng thái", minWidth: 170 },
 ];
 
@@ -412,7 +421,13 @@ export default function OrderDetails(props: OrderDetailsProps) {
                   </>
                 ) : (
                   <div className="card mb-4">
-                    <div className="d-flex justify-content-end p-4">
+                    <div className="d-flex justify-content-between p-4">
+                      <button
+                        className="btn btn-secondary p-2"
+                        onClick={() => router.back()}
+                      >
+                        Trở về
+                      </button>
                       <button
                         className="btn btn-primary p-2"
                         onClick={() => setIsViewOrder(true)}
@@ -590,7 +605,18 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                                           )}
                                                         </strong>
                                                       </TableCell>
-
+                                                      <TableCell>
+                                                        {row.reasonByUser !==
+                                                        null ? (
+                                                          <span className="fw-bold me-1">
+                                                            Khách hàng
+                                                          </span>
+                                                        ) : (
+                                                          <span className="fw-bold me-1">
+                                                            Nhà in
+                                                          </span>
+                                                        )}
+                                                      </TableCell>
                                                       <TableCell>
                                                         <td>
                                                           {row.status ===
@@ -635,21 +661,19 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                                               <div className="badge bg-label-danger h-75 mt-1">
                                                                 Đã hủy
                                                               </div>
-                                                              {row.reasonByUser && (
-                                                                <div
-                                                                  className="text-secondary btn p-0 text-start"
-                                                                  onClick={() => {
-                                                                    setSelectedOrderDetailId(
-                                                                      row.orderDetailsId
-                                                                    );
-                                                                    setIsShowCancelReason(
-                                                                      true
-                                                                    );
-                                                                  }}
-                                                                >
-                                                                  xem lý do{" "}
-                                                                </div>
-                                                              )}
+                                                              <div
+                                                                className="text-secondary btn p-0 text-start text-decoration-underline"
+                                                                onClick={() => {
+                                                                  setSelectedOrderDetailId(
+                                                                    row.orderDetailsId
+                                                                  );
+                                                                  setIsShowCancelReason(
+                                                                    true
+                                                                  );
+                                                                }}
+                                                              >
+                                                                xem lý do{" "}
+                                                              </div>
                                                             </div>
                                                           )}
                                                         </td>
@@ -680,36 +704,6 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                           )}
                                       </Paper>
                                     </>
-                                  </div>
-
-                                  <div>
-                                    {isCancelByFactory && (
-                                      <Box
-                                        sx={{
-                                          width: "100%",
-                                          marginTop: 6,
-                                          marginBottom: 5,
-                                        }}
-                                      >
-                                        <div>
-                                          {
-                                            <div className="ms-3">
-                                              {isCancelByFactory &&
-                                                cancelReasonByFactory && (
-                                                  <div>
-                                                    <strong className="text-danger fs-5">
-                                                      Lý do hủy đơn:{" "}
-                                                    </strong>
-                                                    <label className="text-danger fs-5">
-                                                      {cancelReasonByFactory}
-                                                    </label>
-                                                  </div>
-                                                )}
-                                            </div>
-                                          }
-                                        </div>
-                                      </Box>
-                                    )}
                                   </div>
                                 </div>
                               )}
@@ -1058,6 +1052,26 @@ export default function OrderDetails(props: OrderDetailsProps) {
                                           orderDetail.orderDetailsId ===
                                           selectedOrderDetailId
                                       )[0].reasonByUser
+                                    }
+                                  </div>
+                                </>
+                              )}
+                              {orderDetailsList.filter(
+                                (orderDetail) =>
+                                  orderDetail.orderDetailsId ===
+                                  selectedOrderDetailId
+                              )[0].reasonByFactory && (
+                                <>
+                                  <div className="h5 d-flex justify-content-center text-dark">
+                                    Bạn đã hủy đơn với lý do:
+                                  </div>
+                                  <div className="d-flex justify-content-center">
+                                    {
+                                      orderDetailsList.filter(
+                                        (orderDetail) =>
+                                          orderDetail.orderDetailsId ===
+                                          selectedOrderDetailId
+                                      )[0].reasonByFactory
                                     }
                                   </div>
                                 </>
