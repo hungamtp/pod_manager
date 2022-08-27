@@ -66,9 +66,8 @@ export default function CreateSizeColorProductForm(
 
   const { data: responseColorSize, isLoading: isloadingColorSize } =
     useColorSize(productId);
-
+  const [sizeErr, setSizeErr] = useState(false);
   const [selectedColor, setSelectedColor] = useState<string>("");
-
   const [getProduct, setGetProduct] = useState<ProductDto>();
   useEffect(() => {
     setGetProduct(productInfo);
@@ -137,14 +136,20 @@ export default function CreateSizeColorProductForm(
   const onSubmit: SubmitHandler<{ quantity: number }> = (data) => {
     const quantity = data.quantity;
     const submitData: CreateSizeColorProductDto[] = [];
-    sizesList.forEach((size) => {
-      submitData.push({
-        size: size,
-        colorImage: selectedColor,
-        quantity: quantity,
+    if (sizesList.length !== 0) {
+      sizesList.forEach((size) => {
+        submitData.push({
+          size: size,
+          colorImage: selectedColor,
+          quantity: quantity,
+        });
       });
-    });
-    addSizeColorProduct(submitData);
+      addSizeColorProduct(submitData);
+      setSizeErr(false);
+    } else {
+      setSizeErr(true);
+    }
+
     // addSizeColorProduct(submitData, {
     //   onError: (error: any) => {
     //     console.log(error.response.data.errorMessage);
@@ -312,6 +317,11 @@ export default function CreateSizeColorProductForm(
                       </Select>
                     </FormControl>
                   </div>
+                  {sizeErr === true && (
+                    <span id="error-pwd-message" className="text-danger">
+                      Kích thước không được để trống
+                    </span>
+                  )}
                 </div>
               </div>
 

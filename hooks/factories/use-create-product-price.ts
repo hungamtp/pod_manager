@@ -31,8 +31,6 @@ const useCreateProductPrice = (
       },
       onError: (error: AxiosError<ErrorHttpResponse>) => {
         if (error) {
-          handleCloseDialog();
-
           enqueueSnackbar("Chất liệu sản phẩm không được để trống", {
             autoHideDuration: 9000,
             variant: "error",

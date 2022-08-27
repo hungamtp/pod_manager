@@ -69,6 +69,7 @@ export default function AccountSetting(props: AccountSettingProps) {
   const { data: responseFactory, isLoading: isLoadingFactory } =
     useGetFactoryById(credentialId, filter);
   const [page, setPage] = React.useState(0);
+  const [productName, setProductName] = React.useState("");
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [factoryInfo, setFactoryInfo] = React.useState<FactoryInfo>();
   const [isUpdateFactoryInfo, setIsUpdateFactoryInfo] = React.useState(true);
@@ -89,10 +90,12 @@ export default function AccountSetting(props: AccountSettingProps) {
     }
   }, [responseFactory]);
   const handleOpenSizeColorDialog = (
-    data: { quantity: number; size: string; colorImage: string }[]
+    data: { quantity: number; size: string; colorImage: string }[],
+    productName: string
   ) => {
     setSizeColors(data);
     setOpenDialog(true);
+    setProductName(productName);
   };
   React.useEffect(() => {
     responseFactory?.data;
@@ -122,7 +125,7 @@ export default function AccountSetting(props: AccountSettingProps) {
         fullWidth={true}
       >
         <DialogContent>
-          <SizesColorsProduct data={sizeColors} />
+          <SizesColorsProduct data={sizeColors} productName={productName} />
         </DialogContent>
       </Dialog>
       {isLoadingFactory && (
@@ -478,7 +481,8 @@ export default function AccountSetting(props: AccountSettingProps) {
                                           <IconButton
                                             onClick={() =>
                                               handleOpenSizeColorDialog(
-                                                row.sizeColors
+                                                row.sizeColors,
+                                                row.name
                                               )
                                             }
                                           >
