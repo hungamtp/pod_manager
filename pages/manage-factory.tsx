@@ -142,15 +142,27 @@ export default function ManageFactory(props: IManageFactory) {
           <DialogContent>
             <div className="d-flex justify-content-center">
               <div className="col-sm-10 d-flex justify-content-around">
-                <button
-                  className="btn btn-danger"
-                  color="danger"
-                  onClick={() => {
-                    onDelete(isDelete);
-                  }}
-                >
-                  Có
-                </button>
+                {isCollaborating !== "true" ? (
+                  <button
+                    className="btn btn-danger"
+                    color="danger"
+                    onClick={() => {
+                      onDelete(isDelete);
+                    }}
+                  >
+                    Có
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-primary"
+                    color="danger"
+                    onClick={() => {
+                      onDelete(isDelete);
+                    }}
+                  >
+                    Có
+                  </button>
+                )}
                 <button
                   className="btn btn-secondary"
                   onClick={handleCloseDeleteDialog}

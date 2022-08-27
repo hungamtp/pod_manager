@@ -43,6 +43,14 @@ const useLogin = () => {
               autoHideDuration: 9000,
               variant: "error",
             });
+          } else if (
+            tmpError?.includes("This factory is not available at this time")
+          ) {
+            tmpError = "Tài khoản của bạn đã bị khóa";
+            enqueueSnackbar(tmpError, {
+              autoHideDuration: 9000,
+              variant: "error",
+            });
           } else {
             enqueueSnackbar(error.response?.data.errorMessage, {
               autoHideDuration: 9000,
