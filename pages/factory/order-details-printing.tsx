@@ -423,7 +423,7 @@ export default function OrderDetails(props: OrderDetailsProps) {
                   <div className="card mb-4">
                     <div className="d-flex justify-content-between p-4">
                       <button
-                        className="btn btn-secondary p-2"
+                        className="btn btn-secondary pe-4 ps-4"
                         onClick={() => router.back()}
                       >
                         Trở về
