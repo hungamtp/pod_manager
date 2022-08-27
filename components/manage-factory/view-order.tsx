@@ -199,18 +199,12 @@ export default function ViewOrder({
                               <div key={designData.name} className="row mt-5">
                                 {designData.types !== "text" ? (
                                   <div className={`col-lg-4`}>
-                                    <div
-                                      onClick={() =>
-                                        save(designData.name, designData.src)
-                                      }
-                                    >
-                                      <Image
-                                        src={designData.src}
-                                        alt="Picture of the author"
-                                        width={300}
-                                        height={300}
-                                      />
-                                    </div>
+                                    <Image
+                                      src={designData.src}
+                                      alt="Picture of the author"
+                                      width={300}
+                                      height={300}
+                                    />
                                   </div>
                                 ) : (
                                   <div className="col-lg-4">
@@ -249,8 +243,9 @@ export default function ViewOrder({
                                           <a
                                             href={designData.src}
                                             target="blank"
+                                            className="text-primary"
                                           >
-                                            Link hình
+                                            <u>Link hình ảnh</u>
                                           </a>
                                         </div>
                                       </>
