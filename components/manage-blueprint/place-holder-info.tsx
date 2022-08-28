@@ -134,24 +134,12 @@ const PlaceHolderInfo = ({
 
           <div className="row mt-4">
             <div className="d-flex w-100 p-0">
-              <div className="w-50 me-4">Cách trên</div>
               <div className="w-50">Mặt áo</div>
             </div>
           </div>
 
           <div className="row">
             <div className="d-flex w-100 p-0">
-              <div className="w-50 me-4">
-                <div className="d-flex ">
-                  <input
-                    type="number"
-                    className="custom-input"
-                    aria-label="Inches (with dot and two decimal places)"
-                    value={get2Decimal(blueprint.topRate)}
-                  />
-                  <span className="custom-input-tag w-50">%</span>
-                </div>
-              </div>
               <div className="w-50">
                 <div className="d-flex ">
                   <select
