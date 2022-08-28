@@ -362,7 +362,6 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
           selectable: false,
         }
       );
-      console.log(index, "index");
       const horizontalContent = index * span + "";
       const textHorizontalLeft = image.getScaledWidth() * 0.2;
       const textHorizontalTop =
@@ -416,6 +415,7 @@ export default function UpdateBlueprint(props: IUpdateBlueprint) {
         centeredScaling: true,
         transparentCorners: true,
         fill: "black",
+        selectable: false,
       }).scaleToHeight(newHorizontialText.getScaledHeight());
 
       canvas.add(horizontalLine);
