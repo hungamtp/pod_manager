@@ -1200,9 +1200,9 @@ export default function ProductDetails(props: IProductDetailsProps) {
                                   />
                                 </td>
                                 <td>
-                                  <strong>Cách trên: </strong>
+                                  {/* <strong>Cách trên: </strong>
                                   {productBlueprint.placeholder.top.toFixed(2)}%
-                                  <br />
+                                  <br /> */}
                                   <strong>Chiều dài: </strong>
                                   {productBlueprint.placeholder.height} cm
                                   <br />
