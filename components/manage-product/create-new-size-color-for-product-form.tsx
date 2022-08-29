@@ -44,6 +44,8 @@ export default function CreateNewSizeColorForProductForm(
     handleCloseDialog,
     id
   );
+  const [sizeErr, setSizeErr] = useState(false);
+  const [colorErr, setColorErr] = useState(false);
   const handleChange = (event: SelectChangeEvent<typeof colorsList>) => {
     const {
       target: { value },
@@ -69,11 +71,17 @@ export default function CreateNewSizeColorForProductForm(
     const submitColors = colorsList.map((color) => {
       return color.split("-")[0];
     });
-    const submitData = {
-      colors: submitColors,
-      sizes: sizesList,
-    };
-    addSizesColorsForProduct(submitData);
+    if (sizesList.length > 0 && colorsList.length > 0) {
+      const submitData = {
+        colors: submitColors,
+        sizes: sizesList,
+      };
+      addSizesColorsForProduct(submitData);
+    } else {
+      setSizeErr(true);
+      setColorErr(true);
+    }
+
     // addSizeColorProduct(submitData, {
     //   onError: (error: any) => {
     //     console.log(error.response.data.errorMessage);
@@ -109,7 +117,9 @@ export default function CreateNewSizeColorForProductForm(
                         if (selected.length === 0) {
                           return selected;
                         }
-
+                        if (selected.length > 0) {
+                          setColorErr(false);
+                        }
                         return selected.map((color) => (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
@@ -158,6 +168,11 @@ export default function CreateNewSizeColorForProductForm(
                     </Select>
                   </FormControl>
                 </div>
+                {colorErr === true && (
+                  <span id="error-pwd-message" className="text-danger">
+                    Màu không được để trống
+                  </span>
+                )}
               </div>
             </div>
             <div className="row mb-3">
@@ -182,7 +197,9 @@ export default function CreateNewSizeColorForProductForm(
                         if (selected.length === 0) {
                           return selected;
                         }
-
+                        if (selected.length > 0) {
+                          setSizeErr(false);
+                        }
                         return (
                           <Box
                             sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
@@ -208,6 +225,11 @@ export default function CreateNewSizeColorForProductForm(
                     </Select>
                   </FormControl>
                 </div>
+                {sizeErr === true && (
+                  <span id="error-pwd-message" className="text-danger">
+                    Kích thước không được để trống
+                  </span>
+                )}
               </div>
             </div>
 

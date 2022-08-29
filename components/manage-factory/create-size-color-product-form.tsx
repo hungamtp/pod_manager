@@ -287,6 +287,9 @@ export default function CreateSizeColorProductForm(
                           if (selected.length === 0) {
                             return selected;
                           }
+                          if (selected.length > 0) {
+                            setSizeErr(false);
+                          }
 
                           return (
                             <Box

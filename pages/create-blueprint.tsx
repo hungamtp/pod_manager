@@ -418,6 +418,7 @@ export default function CreateBlueprint(props: ICreateBlueprint) {
         centeredScaling: true,
         transparentCorners: true,
         fill: "black",
+        selectable: false,
       }).scaleToHeight(newHorizontialText.getScaledHeight());
 
       canvas.add(horizontalLine);
